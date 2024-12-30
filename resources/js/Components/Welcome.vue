@@ -10,7 +10,15 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
             <h1 class="mt-8 text-2xl font-medium text-gray-900">
                 Welcome to your Jetstream application!
             </h1>
-
+            <!-- 
+                Tutoria de roles y permisos
+                https://www.youtube.com/watch?v=M3d2t3fMXGg,
+                migraciones, Seeders, se compila los cambios (npm instal y npm run dev)
+            -->
+            <div class="mt-6 flex justify-between" >
+                <button v-if="$page.props.user.permissions.includes('create role') || $page.props.user.roles == 'admin'" class="mr-2 p-3">Crear categoria</button>
+                <button v-if="$page.props.user.permissions.includes('create role') || $page.props.user.roles == 'admin'" class="mr-2 p-3">Crear proveedor</button>
+            </div>
             <p class="mt-6 text-gray-500 leading-relaxed">
                 Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
                 to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
@@ -102,3 +110,9 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
         </div>
     </div>
 </template>
+<style scoped>
+button {
+    background-color: turquoise;
+    color: rgb(50, 75, 97);
+}
+</style>
