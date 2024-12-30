@@ -1,21 +1,33 @@
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
     import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
     import Modal from '@/Components/Modal.vue';
 
     const page = usePage();
     const CategoriaProveedors = ref(page.props.categoriaproveedors);
+    
     const onDeleteConfirm = (categoria) => {
-    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar este elemento ${categoria.nombre}?`);
-    if (confirmed) {
-        router.delete(route('categoria_proveedor.destroy', categoria), {
-        onSuccess: (page) => {
-            CategoriaProveedors.value = page.props.categoriaproveedors;
-        },
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${categoria.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('categoria_proveedor.destroy', categoria), {
+                onSuccess: (page) => {
+                CategoriaProveedors.value = page.props.categoriaproveedors;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
         });
-    }
     };
 
     const isModalVisible = ref(false);
@@ -37,10 +49,10 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   Categoria proveedor
               </h2>   
+              <button @click="showModal()" class="btn btn-primary">Modal categoria proveedor</button>    
               <Link :href="route('categoria_proveedor.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar categoria proveedor
-              </Link>  
-              <button @click="showModal()" class="btn btn-primary">Modal categoria proveedor</button>        
+              </Link>                    
           </div>    
         </template>
 
