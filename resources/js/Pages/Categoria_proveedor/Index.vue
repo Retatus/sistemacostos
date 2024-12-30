@@ -1,15 +1,33 @@
 <script setup>
-  import AppLayout from '@/Layouts/AppLayout.vue';
-  import {Link, usePage} from '@inertiajs/vue3';
-  import { ref } from 'vue';
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import Modal from '@/Components/Modal.vue';
 
-  const page = usePage();
-  const CategoriaProveedors = ref(page.props.categoriaproveedors);
+    const page = usePage();
+    const CategoriaProveedors = ref(page.props.categoriaproveedors);
+    const onDeleteConfirm = (categoria) => {
+    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar este elemento ${categoria.nombre}?`);
+    if (confirmed) {
+        router.delete(route('categoria_proveedor.destroy', categoria), {
+        onSuccess: (page) => {
+            CategoriaProveedors.value = page.props.categoriaproveedors;
+        },
+        });
+    }
+    };
 
-  const onDeleteSuccess = (e)=>{
-      //console.log(e);
-      CategoriaProveedors.value = e.props.categoriaproveedors;
-  }
+    const isModalVisible = ref(false);
+    function showModal() {
+        console.log('Mostrando modal...');
+        isModalVisible.value = true;
+    }
+
+    function closeModal() {
+        console.log('Ocultar modal...');
+        isModalVisible.value = false;
+    }
 </script>
 
 <template>
@@ -20,8 +38,9 @@
                   Categoria proveedor
               </h2>   
               <Link :href="route('categoria_proveedor.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar categoria
-              </Link>      
+                  Agregar categoria proveedor
+              </Link>  
+              <button @click="showModal()" class="btn btn-primary">Modal categoria proveedor</button>        
           </div>    
         </template>
 
@@ -62,13 +81,7 @@
                                             <Link :href="route('categoria_proveedor.edit', CategoriaProveedor)">
                                                 Editar
                                             </Link>
-                                            <Link 
-                                                @success="onDeleteSuccess" 
-                                                :href="route('categoria_proveedor.destroy', CategoriaProveedor)" 
-                                                method="delete" 
-                                                as="button">
-                                                Eliminar
-                                            </Link>
+                                            <button @click="onDeleteConfirm(CategoriaProveedor)">Eliminar</button>
                                         </div>                                                                               
                                     </td>
                                 </tr>
@@ -78,5 +91,24 @@
                 </div>                
             </div>
         </div>
-    </AppLayout>
+    </AppLayout>  
+    <Modal
+        :show="isModalVisible"
+        maxWidth="lg"
+        closeable
+        @close="closeModal"
+    >
+        <template #default>
+            <div class="p-4">
+                <h2 class="text-lg font-bold">Agregar categoria proveedor</h2>
+                <p>Este es el contenido dentro del modal.</p>
+                <button
+                    @click="closeModal"
+                    class="mt-4 btn btn-secondary"
+                >
+                    Cerrar
+                </button>
+            </div>
+        </template>
+    </Modal>      
 </template>
