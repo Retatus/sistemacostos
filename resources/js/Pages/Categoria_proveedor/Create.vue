@@ -38,7 +38,7 @@ const fnSubmit = () => {
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <form class="py-5 space-y-3 w-1/3" @submit.prevent ="fnSubmit">
                         <div>
-                            <InputLabel for="nombre" value="Clase servicio" />
+                            <InputLabel for="nombre" value="Categoria proveedor" />
                             <TextInput
                                 id="nombre"
                                 type="text"
@@ -56,7 +56,7 @@ const fnSubmit = () => {
                                 <option value="1">Activo</option>
                                 <option value="0">Desactivo</option>
                             </select>
-                            <InputError class="mt-2" :message="form.errors.estado   " />                            
+                            <InputError class="mt-2" :message="form.errors.estado"/>                            
                         </div>
                         <div class="flex justify-center">
                             <PrimaryButton>
