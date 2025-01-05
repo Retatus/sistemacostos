@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\ClaseServicioController;
+use App\Http\Controllers\TipoDocumentoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,10 +38,9 @@ Route::middleware([
     Route::get('/dashboard/clase_servicio/{clase_servicio}/edit', [ClaseServicioController::class, 'edit'])->name('clase_servicio.edit');
     Route::put('/dashboard/clase_servicio/{clase_servicio}', [ClaseServicioController::class, 'update'])->name('clase_servicio.update');
     Route::patch('/dashboard/clase_servicio/{clase_servicio}/update', [ClaseServicioController::class, 'update'])->name('clase_servicio.update');
-    Route::delete('/dashboard//clase_servicio/{clase_servicio}/destroy', [ClaseServicioController::class, 'destroy'])->name('clase_servicio.destroy');
+    Route::delete('/dashboard/clase_servicio/{clase_servicio}/destroy', [ClaseServicioController::class, 'destroy'])->name('clase_servicio.destroy');
 
-
-
-
-
+    // Forma simplificada de las rutas 
+    // Comando para listar las Rutas, ---->> php artisan r:l
+    Route::resource('/dashboard/tipodocumento', TipoDocumentoController::class);
 });
