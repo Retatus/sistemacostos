@@ -5,11 +5,18 @@ import SectionTitle from './SectionTitle.vue';
 defineEmits(['submitted']);
 
 const hasActions = computed(() => !! useSlots().actions);
+
+defineProps({
+    shouldShowTitle: {
+      type: Boolean,
+      default: true, // Muestra el título por defecto
+    },   
+});
 </script>
 
 <template>
     <div class="md:grid md:grid-cols-3 md:gap-6">
-        <SectionTitle>
+        <SectionTitle v-if="shouldShowTitle">
             <template #title>
                 <slot name="title" />
             </template>

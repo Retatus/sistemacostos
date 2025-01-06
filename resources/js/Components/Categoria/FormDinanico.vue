@@ -30,7 +30,7 @@
 </script>
 <template>   
     <!-- Comunicacion vertical ascedente agregar o editar--> 
-    <FormSection @submitted="$emit('submit')">
+    <FormSection @submitted="$emit('submit')" class="py-2 w-full" :shouldShowTitle="false">
         <template #form>
         <div v-for="(field, key) in fields" :key="key" class="col-span-12 sm:col-span-12">
             <label :for="key" class="block text-sm font-medium text-gray-700  " >
