@@ -19,7 +19,7 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('tipodocumento.destroy', TipoDocumento), {
+            router.delete(route('tipo_documento.destroy', TipoDocumento), {
                 onSuccess: (page) => {
                 TipoDocumentos.value = page.props.tipodocumentos;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
@@ -37,10 +37,10 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipodocumento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar TipoDocumento
               </Link>
-              <Link :href="route('tipodocumento.crear')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipo_documento.crear')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar Dinamico
               </Link>                      
           </div>    
@@ -82,7 +82,7 @@
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('tipodocumento.edit', tipodocumento)">
+                                            <Link :href="route('tipo_documento.edit', tipodocumento)">
                                                 Editar
                                             </Link>
                                             <button @click="onDeleteConfirm(tipodocumento)">Eliminar</button>

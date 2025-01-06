@@ -16,7 +16,7 @@
         } 
     })
  
-    console.log(props);
+    //console.log(props.tipoDocumento.codigo);
     const form = useForm({
         codigo: props.tipoDocumento.codigo,
         nombre: props.tipoDocumento.nombre,
@@ -45,7 +45,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipodocumento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar TipoDocumento
               </Link>                             
           </div>    
@@ -59,7 +59,7 @@
                             :form="form"
                             :fields="formFields"                            
                             :updating="true"
-                            @submit="form.patch(route('tipodocumento.update', tipoDocumento))" 
+                            @submit="form.patch(route('tipo_documento.update', tipoDocumento))" 
                         />
                         </div>
                     </div>
