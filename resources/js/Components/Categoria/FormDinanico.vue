@@ -5,9 +5,10 @@
 </script>
 
 <script setup>   
+import { computed, useSlots } from 'vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue'; 
-    import FormSection from '../FormSection.vue';
     import InputError from '../InputError.vue';
+    import FormSectionNew from './FormSectionNew.vue';
 
     defineProps({
         form: {
@@ -27,10 +28,13 @@
      });
      // Comunicacion vertical descendente agregar o editar a traves de las props
      defineEmits(['submit']);
+
+     const hasActions = computed(() => !! useSlots().actions);
+
 </script>
 <template>   
     <!-- Comunicacion vertical ascedente agregar o editar--> 
-    <FormSection @submitted="$emit('submit')" class="py-2 w-full" :shouldShowTitle="false">
+    <FormSectionNew @submitted="$emit('submit')" class="py-2 w-full">
         <template #form>
         <div v-for="(field, key) in fields" :key="key" class="col-span-12 sm:col-span-12">
             <label :for="key" class="block text-sm font-medium text-gray-700  " >
@@ -112,7 +116,7 @@
                 {{updating ? 'Actualizar' : 'Crear'}}
             </PrimaryButton>
         </template>
-    </FormSection>
+    </FormSectionNew>
   </template>
 
   
