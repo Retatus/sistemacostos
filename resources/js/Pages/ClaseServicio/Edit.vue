@@ -43,7 +43,7 @@
                         <div class="p-6 bg-white border-b border-gray-200">
                             <!-- :form="form"                                           comunicacion vertical descendente a traves de las props -->
                             <!-- @submit="form.post(route('categoria_proveedor.store')) comunicacion horizontal ascendente -->
-                            <CategoryForm :updating="true" :form="form" @submit="form.patch(route('clase_servicio.update', claseServicio))"/>
+                            <CategoryForm :updating="true" :titulo="'Clase Servicio'" :form="form" @submit="form.patch(route('clase_servicio.update', claseServicio))"/>
                         </div>
                     </div>
                 </div>

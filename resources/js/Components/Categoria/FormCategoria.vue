@@ -20,6 +20,10 @@ export default {
             type: Boolean,
             required: true,
             default: false
+        },
+        titulo: {
+            type: String,
+            required: true
         }
      });
      // Comunicacion vertical descendente agregar o editar a traves de las props
@@ -29,7 +33,7 @@ export default {
     <!-- Comunicacion vertical ascedente agregar o editar-->
     <FormSection @submitted="$emit('submit')">
         <template #title>
-            {{updating ? 'Actualizar categoria proveedores' : 'Crear categoria proveedor'}}
+            {{updating ? `Actualizar ${titulo}` : `Crear ${titulo}`}}
         </template>
         <template #description>
             {{updating ? 'Actualiza la seccion de la categoria proveedor' : 'Crear la seccion de la categoria proveedor'}}
@@ -48,9 +52,9 @@ export default {
                 />
                 <InputError class="mt-2" :message="$page.props.errors.nombre" />
             </div>
-            <div>
+            <div class="col-span-6 sm:col-span-6">
                 <InputLabel for="estado" value="Estado" />
-                <select v-model="form.estado" id="estado" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full">
+                <select v-model="form.estado" id="estado" class="w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     <option value="1">Activo</option>
                     <option value="0">Desactivo</option>
                 </select>

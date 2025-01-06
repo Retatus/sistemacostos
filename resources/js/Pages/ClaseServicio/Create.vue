@@ -36,7 +36,7 @@ const form = useForm({
                         <div class="p-6 bg-white border-b border-gray-200">
                             <!-- :form="form"                                           comunicacion vertical descendente a traves de las props -->
                             <!-- @submit="form.post(route('categoria_proveedor.store')) comunicacion horizontal ascendente -->
-                            <CategoryForm :form="form" @submit="form.post(route('clase_servicio.store'))" :updating="false"/>
+                            <CategoryForm :form="form" @submit="form.post(route('clase_servicio.store'))" :updating="false" :titulo="'Clase Servicio'"/>
                         </div>
                     </div>
                 </div>

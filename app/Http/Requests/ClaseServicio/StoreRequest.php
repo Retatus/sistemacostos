@@ -4,6 +4,7 @@ namespace App\Http\Requests\ClaseServicio;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class StoreRequest extends FormRequest
 {
     /**
@@ -22,7 +23,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => 'required|min:3|max:25',
+            'nombre' => ['required','string','min:3','max:15', Rule::unique(table: 'clase_servicios', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
             'estado' => 'required|in:1,0',
         ];
     }
