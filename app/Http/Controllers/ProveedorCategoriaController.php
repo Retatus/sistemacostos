@@ -29,11 +29,11 @@ class ProveedorCategoriaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->all();
         ProveedorCategoria::create($data);
-        return to_route('proveedor_categorias');
+        return to_route('proveedor_categoria');
     }
 
     /**
@@ -49,17 +49,17 @@ class ProveedorCategoriaController extends Controller
      */
     public function edit(ProveedorCategoria $proveedorCategoria)
     {
-        return Inertia::render('ProveedorCategoria/Edit', compact('proveedorcategoria'));
+        return Inertia::render('ProveedorCategoria/Edit', compact('proveedorCategoria'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProveedorCategoria $proveedorCategoria)
+    public function update(StoreRequest $request, ProveedorCategoria $proveedorCategoria)
     {
         $data = $request->all();
-        $proveedorcategoria->update($data);
-        return Inertia::render('ProveedorCategoria/Edit', compact('proveedorcategoria'));
+        $proveedorCategoria->update($data);
+        return Inertia::render('ProveedorCategoria/Edit', compact('proveedorCategoria'));
     }
 
     /**
@@ -67,7 +67,7 @@ class ProveedorCategoriaController extends Controller
      */
     public function destroy(ProveedorCategoria $proveedorCategoria)
     {
-        $proveedorcategoria->delete();
-        return to_route('proveedor_categorias');
+        $proveedorCategoria->delete();
+        return to_route('proveedor_categoria');
     }
 }

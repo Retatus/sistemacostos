@@ -34,9 +34,10 @@ import { computed, useSlots } from 'vue';
 </script>
 <template>   
     <!-- Comunicacion vertical ascedente agregar o editar--> 
-    <FormSectionNew @submitted="$emit('submit')" class="py-2 w-full">
-        <template #form>
-        <div v-for="(field, key) in fields" :key="key" class="col-span-12 sm:col-span-12">
+    <FormSectionNew @submitted="$emit('submit')" class="py-2 w-full">        
+        <template #form>  
+        <p v-if="form.recentlySuccessful" class="text-sm text-green-600 col-span-12 sm:col-span-12"> Actualizado correctamente.</p>              
+        <div v-for="(field, key) in fields" :key="key" class="col-span-12 sm:col-span-12">            
             <label :for="key" class="block text-sm font-medium text-gray-700  " >
             {{ field.label || key }}
             </label>

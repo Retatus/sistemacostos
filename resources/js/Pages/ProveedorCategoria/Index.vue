@@ -19,7 +19,7 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('proveedor_categorias.destroy', ProveedorCategoria), {
+            router.delete(route('proveedor_categoria.destroy', ProveedorCategoria), {
                 onSuccess: (page) => {
                 ProveedorCategorias.value = page.props.proveedorcategorias;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
@@ -37,7 +37,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   ProveedorCategoria
               </h2>   
-              <Link :href="route('proveedor_categorias.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('proveedor_categoria.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar ProveedorCategoria
               </Link>                    
           </div>    
@@ -73,7 +73,7 @@
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('proveedor_categorias.edit', proveedorcategoria)">
+                                            <Link :href="route('proveedor_categoria.edit', proveedorcategoria)">
                                                 Editar
                                             </Link>
                                             <button @click="onDeleteConfirm(proveedorcategoria)">Eliminar</button>

@@ -4,6 +4,7 @@ namespace App\Http\Requests\ProveedorCategoria;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class UpdateRequest extends FormRequest
 {
     /**
@@ -22,7 +23,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "nombre" => 'required|min:3|max:45',
+            'nombre' => ['required','string','min:3','max:45', Rule::unique(table: 'proveedor_categorias', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
             "estado_activo" => 'required',
 
         ];

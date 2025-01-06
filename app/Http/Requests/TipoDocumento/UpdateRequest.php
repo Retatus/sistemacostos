@@ -4,6 +4,7 @@ namespace App\Http\Requests\TipoDocumento;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class UpdateRequest extends FormRequest
 {
     /**

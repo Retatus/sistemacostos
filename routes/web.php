@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\ClaseServicioController;
+use App\Http\Controllers\ProveedorCategoriaController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Models\proveedor;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,4 +55,18 @@ Route::middleware([
     Route::patch('/dashboard/tipo_documento/{tipo_documento}/update', [TipoDocumentoController::class, 'update'])->name('tipo_documento.update');
     Route::delete('/dashboard//tipo_documento/{tipo_documento}/destroy', [TipoDocumentoController::class, 'destroy'])->name('tipo_documento.destroy');
     //Route::get('/categoria/crear', [CategoriaController::class, 'crear'])->name('categoria.crear');
+
+    Route::get('/dashboard/proveedor_categoria', [ProveedorCategoriaController::class, 'index'])->name('proveedor_categoria');
+    Route::get('/dashboard/proveedor_categoria/create', [ProveedorCategoriaController::class, 'create'])->name('proveedor_categoria.create');
+    Route::post('/dashboard/proveedor_categoria', [ProveedorCategoriaController::class, 'store'])->name('proveedor_categoria.store');
+    Route::get('/dashboard/proveedor_categoria/{proveedor_categoria}/edit', [ProveedorCategoriaController::class, 'edit'])->name('proveedor_categoria.edit');
+    Route::patch('/dashboard/proveedor_categoria/{proveedor_categoria}/update', [ProveedorCategoriaController::class, 'update'])->name('proveedor_categoria.update');
+    Route::delete('/dashboard/proveedor_categoria/{proveedor_categoria}/destroy', [ProveedorCategoriaController::class, 'destroy'])->name('proveedor_categoria.destroy');
+
+    Route::get('/dashboard/proveedor', [ProveedorController::class, 'index'])->name('proveedor');
+    Route::get('/dashboard/proveedor/create', [ProveedorController::class, 'create'])->name('proveedor.create');
+    Route::post('/dashboard/proveedor', [ProveedorController::class, 'store'])->name('proveedor.store');
+    Route::get('/dashboard/proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
+    Route::patch('/dashboard/proveedor/{proveedor}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
+    Route::delete('/dashboard/proveedor/{proveedor}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
 });
