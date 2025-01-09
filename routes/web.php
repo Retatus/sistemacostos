@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\ClaseServicioController;
+use App\Http\Controllers\ServicioClaseController;
+use App\Http\Controllers\ServicioDetalleController;
 use App\Http\Controllers\ProveedorCategoriaController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Models\proveedor;
+use App\Models\ServicioClase;
+use App\Models\ServicioDetalle;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -69,4 +73,20 @@ Route::middleware([
     Route::get('/dashboard/proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
     Route::patch('/dashboard/proveedor/{proveedor}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
     Route::delete('/dashboard/proveedor/{proveedor}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
+
+    Route::get('/dashboard/servicio_clase', [ServicioClaseController::class, 'index'])->name('servicio_clase');
+    Route::get('/dashboard/servicio_clase/create', [ServicioClaseController::class, 'create'])->name('servicio_clase.create');
+    Route::post('/dashboard/servicio_clase', [ServicioClaseController::class, 'store'])->name('servicio_clase.store');
+    Route::post('/dashboard/servicio_clase', [ServicioClaseController::class, 'storemodal'])->name('servicio_clase.storemodal');
+    Route::get('/dashboard/servicio_clase/{servicio_clase}/edit', [ServicioClaseController::class, 'edit'])->name('servicio_clase.edit');
+    Route::patch('/dashboard/servicio_clase/{servicio_clase}/update', [ServicioClaseController::class, 'update'])->name('servicio_clase.update');
+    Route::delete('/dashboard/servicio_clase/{servicio_clase}/destroy', [ServicioClaseController::class, 'destroy'])->name('servicio_clase.destroy');
+
+    Route::get('/dashboard/servicio_detalle', [ServicioDetalleController::class, 'index'])->name('servicio_detalle');
+    Route::get('/dashboard/servicio_detalle/create', [ServicioDetalleController::class, 'create'])->name('servicio_detalle.create');
+    Route::post('/dashboard/servicio_detalle', [ServicioDetalleController::class, 'store'])->name('servicio_detalle.store');
+    Route::get('/dashboard/servicio_detalle/{servicio_detalle}/edit', [ServicioDetalleController::class, 'edit'])->name('servicio_detalle.edit');
+    Route::patch('/dashboard/servicio_detalle/{servicio_detalle}/update', [ServicioDetalleController::class, 'update'])->name('servicio_detalle.update');
+    Route::delete('/dashboard/servicio_detalle/{servicio_detalle}/destroy', [ServicioDetalleController::class, 'destroy'])->name('servicio_detalle.destroy');
+
 });

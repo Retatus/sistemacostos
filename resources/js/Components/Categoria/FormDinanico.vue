@@ -5,7 +5,6 @@
 </script>
 
 <script setup>   
-import { computed, useSlots } from 'vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue'; 
     import InputError from '../InputError.vue';
     import FormSectionNew from './FormSectionNew.vue';
@@ -28,9 +27,6 @@ import { computed, useSlots } from 'vue';
      });
      // Comunicacion vertical descendente agregar o editar a traves de las props
      defineEmits(['submit']);
-
-     const hasActions = computed(() => !! useSlots().actions);
-
 </script>
 <template>   
     <!-- Comunicacion vertical ascedente agregar o editar--> 
