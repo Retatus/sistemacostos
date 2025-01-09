@@ -84,13 +84,13 @@ const logout = () => {
                                 </div>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink>
+                                <NavLink :href="route('dashboard')">
                                     Operaciones
                                 </NavLink>
-                                <NavLink>
+                                <NavLink :href="route('dashboard')">
                                     Compras
                                 </NavLink>
-                                <NavLink>
+                                <NavLink :href="route('dashboard')">
                                     Ventas
                                 </NavLink>
                             </div>
