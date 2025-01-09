@@ -18,12 +18,14 @@
  
     console.log(props);
     const form = useForm({
+        codigo: props.destino.codigo,
         nombre: props.destino.nombre,
         estado_activo: props.destino.estado_activo,
     });
 
     const formFields = {   
-        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        codigo: { type: 'text', placeholder: 'Ingrese el codigo', label: 'codigo' },
+        nombre: { type: 'text', placeholder: 'Ingrese el nombre', label: 'nombre' },
         estado_activo: { 
             type: 'select', 
             options: [
@@ -40,10 +42,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  Destino
+                  Distribucion venta
               </h2>   
               <Link :href="route('destino')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista Destino
+                  Lista Distribucion venta
               </Link>                             
           </div>    
         </template>

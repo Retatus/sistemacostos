@@ -51,6 +51,9 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
+                                        codigo
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -64,6 +67,9 @@
                             </thead>
                             <tbody>
                                 <tr v-for="destino in Destinos" className="bg-white border-b ">
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{destino.codigo}}
+                                    </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{destino.nombre}}
                                     </td> 

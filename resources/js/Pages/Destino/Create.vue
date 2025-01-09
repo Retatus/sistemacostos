@@ -11,11 +11,13 @@
 
     const form = useForm({
         nombre: "",
+        codigo: "",
         estado_activo: "1",
     });
 
     const formFields = {   
-        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        codigo: { type: 'text', placeholder: 'Ingrese el codigo', label: 'codigo' },        
+        nombre: { type: 'text', placeholder: 'Ingrese el nombre', label: 'nombre' },
         estado_activo: { 
             type: 'select', 
             options: [

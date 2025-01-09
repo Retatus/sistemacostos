@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('destinos', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo', 3);
             $table->string('nombre', 25);
-            $table->tinyInteger('estado_activo' )->default(1);
+            $table->string('estado_activo');
             $table->timestamps();
 
         });

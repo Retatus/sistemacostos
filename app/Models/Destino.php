@@ -9,5 +9,5 @@ class Destino extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nombre', 'estado_activo'];
+    protected $fillable = ['codigo', 'nombre', 'estado_activo'];
 }
