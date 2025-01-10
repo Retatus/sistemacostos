@@ -28,7 +28,7 @@
         } 
     })
  
-    console.log(props);
+    //console.log(props.servicioDetalle);
     const form = useForm({
         descripcion: props.servicioDetalle.descripcion,
         costo_id: props.servicioDetalle.costo_id,

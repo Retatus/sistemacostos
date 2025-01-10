@@ -8,6 +8,8 @@ use App\Models\DistribucionVenta;
 use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
+
 class ServicioDetalleController extends Controller
 {
     /**
@@ -75,7 +77,12 @@ class ServicioDetalleController extends Controller
     public function update(Request $request, ServicioDetalle $servicioDetalle)
     {
         $data = $request->all();
+        //DB::enableQueryLog(); // Habilita el registro de consultas
         $servicioDetalle->update($data);
+        //dd(DB::getQueryLog());        
+        // origen del problema en las rutas {serviciodetalle} {servicio_detalle}
+        //Route::patch('/dashboard/serviciodetalle/{serviciodetalle}/update', [ServicioDetalleController::class, 'update'])->name('serviciodetalle.update');
+        //Route::patch('/dashboard/serviciodetalle/{servicio_detalle}/update', [ServicioDetalleController::class, 'update'])->name('serviciodetalle.update');
         return to_route('serviciodetalle');
         //return Inertia::render('ServicioDetalle/Edit', compact('servicioDetalle'));
     }
