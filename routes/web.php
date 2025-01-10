@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\ClaseServicioController;
+use App\Http\Controllers\CostoController;
+use App\Http\Controllers\DestinoController;
+use App\Http\Controllers\DistribucionVentaController;
 use App\Http\Controllers\ServicioClaseController;
 use App\Http\Controllers\ServicioDetalleController;
 use App\Http\Controllers\ProveedorCategoriaController;
@@ -77,16 +80,37 @@ Route::middleware([
     Route::get('/dashboard/servicio_clase', [ServicioClaseController::class, 'index'])->name('servicio_clase');
     Route::get('/dashboard/servicio_clase/create', [ServicioClaseController::class, 'create'])->name('servicio_clase.create');
     Route::post('/dashboard/servicio_clase', [ServicioClaseController::class, 'store'])->name('servicio_clase.store');
-    Route::post('/dashboard/servicio_clase', [ServicioClaseController::class, 'storemodal'])->name('servicio_clase.storemodal');
+    Route::post('/dashboard/servicio_clase/storemodal', [ServicioClaseController::class, 'storemodal'])->name('servicio_clase.storemodal');
     Route::get('/dashboard/servicio_clase/{servicio_clase}/edit', [ServicioClaseController::class, 'edit'])->name('servicio_clase.edit');
     Route::patch('/dashboard/servicio_clase/{servicio_clase}/update', [ServicioClaseController::class, 'update'])->name('servicio_clase.update');
     Route::delete('/dashboard/servicio_clase/{servicio_clase}/destroy', [ServicioClaseController::class, 'destroy'])->name('servicio_clase.destroy');
 
-    Route::get('/dashboard/servicio_detalle', [ServicioDetalleController::class, 'index'])->name('servicio_detalle');
-    Route::get('/dashboard/servicio_detalle/create', [ServicioDetalleController::class, 'create'])->name('servicio_detalle.create');
-    Route::post('/dashboard/servicio_detalle', [ServicioDetalleController::class, 'store'])->name('servicio_detalle.store');
-    Route::get('/dashboard/servicio_detalle/{servicio_detalle}/edit', [ServicioDetalleController::class, 'edit'])->name('servicio_detalle.edit');
-    Route::patch('/dashboard/servicio_detalle/{servicio_detalle}/update', [ServicioDetalleController::class, 'update'])->name('servicio_detalle.update');
-    Route::delete('/dashboard/servicio_detalle/{servicio_detalle}/destroy', [ServicioDetalleController::class, 'destroy'])->name('servicio_detalle.destroy');
+    Route::get('/dashboard/serviciodetalle', [ServicioDetalleController::class, 'index'])->name('serviciodetalle');
+    Route::get('/dashboard/serviciodetalle/create', [ServicioDetalleController::class, 'create'])->name('serviciodetalle.create');
+    Route::post('/dashboard/serviciodetalle', [ServicioDetalleController::class, 'store'])->name('serviciodetalle.store');
+    Route::get('/dashboard/serviciodetalle/{servicio_detalle}/edit', [ServicioDetalleController::class, 'edit'])->name('serviciodetalle.edit');
+    Route::patch('/dashboard/serviciodetalle/{servicio_detalle}/update', [ServicioDetalleController::class, 'update'])->name('serviciodetalle.update');
+    Route::delete('/dashboard/serviciodetalle/{serviciodetalle}/destroy', [ServicioDetalleController::class, 'destroy'])->name('serviciodetalle.destroy');
+
+    Route::get('/dashboard/costo', [CostoController::class, 'index'])->name('costo');
+    Route::get('/dashboard/costo/create', [CostoController::class, 'create'])->name('costo.create');
+    Route::post('/dashboard/costo', [CostoController::class, 'store'])->name('costo.store');
+    Route::get('/dashboard/costo/{costo}/edit', [CostoController::class, 'edit'])->name('costo.edit');
+    Route::patch('/dashboard/costo/{costo}/update', [CostoController::class, 'update'])->name('costo.update');
+    Route::delete('/dashboard/costo/{costo}/destroy', [CostoController::class, 'destroy'])->name('costo.destroy');
+
+    Route::get('/dashboard/destino', [DestinoController::class, 'index'])->name('destino');
+    Route::get('/dashboard/destino/create', [DestinoController::class, 'create'])->name('destino.create');
+    Route::post('/dashboard/destino', [DestinoController::class, 'store'])->name('destino.store');
+    Route::get('/dashboard/destino/{destino}/edit', [DestinoController::class, 'edit'])->name('destino.edit');
+    Route::patch('/dashboard/destino/{destino}/update', [DestinoController::class, 'update'])->name('destino.update');
+    Route::delete('/dashboard/destino/{destino}/destroy', [DestinoController::class, 'destroy'])->name('destino.destroy');
+
+    Route::get('/dashboard/distribucion_venta', [DistribucionVentaController::class, 'index'])->name('distribucion_venta');
+    Route::get('/dashboard/distribucion_venta/create', [DistribucionVentaController::class, 'create'])->name('distribucion_venta.create');
+    Route::post('/dashboard/distribucion_venta', [DistribucionVentaController::class, 'store'])->name('distribucion_venta.store');
+    Route::get('/dashboard/distribucion_venta/{distribucion_venta}/edit', [DistribucionVentaController::class, 'edit'])->name('distribucion_venta.edit');
+    Route::patch('/dashboard/distribucion_venta/{distribucion_venta}/update', [DistribucionVentaController::class, 'update'])->name('distribucion_venta.update');
+    Route::delete('/dashboard/distribucion_venta/{distribucion_venta}/destroy', [DistribucionVentaController::class, 'destroy'])->name('distribucion_venta.destroy');
 
 });

@@ -41,7 +41,7 @@
 
     async function addServiceClass(data) {
         try {
-            const response = await axios.post(route('servicio_clase.storemodal'), data);    
+            const response = await axios.post(`${route('servicio_clase')}/storemodal`, data);    
             console.log('Elemento agregado:', response.data);            
             if (response.status === 200) {        
                 ServicioClases.value = response.data;    
@@ -74,8 +74,10 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   ServicioClase
               </h2>   
-              <!-- <button @click="showModal()" class="btn btn-primary">Modal categoria proveedor</button>        -->
-              <button @click="showModal = true">Abrir Modal</button>              
+              <button @click="showModal = true">Agregar Servicio Clase Modal</button>      
+              <Link :href="route('servicio_clase.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Agregar Servicio Clase
+              </Link>          
           </div>    
         </template>
 
