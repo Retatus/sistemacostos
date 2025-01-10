@@ -56,7 +56,7 @@ class ServicioClaseController extends Controller
      */
     public function edit(ServicioClase $servicioClase)
     {
-        return Inertia::render('ServicioClase/Edit', compact('servicioclase'));
+        return Inertia::render('ServicioClase/Edit', compact('servicioClase'));
     }
 
     /**
@@ -66,7 +66,7 @@ class ServicioClaseController extends Controller
     {
         $data = $request->all();
         $servicioClase->update($data);
-        return Inertia::render('ServicioClase/Edit', compact('servicioclase'));
+        return Inertia::render('ServicioClase/Edit', compact('servicioClase'));
     }
 
     /**
