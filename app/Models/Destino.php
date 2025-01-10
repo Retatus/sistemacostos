@@ -17,8 +17,8 @@ class Destino extends Model
             ->get()
             ->map(function ($destino) {
                 return [
-                    'value' => $destino->codigo,
-                    'label' => $destino->nombre,
+                    'value' => $destino->id,
+                    'label' => $destino->codigo . ' - ' . $destino->nombre,
                 ];
             });
     }

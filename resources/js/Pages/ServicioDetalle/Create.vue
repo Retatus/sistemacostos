@@ -26,25 +26,26 @@
 
     const form = useForm({
         descripcion: "",
-        costo: "1",
-        destino: "113",
-        distribucion: "1",
+        costo_id: "1",
+        destino_id: "1",
+        distribucion_venta_id: "1",
         estado_activo: "1",
+
     });
 
     const formFields = {   
         descripcion: { type: 'text', placeholder: 'Ingrese la descripcion', label: 'descripcion' },
-        costo: { 
+        costo_id: { 
             type: 'select', 
             label: 'Costos', 
             options: props.categoriaCostos
         },
-        destino: { 
+        destino_id: { 
             type: 'select', 
             label: 'Destino', 
             options: props.categoriaDestinos
         },
-        distribucion: { 
+        distribucion_venta_id: { 
             type: 'select', 
             label: 'Distribucion', 
             options: props.categoriaDistribuciones
@@ -57,10 +58,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  Servicio detalle
+                  ServicioDetalle
               </h2>   
-              <Link :href="route('servicio_detalle')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista Servicio detalle
+              <Link :href="route('serviciodetalle')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ServicioDetalle
               </Link>                             
           </div>    
         </template>
@@ -71,7 +72,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="false"
-                        @submit="form.post(route('servicio_detalle.store'))" 
+                        @submit="form.post(route('serviciodetalle.store'))" 
                     />
                 </div>
             </div>

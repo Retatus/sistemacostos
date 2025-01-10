@@ -31,29 +31,37 @@
     console.log(props);
     const form = useForm({
         descripcion: props.servicioDetalle.descripcion,
-        costo: props.servicioDetalle.costo,
-        destino: props.servicioDetalle.destino,
-        distribucion: props.servicioDetalle.distribucion,
+        costo_id: props.servicioDetalle.costo_id,
+        destino_id: props.servicioDetalle.destino_id,
+        distribucion_venta_id: props.servicioDetalle.distribucion_venta_id,
         estado_activo: props.servicioDetalle.estado_activo,
     });
 
     const formFields = {   
         descripcion: { type: 'text', placeholder: 'Ingrese la descripcion', label: 'descripcion' },
-        costo: { 
+        costo_id: { 
             type: 'select', 
             label: 'Costos', 
             options: props.categoriaCostos
         },
-        destino: { 
+        destino_id: { 
             type: 'select', 
             label: 'Destino', 
             options: props.categoriaDestinos
         },
-        distribucion: { 
+        distribucion_venta_id: { 
             type: 'select', 
             label: 'Distribucion', 
             options: props.categoriaDistribuciones
-        }        
+        }, 
+        estado_activo: { 
+            type: 'select', 
+            options: [
+                { value: '1', label: 'Activo' }, 
+                { value: '0', label: 'Desactivo' }
+            ], 
+            label: 'Estado activo' 
+        }
     }
 </script>
 
@@ -62,10 +70,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  Servicio detalle
+                  ServicioDetalle
               </h2>   
-              <Link :href="route('servicio_detalle')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista Servicio detalle
+              <Link :href="route('serviciodetalle')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ServicioDetalle
               </Link>                             
           </div>    
         </template>
@@ -76,7 +84,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="true"
-                        @submit="form.patch(route('servicio_detalle.update', servicioDetalle))" 
+                        @submit="form.patch(route('serviciodetalle.update', servicioDetalle))" 
                     />
                 </div>
             </div>

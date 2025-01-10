@@ -23,9 +23,9 @@ class UpdateRequest extends FormRequest
     {
         return [
              "descripcion" => 'required|min:3|max:75',
-            "costo" => 'required|min:3|max:15',
-            "destino" => 'required',
-            "distribucion" => 'required',
+            "costo_id" => 'required|min:3|max:',
+            "destino_id" => 'required|min:3|max:',
+            "distribucion_venta_id" => 'required|min:3|max:',
             "estado_activo" => 'required',
 
         ];

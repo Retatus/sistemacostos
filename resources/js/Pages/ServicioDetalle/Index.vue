@@ -19,7 +19,7 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('servicio_detalle.destroy', ServicioDetalle), {
+            router.delete(route('serviciodetalle.destroy', ServicioDetalle), {
                 onSuccess: (page) => {
                 ServicioDetalles.value = page.props.serviciodetalles;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
@@ -37,7 +37,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   ServicioDetalle
               </h2>   
-              <Link :href="route('servicio_detalle.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('serviciodetalle.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar ServicioDetalle
               </Link>                    
           </div>    
@@ -54,13 +54,13 @@
                                         descripcion
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        costo
+                                        costo_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        destino
+                                        destino_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        distribucion
+                                        distribucion_venta_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
@@ -76,14 +76,23 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{serviciodetalle.descripcion}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{serviciodetalle.costo}}
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{serviciodetalle.costo_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{serviciodetalle.destino}}
+                                        {{serviciodetalle.costo.nombre}}
+                                    </td> 
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{serviciodetalle.destino_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{serviciodetalle.distribucion}}
+                                        {{serviciodetalle.destino.nombre}}
+                                    </td> 
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{serviciodetalle.distribucion_venta_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{serviciodetalle.distribucion_venta.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{serviciodetalle.estado_activo}}
@@ -91,7 +100,7 @@
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('servicio_detalle.edit', serviciodetalle)">
+                                            <Link :href="route('serviciodetalle.edit', serviciodetalle)">
                                                 Editar
                                             </Link>
                                             <button @click="onDeleteConfirm(serviciodetalle)">Eliminar</button>

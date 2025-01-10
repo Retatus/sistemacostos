@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ServicioDetalle\StoreRequest;
-use App\Models\Costos;
+use App\Models\Costo;
 use App\Models\Destino;
 use App\Models\DistribucionVenta;
 use App\Models\ServicioDetalle;
@@ -16,7 +16,15 @@ class ServicioDetalleController extends Controller
     public function index()
     {
         //$serviciodetalle = ServicioDetalle::all();
-        $serviciodetalles = ServicioDetalle::orderBy('id', 'desc')->get();
+        $serviciodetalles = ServicioDetalle::with(
+            [
+                'costo:id,nombre',
+                'destino:id,nombre',
+                'distribucion_venta:id,nombre',
+            ])
+        ->orderBy('id', 'desc')
+        ->get();
+
         return Inertia::render('ServicioDetalle/Index', compact('serviciodetalles'));
         //return response()->json( ['serviciodetalle' => $serviciodetalle]);
     }
@@ -26,7 +34,7 @@ class ServicioDetalleController extends Controller
      */
     public function create()
     {
-        $formattedCostos = Costos::getFormattedForDropdown();
+        $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         return Inertia::render('ServicioDetalle/Create', ['categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]); //compact('proveedorcategorias' => $formattedCategorias]);
@@ -39,7 +47,7 @@ class ServicioDetalleController extends Controller
     {
         $data = $request->all();
         ServicioDetalle::create($data);
-        return to_route('servicio_detalle');
+        return to_route('serviciodetalle');
     }
 
     /**
@@ -55,7 +63,7 @@ class ServicioDetalleController extends Controller
      */
     public function edit(ServicioDetalle $servicioDetalle)
     {
-        $formattedCostos = Costos::getFormattedForDropdown();
+        $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         return Inertia::render('ServicioDetalle/Edit', [ 'servicioDetalle' => $servicioDetalle,'categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]);
@@ -68,7 +76,8 @@ class ServicioDetalleController extends Controller
     {
         $data = $request->all();
         $servicioDetalle->update($data);
-        return Inertia::render('ServicioDetalle/Edit', compact('servicioDetalle'));
+        return to_route('serviciodetalle');
+        //return Inertia::render('ServicioDetalle/Edit', compact('servicioDetalle'));
     }
 
     /**
@@ -77,6 +86,6 @@ class ServicioDetalleController extends Controller
     public function destroy(ServicioDetalle $servicioDetalle)
     {
         $servicioDetalle->delete();
-        return to_route('servicio_detalle');
+        return to_route('serviciodetalle');
     }
 }

@@ -74,7 +74,7 @@ const logout = () => {
                                         <Link :href="route('servicio_clase')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Tipos de servicios
                                         </Link>
-                                        <Link :href="route('servicio_detalle')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        <Link :href="route('serviciodetalle')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Servicio detalle
                                         </Link>
                                         <Link :href="route('dashboard')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
