@@ -11,6 +11,18 @@ class ServicioDetalle extends Model
 
     protected $fillable = ['descripcion', 'costo_id', 'destino_id', 'distribucion_venta_id', 'estado_activo'];
 
+    public static function getFormattedForDropdown()
+    {
+        return self::orderBy('id', 'desc')
+            ->get()
+            ->map(function ($destino) {
+                return [
+                    'value' => $destino->id,
+                    'label' => $destino->descripcion,
+                ];
+            });
+    }  
+
     public function costo()
     {
         return $this->belongsTo(Costo::class, 'costo_id', 'id');
