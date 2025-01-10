@@ -45,8 +45,8 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar TipoDocumento
+              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista TipoDocumento
               </Link>                             
           </div>    
         </template>

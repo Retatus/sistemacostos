@@ -39,10 +39,7 @@
               </h2>   
               <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar TipoDocumento
-              </Link>
-              <Link :href="route('tipo_documento.crear')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar Dinamico
-              </Link>                      
+              </Link>                  
           </div>    
         </template>
 

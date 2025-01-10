@@ -42,10 +42,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  Distribucion venta
+                  Destino
               </h2>   
               <Link :href="route('destino')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista Distribucion venta
+                  Lista Destino
               </Link>                             
           </div>    
         </template>
