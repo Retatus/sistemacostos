@@ -16,12 +16,12 @@ class ServicioController extends Controller
     public function index()
     {
         //$servicio = Servicio::all();
-        $servicios = Servicio::orderBy('id', 'desc')->get();
+        //$servicios = Servicio::orderBy('id', 'desc')->get();
         //$serviciodetalle = Servicio::all();
-        $serviciodetalles = Servicio::with(
+        $servicios = Servicio::with(
             [
-                'proveedor:id,nombre',
-                'servicio_detalle:id,nombre',
+                'proveedor:id,razon_social',
+                'servicio_detalle:id,descripcion',
                 'servicio_clase:id,nombre',
             ])
         ->orderBy('id', 'desc')
@@ -44,7 +44,7 @@ class ServicioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->all();
         Servicio::create($data);
@@ -64,7 +64,10 @@ class ServicioController extends Controller
      */
     public function edit(Servicio $servicio)
     {
-        return Inertia::render('Servicio/Edit', compact('servicio'));
+        $formattedProveedor = Proveedor::getFormattedForDropdown();
+        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        return Inertia::render('Servicio/Edit', ['servicio' => $servicio, 'ListaProveedor' => $formattedProveedor, 'ListaServicio_clase' => $formattedServicioClase, 'ListaServicio_detalle' => $formattedServicioDetalle]);
     }
 
     /**

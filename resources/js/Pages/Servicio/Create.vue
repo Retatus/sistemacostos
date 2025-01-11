@@ -25,25 +25,19 @@
     })
 console.log(props);
     const form = useForm({
-        tipo_pax: "adulto",
+        monto: "",
         moneda: "dolares",
         proveedor_id: "",
         servicio_detalle_id: "",
         ubicacion: "",
+        tipo_pax: "adulto",
         servicio_clase_id: "",
-        estado_activo: "1"
+        estado_activo: "1",
+
     });
 
-    const formFields = {        
-        tipo_pax: { 
-            label: 'Tipo pax', 
-            type: 'select', 
-            options: [
-                { value: 'adulto', label: 'adulto' }, 
-                { value: 'estudiante', label: 'estudiante' },
-                { value: 'ninio', label: 'niño' }
-            ], 
-        },
+    const formFields = {   
+        monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },     
         moneda: { 
             label: 'Moneda',
             type: 'select', 
@@ -69,6 +63,15 @@ console.log(props);
             ]
         },
         ubicacion: { type: 'text', placeholder: 'Ingrese la ubicacion', label: 'ubicacion' },
+        tipo_pax: { 
+            label: 'Tipo pax', 
+            type: 'select', 
+            options: [
+                { value: 'adulto', label: 'adulto' }, 
+                { value: 'estudiante', label: 'estudiante' },
+                { value: 'ninio', label: 'niño' }
+            ], 
+        },
         servicio_clase_id: { 
             label: 'Servicio Clase', 
             type: 'select', 
@@ -85,7 +88,6 @@ console.log(props);
                 { value: '0', label: 'Desactivo' }
             ], 
         }
-        
     }
 </script>
 
