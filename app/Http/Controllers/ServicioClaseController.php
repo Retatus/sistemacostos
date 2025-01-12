@@ -40,7 +40,9 @@ class ServicioClaseController extends Controller
     {
         $data = $request->all();
         ServicioClase::create($data);
-        return response()->json(ServicioClase::orderBy('id', 'desc')->get());
+        $dataResponse = ServicioClase::getFormattedForDropdown();
+        //return response()->json(ServicioClase::orderBy('id', 'desc')->get());
+        return response()->json($dataResponse);
         //return to_route('servicio_clase');
     }
     /**

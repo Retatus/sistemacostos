@@ -44,11 +44,12 @@ class ServicioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
         $data = $request->all();
-        Servicio::create($data);
-        return to_route('servicio');
+        $proveedor = Servicio::create($data);
+        //return to_route('servicio');
+        return response()->json($proveedor);
     }
 
     /**

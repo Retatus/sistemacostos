@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\proveedor\StoreRequest;
+use App\Models\Costo;
+use App\Models\Destino;
+use App\Models\DistribucionVenta;
 use App\Models\ProveedorCategoria;
 use App\Models\proveedor;
+use App\Models\ServicioClase;
+use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ProveedorController extends Controller
@@ -29,7 +34,19 @@ class ProveedorController extends Controller
     public function create()
     {
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
-        return Inertia::render('proveedor/Create', ['proveedorcategorias' => $formattedCategorias]); //compact('proveedorcategorias'));
+        $formattedCostos = Costo::getFormattedForDropdown();
+        $formattedDestinos = Destino::getFormattedForDropdown();
+        $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
+        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        return Inertia::render('proveedor/CreateProveedor', 
+        ['proveedorcategorias' => $formattedCategorias,
+         'categoriaCostos' => $formattedCostos,
+         'categoriaDestinos' => $formattedDestinos,
+         'categoriaDistribuciones' => $formattedDistribuciones,
+         'ListaServicio_clase' => $formattedServicioClase,
+         'ListaServicio_detalle' => $formattedServicioDetalle]
+    ); //compact('proveedorcategorias'));
     }
 
     /**
@@ -38,8 +55,9 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        proveedor::create($data);
-        return to_route('proveedor');
+        $proveedor = proveedor::create($data);
+        //return to_route('proveedor');
+        return response()->json($proveedor);
     }
 
     /**
