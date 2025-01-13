@@ -20,11 +20,9 @@ class ProveedorController extends Controller
     {
         //$proveedor = proveedor::all();
         //$proveedors = proveedor::orderBy('id', 'desc')->get();
-        $proveedors = Proveedor::with('categoria:id,nombre') 
-        ->orderBy('id', 'desc') 
-        ->get();
+        $proveedors = Proveedor::with('categoria:id,nombre')->orderBy('id', 'desc')->paginate(10);
         //dd($proveedors);
-        return Inertia::render('proveedor/Index', compact('proveedors'));
+        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors]);
         //return response()->json( ['proveedor' => $proveedor]);
     }
 

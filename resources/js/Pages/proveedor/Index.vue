@@ -4,9 +4,13 @@
     import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    
 
     const page = usePage();
-    const proveedors = ref(page.props.proveedors);
+    const Proveedors = ref(page.props.proveedors.data);
+
+    console.log(Proveedors);
     
     const onDeleteConfirm = (proveedor) => {
         Swal.fire({
@@ -21,15 +25,30 @@
             if (result.isConfirmed) {
             router.delete(route('proveedor.destroy', proveedor), {
                 onSuccess: (page) => {
-                proveedors.value = page.props.proveedors;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                    Proveedors.value = page.props.proveedors;
+                    Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
             }
         });
     };
 </script>
+<script>
+import { defineComponent } from 'vue';
 
+export default defineComponent({
+  props: {
+    proveedors: Object,
+  },
+  methods: {
+    changePage(page) {
+        if(page > 0 && page <= this.proveedors.last_page){
+            this.$inertia.get(window.location.pathname, { page: page });
+        }
+    }
+  },
+});
+</script>
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -84,7 +103,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="proveedor in proveedors" className="bg-white border-b ">
+                                <tr v-for="proveedor in Proveedors" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{proveedor.ruc}}
                                     </td> 
@@ -124,6 +143,19 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div v-if="proveedors.last_page > 1" class="flex justify-center items-center gap-4 mt-5 mb-5">
+                            <SecondaryButton 
+                                @click="changePage(proveedors.current_page - 1)" 
+                                :disabled="proveedors.current_page === 1">
+                                Anterior
+                            </SecondaryButton>
+                            <span>Página {{ proveedors.current_page }} de {{ proveedors.last_page }}</span>
+                            <SecondaryButton 
+                                @click="changePage(proveedors.current_page + 1)" 
+                                :disabled="proveedors.current_page === proveedors.last_page">
+                                Siguiente
+                            </SecondaryButton>
+                        </div>
                     </div>                    
                 </div>                
             </div>

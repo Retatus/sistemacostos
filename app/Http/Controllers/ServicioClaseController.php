@@ -13,8 +13,8 @@ class ServicioClaseController extends Controller
     public function index()
     {
         //$servicioclase = ServicioClase::all();
-        $servicioclases = ServicioClase::orderBy('id', 'desc')->get();
-        return Inertia::render('ServicioClase/Index', compact('servicioclases'));
+        $servicioclases = ServicioClase::orderBy('id', 'desc')->paginate(10);
+        return Inertia::render('ServicioClase/Index', ['servicioclases' => $servicioclases]);
         //return response()->json( ['servicioclase' => $servicioclase]);
     }
 

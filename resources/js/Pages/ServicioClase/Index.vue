@@ -4,17 +4,13 @@
     import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
-    import Modal from '@/Components/Modal.vue';
-    import InputError from '@/Components/InputError.vue';
-    import InputLabel from '@/Components/InputLabel.vue';
-    import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
-    import TextInput from '@/Components/TextInput.vue';
     import ServiceClassModal from '@/Components/Modal/FormModal.vue';
 
     const page = usePage();
-    const ServicioClases = ref(page.props.servicioclases);
+    const ServicioClases = ref(page.props.servicioclases.data);
     
+    console.log(ServicioClases);
     const onDeleteConfirm = (ServicioClase) => {
         Swal.fire({
             title: '<strong>¿Estás seguro?</strong>',
@@ -28,8 +24,8 @@
             if (result.isConfirmed) {
             router.delete(route('servicio_clase.destroy', ServicioClase), {
                 onSuccess: (page) => {
-                ServicioClases.value = page.props.servicioclases;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                    ServicioClases.value = page.props.servicioclases;
+                    Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
             }
@@ -65,6 +61,23 @@
             error.value = err.response?.data?.message || 'Ocurrió un error';
         }
     }
+</script>
+
+<script>
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  props: {
+    servicioclases: Object,
+  },
+  methods: {
+    changePage(page) {
+        if(page > 0 && page <= this.servicioclases.last_page){
+            this.$inertia.get(window.location.pathname, { page: page });
+        }
+    }
+  },
+});
 </script>
 
 <template>
@@ -119,6 +132,19 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div v-if="servicioclases.last_page > 1" class="flex justify-center items-center gap-4 mt-5 mb-5">
+                            <SecondaryButton 
+                                @click="changePage(servicioclases.current_page - 1)" 
+                                :disabled="servicioclases.current_page === 1">
+                                Anterior
+                            </SecondaryButton>
+                            <span>Página {{ servicioclases.current_page }} de {{ servicioclases.last_page }}</span>
+                            <SecondaryButton 
+                                @click="changePage(servicioclases.current_page + 1)" 
+                                :disabled="servicioclases.current_page === servicioclases.last_page">
+                                Siguiente
+                            </SecondaryButton>
+                        </div>
                     </div>                    
                 </div>                
             </div>
