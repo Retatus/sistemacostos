@@ -82,7 +82,7 @@
           </tr>
         </tbody>
       </table>
-      <button @click.prevent="addItem">Agregar Ítem</button>
+      <!-- <button @click.prevent="addItem">Agregar Ítem</button> -->
     </div>
   </template>
 
@@ -106,21 +106,22 @@
       } 
     },
     methods: {
-      addItem() {
-        this.items.push({ 
-          monto: '',
-          moneda: 'dolares',
-          servicio_clase_id: '',
-          ubicacion: '',
-          tipo_pax: 'adulto',
-          servicio_detalle_id: '',
+      // addItem() {
+      //   this.items.push({ 
+      //     monto: '',
+      //     moneda: 'dolares',
+      //     servicio_clase_id: '',
+      //     ubicacion: '',
+      //     tipo_pax: 'adulto',
+      //     servicio_detalle_id: '',
 
-          // producto: '',
-          // cantidad: 1, 
-          // precio: 0 
-        });
-        this.$emit('update', this.items);
-      },
+      //     // producto: '',
+      //     // cantidad: 1, 
+      //     // precio: 0 
+      //   });
+
+      //   this.$emit('update', this.items);
+      // },
       removeItem(index) {
         this.items.splice(index, 1);
         this.$emit('update', this.items);
