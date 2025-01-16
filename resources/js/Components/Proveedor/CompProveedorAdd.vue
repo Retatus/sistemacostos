@@ -115,7 +115,7 @@
 <script setup>
     import { ref } from 'vue';
     import axios from 'axios';
-    import Servicio from './Servicio.vue';
+    import Servicio from '../Servicio/CompServicioAdd.vue';
     import PrimaryButton from '../PrimaryButton.vue';
     import ServiceDetalleModal from '@/Components/Modal/FormModal.vue';
     

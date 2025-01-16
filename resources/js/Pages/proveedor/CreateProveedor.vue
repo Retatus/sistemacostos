@@ -2,7 +2,7 @@
 <script setup>
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
-    import FormularioProveedor from '@/Components/Proveedor/Proveedor.vue';
+    import FormularioProveedor from '@/Components/Proveedor/CompProveedorAdd.vue';
 
     const props = defineProps({
         proveedorcategorias: {

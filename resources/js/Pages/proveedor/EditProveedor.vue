@@ -2,7 +2,7 @@
 <script setup>
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
-    import FormularioProveedorEdit from '@/Components/Proveedor/ProveedorEdit.vue';
+    import FormularioProveedorEdit from '@/Components/Proveedor/CompProveedorEdit.vue';
 
     const props = defineProps({
         proveedor_edit: {

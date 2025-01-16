@@ -85,9 +85,8 @@
       <!-- <button @click.prevent="addItem">Agregar Ítem</button> -->
     </div>
   </template>
-  
-  <script>
-  
+
+<script>  
   export default {
     props: {
       items: {
@@ -104,12 +103,11 @@
       } 
     },
     methods: {
-      
       removeItem(index) {
         this.items.splice(index, 1);
         this.$emit('update', this.items);
       },
     },
   };
-  </script>
+</script>
   
