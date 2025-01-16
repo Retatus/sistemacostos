@@ -94,9 +94,8 @@
             :ListaServicio_detalle="ListaServicio_detalle"   
             @update="updateDetalles"
         />
-
-        <!-- Botón para agregar el ítem -->  
-        <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+        <!-- Botón para agregar el ítem -->
+        <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Editar</PrimaryButton>
       </form>
     </div>
     <ServiceDetalleModal
@@ -118,9 +117,17 @@
     import Servicio from './Servicio.vue';
     import PrimaryButton from '../PrimaryButton.vue';
     import ServiceDetalleModal from '@/Components/Modal/FormModal.vue';
-    
-    // Definir las props
+  
+  // Definir las props
     const props = defineProps({
+        proveedor_edit: {
+            type: Object, 
+            required: true
+        },
+        servicio_edit: {
+            type: Object, 
+            required: true
+        },
         proveedorcategorias: {
             type: Object,
             required: true,
@@ -146,13 +153,14 @@
             required: true,
         },
     });
-    
+  
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
+    //console.log('props 133:', props);
     const ServiciosDetalles = ref([...props.ListaServicio_detalle]);
     const ServicioClases = ref([...props.ListaServicio_clase]);
-    
+
     // Variables para el proveedor y detalle temporal
     const proveedor = ref({
         ruc: '',
@@ -168,7 +176,9 @@
         destino: '',
         detalles: [],
     });
-    
+
+    proveedor.value = props.proveedor_edit;
+
     const detalleTemporal = ref({
         monto: '',
         moneda: 'dolares',
@@ -177,7 +187,9 @@
         tipo_pax: 'adulto',
         servicio_detalle_id: '',
     });
-    
+
+    proveedor.value.detalles = props.servicio_edit;
+
     // Métodos
     async function addServiceClass(data) {
         try {
@@ -194,11 +206,11 @@
             error.value = err.response?.data?.message || 'Ocurrió un error';
         }
     }
-    
+
     function updateDetalles(nuevosDetalles) {
         detalleTemporal.value = nuevosDetalles;
     }
-    
+
     function agregarDetalle() {
         // Agrega el detalle temporal a la lista de detalles
         proveedor.value.detalles.push({ ...detalleTemporal.value });
@@ -212,7 +224,7 @@
             servicio_detalle_id: '',
         };
     }
-  
+
     async function submitProveedor() {
         try {
             console.log(proveedor.value);
@@ -221,7 +233,7 @@
         } catch (error) {
             console.error('Error al registrar el proveedor:', error);
         }
-    }  
+    }
 </script>
   
   

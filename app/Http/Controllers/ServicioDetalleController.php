@@ -52,6 +52,16 @@ class ServicioDetalleController extends Controller
         return to_route('serviciodetalle');
     }
 
+    public function storemodal(StoreRequest $request)
+    {
+        $data = $request->all();
+        ServicioDetalle::create($data);
+        $dataResponse = ServicioDetalle::getFormattedForDropdown();
+        //return response()->json(ServicioDetalle::orderBy('id', 'desc')->get());
+        return response()->json($dataResponse);
+        //return to_route('servicio_clase');
+    }
+
     /**
      * Display the specified resource.
      */

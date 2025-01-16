@@ -7,6 +7,7 @@ use App\Models\Destino;
 use App\Models\DistribucionVenta;
 use App\Models\ProveedorCategoria;
 use App\Models\proveedor;
+use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
@@ -38,13 +39,14 @@ class ProveedorController extends Controller
         $formattedServicioClase = ServicioClase::getFormattedForDropdown();
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
         return Inertia::render('proveedor/CreateProveedor', 
-        ['proveedorcategorias' => $formattedCategorias,
-         'categoriaCostos' => $formattedCostos,
-         'categoriaDestinos' => $formattedDestinos,
-         'categoriaDistribuciones' => $formattedDistribuciones,
-         'ListaServicio_clase' => $formattedServicioClase,
-         'ListaServicio_detalle' => $formattedServicioDetalle]
-    ); //compact('proveedorcategorias'));
+        [
+            'proveedorcategorias' => $formattedCategorias,
+            'categoriaCostos' => $formattedCostos,
+            'categoriaDestinos' => $formattedDestinos,
+            'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaServicio_clase' => $formattedServicioClase,
+            'ListaServicio_detalle' => $formattedServicioDetalle
+        ]); //compact('proveedorcategorias'));
     }
 
     /**
@@ -71,14 +73,24 @@ class ProveedorController extends Controller
      */
     public function edit(proveedor $proveedor)
     {
-        $categoria = ProveedorCategoria::orderBy('id', 'desc')->get();
-        $formattedCategorias = $categoria->map(function ($categoria) {
-            return [
-                'value' => $categoria->id,
-                'label' => $categoria->nombre,
-            ];
-        });
-        return Inertia::render('proveedor/Edit', ['proveedor' => $proveedor, 'proveedorcategorias' => $formattedCategorias]); //compact('proveedorcategorias')); compact('proveedor'));
+        $servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedCostos = Costo::getFormattedForDropdown();
+        $formattedDestinos = Destino::getFormattedForDropdown();
+        $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
+        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        return Inertia::render('proveedor/EditProveedor',
+        [
+            'proveedor_edit' => $proveedor,
+            'servicio_edit' => $servicio,
+            'proveedorcategorias' => $formattedCategorias,
+            'categoriaCostos' => $formattedCostos,
+            'categoriaDestinos' => $formattedDestinos,
+            'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaServicio_clase' => $formattedServicioClase,
+            'ListaServicio_detalle' => $formattedServicioDetalle
+        ]); //compact('proveedorcategorias'));
     }
 
     /**
