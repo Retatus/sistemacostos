@@ -29,7 +29,7 @@ class TipoDocumentoController extends Controller
 
     public function crear()
     {
-        dd("que pasa");
+        //dd("que pasa");
         return Inertia::render('Categoria/Crear');
         //return Inertia::render('TipoDocumento/Create');
     }

@@ -6,12 +6,12 @@
     import { router } from '@inertiajs/vue3';
 
     const page = usePage();
-    const ClaseServicios = ref(page.props.claseservicios);
+    const Destinos = ref(page.props.destinos);
     
-    const onDeleteConfirm = (ClaseServicio) => {
+    const onDeleteConfirm = (Destino) => {
         Swal.fire({
             title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${ClaseServicio.nombre}</strong> será eliminado permanentemente.`,
+            html: `Este elemento <strong>${Destino.nombre}</strong> será eliminado permanentemente.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, eliminar',
@@ -19,9 +19,9 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('clase_servicio.destroy', ClaseServicio), {
+            router.delete(route('destino.destroy', Destino), {
                 onSuccess: (page) => {
-                ClaseServicios.value = page.props.claseservicios;
+                Destinos.value = page.props.destinos;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
@@ -35,10 +35,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  ClaseServicio
+                  Destino
               </h2>   
-              <Link :href="route('clase_servicio.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar ClaseServicio
+              <Link :href="route('destino.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Agregar Destino
               </Link>                    
           </div>    
         </template>
@@ -51,10 +51,13 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
+                                        codigo
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        estado
+                                        estado_activo
                                     </th> 
 
                                     <th scope="col" className="px-6 py-3">
@@ -63,20 +66,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="claseservicio in ClaseServicios" className="bg-white border-b ">
+                                <tr v-for="destino in Destinos" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{claseservicio.nombre}}
+                                        {{destino.codigo}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{claseservicio.estado}}
+                                        {{destino.nombre}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{destino.estado_activo}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('clase_servicio.edit', claseservicio)">
+                                            <Link :href="route('destino.edit', destino)">
                                                 Editar
                                             </Link>
-                                            <button @click="onDeleteConfirm(claseservicio)">Eliminar</button>
+                                            <button @click="onDeleteConfirm(destino)">Eliminar</button>
                                         </div>                                                                               
                                     </td>
                                 </tr>

@@ -37,24 +37,20 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar TipoDocumento
+              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista TipoDocumento
               </Link>                             
           </div>    
         </template>
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200">
-                        <FormularioDinamico
-                            :form="form"
-                            :fields="formFields"                            
-                            :updating="false"
-                            @submit="form.post(route('tipo_documento.store'))" 
-                        />
-                        </div>
-                    </div>
+                    <FormularioDinamico
+                        :form="form"
+                        :fields="formFields"                            
+                        :updating="false"
+                        @submit="form.post(route('tipo_documento.store'))" 
+                    />
                 </div>
             </div>
         </div>

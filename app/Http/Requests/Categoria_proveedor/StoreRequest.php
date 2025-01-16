@@ -4,6 +4,7 @@ namespace App\Http\Requests\Categoria_proveedor;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -20,11 +21,18 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            "nombre" => 'required',
-            "estado" => 'required',
+            "nombre" => ['required', 'string','max:100', 'min:3', Rule::unique(table: 'categoria_proveedor', column: 'nombre')->ignore(id: request('categoria_proveedor'), idColumn : 'id')],
+            "estado" => 'required|in:1,0',
         ];
     }
+
+    public function messages():array
+     {
+         return [
+             'nombre.unique' => 'El nombre ya existe',
+         ];
+     }
 }

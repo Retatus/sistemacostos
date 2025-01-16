@@ -45,16 +45,56 @@ const logout = () => {
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
+                            
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <!-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
+                            </div> -->
+                              <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <!-- Dropdown for Dashboard -->
+                                <div class="group">
+                                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')" class="flex items-center mt-5">
+                                        Productos
+                                        <svg class="w-4 h-4 ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06 0L10 10.93l3.71-3.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                        </svg>
+                                    </NavLink>
+                                    <!-- Dropdown content -->
+                                    <div class="hidden group-hover:block absolute bg-white border border-gray-200 rounded-md shadow-lg mt-2 z-10">
+                                        <Link :href="route('proveedor')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Proveedores
+                                        </Link>
+                                        <Link :href="route('categoria_proveedor')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Categoria proveedor
+                                        </Link>
+                                        <Link :href="route('servicio_clase')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Servicio clase
+                                        </Link>
+                                        <Link :href="route('serviciodetalle')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Servicio detalle
+                                        </Link>
+                                        <Link :href="route('servicio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Servicio
+                                        </Link>
+                                        <Link :href="route('dashboard')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Destinos turisticos
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('categoria_proveedor')" :active="route().current('categoria_proveedor')">
-                                    Categoria proveedor
+                                <NavLink :href="route('dashboard')">
+                                    Operaciones
+                                </NavLink>
+                                <NavLink :href="route('dashboard')">
+                                    Compras
+                                </NavLink>
+                                <NavLink :href="route('dashboard')">
+                                    Ventas
                                 </NavLink>
                             </div>
                         </div>
