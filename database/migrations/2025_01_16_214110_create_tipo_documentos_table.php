@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('tipo_documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo', 2);
-            $table->string('nombre', 15);
-            $table->tinyInteger('estado' )->default(1);
+            $table->string('nombre', 25);
+            $table->tinyInteger('estado_activo' )->default(1);
             $table->timestamps();
 
         });

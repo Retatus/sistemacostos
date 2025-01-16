@@ -19,7 +19,7 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('tipo_documento.destroy', TipoDocumento), {
+            router.delete(route('tipodocumento.destroy', TipoDocumento), {
                 onSuccess: (page) => {
                 TipoDocumentos.value = page.props.tipodocumentos;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
@@ -37,9 +37,9 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipodocumento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar TipoDocumento
-              </Link>                  
+              </Link>                    
           </div>    
         </template>
 
@@ -50,14 +50,11 @@
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope='col' className='px-6 py-3'>
-                                        codigo
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                                                        <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        estado
+                                        estado_activo
                                     </th> 
 
                                     <th scope="col" className="px-6 py-3">
@@ -67,19 +64,16 @@
                             </thead>
                             <tbody>
                                 <tr v-for="tipodocumento in TipoDocumentos" className="bg-white border-b ">
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipodocumento.codigo}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{tipodocumento.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipodocumento.estado}}
+                                        {{tipodocumento.estado_activo}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('tipo_documento.edit', tipodocumento)">
+                                            <Link :href="route('tipodocumento.edit', tipodocumento)">
                                                 Editar
                                             </Link>
                                             <button @click="onDeleteConfirm(tipodocumento)">Eliminar</button>

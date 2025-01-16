@@ -10,22 +10,20 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
 
     const form = useForm({
-        codigo: "",
-        nombre: "",
-        estado: '1',
+                nombre: "",
+        estado_activo: "",
+
     });
 
-    const formFields = {            
-        codigo: { type: 'text', placeholder: 'Ingrese el código', label: 'Código' },
-        nombre: { type: 'text', placeholder: 'Ingrese el nombre', label: 'Nombre' },
-        //descripcion: { type: 'textarea', placeholder: 'Ingrese el descripcion', label: 'Descripcion' },
-        estado: { 
-        type: 'select', 
-        options: [
-            { value: '1', label: 'Activo' }, 
-            { value: '0', label: 'Desactivo' }
-        ], 
-        label: 'Estado' 
+    const formFields = {   
+        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        estado_activo: { 
+            type: 'select', 
+            options: [
+                { value: '1', label: 'Activo' }, 
+                { value: '0', label: 'Desactivo' }
+            ], 
+            label: 'Estado activo' 
         }
     }
 </script>
@@ -37,7 +35,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipodocumento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Lista TipoDocumento
               </Link>                             
           </div>    
@@ -49,7 +47,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="false"
-                        @submit="form.post(route('tipo_documento.store'))" 
+                        @submit="form.post(route('tipodocumento.store'))" 
                     />
                 </div>
             </div>

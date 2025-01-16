@@ -10,30 +10,27 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
   
     const props = defineProps({
-        tipoDocumento: {
+        tipodocumento: {
             type: Object, 
             required: true
         } 
     })
  
-    //console.log(props.tipoDocumento.codigo);
+    console.log(props);
     const form = useForm({
-        codigo: props.tipoDocumento.codigo,
-        nombre: props.tipoDocumento.nombre,
-        estado: props.tipoDocumento.estado
+        nombre: props.tipodocumento.nombre,
+        estado_activo: props.tipodocumento.estado_activo,
     });
 
-    const formFields = {            
-        codigo: { type: 'text', placeholder: 'Ingrese el código', label: 'Código' },
-        nombre: { type: 'text', placeholder: 'Ingrese el nombre', label: 'Nombre' },
-        //descripcion: { type: 'textarea', placeholder: 'Ingrese el descripcion', label: 'Descripcion' },
-        estado: { 
-        type: 'select', 
-        options: [
-            { value: '1', label: 'Activo' }, 
-            { value: '0', label: 'Desactivo' }
-        ], 
-        label: 'Estado' 
+    const formFields = {   
+        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        estado_activo: { 
+            type: 'select', 
+            options: [
+                { value: '1', label: 'Activo' }, 
+                { value: '0', label: 'Desactivo' }
+            ], 
+            label: 'Estado activo' 
         }
     }
 </script>
@@ -45,7 +42,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipodocumento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Lista TipoDocumento
               </Link>                             
           </div>    
@@ -57,7 +54,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="true"
-                        @submit="form.patch(route('tipo_documento.update', tipoDocumento))" 
+                        @submit="form.patch(route('tipodocumento.update', tipodocumento))" 
                     />
                 </div>
             </div>
