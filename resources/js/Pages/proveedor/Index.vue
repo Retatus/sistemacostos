@@ -36,10 +36,7 @@
         });
     });
 
-    
-
-    console.log(documentosConTipoTexto);
-    
+        
     const onDeleteConfirm = (proveedor) => {
         Swal.fire({
             title: '<strong>¿Estás seguro?</strong>',
@@ -63,6 +60,7 @@
 </script>
 <script>
 import { defineComponent } from 'vue';
+
 
 export default defineComponent({
   props: {
@@ -171,19 +169,24 @@ export default defineComponent({
                                 </tr>
                             </tbody>
                         </table>
-                        <div v-if="proveedors.last_page > 1" class="flex justify-center items-center gap-4 mt-5 mb-5">
-                            <SecondaryButton 
-                                @click="changePage(proveedors.current_page - 1)" 
-                                :disabled="proveedors.current_page === 1">
-                                Anterior
-                            </SecondaryButton>
-                            <span>Página {{ proveedors.current_page }} de {{ proveedors.last_page }}</span>
-                            <SecondaryButton 
-                                @click="changePage(proveedors.current_page + 1)" 
-                                :disabled="proveedors.current_page === proveedors.last_page">
-                                Siguiente
-                            </SecondaryButton>
-                        </div>
+                        <div class="flex justify-between py-5 px-5">
+                            <div class="flex justify-center items-center gap-4 mt-5 mb-5">
+                                <span>Total de proveedores: {{ proveedors.total }}</span>
+                            </div>
+                            <div v-if="proveedors.last_page > 1" class="flex justify-center items-center gap-4 mt-5 mb-5">
+                                <SecondaryButton 
+                                    @click="changePage(proveedors.current_page - 1)" 
+                                    :disabled="proveedors.current_page === 1">
+                                    Anterior
+                                </SecondaryButton>
+                                <span>Página {{ proveedors.current_page }} de {{ proveedors.last_page }}</span>
+                                <SecondaryButton 
+                                    @click="changePage(proveedors.current_page + 1)" 
+                                    :disabled="proveedors.current_page === proveedors.last_page">
+                                    Siguiente
+                                </SecondaryButton>
+                            </div>
+                        </div>                        
                     </div>                    
                 </div>                
             </div>

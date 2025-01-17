@@ -21,7 +21,7 @@ class ProveedorController extends Controller
     {
         //$proveedor = proveedor::all();
         //$proveedors = proveedor::orderBy('id', 'desc')->get();
-        $proveedors = Proveedor::with('categoria:id,nombre')->orderBy('id', 'desc')->paginate(10);
+        $proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
         //dd($proveedors);
         return Inertia::render('proveedor/Index', ['proveedors' => $proveedors]);
         //return response()->json( ['proveedor' => $proveedor]);
@@ -101,6 +101,24 @@ class ProveedorController extends Controller
         $data = $request->all();
         $proveedor->update($data);
         return Inertia::render('proveedor/Edit', compact('proveedor'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateEstado($id)
+    {
+        try {
+            // Encuentra el proveedor por su ID
+            $proveedor = Proveedor::findOrFail($id);
+    
+            // Llama al método desactivar
+            $proveedor->desactivar();
+    
+            return response()->json(['message' => 'Proveedor desactivado con éxito.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al desactivar el proveedor: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

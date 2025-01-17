@@ -24,7 +24,7 @@
                 <label for="tipo_comprobante" class="block text-sm font-medium text-gray-700">Tipo Comprobante</label>  
                 <select v-model="proveedor.tipo_comprobante" id="tipo_comprobante" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="options in tiposDocumento" :key="options.id" :value="options.nombre">
+                    <option v-for="options in tiposDocumento" :key="options.id" :value="options.id">
                     {{ options.nombre }}
                     </option>
                 </select>     
@@ -39,7 +39,7 @@
                 <label for="tipo_sunat" class="block text-sm font-medium text-gray-700">Tipo Sunat</label>
                 <select v-model="proveedor.tipo_sunat" id="tipo_sunat" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="options in tiposSunat" :key="options.id" :value="options.nombre">
+                    <option v-for="options in tiposSunat" :key="options.id" :value="options.id">
                     {{ options.nombre }}
                     </option>
                 </select>  
@@ -250,9 +250,9 @@
 
     async function submitProveedor() {
         try {
-            console.log(proveedor.value);
-            const response = await axios.post(route('proveedor_servicio.update'), proveedor.value);
+            const response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
             alert(response.data.message);
+            console.log(response);
         } catch (error) {
             console.error('Error al registrar el proveedor:', error);
         }
