@@ -48,4 +48,38 @@ class ProveedorServicioService
             ];
         });
     }
+
+    public function handleValidationAndUpdating(Request $request)
+    {
+        // Usar una transacción para asegurar que ambas inserciones sean atómicas.
+        return DB::transaction(function () use ($request) {
+            $proveedorResponseUpdate = $this->proveedorController->updateEstado($request->id);
+
+            // Validar e insertar proveedor
+            $proveedor = new Request($request->except(['detalles','costo','destino']));
+            $proveedorResponse = $this->proveedorController->store($proveedor);
+
+            // Obtener el ID del proveedor creado
+            $proveedorId = json_decode($proveedorResponse->getContent())->id;
+            // if ($proveedorResponse->getStatusCode() !== 200) {
+            //     throw new \Exception('Error al insertar proveedor' .$proveedorId);
+            // }          
+            
+            $detalles = $request->only('detalles')['detalles'];
+           
+            foreach ($detalles as $servicio) {
+                $servicio['proveedor_id'] = $proveedorId;
+                $servicioRequest = new Request($servicio);
+                $servicioResponse = $this->servicioController->store($servicioRequest);
+                // if ($servicioResponse->getStatusCode() !== 200) {
+                //     throw new \Exception('Error al insertar servicio');
+                // }
+            }
+            return [
+                'proveedorUpdate' => $proveedorResponseUpdate,
+                'proveedor' => $proveedorResponse,                
+                'servicio' => $servicioResponse ,
+            ];
+        });
+    }
 }

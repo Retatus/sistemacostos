@@ -27,4 +27,10 @@ class proveedor extends Model
                 ];
             });
     }
+
+    public function desactivar()
+    {
+        $this->estado_activo = 0;
+        return $this->save();
+    }
 }

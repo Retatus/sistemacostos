@@ -21,8 +21,13 @@
                 <input v-model="proveedor.direccion" type="text" id="direccion" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Direccion">
             </div>
             <div class="col-span-1">
-                <label for="tipo_comprobante" class="block text-sm font-medium text-gray-700">Tipo Comprobante</label>
-                <input v-model="proveedor.tipo_comprobante" type="text" id="tipo_comprobante" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Tipo Documento">
+                <label for="tipo_comprobante" class="block text-sm font-medium text-gray-700">Tipo Comprobante</label>  
+                <select v-model="proveedor.tipo_comprobante" id="tipo_comprobante" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                    <option disabled value="">-- Selecciona una opción --</option>
+                    <option v-for="options in tiposDocumento" :key="options.id" :value="options.id">
+                    {{ options.nombre }}
+                    </option>
+                </select>     
             </div>
             <div class="col-span-1">
                 <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
@@ -32,7 +37,12 @@
             <!-- Tercera fila -->
             <div class="col-span-1">
                 <label for="tipo_sunat" class="block text-sm font-medium text-gray-700">Tipo Sunat</label>
-                <input v-model="proveedor.tipo_sunat" type="text" id="tipo_sunat" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Tipo Sunat">
+                <select v-model="proveedor.tipo_sunat" id="tipo_sunat" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                    <option disabled value="">-- Selecciona una opción --</option>
+                    <option v-for="options in tiposSunat" :key="options.id" :value="options.id">
+                    {{ options.nombre }}
+                    </option>
+                </select>  
             </div>
             <div class="col-span-1">
                 <label for="contacto" class="block text-sm font-medium text-gray-700">Contacto</label>
@@ -154,6 +164,19 @@
         },
     });
   
+    const tiposDocumento = ref([
+        { id: '00', nombre: 'OTROS' },
+        { id: '01', nombre: 'FACTURA' },
+        { id: '02', nombre: 'RECIBO POR HONORARIOS' },
+        { id: '03', nombre: 'BOLETA' },
+    ]);
+
+    const tiposSunat = ref([
+        { id: '2', nombre: 'AGENTE PERCEPCION' },
+        { id: '1', nombre: 'AGENTE PERCEPCION' }, 
+        { id: '0', nombre: 'AGENTE RETENCION' }
+    ]);
+
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
@@ -227,9 +250,9 @@
 
     async function submitProveedor() {
         try {
-            console.log(proveedor.value);
-            const response = await axios.post(route('proveedor_servicio.store'), proveedor.value);
+            const response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
             alert(response.data.message);
+            console.log(response);
         } catch (error) {
             console.error('Error al registrar el proveedor:', error);
         }

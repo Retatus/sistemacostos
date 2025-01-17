@@ -38,7 +38,7 @@
             required: true
         } 
     })
-
+   
     //console.log("que fue" + props);
     //console.log(props.proveedor_edit);
 </script>
@@ -66,7 +66,7 @@
                         :categoriaDistribuciones="categoriaDistribuciones"
                         :proveedorcategorias="proveedorcategorias" 
                         :ListaServicio_clase="ListaServicio_clase" 
-                        :ListaServicio_detalle="ListaServicio_detalle"                
+                        :ListaServicio_detalle="ListaServicio_detalle"  
                     />
                 </div>
             </div>
