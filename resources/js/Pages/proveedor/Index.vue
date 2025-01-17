@@ -2,7 +2,7 @@
     import AppLayout from '@/Layouts/AppLayout.vue';
     import {Link, usePage} from '@inertiajs/vue3';
     import Swal from 'sweetalert2';
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import { router } from '@inertiajs/vue3';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     
@@ -11,6 +11,34 @@
     const Proveedors = ref(page.props.proveedors.data);
 
     console.log(Proveedors);
+
+    const tiposDocumento = ref([
+        { id: '00', nombre: 'OTROS' },
+        { id: '01', nombre: 'FACTURA' },
+        { id: '02', nombre: 'RECIBO POR HONORARIOS' },
+        { id: '03', nombre: 'BOLETA' },
+    ]);
+
+    const tiposSunat = ref([
+        { id: '2', nombre: 'AGENTE PERCEPCION' },
+        { id: '1', nombre: 'AGENTE PERCEPCION' }, 
+        { id: '0', nombre: 'AGENTE RETENCION' }
+    ]);
+    const documentosConTipoTexto = computed(() => {
+        return Proveedors.value.map((doc) => {
+            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.tipo_comprobante);
+            const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.id == doc.tipo_sunat);
+            return {
+            ...doc,
+            tipo_documento_nombre: tipoComprobante ? tipoComprobante.nombre : 'Desconocido',
+            tipo_sunat_nombre: tipoSunat ? tipoSunat.nombre : 'Desconocido',
+            };
+        });
+    });
+
+    
+
+    console.log(documentosConTipoTexto);
     
     const onDeleteConfirm = (proveedor) => {
         Swal.fire({
@@ -103,7 +131,7 @@ export default defineComponent({
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="proveedor in Proveedors" className="bg-white border-b ">
+                                <tr v-for="proveedor in documentosConTipoTexto" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{proveedor.ruc}}
                                     </td> 
@@ -114,13 +142,13 @@ export default defineComponent({
                                         {{proveedor.direccion}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{proveedor.tipo_comprobante}}
+                                        {{proveedor.tipo_documento_nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{proveedor.correo}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{proveedor.tipo_sunat}}
+                                        {{proveedor.tipo_sunat_nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{proveedor.contacto}}

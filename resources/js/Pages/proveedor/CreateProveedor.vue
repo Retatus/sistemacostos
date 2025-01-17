@@ -29,7 +29,7 @@
             type: Object, 
             required: true
         } 
-    })
+    })  
 
     console.log(props.proveedorcategorias);
 </script>
@@ -55,7 +55,7 @@
                         :categoriaDistribuciones="categoriaDistribuciones"
                         :proveedorcategorias="proveedorcategorias" 
                         :ListaServicio_clase="ListaServicio_clase" 
-                        :ListaServicio_detalle="ListaServicio_detalle"                
+                        :ListaServicio_detalle="ListaServicio_detalle"
                     />
                 </div>
             </div>
