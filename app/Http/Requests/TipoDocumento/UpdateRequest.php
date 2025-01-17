@@ -20,23 +20,39 @@ class UpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'codigo' => ['required','string','min:2','max:2', Rule::unique(table: 'tipo_documentos', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
-            'nombre' => ['required','string','min:3','max:15', Rule::unique(table: 'tipo_documentos', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
-            'estado' => 'required',
+            'nombre' => [
+                'required',               // Campo obligatorio
+                'string',                 // Debe ser una cadena de texto
+                'min:3',                  // Longitud mínima de 3 caracteres
+                'max:25',                 // Longitud máxima de 25 caracteres
+                Rule::unique('tipo_documentos', 'nombre') // Único en la tabla tipo_documentos
+                ->ignore(id: request('update'), idColumn: 'id') // Ignora el registro actual al actualizar
+              //->ignore($this->route('tipoDocumento')->id, 'id') // Ignora el registro actual al actualizar
+            ],
+            'estado_activo' => [
+                'required|in:1,0',        // Campo obligatorio y debe ser 1 o 0
+            ],
         ];
     }
 
+    /**
+     * Mensajes de error personalizados (opcional).
+     *
+     * @return array
+     */
     public function messages()
     {
         return [
-            'nombre.unique' => 'El :attribute ya está registrado.',
-            'required' => 'El campo :attribute es obligatorio.',
-            'min' => 'El campo :attribute debe tener al menos :min caracteres.',
-            'max' => 'El campo :attribute debe tener como máximo :max caracteres.',
-            'unique' => 'El campo :attribute debe ser único.',
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'nombre.string' => 'El campo nombre debe ser una cadena de texto.',
+            'nombre.min' => 'El campo nombre debe tener al menos 3 caracteres.',
+            'nombre.max' => 'El campo nombre no puede tener más de 25 caracteres.',
+            'nombre.unique' => 'El nombre ya está registrado en otro documento.',
+            'estado_activo.required' => 'El campo estado activo es obligatorio.',
+            'estado_activo.boolean' => 'El campo estado activo debe ser verdadero (1) o falso (0).',
         ];
     }
 }

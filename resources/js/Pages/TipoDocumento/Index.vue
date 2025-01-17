@@ -39,7 +39,7 @@
               </h2>   
               <Link :href="route('tipo_documento.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar TipoDocumento
-              </Link>                  
+              </Link>                    
           </div>    
         </template>
 
@@ -50,14 +50,11 @@
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope='col' className='px-6 py-3'>
-                                        codigo
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                                                        <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        estado
+                                        estado_activo
                                     </th> 
 
                                     <th scope="col" className="px-6 py-3">
@@ -67,14 +64,11 @@
                             </thead>
                             <tbody>
                                 <tr v-for="tipodocumento in TipoDocumentos" className="bg-white border-b ">
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipodocumento.codigo}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{tipodocumento.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipodocumento.estado}}
+                                        {{tipodocumento.estado_activo}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

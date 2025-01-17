@@ -20,11 +20,18 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    
     public function rules(): array
     {
         return [
-            'codigo' => ['required','string','min:2','max:2', Rule::unique(table: 'tipo_documentos', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
-            'nombre' => ['required','string','min:3','max:15', Rule::unique(table: 'tipo_documentos', column: 'nombre')->ignore(id: request('store'), idColumn: 'id')],
+            'nombre' => [
+                'required',
+                'string',
+                'min:3',
+                'max:25', 
+                Rule::unique(table: 'tipo_documentos', column: 'nombre')
+                ->ignore(id: request('store'), idColumn: 'id')
+            ],
             'estado' => 'required',
         ];
     }

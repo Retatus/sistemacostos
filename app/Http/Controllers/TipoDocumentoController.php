@@ -23,15 +23,8 @@ class TipoDocumentoController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    { 
-        return Inertia::render('TipoDocumento/Create');
-    }
-
-    public function crear()
     {
-        //dd("que pasa");
-        return Inertia::render('Categoria/Crear');
-        //return Inertia::render('TipoDocumento/Create');
+        return Inertia::render('TipoDocumento/Create');
     }
 
     /**
@@ -42,10 +35,6 @@ class TipoDocumentoController extends Controller
         $data = $request->all();
         TipoDocumento::create($data);
         return to_route('tipo_documento');
-        //return redirect()->route('tipodocumento.index');
-        //return to_route('tipo_documento');
-        //return response()->json( ['tipodocumento' => $data]);
-        //return response()->json(['message' => 'Tipo de documento creado correctamente', 'data' => $data], 201);
     }
 
     /**
@@ -53,7 +42,7 @@ class TipoDocumentoController extends Controller
      */
     public function show(TipoDocumento $tipoDocumento)
     {
-        // return Inertia::render('TipoDocumento/Show', compact('tipoDocumento'));
+        // return Inertia::render('TipoDocumento/Show', compact('tipodocumento'));
     }
 
     /**
@@ -61,19 +50,17 @@ class TipoDocumentoController extends Controller
      */
     public function edit(TipoDocumento $tipoDocumento)
     {
-        //dd($tipoDocumento);
         return Inertia::render('TipoDocumento/Edit', compact('tipoDocumento'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipoDocumento $tipoDocumento)
+    public function update(UpdateRequest $request, TipoDocumento $tipoDocumento)
     {
         $data = $request->all();
         $tipoDocumento->update($data);
-        return to_route('tipo_documento');
-        //return Inertia::render('TipoDocumento/Edit', compact('tipoDocumento'));
+        return Inertia::render('TipoDocumento/Edit', compact('tipoDocumento'));
     }
 
     /**
