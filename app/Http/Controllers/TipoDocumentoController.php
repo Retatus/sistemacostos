@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\TipoDocumento\StoreRequest;
+use App\Http\Requests\TipoDocumento\UpdateRequest;
 use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,11 +30,11 @@ class TipoDocumentoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->all();
         TipoDocumento::create($data);
-        return to_route('tipodocumento');
+        return to_route('tipo_documento');
     }
 
     /**
@@ -49,17 +50,17 @@ class TipoDocumentoController extends Controller
      */
     public function edit(TipoDocumento $tipoDocumento)
     {
-        return Inertia::render('TipoDocumento/Edit', compact('tipodocumento'));
+        return Inertia::render('TipoDocumento/Edit', compact('tipoDocumento'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipoDocumento $tipoDocumento)
+    public function update(UpdateRequest $request, TipoDocumento $tipoDocumento)
     {
         $data = $request->all();
-        $tipodocumento->update($data);
-        return Inertia::render('TipoDocumento/Edit', compact('tipodocumento'));
+        $tipoDocumento->update($data);
+        return Inertia::render('TipoDocumento/Edit', compact('tipoDocumento'));
     }
 
     /**
@@ -67,7 +68,7 @@ class TipoDocumentoController extends Controller
      */
     public function destroy(TipoDocumento $tipoDocumento)
     {
-        $tipodocumento->delete();
-        return to_route('tipodocumento');
+        $tipoDocumento->delete();
+        return to_route('tipo_documento');
     }
 }

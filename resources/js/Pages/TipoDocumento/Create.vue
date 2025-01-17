@@ -10,8 +10,8 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
 
     const form = useForm({
-                nombre: "",
-        estado_activo: "",
+        nombre: "",
+        estado_activo: "1",
 
     });
 
@@ -35,7 +35,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipodocumento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Lista TipoDocumento
               </Link>                             
           </div>    
@@ -47,7 +47,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="false"
-                        @submit="form.post(route('tipodocumento.store'))" 
+                        @submit="form.post(route('tipo_documento.store'))" 
                     />
                 </div>
             </div>

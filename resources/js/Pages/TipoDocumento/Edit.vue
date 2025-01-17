@@ -10,7 +10,7 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
   
     const props = defineProps({
-        tipodocumento: {
+        tipoDocumento: {
             type: Object, 
             required: true
         } 
@@ -18,8 +18,8 @@
  
     console.log(props);
     const form = useForm({
-        nombre: props.tipodocumento.nombre,
-        estado_activo: props.tipodocumento.estado_activo,
+        nombre: props.tipoDocumento.nombre,
+        estado_activo: props.tipoDocumento.estado_activo,
     });
 
     const formFields = {   
@@ -42,7 +42,7 @@
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   TipoDocumento
               </h2>   
-              <Link :href="route('tipodocumento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('tipo_documento')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Lista TipoDocumento
               </Link>                             
           </div>    
@@ -54,7 +54,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="true"
-                        @submit="form.patch(route('tipodocumento.update', tipodocumento))" 
+                        @submit="form.patch(route('tipo_documento.update', tipoDocumento))" 
                     />
                 </div>
             </div>
