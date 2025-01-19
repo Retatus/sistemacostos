@@ -169,11 +169,10 @@ export default defineComponent({
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="flex justify-between py-5 px-5">
-                            <div class="flex justify-center items-center gap-4 mt-5 mb-5">
-                                <span>Total de proveedores: {{ proveedors.total }}</span>
-                            </div>
-                            <div v-if="proveedors.last_page > 1" class="flex justify-center items-center gap-4 mt-5 mb-5">
+                        <div class="flex justify-between items-center gap-4 mt-5 mb-5">
+                            <span>Total de proveedores: {{ proveedors.total }}</span>
+
+                            <div v-if="proveedors.last_page > 1" class="flex items-center gap-4">
                                 <SecondaryButton 
                                     @click="changePage(proveedors.current_page - 1)" 
                                     :disabled="proveedors.current_page === 1">
@@ -186,7 +185,7 @@ export default defineComponent({
                                     Siguiente
                                 </SecondaryButton>
                             </div>
-                        </div>                        
+                        </div>                         
                     </div>                    
                 </div>                
             </div>

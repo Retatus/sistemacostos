@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\proveedor\StoreRequest;
+use App\Http\Requests\proveedor\UpdateRequest;
 use App\Models\Costo;
 use App\Models\Destino;
 use App\Models\DistribucionVenta;
@@ -49,12 +50,19 @@ class ProveedorController extends Controller
         ]); //compact('proveedorcategorias'));
     }
 
+    public function createProveedor()
+    {
+        $proveedorCategoria = ProveedorCategoria::getFormattedForDropdown();
+        return Inertia::render('proveedor/Create', ['proveedorcategorias' => $proveedorCategoria]); //compact('proveedorcategorias'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->all();
+        //dd($data);
         $proveedor = proveedor::create($data);
         //return to_route('proveedor');
         return response()->json($proveedor);
@@ -96,7 +104,7 @@ class ProveedorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, proveedor $proveedor)
+    public function update(UpdateRequest $request, proveedor $proveedor)
     {
         $data = $request->all();
         $proveedor->update($data);
