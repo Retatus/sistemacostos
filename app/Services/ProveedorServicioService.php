@@ -24,7 +24,7 @@ class ProveedorServicioService
 
     public function handleValidationAndInsertion(Request $request)
     {
-        try {
+        //try {
             return DB::transaction(function () use ($request) {
                 // **Validar e insertar el proveedor**
                 // Validar los datos del proveedor usando las reglas de ProveedorRequest
@@ -52,7 +52,7 @@ class ProveedorServicioService
                 // **Validar e insertar servicios**
                 $detalles = $request->get('detalles', []);
     
-                foreach ($detalles as $index => $servicioData) {
+                foreach ($detalles as $servicioData) {
                     // Añadir `proveedor_id` al servicio
                     $servicioData['proveedor_id'] = $proveedorId;
     
@@ -83,17 +83,17 @@ class ProveedorServicioService
                     'message' => 'Proveedor y servicios creados correctamente',
                 ];
             });
-        } catch (CustomValidationException $e) {
-            return response()->json([
-                'message' => 'Errores de validación',
-                'errors' => $e->errors(), // Contiene los errores por campo
-                'index' => $e->getCode() === 0 ? null : $e->getCode(), // Indica el índice en caso de error en un servicio
-            ], 422);  
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 500);
-        }        
+        // } catch (CustomValidationException $e) {
+        //     return response()->json([
+        //         'message' => 'Errores de validación',
+        //         'errors' => $e->errors(), // Contiene los errores por campo
+        //         'index' => $e->getCode() === 0 ? null : $e->getCode(), // Indica el índice en caso de error en un servicio
+        //     ], 422);  
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'message' => $e->getMessage(),
+        //     ], 500);
+        // }        
     }
 
     public function handleValidationAndUpdating(Request $request)
