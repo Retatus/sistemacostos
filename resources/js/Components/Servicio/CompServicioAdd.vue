@@ -20,7 +20,8 @@
         <tbody>
           <tr v-for="(item, index) in items" :key="index" class="even:bg-gray-50 odd:bg-white">
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                <input v-model="item.monto" type="number" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <input v-model="item.monto" type="number" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+
             </td>
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
                 <select v-model="item.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -54,17 +55,9 @@
                   <option value="ninio">NIÑO</option>
                 </select>
             </td>          
-
             <td hidden class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                <input v-model="item.producto" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <input v-model="item.estado_valido" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
             </td>
-            <td hidden class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                <input v-model.number="item.cantidad" type="number" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-            </td>
-            <td hidden class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                <input v-model.number="item.precio" type="number" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-            </td>
-            <td hidden class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ item.cantidad * item.precio }}</td>
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:text-blue-700">
               <button @click="removeItem(index)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

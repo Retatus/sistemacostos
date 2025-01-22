@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\proveedor\StoreRequest;
+use App\Http\Requests\proveedor\UpdateRequest;
 use App\Models\Costo;
 use App\Models\Destino;
 use App\Models\DistribucionVenta;
@@ -17,14 +18,69 @@ class ProveedorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$proveedor = proveedor::all();
-        //$proveedors = proveedor::orderBy('id', 'desc')->get();
-        $proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
+        // Obtener las categorías formateadas
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+
+        // Parámetros de búsqueda
+        $category = $request->input('tipo_comprobante') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial'); 
+        // Consulta principal
+        $proveedors = Proveedor::with('categoria:id,nombre')
+            ->where('estado_activo', 1)
+            ->when($category, function ($query, $category) {
+                return $query->where('proveedor_categoria_id', $category);
+            })
+            ->when($ruc_name, function ($query, $ruc_name) {
+                $query->where(function ($q) use ($ruc_name) {
+                    $q->where('ruc', 'LIKE', "%{$ruc_name}%")
+                    ->orWhere('razon_social', 'LIKE', "%{$ruc_name}%");
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        // Verificar si es una solicitud AJAX o normal
+        if ($request->wantsJson()) {
+            // Respuesta para solicitudes AJAX (búsquedas)
+            return response()->json(['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias, ]);
+        }
+
+        // Respuesta para cargar la vista inicial
+        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias, ]);
+    }
+
+
+    public function indexProveedor(Request $request)
+    {
+        //dd($request);
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+
+        $category = $request->input('tipo_comprobante') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial'); 
+        //dd($ruc_name);
+
+        $proveedors = Proveedor::with('categoria:id,nombre')
+        ->where('estado_activo', 1) // Filtra solo proveedores activos
+        ->when($category, function ($query, $category) {
+            // Filtrar por categoría si se proporciona
+            return $query->where('proveedor_categoria_id', $category);
+        })
+        ->when($ruc_name, function ($query, $ruc_name) {
+            // Filtrar por RUC o Razón Social si se proporciona
+            $query->where(function ($q) use ($ruc_name) {
+                $q->where('ruc', 'LIKE', "%{$ruc_name}%")
+                ->orWhere('razon_social', 'LIKE', "%{$ruc_name}%");
+            });
+        })
+        ->orderBy('id', 'desc') // Ordenar por ID descendente
+        ->paginate(10); // Paginación con 10 elementos por página
+        //$proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
+
         //dd($proveedors);
-        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors]);
-        //return response()->json( ['proveedor' => $proveedor]);
+        //return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
+        return response()->json( ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
     }
 
     /**
@@ -49,12 +105,19 @@ class ProveedorController extends Controller
         ]); //compact('proveedorcategorias'));
     }
 
+    public function createProveedor()
+    {
+        $proveedorCategoria = ProveedorCategoria::getFormattedForDropdown();
+        return Inertia::render('proveedor/Create', ['proveedorcategorias' => $proveedorCategoria]); //compact('proveedorcategorias'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->all();
+        //dd($data);
         $proveedor = proveedor::create($data);
         //return to_route('proveedor');
         return response()->json($proveedor);
@@ -96,7 +159,7 @@ class ProveedorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, proveedor $proveedor)
+    public function update(UpdateRequest $request, proveedor $proveedor)
     {
         $data = $request->all();
         $proveedor->update($data);

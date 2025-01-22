@@ -12,13 +12,13 @@
             </div>
             <div class="col-span-2 ">
                 <label for="razon-social" class=" text-sm font-medium text-gray-700">Razón Social</label>
-                <input v-model="proveedor.razon_social" type="text" id="razon-social" class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese la Razón Social">
+                <input v-model="proveedor.razon_social" type="text" id="razon-social" required="true" class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese la Razón Social">
             </div>
 
             <!-- Segunda fila -->
             <div class="col-span-1">
                 <label for="direccion" class="block text-sm font-medium text-gray-700">Direccion</label>
-                <input v-model="proveedor.direccion" type="text" id="direccion" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Direccion">
+                <input v-model="proveedor.direccion" type="text" id="direccion" required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Direccion">
             </div>
             <div class="col-span-1">
                 <label for="tipo_comprobante" class="block text-sm font-medium text-gray-700">Tipo Comprobante</label>  
@@ -31,7 +31,7 @@
             </div>
             <div class="col-span-1">
                 <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
-                <input v-model="proveedor.correo" type="email" id="correo" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Correo">
+                <input v-model="proveedor.correo" type="email" id="correo" required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Correo">
             </div>
 
             <!-- Tercera fila -->
@@ -46,7 +46,7 @@
             </div>
             <div class="col-span-1">
                 <label for="contacto" class="block text-sm font-medium text-gray-700">Contacto</label>
-                <input v-model="proveedor.contacto" type="text" id="contacto" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Contacto">
+                <input v-model="proveedor.contacto" type="text" id="contacto" required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Contacto">
             </div>
             <div class="col-span-1">
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
@@ -56,39 +56,16 @@
                     {{ option.label }}
                     </option>
                 </select>
-            </div>
-
-            <!-- Cuarta fila -->
+            </div>  
             <div class="col-span-1">
-                <label for="servicio_detalle" class="block text-sm font-medium text-gray-700">Servicio clase</label>
-                <div class="flex items-center space-x-2">
-                    <select v-model="proveedor.servicio_detalle" id="servicio_detalle" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
+                <select v-model="proveedor.estado_activo" id="estado_activo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in ServiciosDetalles" :key="option.value" :value="option.value">
-                    {{ option.label }}
+                    <option v-for="option in estadoActivo" :key="option.id" :value="option.id">
+                    {{ option.nombre }}
                     </option>
                 </select>
-                    <button @click.prevent="showModal = true">Agregar</button>
-                </div>
-            </div>
-            <div class="col-span-1">
-                <label for="costo" class="block text-sm font-medium text-gray-700">Costo</label>
-                <select v-model="proveedor.costo" id="costo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                    <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in categoriaCostos" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                    </option>
-                </select>
-            </div>
-            <div class="col-span-1">
-                <label for="destino" class="block text-sm font-medium text-gray-700">Destino</label>
-                <select v-model="proveedor.destino" id="destino" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                    <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in categoriaDestinos" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                    </option>
-                </select>
-            </div>            
+            </div>                
         </div>
         <PrimaryButton 
             type="button"
@@ -108,17 +85,6 @@
         <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Editar</PrimaryButton>
       </form>
     </div>
-    <ServiceDetalleModal
-        :isModalVisible="showModal"
-        title="Agregar Servicio"
-        inputLabel="Descripcion"
-        inputPlaceholder="Ingrese un nombre"
-        submitButtonText="Guardar"
-        :errorMessage="error"
-        :defaultData="{ nombre: '' }"
-        @close="showModal = false"
-        @submit="addServiceClass"
-    />
 </template>
   
 <script setup>
@@ -126,7 +92,6 @@
     import axios from 'axios';
     import Servicio from '../Servicio/CompServicioAdd.vue';
     import PrimaryButton from '../PrimaryButton.vue';
-    import ServiceDetalleModal from '@/Components/Modal/FormModal.vue';
   
   // Definir las props
     const props = defineProps({
@@ -139,18 +104,6 @@
             required: true
         },
         proveedorcategorias: {
-            type: Object,
-            required: true,
-        },
-        categoriaCostos: {
-            type: Object,
-            required: true,
-        },
-        categoriaDestinos: {
-            type: Object,
-            required: true,
-        },
-        categoriaDistribuciones: {
             type: Object,
             required: true,
         },
@@ -177,6 +130,11 @@
         { id: '0', nombre: 'AGENTE RETENCION' }
     ]);
 
+    const estadoActivo = ref([
+        { id: '1', nombre: 'ACTIVO' }, 
+        { id: '0', nombre: 'DESACTIVO' }
+    ]);
+    
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
@@ -193,10 +151,10 @@
         correo: '',
         tipo_sunat: '',
         contacto: '',
+        estado_activo: '',
         proveedor_categoria_id: '',
         servicio_detalle: '',
-        costo: '',
-        destino: '',
+        
         detalles: [],
     });
 
@@ -209,27 +167,12 @@
         ubicacion: '',
         tipo_pax: 'adulto',
         servicio_detalle_id: '',
+        estado_activo: '1',
     });
 
     proveedor.value.detalles = props.servicio_edit;
 
-    // Métodos
-    async function addServiceClass(data) {
-        try {
-            const response = await axios.post(`${route('serviciodetalle')}/storemodal`, data);
-            console.log('Elemento agregado:', response.data);
-            if (response.status === 200) {
-                ServiciosDetalles.value = response.data;
-                showModal.value = false;
-            } else {
-                alert('Error al agregar el elemento:', response.data);
-            }
-        } catch (err) {
-            console.log('Error al agregar elemento:', err);
-            error.value = err.response?.data?.message || 'Ocurrió un error';
-        }
-    }
-
+    
     function updateDetalles(nuevosDetalles) {
         detalleTemporal.value = nuevosDetalles;
     }
@@ -245,6 +188,7 @@
             ubicacion: '',
             tipo_pax: 'adulto',
             servicio_detalle_id: '',
+            estado_activo: '1',
         };
     }
 

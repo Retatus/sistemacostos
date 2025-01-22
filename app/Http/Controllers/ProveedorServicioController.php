@@ -1,13 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-use App\Models\Proveedor;
-use App\Models\Servicio;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\proveedor\StoreRequest as ProveedorRequest;
-use App\Http\Requests\Servicio\StoreRequest as ServicioRequest;
 use App\Services\ProveedorServicioService;
 
 class ProveedorServicioController extends Controller
