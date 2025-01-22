@@ -51,22 +51,27 @@
     const tipo_comprobante = ref('');
     const ruc_razonsocial = ref('');
 
-    async function submitForm() {
-        const parameters = {
-            tipo_comprobante: tipo_comprobante.value,
-            ruc_razonsocial: ruc_razonsocial.value,
-        };
-        const response = await axios.post(route('proveedor.indexProveedor'), parameters);
-        
-        console.log('Elemento agregado:', response.data);            
-        if (response.status === 200) {   
-            Proveedors.value = response.data.proveedors.data;  
-            Paginate.value = response.data.proveedors;
-        }else{
-            //console.error('Error al agregar el elemento:', error);
-            alert('Error al agregar el elemento:', response.data);
+    const handleSearch = async () => {
+        try {
+            // Datos a enviar en la petición
+            const parameters = {
+                tipo_comprobante: tipo_comprobante.value,
+                ruc_razonsocial: ruc_razonsocial.value,
+            };
+
+            // Petición POST usando axios
+            const response = await axios.post(route('proveedor.indexProveedor'), parameters);
+
+            // Manejo de la respuesta
+            if (response.status === 200) {
+                Proveedors.value = response.data.proveedors.data;  
+                Paginate.value = response.data.proveedors;
+            }
+        } catch (error) {
+            console.error('Error en la búsqueda:', error);
+            alert('Ocurrió un error al realizar la búsqueda. Por favor, intenta nuevamente.');
         }
-    }
+    };
 
     const onDeleteConfirm = (proveedor) => {
         Swal.fire({
@@ -104,7 +109,7 @@
                         </Link>
                     </div>
                     <div class="col-span-1 bg-gray-100 flex justify-between items-center px-4">
-                        <form @submit.prevent="submitForm" class="flex w-full items-center gap-4">
+                        <div class="flex w-full items-center gap-4">
                             <select v-model="tipo_comprobante"
                                 class="text-xs border border-gray-300 rounded-md shadow-sm px-4 flex-1">
                                 <option value="">-- Selecciona una opción --</option>
@@ -114,11 +119,11 @@
                             </select>
                             <input v-model="ruc_razonsocial" type="text" placeholder="Buscar"
                                 class="text-xs border border-gray-300 rounded-md shadow-sm px-4 flex-1">
-                            <PrimaryButton class="btn btn-primary px-4 flex-1">Buscar</PrimaryButton>
-                        </form>
+                            <!-- <PrimaryButton class="btn btn-primary px-4 flex-1">Buscar</PrimaryButton> -->
+                        </div>
                     </div>
                     <div class="col-span-1 bg-gray-100 flex justify-center items-right px-4"> 
-                        <PrimaryButton class="mr-2">Buscar</PrimaryButton>
+                        <PrimaryButton class="btn btn-primary px-4 mr-2" @click="handleSearch">Buscar</PrimaryButton>
                         <SecondaryButton class="mr-2">Cancelar</SecondaryButton>
                     </div>
                 </div>
