@@ -22,10 +22,43 @@ class ProveedorController extends Controller
     {
         //$proveedor = proveedor::all();
         //$proveedors = proveedor::orderBy('id', 'desc')->get();
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
+
         //dd($proveedors);
-        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors]);
+        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
         //return response()->json( ['proveedor' => $proveedor]);
+    }
+
+    public function indexProveedor(Request $request)
+    {
+        //dd($request);
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+
+        $category = $request->input('tipo_comprobante') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial'); 
+        //dd($ruc_name);
+
+        $proveedors = Proveedor::with('categoria:id,nombre')
+        ->where('estado_activo', 1) // Filtra solo proveedores activos
+        ->when($category, function ($query, $category) {
+            // Filtrar por categoría si se proporciona
+            return $query->where('proveedor_categoria_id', $category);
+        })
+        ->when($ruc_name, function ($query, $ruc_name) {
+            // Filtrar por RUC o Razón Social si se proporciona
+            $query->where(function ($q) use ($ruc_name) {
+                $q->where('ruc', 'LIKE', "%{$ruc_name}%")
+                ->orWhere('razon_social', 'LIKE', "%{$ruc_name}%");
+            });
+        })
+        ->orderBy('id', 'desc') // Ordenar por ID descendente
+        ->paginate(10); // Paginación con 10 elementos por página
+        //$proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
+
+        //dd($proveedors);
+        //return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
+        return response()->json( ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
     }
 
     /**
