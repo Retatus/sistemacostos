@@ -24,18 +24,6 @@
         ListaServicio_detalle: {
             type: Object, 
             required: true
-        },
-        categoriaCostos: {
-            type: Object, 
-            required: true
-        },
-        categoriaDestinos: {
-            type: Object, 
-            required: true
-        } ,
-        categoriaDistribuciones: {
-            type: Object, 
-            required: true
         } 
     })
    
@@ -61,9 +49,6 @@
                     <FormularioProveedorEdit  
                         :proveedor_edit="proveedor_edit"
                         :servicio_edit="servicio_edit"
-                        :categoriaCostos="categoriaCostos" 
-                        :categoriaDestinos="categoriaDestinos" 
-                        :categoriaDistribuciones="categoriaDistribuciones"
                         :proveedorcategorias="proveedorcategorias" 
                         :ListaServicio_clase="ListaServicio_clase" 
                         :ListaServicio_detalle="ListaServicio_detalle"  

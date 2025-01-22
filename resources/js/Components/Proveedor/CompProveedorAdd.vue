@@ -39,7 +39,7 @@
                 <label for="tipo_sunat" class="block text-sm font-medium text-gray-700">Tipo Sunat</label>
                 <select v-model="proveedor.tipo_sunat" id="tipo_sunat" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="options in tipoSunat" :key="options.id" :value="options.id">
+                    <option v-for="options in tiposSunat" :key="options.id" :value="options.id">
                     {{ options.nombre }}
                     </option>
                 </select>  
@@ -101,18 +101,6 @@
             type: Object,
             required: true,
         },
-        categoriaCostos: {
-            type: Object,
-            required: true,
-        },
-        categoriaDestinos: {
-            type: Object,
-            required: true,
-        },
-        categoriaDistribuciones: {
-            type: Object,
-            required: true,
-        },
         ListaServicio_clase: {
             type: Object,
             required: true,
@@ -130,7 +118,7 @@
         { id: '03', nombre: 'BOLETA' },
     ]);
 
-    const tipoSunat = ref([
+    const tiposSunat = ref([
         { id: '2', nombre: 'AGENTE PERCEPCION' },
         { id: '1', nombre: 'AGENTE PERCEPCION' }, 
         { id: '0', nombre: 'AGENTE RETENCION' }
