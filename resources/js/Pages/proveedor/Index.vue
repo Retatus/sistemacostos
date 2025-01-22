@@ -60,7 +60,8 @@
             };
 
             // Petición POST usando axios
-            const response = await axios.post(route('proveedor.indexProveedor'), parameters);
+            //const response = await axios.post(route('proveedor.indexProveedor'), parameters);
+            const response = await axios.get(route('proveedor'), {params: parameters});
 
             // Manejo de la respuesta
             if (response.status === 200) {
@@ -104,7 +105,8 @@
                         <h2 class="text-xl mr-2 font-semibold leading-tight text-gray-800">
                             proveedor
                         </h2>
-                        <Link :href="route('proveedor.create')" class="mr-2"> <i class="bi bi-plus"></i>
+                        <Link :href="route('proveedor.create')"
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150 btn btn-primary px-4 mr-2">
                             Nuevo
                         </Link>
                     </div>
@@ -130,7 +132,7 @@
                 
         </template>
 
-        <div class="py-12">
+        <div class="py-6">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">

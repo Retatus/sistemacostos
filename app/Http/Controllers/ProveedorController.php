@@ -18,17 +18,39 @@ class ProveedorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$proveedor = proveedor::all();
-        //$proveedors = proveedor::orderBy('id', 'desc')->get();
+        // Obtener las categorías formateadas
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
-        $proveedors = Proveedor::with('categoria:id,nombre')->where('estado_activo', 1)->orderBy('id', 'desc')->paginate(10);
 
-        //dd($proveedors);
-        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias]);
-        //return response()->json( ['proveedor' => $proveedor]);
+        // Parámetros de búsqueda
+        $category = $request->input('tipo_comprobante') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial'); 
+        // Consulta principal
+        $proveedors = Proveedor::with('categoria:id,nombre')
+            ->where('estado_activo', 1)
+            ->when($category, function ($query, $category) {
+                return $query->where('proveedor_categoria_id', $category);
+            })
+            ->when($ruc_name, function ($query, $ruc_name) {
+                $query->where(function ($q) use ($ruc_name) {
+                    $q->where('ruc', 'LIKE', "%{$ruc_name}%")
+                    ->orWhere('razon_social', 'LIKE', "%{$ruc_name}%");
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        // Verificar si es una solicitud AJAX o normal
+        if ($request->wantsJson()) {
+            // Respuesta para solicitudes AJAX (búsquedas)
+            return response()->json(['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias, ]);
+        }
+
+        // Respuesta para cargar la vista inicial
+        return Inertia::render('proveedor/Index', ['proveedors' => $proveedors, 'proveedorcategorias' => $formattedCategorias, ]);
     }
+
 
     public function indexProveedor(Request $request)
     {
