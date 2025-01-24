@@ -90,6 +90,7 @@
 <script setup>
     import { ref } from 'vue';
     import axios from 'axios';
+    import Swal from 'sweetalert2';
     import Servicio from '../Servicio/CompServicioAdd.vue';
     import PrimaryButton from '../PrimaryButton.vue';
   
@@ -193,12 +194,44 @@
     }
 
     async function submitProveedor() {
+
         try {
-            const response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
-            alert(response.data.message);
-            console.log(response);
-        } catch (error) {
-            console.error('Error al registrar el proveedor:', error);
+            console.log(proveedor.value);
+            const response = await axios.patch(
+                route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }),
+                proveedor.value
+            );
+
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: response.data.message,
+                    confirmButtonText: 'Aceptar',
+                }).then(() => {
+                    window.location.href = route('proveedor'); // Redirige después de cerrar el modal.
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al agregar el elemento.',
+                    confirmButtonText: 'Aceptar',
+                });
+            }
+        } catch (err) {
+            console.error('Error al registrar el proveedor:', err);
+            const errorMessage = err.response?.data?.message || 'Ocurrió un error inesperado';
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'Aceptar',
+            });
+
+            // Asigna el mensaje de error a la variable "error" si es necesario.
+            error.value = errorMessage;
         }
     }
 </script>

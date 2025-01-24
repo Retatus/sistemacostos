@@ -24,8 +24,8 @@ class ProveedorController extends Controller
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
 
         // Parámetros de búsqueda
-        $category = $request->input('tipo_comprobante') ?? ''; 
-        $ruc_name = $request->input('ruc_razonsocial'); 
+        $category = $request->input('proveedor_categoria') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial') ?? ''; 
         // Consulta principal
         $proveedors = Proveedor::with('categoria:id,nombre')
             ->where('estado_activo', 1)

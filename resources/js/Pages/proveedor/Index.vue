@@ -7,12 +7,16 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     
-
     const Page = usePage();
     const Paginate = ref(Page.props.proveedors);
     const Proveedors = ref(Page.props.proveedors.data);
+    const ProveedorCategorias = ref(Page.props.proveedorcategorias);
 
-    console.log(Proveedors);
+    // Campos del formulario (reactivos)
+    const proveedor_categoria = ref('');
+    const ruc_razonsocial = ref('');
+
+    console.log(ProveedorCategorias);
 
     const tiposDocumento = ref([
         { id: '00', nombre: 'OTROS' },
@@ -29,7 +33,7 @@
 
     const documentosConTipoTexto = computed(() => {
         return Proveedors.value.map((doc) => {
-            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.tipo_comprobante);
+            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.proveedor_categoria);
             const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.id == doc.tipo_sunat);
             return {
             ...doc,
@@ -42,20 +46,38 @@
     async function changePage(page) {
         debugger
         if(page > 0 && page <= Paginate.value.last_page){
-            //this.$inertia.get(window.location.pathname, { page: page });
-            router.get(window.location.pathname, { page: page });
-        }
-    }      
+            // Incluye los filtros actuales en la solicitud            
+            const filters = {
+                page: page
+            };
 
-    // Campos del formulario (reactivos)
-    const tipo_comprobante = ref('');
-    const ruc_razonsocial = ref('');
+            // Agregar categoría solo si tiene un valor válido
+            if (proveedor_categoria.value) {
+                filters.categoria = proveedor_categoria.value;
+            }
+
+            // Agregar búsqueda solo si tiene un valor válido
+            if (ruc_razonsocial.value) {
+                filters.ruc_razonsocial = ruc_razonsocial.value;
+            }
+
+            // Envía la solicitud con los filtros y la página
+            router.get(window.location.pathname, filters, {
+                preserveScroll: true, // Mantiene la posición del scroll
+                preserveState: true,  // Mantiene los datos actuales en la vista
+                onSuccess: (page) => {
+                    Paginate.value = page.props.proveedors; // Asegúrate de que los datos reactivos se actualicen
+                    Proveedors.value = page.props.proveedors.data; // Asegúrate de que los datos reactivos se actualicen
+                }
+            });
+        }
+    }   
 
     const handleSearch = async () => {
         try {
             // Datos a enviar en la petición
             const parameters = {
-                tipo_comprobante: tipo_comprobante.value,
+                proveedor_categoria: proveedor_categoria.value,
                 ruc_razonsocial: ruc_razonsocial.value,
             };
 
@@ -112,11 +134,11 @@
                     </div>
                     <div class="col-span-1 bg-gray-100 flex justify-between items-center px-4">
                         <div class="flex w-full items-center gap-4">
-                            <select v-model="tipo_comprobante"
+                            <select v-model="proveedor_categoria"
                                 class="text-xs border border-gray-300 rounded-md shadow-sm px-4 flex-1">
                                 <option value="">-- Selecciona una opción --</option>
-                                <option v-for="option in tiposDocumento" :key="option.id" :value="option.id">
-                                    {{ option.nombre }}
+                                <option v-for="option in ProveedorCategorias" :key="option.value" :value="option.value">
+                                    {{ option.label }}
                                 </option>
                             </select>
                             <input v-model="ruc_razonsocial" type="text" placeholder="Buscar"
