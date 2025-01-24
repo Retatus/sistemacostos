@@ -91,6 +91,7 @@
 <script setup>
     import { ref } from 'vue';
     import axios from 'axios';
+    import Swal from 'sweetalert2';
     import Servicio from '../Servicio/CompServicioAdd.vue';
     import PrimaryButton from '../PrimaryButton.vue';
     import InputError from '@/Components/InputError.vue';
@@ -182,17 +183,48 @@
         try {
             console.log(proveedor.value);
             const response = await axios.post(route('proveedor_servicio.store'), proveedor.value);
+
             if (response.status === 200) {
-                alert(response.data.message);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: response.data.message,
+                    confirmButtonText: 'Aceptar',
+                }).then(() => {
+                    window.location.href = route('proveedor'); // Redirige después de cerrar el modal.
+                });
             } else {
-                alert('Error al agregar el elemento:', response.data);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Error al agregar el elemento. ${response.data.message}`,
+                    confirmButtonText: 'Aceptar',
+                });
             }
         } catch (err) {
-            console.log('Error al registrar el proveedor:', err);
-            error.value = err.response?.data?.message || 'Ocurrió un error';
-            //alert(error.value);
+            console.error('Error al registrar el proveedor:', err);
+            const errorMessage = err.response?.data?.message || 'Ocurrió un error inesperado';
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'Aceptar',
+            });
+
+            // Asigna el mensaje de error a la variable "error" si es necesario.
+            error.value = errorMessage;
         }
     }  
+
+    const fetchItems = async () => {
+        try {
+            const response = await axios.get('/api/get-items', { params: { value: selectedValue.value },});
+            proveedorcategorias.value = response.data;
+        } catch (error) {
+            console.error('Error al actualizar los datos:', error);
+        }
+    };
 </script>
   
   

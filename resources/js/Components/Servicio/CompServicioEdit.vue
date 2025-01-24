@@ -20,7 +20,7 @@
         <tbody>
           <tr v-for="(item, index) in items" :key="index" class="even:bg-gray-50 odd:bg-white">
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
-                <input v-model="item.monto" type="number" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <input v-model="item.monto" type="number" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
             </td>
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">
                 <select v-model="item.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -66,14 +66,14 @@
             </td>
             <td hidden class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ item.cantidad * item.precio }}</td>
             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:text-blue-700">
-              <button @click="removeItem(index)">
+              <button type ="button" @click="removeItem(index)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M11 5h4m4 0h-4m4 0a2 2 0 01-2 2h-4a2 2 0 01-2-2h4zm4 0H7m4 0H5a2 2 0 012-2h8a2 2 0 012 2z" />
                 </svg>
               </button>
             </td>
             <td class=" border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:text-red-700">
-              <button @click="removeItem(index)">
+              <button type ="button" @click="removeItem(index)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -87,8 +87,7 @@
   </template>
   
 <script>  
-  export default {
-    props: {
+    const props = defineProps({
       items: {
         type: Array,
         required: true,
@@ -101,14 +100,13 @@
           type: Object, 
           required: true
       } 
-    },
-    methods: {
-      
-      removeItem(index) {
-        this.items.splice(index, 1);
-        this.$emit('update', this.items);
-      },
-    },
-  };
+    })
+
+    const emit = defineEmits(['update']); // Define el evento que vas a emitir
+    
+    const removeItem = (index) => {
+      props.items.splice(index, 1);
+      emit('update', props.items);
+    }   
 </script>
   

@@ -40,7 +40,7 @@ class ProveedorServicioController extends Controller
             $result = $this->service->handleValidationAndUpdating($request);
 
             return response()->json([
-                'message' => 'Proveedor y servicio creados exitosamente',
+                'message' => 'Proveedor y servicio actualizados exitosamente',
                 'data' => $result,
             ], 200);
         } catch (\Exception $e) {

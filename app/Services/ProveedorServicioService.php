@@ -37,7 +37,6 @@ class ProveedorServicioService
                 if ($validatorProveedor->fails()) {                
                     throw new \Illuminate\Validation\ValidationException($validatorProveedor);
                     //throw new CustomValidationException($validatorProveedor);
-
                 }            
     
                 // Llamar al método `store` del controlador de proveedor
@@ -79,7 +78,7 @@ class ProveedorServicioService
                 return [
                     
                     'proveedor' => $proveedorResponse,           
-                    
+                    'servicio' => $servicioResponse ,
                     'message' => 'Proveedor y servicios creados correctamente',
                 ];
             });
@@ -103,29 +102,60 @@ class ProveedorServicioService
             $proveedorResponseUpdate = $this->proveedorController->updateEstado($request->id);
 
             // Validar e insertar proveedor
-            $proveedor = new Request($request->except(['detalles','costo','destino']));
-            $proveedorResponse = $this->proveedorController->store($proveedor);
+            $validatorProveedor = Validator::make(
+                $request->except(['detalles']),
+                (new ProveedorRequest())->rules(),
+                (new ProveedorRequest())->messages()
+            );
 
-            // Obtener el ID del proveedor creado
-            $proveedorId = json_decode($proveedorResponse->getContent())->id;
-            // if ($proveedorResponse->getStatusCode() !== 200) {
-            //     throw new \Exception('Error al insertar proveedor' .$proveedorId);
-            // }          
+            if ($validatorProveedor->fails()) {                
+                throw new \Illuminate\Validation\ValidationException($validatorProveedor);
+                //throw new CustomValidationException($validatorProveedor);
+            }   
             
-            $detalles = $request->only('detalles')['detalles'];
+            // Llamar al método `store` del controlador de proveedor
+            $proveedorResponse = $this->proveedorController->store(new ProveedorRequest($validatorProveedor->validated()));
+
+            if ($proveedorResponse->getStatusCode() !== 200) {
+                throw new \Exception('Error al insertar proveedor' . json_decode($proveedorResponse->getContent())->id);
+            } 
+
+            $proveedorId = json_decode($proveedorResponse->getContent())->id;
+            
+            // **Validar e insertar servicios**
+            $detalles = $request->get('detalles', []);
+
+            // Actualizar el estado_activo del detalle de servicio a 0 para poder insertar un nuevo servicio
+            $proveedorResponseUpdate = $this->servicioController->updateEstado($request->id);
            
-            foreach ($detalles as $servicio) {
-                $servicio['proveedor_id'] = $proveedorId;
-                $servicioRequest = new Request($servicio);
-                $servicioResponse = $this->servicioController->store($servicioRequest);
-                // if ($servicioResponse->getStatusCode() !== 200) {
-                //     throw new \Exception('Error al insertar servicio');
-                // }
+            foreach ($detalles as $servicioData) {
+                // Añadir `proveedor_id` al servicio
+                $servicioData['proveedor_id'] = $proveedorId;
+
+                // Validar los datos del servicio usando las reglas de ServicioRequest
+                $validatorServicio = Validator::make(
+                    $servicioData,
+                    (new ServicioRequest())->rules(),
+                    (new ServicioRequest())->messages()
+                );
+
+                if ($validatorServicio->fails()) {
+                    throw new \Illuminate\Validation\ValidationException($validatorServicio);
+                    //throw new CustomValidationException($validatorServicio, $proveedorId);
+                }
+
+                // Llamar al método `store` del controlador de servicio
+                $servicioResponse = $this->servicioController->store(new ServicioRequest($validatorServicio->validated()));
+    
+                if ($servicioResponse->getStatusCode() !== 200) {
+                    throw new \Exception('Error al insertar servicio');
+                }
             }
             return [
                 'proveedorUpdate' => $proveedorResponseUpdate,
                 'proveedor' => $proveedorResponse,                
                 'servicio' => $servicioResponse ,
+                'message' => 'Proveedor y servicios actualizados correctamente',
             ];
         });
     }
