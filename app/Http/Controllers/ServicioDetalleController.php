@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ServicioDetalle\StoreRequest;
+use App\Models\ProveedorCategoria;
 use App\Models\Costo;
 use App\Models\Destino;
 use App\Models\DistribucionVenta;
@@ -20,6 +21,7 @@ class ServicioDetalleController extends Controller
         //$serviciodetalle = ServicioDetalle::all();
         $serviciodetalles = ServicioDetalle::with(
             [
+                'proveedor_categoria:id,nombre',
                 'costo:id,nombre',
                 'destino:id,nombre',
                 'distribucion_venta:id,nombre',
@@ -36,10 +38,11 @@ class ServicioDetalleController extends Controller
      */
     public function create()
     {
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
-        return Inertia::render('ServicioDetalle/Create', ['categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]); //compact('proveedorcategorias' => $formattedCategorias]);
+        return Inertia::render('ServicioDetalle/Create', ['proveedorcategorias' => $formattedCategorias, 'categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]); //compact('proveedorcategorias' => $formattedCategorias]);
     }
 
     /**
@@ -75,10 +78,11 @@ class ServicioDetalleController extends Controller
      */
     public function edit(ServicioDetalle $servicioDetalle)
     {
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
-        return Inertia::render('ServicioDetalle/Edit', [ 'servicioDetalle' => $servicioDetalle,'categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]);
+        return Inertia::render('ServicioDetalle/Edit', ['proveedorcategorias' => $formattedCategorias, 'servicioDetalle' => $servicioDetalle,'categoriaCostos' => $formattedCostos, 'categoriaDestinos' => $formattedDestinos, 'categoriaDistribuciones' => $formattedDistribuciones]);
     }
 
     /**

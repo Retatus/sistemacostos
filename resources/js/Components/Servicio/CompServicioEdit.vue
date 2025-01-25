@@ -24,8 +24,8 @@
             </td>
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option value="dolares">DOLARES</option>
-                  <option value="soles">SOLES</option>
+                  <option value="DOLARES">DOLARES</option>
+                  <option value="SOLES">SOLES</option>
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
@@ -49,9 +49,9 @@
             </td>
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.tipo_pax" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option value="adulto">ADULTO</option>
-                  <option value="estudiante">ESTUDIANTE</option>
-                  <option value="ninio">NIÑO</option>
+                  <option value="ADULTO">ADULTO</option>
+                  <option value="ESTUDIANTE">ESTUDIANTE</option>
+                  <option value="NINIO">NIÑO</option>
                 </select>
             </td>          
             <td hidden class="px-4 py-2 text-sm">

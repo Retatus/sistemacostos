@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
             "ubicacion" => 'required|min:3|max:50',
             "tipo_pax" => 'required',
             "servicio_clase_id" => 'required',
-            "estado_activo" => 'required',
+            "estado_activo" => 'required|in:1,0',
 
         ];
     }

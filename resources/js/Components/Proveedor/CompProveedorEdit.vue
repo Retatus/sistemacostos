@@ -163,10 +163,10 @@
 
     const detalleTemporal = ref({
         monto: '',
-        moneda: 'dolares',
+        moneda: 'DOLARES',
         servicio_clase_id: '',
         ubicacion: '',
-        tipo_pax: 'adulto',
+        tipo_pax: 'ADULTO',
         servicio_detalle_id: '',
         estado_activo: '1',
     });
@@ -184,10 +184,10 @@
         // Limpia el detalle temporal
         detalleTemporal.value = {
             monto: '',
-            moneda: 'dolares',
+            moneda: 'DOLARES',
             servicio_clase_id: '',
             ubicacion: '',
-            tipo_pax: 'adulto',
+            tipo_pax: 'ADULTO',
             servicio_detalle_id: '',
             estado_activo: '1',
         };

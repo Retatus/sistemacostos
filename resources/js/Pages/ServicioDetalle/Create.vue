@@ -10,6 +10,10 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
 
     const props = defineProps({
+        proveedorcategorias: {
+            type: Object, 
+            required: true
+        },
         categoriaCostos: {
             type: Object, 
             required: true
@@ -26,15 +30,20 @@
 
     const form = useForm({
         descripcion: "",
+        proveedor_categoria_id: "1",
         costo_id: "1",
         destino_id: "1",
         distribucion_venta_id: "1",
         estado_activo: "1",
-
     });
 
     const formFields = {   
         descripcion: { type: 'text', placeholder: 'Ingrese la descripcion', label: 'descripcion' },
+        proveedor_categoria_id: { 
+            type: 'select', 
+            label: 'Categoria', 
+            options: props.proveedorcategorias
+        },
         costo_id: { 
             type: 'select', 
             label: 'Costos', 
