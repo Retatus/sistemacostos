@@ -4,6 +4,7 @@ namespace App\Http\Requests\proveedor;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class StoreRequest extends FormRequest
 {
     /**
@@ -22,7 +23,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "ruc" => 'required|min:3|max:15',
+            "ruc" => ['required', 'string','regex:/^\d{11,18}$/', Rule::unique(table: 'proveedors', column: 'ruc')->ignore(id: request('proveedors'), idColumn : 'id')],
             "razon_social" => 'required|min:3|max:100',
             "direccion" => 'required|min:3|max:100',
             "tipo_comprobante" => 'required|min:2|max:2',
@@ -39,8 +40,8 @@ class StoreRequest extends FormRequest
      {
          return [
              'ruc.required' => 'El RUC es obligatorio',
-             'ruc.min' => 'El RUC debe tener al menos 3 caracteres',
-             'ruc.max' => 'El RUC no debe exceder 15 caracteres',
+             'ruc.unique' => 'El RUC ya existe',
+             'ruc.regex' => 'El RUC debe contener solo números entre 11 y 18 dígitos',
              'razon_social.required' => 'La razón social es obligatoria',
              'razon_social.min' => 'La razón social debe tener al menos 3 caracteres',
              'razon_social.max' => 'La razón social no debe exceder 100 caracteres',

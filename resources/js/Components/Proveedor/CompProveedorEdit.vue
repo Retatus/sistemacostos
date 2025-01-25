@@ -6,7 +6,7 @@
             <div class="col-span-1 ">
                 <label for="ruc" class=" text-sm font-medium text-gray-700">RUC</label>
                 <div class="flex items-center space-x-2">
-                    <input v-model="proveedor.ruc" type="text" id="ruc" class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el RUC">
+                    <input v-model="proveedor.ruc" disabled type="text" id="ruc" class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el RUC">
                     <button @click.prevent="showModal">Agregar</button>            
                 </div>
             </div>
@@ -81,7 +81,7 @@
             :ListaServicio_detalle="ListaServicio_detalle"   
             @update="updateDetalles"
         />
-        <!-- Botón para agregar el ítem -->
+        <!-- Botón para agregar el ítem -->  
         <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Editar</PrimaryButton>
       </form>
     </div>
