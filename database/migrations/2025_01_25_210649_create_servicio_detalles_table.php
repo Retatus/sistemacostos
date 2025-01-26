@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('servicio_detalles', function (Blueprint $table) {
             $table->id();
-            $table->string('descripcion', 75);
+            $table->string('descripcion', 100);
+             
+
+            // Define la columna que será la clave foránea
+            $table->unsignedBigInteger('proveedor_categoria_id');
+
+            // Define la relación con la tabla `proveedor_categorias`
+            $table->foreign('proveedor_categoria_id')
+                ->references('id')->on('proveedor_categorias')
+                ->onUpdate('cascade')->onDelete('cascade');
              
 
             // Define la columna que será la clave foránea

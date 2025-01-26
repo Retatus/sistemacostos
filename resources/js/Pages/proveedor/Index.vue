@@ -33,7 +33,7 @@
 
     const documentosConTipoTexto = computed(() => {
         return Proveedors.value.map((doc) => {
-            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.proveedor_categoria);
+            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.tipo_comprobante);
             const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.id == doc.tipo_sunat);
             return {
             ...doc,

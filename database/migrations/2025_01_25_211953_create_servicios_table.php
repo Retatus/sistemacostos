@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
             $table->decimal('monto', 10, 2);
-            $table->enum('moneda', ['dolares', 'soles'])->default('dolares');
+            $table->enum('moneda', ['DOLARES', 'SOLES'])->default('DOLARES');
              
 
             // Define la columna que será la clave foránea
@@ -34,7 +34,7 @@ return new class extends Migration
                 ->references('id')->on('servicio_detalles')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->string('ubicacion', 50);
-            $table->enum('tipo_pax', ['adulto', 'estudiante', 'ninio'])->default('adulto');
+            $table->enum('tipo_pax', ['ADULTO', 'ESTUDIANTE', 'NINIO'])->default('ADULTO');
              
 
             // Define la columna que será la clave foránea

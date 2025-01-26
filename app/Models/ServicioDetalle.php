@@ -9,11 +9,14 @@ class ServicioDetalle extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['descripcion', 'costo_id', 'destino_id', 'distribucion_venta_id', 'estado_activo'];
+    protected $fillable = ['descripcion', 'proveedor_categoria_id', 'costo_id', 'destino_id', 'distribucion_venta_id', 'estado_activo'];
 
-    public static function getFormattedForDropdown()
+    public static function getFormattedForDropdown($parametro = null)
     {
         return self::orderBy('id', 'desc')
+            ->when($parametro, function ($query, $parametro) {
+                return $query->where('proveedor_categoria_id', $parametro);
+            })
             ->get()
             ->map(function ($destino) {
                 return [
@@ -22,6 +25,11 @@ class ServicioDetalle extends Model
                 ];
             });
     }  
+
+    public function proveedor_categoria()
+    {
+        return $this->belongsTo(ProveedorCategoria::class, 'proveedor_categoria_id', 'id');
+    }
 
     public function costo()
     {

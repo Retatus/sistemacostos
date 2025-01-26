@@ -10,6 +10,7 @@ class Servicio extends Model
     use HasFactory;    
 
     protected $fillable = ['monto', 'moneda', 'proveedor_id', 'servicio_detalle_id', 'ubicacion', 'tipo_pax', 'servicio_clase_id', 'estado_activo'];
+    
     public function proveedor()
     {
         return $this->belongsTo(proveedor::class, 'proveedor_id', 'id');

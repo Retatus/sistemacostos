@@ -50,7 +50,7 @@
             </div>
             <div class="col-span-1">
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-                <select v-model="proveedor.proveedor_categoria_id" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
                     <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
                     {{ option.label }}
@@ -78,7 +78,7 @@
         <Servicio
             :items="proveedor.detalles"
             :ListaServicio_clase="ServicioClases" 
-            :ListaServicio_detalle="ListaServicio_detalle"   
+            :ListaServicio_detalle="ServicioDetalles"   
             @update="updateDetalles"
         />
         <!-- Botón para agregar el ítem -->  
@@ -139,8 +139,7 @@
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
-    //console.log('props 133:', props);
-    const ServiciosDetalles = ref([...props.ListaServicio_detalle]);
+    const ServicioDetalles = ref([...props.ListaServicio_detalle]);
     const ServicioClases = ref([...props.ListaServicio_clase]);
 
     // Variables para el proveedor y detalle temporal
@@ -163,16 +162,32 @@
 
     const detalleTemporal = ref({
         monto: '',
-        moneda: 'dolares',
+        moneda: 'DOLARES',
+        proveedor_categoria_id: '',
         servicio_clase_id: '',
         ubicacion: '',
-        tipo_pax: 'adulto',
+        tipo_pax: 'ADULTO',
         servicio_detalle_id: '',
         estado_activo: '1',
     });
 
     proveedor.value.detalles = props.servicio_edit;
 
+    async function CategoryListUpdate() {
+        try {     
+            const data = {
+                proveedor_categoria_id: proveedor.value.proveedor_categoria_id,
+            }     
+            const response = await axios.post(`${route('serviciodetalle')}/serviceCategory`, data);   
+            if (response.status === 200) {
+                console.log('Elemento agregado:', response.data);            
+                ServicioDetalles.value = response.data;
+            }   
+            
+        } catch (error) {
+            console.error('Error al actualizar los datos:', error);
+        }        
+    };
     
     function updateDetalles(nuevosDetalles) {
         detalleTemporal.value = nuevosDetalles;
@@ -184,23 +199,20 @@
         // Limpia el detalle temporal
         detalleTemporal.value = {
             monto: '',
-            moneda: 'dolares',
+            moneda: 'DOLARES',
+            proveedor_categoria_id: '',
             servicio_clase_id: '',
             ubicacion: '',
-            tipo_pax: 'adulto',
+            tipo_pax: 'ADULTO',
             servicio_detalle_id: '',
             estado_activo: '1',
         };
     }
 
     async function submitProveedor() {
-
         try {
             console.log(proveedor.value);
-            const response = await axios.patch(
-                route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }),
-                proveedor.value
-            );
+            const response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
 
             if (response.status === 200) {
                 Swal.fire({
@@ -215,7 +227,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Error al agregar el elemento.',
+                    text: `Error al editar el elemento. ${response.data.message}`,
                     confirmButtonText: 'Aceptar',
                 });
             }
@@ -235,5 +247,3 @@
         }
     }
 </script>
-  
-  
