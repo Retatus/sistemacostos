@@ -142,7 +142,7 @@ class ProveedorController extends Controller
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         $formattedServicioClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown($parametro = null);
         return Inertia::render('proveedor/EditProveedor',
         [
             'proveedor_edit' => $proveedor,

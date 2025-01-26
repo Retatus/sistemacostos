@@ -47,8 +47,8 @@
             label: 'Moneda',
             type: 'select', 
             options: [
-                { value: 'soles', label: 'soles' }, 
-                { value: 'dolares', label: 'dolares' },
+                { value: 'SOLES', label: 'SOLES' }, 
+                { value: 'DOLARES', label: 'DOLARES' },
             ],             
         },
         proveedor_id: { 
@@ -72,9 +72,9 @@
             label: 'Tipo pax', 
             type: 'select', 
             options: [
-                { value: 'adulto', label: 'adulto' }, 
-                { value: 'estudiante', label: 'estudiante' },
-                { value: 'ninio', label: 'niño' }
+                { value: 'ADULTO', label: 'ADULTO' }, 
+                { value: 'ESTUDIANTE', label: 'ESTUDIANTE' },
+                { value: 'NINIO', label: 'NIÑO' }
             ], 
         },
         servicio_clase_id: { 

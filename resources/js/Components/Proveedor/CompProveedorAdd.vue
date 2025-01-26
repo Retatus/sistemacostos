@@ -50,12 +50,12 @@
             </div>
             <div class="col-span-1">
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-                <select v-model="proveedor.proveedor_categoria_id" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                    <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                    </option>
-                </select>
+                    <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                        </option>
+                    </select>
             </div>  
             <div class="col-span-1">
                 <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
@@ -78,7 +78,7 @@
         <Servicio
             :items="proveedor.detalles"
             :ListaServicio_clase="ServicioClases" 
-            :ListaServicio_detalle="ListaServicio_detalle"   
+            :ListaServicio_detalle="ServicioDetalles"   
             @update="updateDetalles"
         />
 
@@ -133,6 +133,7 @@
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
+    const ServicioDetalles = ref([...props.ListaServicio_detalle]);
     const ServicioClases = ref([...props.ListaServicio_clase]);
     
     // Variables para el proveedor y detalle temporal
@@ -159,6 +160,22 @@
         servicio_detalle_id: '',
         estado_activo: '1',
     });
+
+    async function CategoryListUpdate() {
+        try {     
+            const data = {
+                proveedor_categoria_id: proveedor.value.proveedor_categoria_id,
+            }     
+            const response = await axios.post(`${route('serviciodetalle')}/serviceCategory`, data);   
+            if (response.status === 200) {
+                console.log('Elemento agregado:', response.data);            
+                ServicioDetalles.value = response.data;
+            }   
+            
+        } catch (error) {
+            console.error('Error al actualizar los datos:', error);
+        }        
+    };
     
     function updateDetalles(nuevosDetalles) {
         detalleTemporal.value = nuevosDetalles;
@@ -215,17 +232,5 @@
             // Asigna el mensaje de error a la variable "error" si es necesario.
             error.value = errorMessage;
         }
-    }  
-
-    const fetchItems = async () => {
-        try {
-            const response = await axios.get('/api/get-items', { params: { value: selectedValue.value },});
-            proveedorcategorias.value = response.data;
-        } catch (error) {
-            console.error('Error al actualizar los datos:', error);
-        }
-    };
+    }
 </script>
-  
-  
-

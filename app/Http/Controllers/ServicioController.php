@@ -13,7 +13,7 @@ class ServicioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //$servicio = Servicio::all();
         //$servicios = Servicio::orderBy('id', 'desc')->get();
@@ -25,7 +25,7 @@ class ServicioController extends Controller
                 'servicio_clase:id,nombre',
             ])
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(10);
         return Inertia::render('Servicio/Index', compact('servicios'));
         //return response()->json( ['servicio' => $servicio]);
     }

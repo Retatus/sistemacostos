@@ -70,6 +70,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/serviciodetalle/create', [ServicioDetalleController::class, 'create'])->name('serviciodetalle.create');
     Route::post('/dashboard/serviciodetalle', [ServicioDetalleController::class, 'store'])->name('serviciodetalle.store');
     Route::post('/dashboard/serviciodetalle/storemodal', [ServicioDetalleController::class, 'storemodal'])->name('serviciodetalle.storemodal');
+    Route::post('/dashboard/serviciodetalle/serviceCategory', [ServicioDetalleController::class, 'serviceCategory'])->name('serviciodetalle.serviceCategory');
     Route::get('/dashboard/serviciodetalle/{servicio_detalle}/edit', [ServicioDetalleController::class, 'edit'])->name('serviciodetalle.edit');
     Route::patch('/dashboard/serviciodetalle/{servicio_detalle}/update', [ServicioDetalleController::class, 'update'])->name('serviciodetalle.update');
     Route::delete('/dashboard/serviciodetalle/{serviciodetalle}/destroy', [ServicioDetalleController::class, 'destroy'])->name('serviciodetalle.destroy');

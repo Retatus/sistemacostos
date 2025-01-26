@@ -65,6 +65,13 @@ class ServicioDetalleController extends Controller
         //return to_route('servicio_clase');
     }
 
+    public function serviceCategory(Request $request)
+    {
+        $data = $request->all();
+        $servicioDetalle = ServicioDetalle::getFormattedForDropdown($data['proveedor_categoria_id']);
+        return response()->json($servicioDetalle);
+    }
+
     /**
      * Display the specified resource.
      */
