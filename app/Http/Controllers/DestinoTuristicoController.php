@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\DestinoTuristico\StoreRequest;
 use App\Models\DestinoTuristico;
+use App\Models\proveedor;
+use App\Models\ProveedorCategoria;
+use App\Models\ServicioClase;
+use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class DestinoTuristicoController extends Controller
@@ -23,7 +27,23 @@ class DestinoTuristicoController extends Controller
      */
     public function create()
     {
-        return Inertia::render('DestinoTuristico/Create');
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedProveedores = proveedor::getFormattedForDropdown();
+        // $formattedCostos = Costo::getFormattedForDropdown();
+        // $formattedDestinos = Destino::getFormattedForDropdown();
+        // $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
+        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
+        [
+            'ListaProveedorCategorias' => $formattedCategorias,
+            'ListaProveedor' =>  $formattedProveedores,
+            // 'categoriaDestinos' => $formattedDestinos,
+            // 'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaServicioClase' => $formattedServicioClase,
+            'ListaServicioDetalle' => $formattedServicioDetalle
+        ]);
+        return Inertia::render('DestinoTuristico/CreateDestinoTuristico');
     }
 
     /**
@@ -34,6 +54,13 @@ class DestinoTuristicoController extends Controller
         $data = $request->all();
         DestinoTuristico::create($data);
         return to_route('destino_turistico');
+    }
+
+    public function DestinoCategories(Request $request)
+    {
+        $data = $request->all();
+        $servicioDetalle = ServicioDetalle::getFormattedForDropdown($data['proveedor_categoria_id']);
+        return response()->json($servicioDetalle);
     }
 
     /**

@@ -123,6 +123,13 @@ class ProveedorController extends Controller
         return response()->json($proveedor);
     }
 
+    public function proveedorList(Request $request)
+    {
+        $data = $request->all();
+        $proveedorList = Proveedor::getFormattedForDropdown($data['proveedor_categoria_id']);
+        return response()->json($proveedorList);
+    }
+
     /**
      * Display the specified resource.
      */

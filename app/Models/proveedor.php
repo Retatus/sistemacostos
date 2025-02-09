@@ -16,9 +16,12 @@ class proveedor extends Model
         return $this->belongsTo(ProveedorCategoria::class, 'proveedor_categoria_id', 'id');
     }
 
-    public static function getFormattedForDropdown()
+    public static function getFormattedForDropdown($parametro = null)
     {
         return self::orderBy('id', 'desc')
+            ->when($parametro, function ($query, $parametro) {
+                return $query->where('proveedor_categoria_id', $parametro);
+            })
             ->get()
             ->map(function ($proveedor) {
                 return [
@@ -26,7 +29,7 @@ class proveedor extends Model
                     'label' => $proveedor->ruc . ' - ' . $proveedor->razon_social,
                 ];
             });
-    }
+    }  
 
     public function desactivar()
     {
