@@ -9,7 +9,7 @@ class Precio extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['anio', 'moneda', 'precio', 'tipo_pasajero_id', 'servicio_id', 'estado_activo'];
+    protected $fillable = ['anio', 'moneda', 'monto', 'tipo_pasajero_id', 'servicio_id', 'estado_activo'];
 
     public function servicio()
     {

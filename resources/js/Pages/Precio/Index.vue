@@ -50,14 +50,14 @@
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                                                        <th scope='col' className='px-6 py-3'>
+                                    <th scope='col' className='px-6 py-3'>
                                         anio
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         moneda
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        precio
+                                        monto
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         tipo_pasajero_id
@@ -76,14 +76,14 @@
                             </thead>
                             <tbody>
                                 <tr v-for="precio in Precios" className="bg-white border-b ">
-                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.anio}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.moneda}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{precio.precio}}
+                                        {{precio.monto}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.tipo_pasajero_id}}

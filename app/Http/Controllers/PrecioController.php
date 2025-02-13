@@ -68,7 +68,18 @@ class PrecioController extends Controller
      */
     public function edit(Precio $precio)
     {
-        return Inertia::render('Precio/Edit', compact('precio'));
+        $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
+        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion') 
+        ->orderBy('id', 'desc') 
+        ->get();
+        
+        return Inertia::render('Precio/Edit', 
+        [
+            'tipopasajeros' => $formattedTipoPasajeros,
+            'servicios' => $formattedServicios,
+            'precio' => $precio
+        ]); //compact('proveedorcategorias'));
+        //return Inertia::render('Precio/Edit', compact('precio'));
     }
 
     /**

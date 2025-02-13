@@ -8,22 +8,72 @@
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
+    import { ref } from 'vue';
   
     const props = defineProps({
+        tipopasajeros: {
+            type: Object, 
+            required: true
+        },
+        servicios: {
+          type: Object, 
+          required: true
+        },
         precio: {
             type: Object, 
             required: true
         } 
     })
  
-    console.log(props);
+    console.log(props.servicios);
+
+    const ListaServicios = ref([]);
+
+    props.servicios.forEach(servicio => {
+        ListaServicios.value.push({
+            value: servicio.id,
+            label: `${servicio.servicio_detalle.descripcion} [ ${servicio.tipo_pax} ]`
+        });
+    });
+
+    console.log(ListaServicios.value);
+
     const form = useForm({
-        nombre: props.precio.nombre,
+        anio: props.precio.anio,
+        moneda: props.precio.moneda,
+        monto: props.precio.monto,
+        tipo_pasajero_id: props.precio.tipo_pasajero_id,
+        servicio_id: props.precio.servicio_id,
         estado_activo: props.precio.estado_activo,
     });
 
     const formFields = {   
-        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        anio: { type: 'text', placeholder: 'Ingrese la año', label: 'año' },
+        moneda: { 
+            label: 'Moneda',
+            type: 'select', 
+            options: [
+                { value: 'DOLARES', label: 'DOLARES' },
+                { value: 'SOLES', label: 'SOLES' }, 
+            ],             
+        },
+        monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },
+        tipo_pasajero_id: { 
+            label: 'Tipo Pasajero', 
+            type: 'select', 
+            options: [
+                { value: '', label: '--Seleccionar--' },
+                ... props.tipopasajeros
+            ]
+        },
+        servicio_id: { 
+            label: 'Servicio', 
+            type: 'select', 
+            options: [
+                { value: '', label: '--Seleccionar--' },
+                ... ListaServicios.value
+            ]
+        },
         estado_activo: { 
             type: 'select', 
             options: [
