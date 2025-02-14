@@ -22,9 +22,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "anio" => 'required|min:3|max:',
+             "anio" => 'required|min:3|max:4',
             "moneda" => 'required',
-            "precio" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            "monto" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "tipo_pasajero_id" => 'required',
             "servicio_id" => 'required',
             "estado_activo" => 'required',

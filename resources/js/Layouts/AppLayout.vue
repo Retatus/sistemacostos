@@ -68,8 +68,8 @@ const logout = () => {
                                         <Link :href="route('proveedor')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Proveedores
                                         </Link>
-                                        <Link :href="route('categoria_proveedor')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                            Categoria proveedor
+                                        <Link :href="route('proveedor_categoria')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Proveedor categoria
                                         </Link>
                                         <Link :href="route('servicio_clase')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Servicio clase
@@ -80,7 +80,7 @@ const logout = () => {
                                         <Link :href="route('servicio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Servicio
                                         </Link>
-                                        <Link :href="route('dashboard')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        <Link :href="route('destino_turistico')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Destinos turisticos
                                         </Link>
                                     </div>
@@ -96,6 +96,30 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')">
                                     Ventas
                                 </NavLink>
+                            </div>
+                            <div class="group px-7">
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')" class="flex items-center mt-5">
+                                    Soporte
+                                    <svg class="w-4 h-4 ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06 0L10 10.93l3.71-3.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </NavLink>
+                                <!-- Dropdown content -->
+                                <div class="hidden group-hover:block absolute bg-white border border-gray-200 rounded-md shadow-lg mt-2 z-10">
+                                    <Link :href="route('itinerario')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Itinerario
+                                    </Link>
+                                    <Link :href="route('precio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Precio
+                                    </Link>
+                                    <Link :href="route('pais')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Pais
+                                    </Link>
+                                    <Link :href="route('ubicacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Ubicacion
+                                    </Link>
+                                    
+                                </div>
                             </div>
                         </div>
 
