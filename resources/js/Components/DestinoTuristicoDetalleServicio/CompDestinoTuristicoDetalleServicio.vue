@@ -30,7 +30,7 @@
                   </option>
               </select>
             </div>
-            <div class="col-span-1 ">
+            <!-- <div class="col-span-1 ">
               <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Servicio clase</label>           
               <select v-model="destinoTuristicoDetalleServicio.servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
@@ -38,7 +38,7 @@
                   {{ option.label }}
                   </option>
               </select>
-            </div>
+            </div> -->
             <div class="col-span-1 ">
               <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700"></label>
                 <PrimaryButton 
@@ -89,15 +89,7 @@
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_servicio_clase" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                  </option>
-                </select>
-            </td>
-            <td class="px-4 py-2 text-sm">
-                <input v-model="item.costo" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <input v-model="item.costo" @input="calcularTotal" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
             </td>
             <td class="px-4 py-2 text-sm hover:text-red-700 text-center">
               <button type ="button" @click="removeItem(index)">
@@ -113,40 +105,56 @@
     </div>
   </template>
 <script setup>
-import { ref, toRefs } from 'vue';
+import { ref, watch, toRefs } from 'vue';
 import PrimaryButton from '../PrimaryButton.vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({ 
-  Lista_proveedor_categorias: {
-    type: Object,
-    required: true,
-  },
-  Lista_proveedor: {
-    type: Object,
-    required: true,
-  },
-  Lista_servicio_clase: {
-    type: Object,
-    required: true,
-  },
-  Lista_servicio_detalle: {
-    type: Object,
-    required: true,
-  },
+    Lista_proveedor_categorias: {
+      type: Object,
+      required: true,
+    },
+    Lista_proveedor: {
+      type: Object,
+      required: true,
+    },
+    // Lista_servicio_clase: {
+    //   type: Object,
+    //   required: true,
+    // },
+    Lista_servicio_detalle: {
+      type: Object,
+      required: true,
+    },
 
-  Lista_destino_turistico_detalle_servicio: {
-    type: Array,
-    required: true,
-  },
-});
+    Lista_destino_turistico_detalle_servicio: {
+      type: Array,
+      required: true,
+    },
+  });
         
     const destinoTuristicoDetalleServicio = ref({
       proveedor_categoria_id: '',
       proveedor_id: '',
       servicio_detalle_id: '',
       servicio_clase_id: '',
-      costo: '0.00',
+      costo: '200.00',
     });
+
+    const emit = defineEmits(['update', 'actualizarTotal']); // Define el evento que vas a emitir
+    
+    const removeItem = (index) => {
+      props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
+      emit('update', props.Lista_destino_turistico_detalle_servicio);
+      calcularTotal();
+    }
+
+    // Función para calcular el total de costos
+  const calcularTotal = () => {
+    const total = props.Lista_destino_turistico_detalle_servicio.reduce((
+      suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.costo || 0), 0 );
+    emit("actualizarTotal", total); // Emitir el total al componente Hijo
+  };
 
     function agregarDestinoTuristicoDetalleServicio() { 
       props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
@@ -155,10 +163,10 @@ const props = defineProps({
             proveedor_id: '',
             servicio_detalle_id: '',
             servicio_clase_id: '',
-            costo: '0.00',            
+            costo: '150.00',            
         };
+        calcularTotal();
     }
-
     async function CategoryListUpdate() {
       //alert('CategoryListUpdate');
         try {     
@@ -169,23 +177,11 @@ const props = defineProps({
             if (response.status === 200) {
                 console.log('Elemento agregado:', response.data);            
                 props.Lista_proveedor_categorias.value = response.data;
-            }   
-            
+            }               
         } catch (error) {
             console.error('Error al actualizar los datos:', error);
         }        
     };
-
-    function updateDestinoTuristicoDetalleServicio(nuevosDetalles) {
-        destinoTuristicoDetalleServicio.value = nuevosDetalles;
-    }
-
-    const emit = defineEmits(['update']); // Define el evento que vas a emitir
-    
-    const removeItem = (index) => {
-      props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
-      emit('update', props.Lista_destino_turistico_detalle_servicio);
-    }   
       
 </script>
 
