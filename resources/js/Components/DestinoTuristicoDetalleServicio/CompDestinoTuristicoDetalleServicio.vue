@@ -30,15 +30,6 @@
                   </option>
               </select>
             </div>
-            <!-- <div class="col-span-1 ">
-              <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Servicio clase</label>           
-              <select v-model="destinoTuristicoDetalleServicio.servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_servicio_clase" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                  </option>
-              </select>
-            </div> -->
             <div class="col-span-1 ">
               <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700"></label>
                 <PrimaryButton 
@@ -168,7 +159,6 @@ const props = defineProps({
         calcularTotal();
     }
     async function CategoryListUpdate() {
-      //alert('CategoryListUpdate');
         try {     
             const data = {
                 proveedor_categoria_id: destinoTuristicoDetalleServicio.value.proveedor_categoria_id,

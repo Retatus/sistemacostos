@@ -51,10 +51,13 @@
 
                 <div class="col-span-3">
                     <DestinioTuristicoDetalle
-                        :Lista_destino_turistico_detalle="destinoTuristico.destino_turistico_detalle"
-                        :Lista_proveedor_categorias="ProveedorCategorias" :Lista_itinerarios="Itinerarios"
-                        :Lista_proveedor="Proveedor" :Lista_servicio_clase="ServicioClases"
-                        :Lista_servicio_detalle="ServicioDetalles" @actualizarMontoPadre="actualizarTotalHijo" />
+                        :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
+                        :Lista_proveedor_categorias = "ProveedorCategorias" 
+                        :Lista_itinerarios = "Itinerarios"
+                        :Lista_proveedor = "Proveedor" 
+                        :Lista_servicio_clase = "ServicioClases"
+                        :Lista_servicio_detalle="ServicioDetalles" 
+                        @actualizarMontoPadre="actualizarTotalHijo" />
                 </div>
 
                 <!-- Tercera fila -->
