@@ -64,6 +64,7 @@ const maxWidthClass = computed(() => {
         'lg': 'sm:max-w-lg',
         'xl': 'sm:max-w-xl',
         '2xl': 'sm:max-w-2xl',
+        '70': 'sm:max-w-[70%]' // Añadimos una clase personalizada para 70%
     }[props.maxWidth];
 });
 </script>

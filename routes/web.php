@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\CostoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinoController;
+use App\Http\Controllers\DestinoTuristicoController;
 use App\Http\Controllers\DistribucionVentaController;
 use App\Http\Controllers\ServicioClaseController;
 use App\Http\Controllers\ServicioDetalleController;
@@ -110,4 +111,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::patch('/dashboard/proveedor_servicio/{proveedor_servicio}/update', [ProveedorServicioController::class, 'update'])->name('proveedor_servicio.update');
     Route::delete('/dashboard/proveedor_servicio/{proveedor_servicio}/destroy', [ProveedorServicioController::class, 'destroy'])->name('proveedor_servicio.destroy');
 
+    Route::get('/dashboard/destino_turistico', [DestinoTuristicoController::class, 'index'])->name('destino_turistico');
+    Route::get('/dashboard/destino_turistico/create', [DestinoTuristicoController::class, 'create'])->name('destino_turistico.create');
+    Route::post('/dashboard/destino_turistico', [DestinoTuristicoController::class, 'store'])->name('destino_turistico.store');
+    Route::get('/dashboard/destino_turistico/{destino_turistico}/edit', [DestinoTuristicoController::class, 'edit'])->name('destino_turistico.edit');
+    Route::patch('/dashboard/destino_turistico/{destino_turistico}/update', [DestinoTuristicoController::class, 'update'])->name('destino_turistico.update');
+    Route::delete('/dashboard/destino_turistico/{destino_turistico}/destroy', [DestinoTuristicoController::class, 'destroy'])->name('destino_turistico.destroy');
 });

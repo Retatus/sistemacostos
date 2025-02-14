@@ -50,12 +50,12 @@
             </div>
             <div class="col-span-1">
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-                    <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                        <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
-                        {{ option.label }}
-                        </option>
-                    </select>
+                <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                    <option disabled value="">-- Selecciona una opción --</option>
+                    <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                    </option>
+                </select>
             </div>  
             <div class="col-span-1">
                 <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
@@ -79,7 +79,7 @@
             :items="proveedor.detalles"
             :ListaServicio_clase="ServicioClases" 
             :ListaServicio_detalle="ServicioDetalles"   
-            @update="updateDetalles"
+            
         />
 
         <!-- Botón para agregar el ítem -->  
@@ -162,6 +162,7 @@
     });
 
     async function CategoryListUpdate() {
+        alert("CategoryListUpdate");
         try {     
             const data = {
                 proveedor_categoria_id: proveedor.value.proveedor_categoria_id,
@@ -178,7 +179,7 @@
     };
     
     function updateDetalles(nuevosDetalles) {
-        detalleTemporal.value = nuevosDetalles;
+        // detalleTemporal.value = nuevosDetalles;
     }
     
     function agregarDetalle() {
