@@ -18,7 +18,7 @@
                 <!-- Segunda fila -->
                 <div class="col-span-1">
                     <label for="pais" class="block text-sm font-medium text-gray-700">Pais</label>
-                    <select v-model="destinoTuristico.pais" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                    <select v-model="destinoTuristico.pais" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="pais">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in Pais" :key="option.value" :value="option.value">
                             {{ option.label }}
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-span-1">
                     <label for="nro_dias" class="block text-sm font-medium text-gray-700">Nro dias</label>
-                    <input v-model="destinoTuristico.dias" type="text" id="nombre"
+                    <input v-model="destinoTuristico.dias" type="text" id="nro_dias" disabled
                         class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Programa">
                 </div>
 
@@ -54,20 +54,19 @@
                         :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
                         :Lista_proveedor_categorias = "ProveedorCategorias" 
                         :Lista_itinerarios = "Itinerarios"
-                        :Lista_proveedor = "Proveedor" 
-                        :Lista_servicio_clase = "ServicioClases"
-                        :Lista_servicio_detalle="ServicioDetalles" 
+                        :Lista_proveedor = "Proveedores" 
+                        :Lista_servicio="Servicios" 
                         @actualizarMontoPadre="actualizarTotalHijo" />
                 </div>
 
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="costo_total" class="block text-sm font-medium text-gray-700">Costo total</label>
-                    <input v-model="destinoTuristico.costo_total" type="text" id="costo_total" required="true"
+                    <input v-model="destinoTuristico.costo_total" @input="handleInput1" type="text" id="costo_total" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Costo total">
                 </div>
                 <div class="col-span-1 ">
-                    <label for="ruc" class=" text-sm font-medium text-gray-700">Margen</label>
+                    <label for="margen" class=" text-sm font-medium text-gray-700">Margen</label>
                     <div class="flex items-center space-x-2">
                         <select id="  margen" class="w-full border-gray-300 rounded-md shadow-sm">
                             <!-- <option disabled value="">-- Selecciona una opción --</option> -->
@@ -75,7 +74,7 @@
                                 {{ option.nombre }}
                             </option>
                         </select>
-                        <input v-model="destinoTuristico.margen" @input="calcularVenta" type="text" id="ruc"
+                        <input v-model="destinoTuristico.margen" @input="handleInput" type="text" id="margen"
                             class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Margen monto">
                     </div>
                 </div>
@@ -86,7 +85,12 @@
                 </div>
             </div>
             <!-- Botón para agregar el ítem -->
-            <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+            <PrimaryButton type="button" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+            <button type ="button" @click="mostrarConsola()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+              </button>                        
         </form>
     </div>
 </template>
@@ -117,11 +121,7 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    Lista_servicio_clase: {
-        type: Object,
-        required: true,
-    },
-    Lista_servicio_detalle: {
+    Lista_servicio: {
         type: Object,
         required: true,
     },
@@ -132,9 +132,11 @@ const error = ref('');
 const Pais = ref([...props.Lista_paises]);
 const Itinerarios = ref([...props.Lista_itinerarios]);
 const ProveedorCategorias = ref([...props.Lista_proveedor_categorias]);
-const Proveedor = ref([...props.Lista_proveedor]);
-const ServicioDetalles = ref([...props.Lista_servicio_detalle]);
-const ServicioClases = ref([...props.Lista_servicio_clase]);
+const Proveedores = ref([...props.Lista_proveedor]);
+const Servicios = ref([...props.Lista_servicio]);
+
+// Timer para controlar el delay
+let emptyInputTimeout = null;
 
 const descuentoTipo = ref([
     { id: '1', nombre: '%' },
@@ -171,13 +173,52 @@ const destinoTuristicoDetalle = ref({
     destino_turistico_detalle_servicio: [],
 });
 
+const mostrarConsola = () => {
+    console.log(destinoTuristico.value);
+}
+
+// Función para validar el input (solo números y un punto decimal permitido)
+const validateInput = (value) => {
+  const validValue = value.replace(/[^0-9.]/g, ""); // Remover caracteres no numéricos
+  // Permitir máximo un punto decimal
+  const decimalParts = validValue.split(".");
+  if (decimalParts.length > 2) {
+    return `${decimalParts[0]}.${decimalParts[1]}`;
+  }
+  return validValue;
+};
+
 // Función para calcular el monto de la venta
 const calcularVenta = () => {
     const costoTotal = destinoTuristico.value.costo_total;
     const margen = destinoTuristico.value.margen
     const porcentaje = margen / 100;
     const venta = costoTotal + costoTotal * porcentaje;
-    destinoTuristico.value.venta = venta.toFixed(2);
+    destinoTuristico.value.venta = venta;
+};
+
+
+
+const handleInput = (event) => {
+  // Validar y actualizar el margen
+  const validatedValue = validateInput(event.target.value);
+  destinoTuristico.value.margen = validatedValue;
+
+  // Limpiar cualquier temporizador existente
+  if (emptyInputTimeout) {
+    clearTimeout(emptyInputTimeout);
+  }
+
+  // Si el input está vacío, esperar 1 segundo antes de asignar "0"
+  if (!validatedValue) {
+    emptyInputTimeout = setTimeout(() => {
+      destinoTuristico.value.margen = "0";
+      calcularVenta(validatedValue);
+    }, 1000); // 1000 ms = 1 segundo
+  } else {
+    // Calcular venta si el valor es válido
+    calcularVenta(validatedValue);
+  }
 };
 
 // Función para actualizar el total general del Padre
@@ -191,6 +232,7 @@ const actualizarTotalHijo = () => {
             )
         );
     }, 0);
+    destinoTuristico.value.dias = destinoTuristico.value.destino_turistico_detalle.length;
     calcularVenta();
 };
 

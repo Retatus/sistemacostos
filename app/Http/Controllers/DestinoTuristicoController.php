@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\DestinoTuristico\StoreRequest;
 use App\Models\DestinoTuristico;
+use App\Models\Itinerario;
+use App\Models\Pais;
 use App\Models\proveedor;
 use App\Models\ProveedorCategoria;
+use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
@@ -27,21 +30,26 @@ class DestinoTuristicoController extends Controller
      */
     public function create()
     {
+        //return Inertia::render('DestinoTuristico/Create');
+        $formattedPaises = Pais::getFormattedForDropdown();
+        $formattedItinerarios = Itinerario::getFormattedForDropdown();
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
         // $formattedCostos = Costo::getFormattedForDropdown();
         // $formattedDestinos = Destino::getFormattedForDropdown();
         // $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
+        $formattedServicio = Servicio::getFormattedForDropdown();
         $formattedServicioClase = ServicioClase::getFormattedForDropdown();
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
         [
+            'ListaPaises' => $formattedPaises,
+            'ListaItinerarios' => $formattedItinerarios,
             'ListaProveedorCategorias' => $formattedCategorias,
             'ListaProveedor' =>  $formattedProveedores,
             // 'categoriaDestinos' => $formattedDestinos,
             // 'categoriaDistribuciones' => $formattedDistribuciones,
-            'ListaServicioClase' => $formattedServicioClase,
-            'ListaServicioDetalle' => $formattedServicioDetalle
+            'ListaServicio' => $formattedServicio,
         ]);
         return Inertia::render('DestinoTuristico/CreateDestinoTuristico');
     }

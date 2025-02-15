@@ -15,7 +15,7 @@
         <tr v-for="(item, index) in Lista_destino_turistico_detalle" :key="index"
           className="bg-white border-b text-gray-900">
           <td class="px-4 py-2 text-sm">
-            <label for="nro_dias" class="block text-sm font-medium text-gray-700">Dia {{ index + 1 }}:</label>
+            <label class="block text-sm font-medium text-gray-700">Dia {{ index + 1 }}:</label>
           </td>
           <td class="px-4 py-2 text-sm">
             <select v-model="item.itinerario" @change="ItinerarioDescripcion(index)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -26,12 +26,10 @@
             </select>
           </td>
           <td class="px-4 py-2 text-sm">
-            <textarea v-model="item.descripcion" name="descripcion" rows="2"
-              class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
+            <textarea v-model="item.descripcion" name="descripcion" rows="2" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
           </td>
           <td class="px-4 py-2 text-sm text-center hover:text-green-700">
-            <textarea v-model="item.observacion" name="observacion" rows="2"
-            class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
+            <textarea v-model="item.observacion" name="observacion" rows="2" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
           </td>
           <td class="px-4 py-2 text-sm text-center hover:text-green-700">
             <button type="button" @click="showModal(index)">
@@ -63,12 +61,13 @@
   <Modal :show="isModalVisible" maxWidth="70" closeable @close="closeModal">
     <div class="p-4">
       <CompDestinoTuristicoDetalleServicio
+        :Lista_proveedor_categorias = "Lista_proveedor_categorias" 
+        :Lista_proveedor="Lista_proveedor"        
         :Lista_destino_turistico_detalle_servicio = Lista_destino_turistico_detalle[indice].destino_turistico_detalle_servicio
-        :Lista_proveedor_categorias = "Lista_proveedor_categorias" :Lista_proveedor="Lista_proveedor"
-        :Lista_servicio_clase = "Lista_servicio_clase" :Lista_servicio_detalle="Lista_servicio_detalle"
+        :Lista_servicio="Lista_servicio"
         @actualizarTotal="actualizarTotalNieto"
       />
-      <button @click="closeModal" class="mt-4 btn btn-secondary">
+      <button @click="closeModal" type="button" class="mt-4 btn btn-secondary">
         Cerrar
       </button>
     </div>
@@ -81,23 +80,19 @@ import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServi
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-  Lista_proveedor_categorias: {
-    type: Object,
-    required: true,
-  },
   Lista_itinerarios: {
     type: Object,
     required: true,
   },
+  Lista_proveedor_categorias: {
+    type: Object,
+    required: true,
+  },  
   Lista_proveedor: {
     type: Object,
     required: true,
   },
-  Lista_servicio_clase: {
-    type: Object,
-    required: true,
-  },
-  Lista_servicio_detalle: {
+  Lista_servicio: {
     type: Object,
     required: true,
   },

@@ -34,17 +34,17 @@
     <AppLayout title="Dashboard">
         <template #header>
           <div class="flex justify-between">
-              <h2 class="text-xl font-semibold leading-tight text-gray-800">
+              <h2 class="text-xl font-semibold leading-tight dark:text-gray-200">
                   DestinoTuristico
               </h2>   
-              <Link :href="route('destino_turistico.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('destino_turistico.create')" class="btn btn-primary dark:text-gray-200"> <i class="bi bi-plus"></i>
                   Agregar DestinoTuristico
               </Link>                    
           </div>    
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -60,31 +60,19 @@
                                         pais
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        dias
+                                        nro_dias
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         costo_total
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        descuento_tipo
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        descuento_estudiante
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        descuento_ninio
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        descuento_otros
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
                                         margen
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        venta
+                                        ganancia
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        estado_activo
+                                        venta
                                     </th> 
 
                                     <th scope="col" className="px-6 py-3">
@@ -104,31 +92,19 @@
                                         {{destinoturistico.pais}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.dias}}
+                                        {{destinoturistico.nro_dias}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{destinoturistico.costo_total}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.descuento_tipo}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.descuento_estudiante}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.descuento_ninio}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.descuento_otros}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{destinoturistico.margen}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.venta}}
+                                        {{destinoturistico.ganancia}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.estado_activo}}
+                                        {{destinoturistico.venta}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

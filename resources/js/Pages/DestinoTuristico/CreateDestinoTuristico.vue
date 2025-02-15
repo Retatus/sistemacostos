@@ -5,6 +5,14 @@
     import CompDestinoTuristicoAdd from '@/Components/DestinoTuristico/CompDestinoTuristicoAdd.vue';
 
     const props = defineProps({
+        ListaPaises: {
+            type: Object, 
+            required: true
+        },
+        ListaItinerarios: {
+            type: Object, 
+            required: true
+        },
         ListaProveedorCategorias: {
             type: Object, 
             required: true
@@ -13,25 +21,21 @@
             type: Object, 
             required: true
         },
-        ListaServicioClase: {
-          type: Object, 
-          required: true
-        } ,
-        ListaServicioDetalle: {
+        ListaServicio: {
             type: Object, 
             required: true
         },
-    })  
+    })      
 </script>
 
 <template>
     <AppLayout title="Dashboard">
         <template #header>
           <div class="flex justify-between">
-              <h2 class="text-xl font-semibold leading-tight text-gray-800">
+              <h2 class="text-xl font-semibold leading-tight dark:text-gray-200">
                   Destino Turistico
               </h2>   
-              <Link :href="route('proveedor')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+              <Link :href="route('destino_turistico')" class="btn btn-primary dark:text-gray-200"> <i class="bi bi-plus"></i>
                   Lista Destino Turistico
               </Link>                             
           </div>    
@@ -40,10 +44,11 @@
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <CompDestinoTuristicoAdd 
+                        :Lista_paises="ListaPaises"
+                        :Lista_itinerarios="ListaItinerarios"
                         :Lista_proveedor_categorias="ListaProveedorCategorias" 
                         :Lista_proveedor="ListaProveedor"
-                        :Lista_servicio_clase="ListaServicioClase" 
-                        :Lista_servicio_detalle="ListaServicioDetalle"                    
+                        :Lista_servicio="ListaServicio"       
                     />
                 </div>
             </div>

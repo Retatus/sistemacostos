@@ -23,11 +23,9 @@
         pais: props.destinoTuristico.pais,
         dias: props.destinoTuristico.dias,
         costo_total: props.destinoTuristico.costo_total,
-        descuento_tipo: props.destinoTuristico.descuento_tipo,
-        descuento_estudiante: props.destinoTuristico.descuento_estudiante,
-        descuento_ninio: props.destinoTuristico.descuento_ninio,
-        descuento_otros: props.destinoTuristico.descuento_otros,
+        
         margen: props.destinoTuristico.margen,
+        ganancia: props.destinoTuristico.ganancia,
         venta: props.destinoTuristico.venta,
         estado_activo: props.destinoTuristico.estado_activo,
     });
@@ -38,18 +36,9 @@
         pais: { type: 'text', placeholder: 'Ingrese el pais', label: 'pais' },
         dias: { type: 'text', placeholder: 'Ingrese los dias', label: 'dias' },
         costo_total: { type: 'text', placeholder: 'Ingrese el costo_total', label: 'costo_total' },
-        descuento_tipo: { 
-            type: 'select', 
-            options: [
-                { value: '1', label: '%' }, 
-                { value: '0', label: 'MONTO' }
-            ], 
-            label: 'Tipo descuento' 
-         },
-        descuento_estudiante: { type: 'text', placeholder: 'Ingrese el descuento_estudiante', label: 'descuento_estudiante' },
-        descuento_ninio: { type: 'text', placeholder: 'Ingrese el descuento_ninio', label: 'descuento_ninio' },
-        descuento_otros: { type: 'text', placeholder: 'Ingrese el descuento_otros', label: 'descuento_otros' },
+        
         margen: { type: 'text', placeholder: 'Ingrese el margen', label: 'margen' },
+        ganancia: { type: 'text', placeholder: 'Ingrese la ganancia', label: 'ganancia' },
         venta: { type: 'text', placeholder: 'Ingrese la venta', label: 'venta' },
         estado_activo: { 
             type: 'select', 

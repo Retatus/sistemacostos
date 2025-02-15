@@ -1,37 +1,37 @@
 <template>
     <div class="overflow-x-auto py-0 pt-5">
-      <div class="grid grid-cols-2 gap-4 w-full p-5">
+      <div class="grid grid-cols-8 gap-4 w-full p-5">
             <div class="col-span-1">
-              <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-              <select v-model="destinoTuristicoDetalleServicio.proveedor_categoria_id" @change="CategoryListUpdate" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+              <label class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
+              <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
                   <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
                   {{ option.label }}
                   </option>
               </select>
             </div>
-            <div class="col-span-1">
-              <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor</label>           
-              <select v-model="destinoTuristicoDetalleServicio.proveedor_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+            <div class="col-span-2">
+              <label class="block text-sm font-medium text-gray-700">Proveedor</label>           
+              <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_proveedor" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
                   {{ option.label }}
                   </option>
               </select>
             </div>
             
             <!-- Primera fila -->
-            <div class="col-span-1 ">
-              <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Servicio detalle</label>           
-              <select v-model="destinoTuristicoDetalleServicio.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+            <div class="col-span-4 ">
+              <label class="block text-sm font-medium text-gray-700">Servicio detalle</label>           
+              <select v-model="selectedValueServicio" @change="ServicioMonto" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_servicio_detalle" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-info="option.monto">
                   {{ option.label }}
                   </option>
               </select>
             </div>
-            <div class="col-span-1 ">
-              <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700"></label>
+            <div class="col-span-1">
+              <label class="block text-sm font-medium text-gray-700"> ....</label>
                 <PrimaryButton 
                   type="button"
                   class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -45,10 +45,9 @@
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
           <tr class="bg-gray-100">
-            <th class="w-3/12 px-4 py-2 text-sm font-medium">Categoria</th>
+            <th class="w-2/12 px-4 py-2 text-sm font-medium">Categoria</th>
             <th class="w-3/12 px-4 py-2 text-sm font-medium">Proveedor</th>
-            <th class="w-1/12 px-4 py-2 text-sm font-medium">Servicio detalle</th>
-            <th class="w-5/12 px-4 py-2 text-sm font-medium">Servicio clase</th>
+            <th class="w-4/12 px-4 py-2 text-sm font-medium">Servicio detalle</th>
             <th class="w-1/12 px-4 py-2 text-sm font-medium">Costo</th>
             <th class="w-1/12 px-4 py-2 text-sm font-medium">Acciones</th>
           </tr>
@@ -74,7 +73,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.servicio_detalle_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_servicio_detalle" :key="option.value" :value="option.value">
+                  <option v-for="option in Lista_servicio" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -109,70 +108,106 @@ const props = defineProps({
       type: Object,
       required: true,
     },
-    // Lista_servicio_clase: {
-    //   type: Object,
-    //   required: true,
-    // },
-    Lista_servicio_detalle: {
+    Lista_servicio: {
       type: Object,
       required: true,
     },
-
     Lista_destino_turistico_detalle_servicio: {
       type: Array,
       required: true,
     },
   });
-        
-    const destinoTuristicoDetalleServicio = ref({
-      proveedor_categoria_id: '',
-      proveedor_id: '',
-      servicio_detalle_id: '',
-      servicio_clase_id: '',
-      costo: '200.00',
-    });
 
-    const emit = defineEmits(['update', 'actualizarTotal']); // Define el evento que vas a emitir
-    
+  const emit = defineEmits(['update', 'actualizarTotal']); // Define el evento que vas a emitir
+
+  const ListaServiciosXProveedor = ref("");
+  const ListaProveedorXCategoria = ref("");
+
+  const selectedValueCategoria = ref("");
+  const selectedValueProveedor = ref("");
+  const selectedValueServicio = ref("");
+  const selectedValueServicioMonto = ref("");
+
+  const destinoTuristicoDetalleServicio = ref({
+    proveedor_categoria_id: '',
+    proveedor_id: '',
+    servicio_detalle_id: '',
+    costo: '0.00',
+  });
+
+  // Sincronizar los valores individuales con el objeto principal
+  watch([selectedValueCategoria, selectedValueProveedor, selectedValueServicio, selectedValueServicioMonto], 
+    ([categoriaTemp, proveedorTemp, servicioTemp, costoTemp]) => {
+      destinoTuristicoDetalleServicio.value.proveedor_categoria_id = categoriaTemp;
+      destinoTuristicoDetalleServicio.value.proveedor_id = proveedorTemp;
+      destinoTuristicoDetalleServicio.value.servicio_detalle_id = servicioTemp;
+      destinoTuristicoDetalleServicio.value.costo = costoTemp;
+    }
+  );   
+  
+    function agregarDestinoTuristicoDetalleServicio() { 
+
+      props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
+        // Reiniciar los valores individuales y el objeto
+        // selectedValueCategoria.value = '';
+        // selectedValueProveedor.value = '';
+        // selectedValueServicio.value = '';
+        destinoTuristicoDetalleServicio.value = {
+            proveedor_categoria_id: '',
+            proveedor_id: '',
+            servicio_detalle_id: '',
+            costo: '0.00',            
+        };
+        calcularTotal();
+    }
+
     const removeItem = (index) => {
       props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
       emit('update', props.Lista_destino_turistico_detalle_servicio);
       calcularTotal();
     }
 
-    // Función para calcular el total de costos
-  const calcularTotal = () => {
-    const total = props.Lista_destino_turistico_detalle_servicio.reduce((
-      suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.costo || 0), 0 );
-    emit("actualizarTotal", total); // Emitir el total al componente Hijo
+    function ServicioMonto() {
+      const selectElement = event.target;
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+      const monto = selectedOption.getAttribute('data-info');
+      selectedValueServicioMonto.value = monto;        
   };
 
-    function agregarDestinoTuristicoDetalleServicio() { 
-      props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
-        destinoTuristicoDetalleServicio.value = {
-            proveedor_categoria_id: '',
-            proveedor_id: '',
-            servicio_detalle_id: '',
-            servicio_clase_id: '',
-            costo: '150.00',            
-        };
-        calcularTotal();
-    }
-    async function CategoryListUpdate() {
+    const calcularTotal = () => {
+      const total = props.Lista_destino_turistico_detalle_servicio.reduce((
+        suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.costo || 0), 0 );
+      emit("actualizarTotal", total); // Emitir el total al componente Hijo
+    };
+    async function ListaCategoriaProveedor() {
         try {     
             const data = {
                 proveedor_categoria_id: destinoTuristicoDetalleServicio.value.proveedor_categoria_id,
             }     
-            const response = await axios.post(`${route('serviciodetalle')}/serviceCategory`, data);   
+            const response = await axios.post(`${route('proveedor')}/proveedorList`, data);   
             if (response.status === 200) {
-                console.log('Elemento agregado:', response.data);            
-                props.Lista_proveedor_categorias.value = response.data;
+                console.log('Listado de categorias:', response.data);            
+                ListaProveedorXCategoria.value = response.data;
             }               
         } catch (error) {
             console.error('Error al actualizar los datos:', error);
         }        
     };
-      
+
+    async function ListaProveedorServicio() {
+        try {     
+            const data = {
+              proveedor_id: destinoTuristicoDetalleServicio.value.proveedor_id,
+            }     
+            const response = await axios.post(`${route('servicio')}/servicioList`, data);   
+            if (response.status === 200) {
+                console.log('Listado de servicios:', response.data);            
+                ListaServiciosXProveedor.value = response.data;
+            }               
+        } catch (error) {
+            console.error('Error al actualizar los datos:', error);
+        }        
+    };      
 </script>
 
 
