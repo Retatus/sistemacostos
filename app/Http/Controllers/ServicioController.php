@@ -52,6 +52,14 @@ class ServicioController extends Controller
         return response()->json($proveedor);
     }
 
+    public function servicioList(Request $request)
+    {
+        $data = $request->all();
+        $servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);
+        
+        return response()->json($servicioList);
+    }
+
     /**
      * Display the specified resource.
      */
