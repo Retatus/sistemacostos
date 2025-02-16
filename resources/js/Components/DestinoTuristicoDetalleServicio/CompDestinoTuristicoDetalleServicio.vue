@@ -71,7 +71,7 @@
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.servicio_detalle_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <select v-model="item.servicio_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
                   <option v-for="option in Lista_servicio" :key="option.value" :value="option.value">
                     {{ option.label }}
@@ -129,10 +129,12 @@ const props = defineProps({
   const selectedValueServicioMonto = ref("");
 
   const destinoTuristicoDetalleServicio = ref({
+    nro_orden: 1,
     proveedor_categoria_id: '',
     proveedor_id: '',
-    servicio_detalle_id: '',
-    costo: '0.00',
+    servicio_id: '',
+    observacion: '',
+    costo: 0.00,
   });
 
   // Sincronizar los valores individuales con el objeto principal
@@ -140,7 +142,7 @@ const props = defineProps({
     ([categoriaTemp, proveedorTemp, servicioTemp, costoTemp]) => {
       destinoTuristicoDetalleServicio.value.proveedor_categoria_id = categoriaTemp;
       destinoTuristicoDetalleServicio.value.proveedor_id = proveedorTemp;
-      destinoTuristicoDetalleServicio.value.servicio_detalle_id = servicioTemp;
+      destinoTuristicoDetalleServicio.value.servicio_id = servicioTemp;
       destinoTuristicoDetalleServicio.value.costo = costoTemp;
     }
   );   
@@ -153,10 +155,12 @@ const props = defineProps({
         // selectedValueProveedor.value = '';
         // selectedValueServicio.value = '';
         destinoTuristicoDetalleServicio.value = {
+            nro_orden: destinoTuristicoDetalleServicio.value.nro_orden + 1,
             proveedor_categoria_id: '',
             proveedor_id: '',
-            servicio_detalle_id: '',
-            costo: '0.00',            
+            servicio_id: '',
+            observacion: '',
+            costo: 0.00,            
         };
         calcularTotal();
     }

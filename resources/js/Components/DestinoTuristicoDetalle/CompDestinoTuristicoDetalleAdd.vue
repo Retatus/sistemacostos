@@ -18,7 +18,7 @@
             <label class="block text-sm font-medium text-gray-700">Dia {{ index + 1 }}:</label>
           </td>
           <td class="px-4 py-2 text-sm">
-            <select v-model="item.itinerario" @change="ItinerarioDescripcion(index)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+            <select v-model="item.itinerario_id" @change="ItinerarioDescripcion(index)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
               <option disabled value="">-- Selecciona una opción --</option>
               <option v-for="option in Lista_itinerarios" :key="option.value" :value="option.value" :data-info="option.descripcion">
                 {{ option.label }}
@@ -62,7 +62,7 @@
     <div class="p-4">
       <CompDestinoTuristicoDetalleServicio
         :Lista_proveedor_categorias = "Lista_proveedor_categorias" 
-        :Lista_proveedor="Lista_proveedor"        
+        :Lista_proveedor = "Lista_proveedor"     
         :Lista_destino_turistico_detalle_servicio = Lista_destino_turistico_detalle[indice].destino_turistico_detalle_servicio
         :Lista_servicio="Lista_servicio"
         @actualizarTotal="actualizarTotalNieto"

@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\DestinoTuristico\DestinoTuristicoRequest;
 use App\Http\Requests\DestinoTuristico\StoreRequest;
 use App\Models\DestinoTuristico;
 use App\Models\Itinerario;
+use App\Models\ItinerarioDestino;
+use App\Models\ItinerarioServicio;
 use App\Models\Pais;
 use App\Models\proveedor;
 use App\Models\ProveedorCategoria;
@@ -11,9 +15,19 @@ use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 class DestinoTuristicoController extends Controller
 {
+    protected $itinerario_destino;
+    protected $itinerario_servicio;
+
+    public function __construct(ItinerarioDestinoController $itinerario_destino, ItinerarioServicioController $itinerario_servicio)
+    {
+        $this->itinerario_destino = $itinerario_destino;
+        $this->itinerario_servicio = $itinerario_servicio;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -57,11 +71,89 @@ class DestinoTuristicoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DestinoTuristicoRequest $request)
     {
-        $data = $request->all();
-        DestinoTuristico::create($data);
-        return to_route('destino_turistico');
+        // $data = $request->all(); 
+        // $destino_turistico = $request->except(['destino_turistico_detalle']);
+        // $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
+        // dd($destino_turistico_detalle, $destino_turistico);
+        // DestinoTuristico::create($destino_turistico);
+        // return to_route('destino_turistico');
+        
+        return DB::transaction(function () use ($request) {
+            // SECCION DESTINO TURISTICO
+            $destinoTuristico = $request->except(['destino_turistico_detalle', 'destino_turistico_detalle_servicio']);
+            $destinoTuriaticoResponse = DestinoTuristico::create($destinoTuristico);
+            //$destinoTuriaticoResponse = $this->itinerario_destino->store($destinoTuristico);
+
+            // if ($destinoTuriaticoResponse->getStatusCode() !== 200) {
+            //     throw new \Exception('Error al insertar destinoTuristico' . json_decode($destinoTuriaticoResponse->getContent())->id);
+            // } 
+
+            // $destinoTuristicoId = json_decode($destinoTuriaticoResponse->getContent())->id;
+            $destinoTuristicoId = $destinoTuriaticoResponse->id;
+
+            // SECCION ITINERARIO DESTINO
+            $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
+
+            foreach ($destino_turistico_detalle as $itinerarioDestinoData) {
+                // Añadir `destino_turistico_id` al itinerarioDestino
+                $itinerarioDestinoData['destino_turistico_id'] = $destinoTuristicoId;
+                $itinerarioDestinoId = ItinerarioDestino::create($itinerarioDestinoData);
+
+                // $itinerarioDestinoResponse = $this->itinerario_destino->store($itinerarioDestinoData);
+
+                // if ($itinerarioDestinoResponse->getStatusCode() !== 200) {
+                //     throw new \Exception('Error al insertar itinerario Destino');
+                // }
+
+                // SECCION ITINERARIO SERVICIO
+                $itinerarioId = $itinerarioDestinoData['itinerario_id'];
+                $destino_turistico_detalle_servicio = $itinerarioDestinoData['destino_turistico_detalle_servicio'] ?? [];
+
+                foreach ($destino_turistico_detalle_servicio as $itinerarioServicioData) {
+                    $itinerarioServicioData['itinerario_id'] = $itinerarioId;
+                    $itinerarioServicioData['observacion'] = $itinerarioDestinoData['observacion'];
+                    $itinerarioServicioId = ItinerarioServicio::create($itinerarioServicioData);
+                    // $itinerarioServicioResponse = $this->itinerario_servicio->store($itinerarioServicioData);
+
+                    // if ($itinerarioServicioResponse->getStatusCode() !== 200) {
+                    //     throw new \Exception('Error al insertar itinerario servicio');
+                    // }
+                }
+            }
+            return [                
+                'destinoTuristico' => $destinoTuristicoId,           
+                'itinerarioDestino' => $itinerarioDestinoId,
+                'itinerarioServicio' => $itinerarioServicioId,
+                'message' => 'Destino turistico y Destino servicios creados correctamente',
+            ];
+        });
+
+
+        // try {
+        //     // Extraer datos del modelo principal
+        //     $destinoTuristico = $request->except(['destino_turistico_detalle', 'destino_turistico_detalle_servicio']);
+        
+        //     // Crear el registro principal
+        //     $destinoTuriaticoResponse = DestinoTuristico::create($destinoTuristico);
+        
+        //     // Aquí puedes acceder al ID del registro creado, por ejemplo:
+        //     $id = $destinoTuriaticoResponse->id;
+        
+        //     // Retornar una respuesta exitosa
+        //     return response()->json([
+        //         'message' => 'Destino Turístico creado con éxito id: ' . $id,
+        //         'data' => $destinoTuriaticoResponse,
+        //     ], 201);
+        
+        // } catch (\Exception $e) {
+        //     // Manejar cualquier error
+        //     return response()->json([
+        //         'message' => 'Error al insertar destino turístico',
+        //         'error' => $e->getMessage(),
+        //     ], 500);
+        // }
     }
 
     public function DestinoCategories(Request $request)

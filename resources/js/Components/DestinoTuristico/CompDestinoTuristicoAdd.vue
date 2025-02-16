@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto">
-        <form @submit.prevent="submitProveedor">
+        <form @submit.prevent="submitDestinoTuristico">
             <div class="grid grid-cols-3 gap-4 w-full p-5">
                 <!-- Primera fila -->
                 <div class="col-span-1 ">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-span-1">
                     <label for="nro_dias" class="block text-sm font-medium text-gray-700">Nro dias</label>
-                    <input v-model="destinoTuristico.dias" type="text" id="nro_dias" disabled
+                    <input v-model="destinoTuristico.nro_dias" type="text" id="nro_dias" disabled
                         class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Programa">
                 </div>
 
@@ -58,7 +58,8 @@
                         :Lista_servicio="Servicios" 
                         @actualizarMontoPadre="actualizarTotalHijo" />
                 </div>
-
+            </div>
+            <div class="grid grid-cols-4 gap-4 w-full p-5">
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="costo_total" class="block text-sm font-medium text-gray-700">Costo total</label>
@@ -66,17 +67,14 @@
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Costo total">
                 </div>
                 <div class="col-span-1 ">
-                    <label for="margen" class=" text-sm font-medium text-gray-700">Margen</label>
-                    <div class="flex items-center space-x-2">
-                        <select id="  margen" class="w-full border-gray-300 rounded-md shadow-sm">
-                            <!-- <option disabled value="">-- Selecciona una opción --</option> -->
-                            <option v-for="option in descuentoTipo" :key="option.id" :value="option.id">
-                                {{ option.nombre }}
-                            </option>
-                        </select>
-                        <input v-model="destinoTuristico.margen" @input="handleInput" type="text" id="margen"
+                    <label for="margen" class=" text-sm font-medium text-gray-700">Margen (%)</label>
+                    <input v-model="destinoTuristico.margen" @input="handleInput" type="text" id="margen"
                             class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Margen monto">
-                    </div>
+                </div>
+                <div class="col-span-1">
+                    <label for="ganancia" class="block text-sm font-medium text-gray-700">Ganancia</label>
+                    <input v-model="destinoTuristico.ganancia" type="text" id="ganancia" required="true"
+                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Ganancia">
                 </div>
                 <div class="col-span-1">
                     <label for="venta" class="block text-sm font-medium text-gray-700">Venta</label>
@@ -85,7 +83,7 @@
                 </div>
             </div>
             <!-- Botón para agregar el ítem -->
-            <PrimaryButton type="button" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+            <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
             <button type ="button" @click="mostrarConsola()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -153,21 +151,22 @@ const destinoTuristico = ref({
     nombre: '',
     descripcion: '',
     pais: '',
-    dias: '0',
-    costo_total: '0.00',
-    margen: '10',
-    venta: '0.00',
-    estado_activo: '1',
+    nro_dias: 0,
+    costo_total: 0.00,
+    margen: 10,
+    ganancia: 0.00,
+    venta: 0.00,
+    estado_activo: 1,
 
     destino_turistico_detalle: [],
 });
 
 const destinoTuristicoDetalle = ref({
-    nro_dia: '1',
-    itinerario: '',
+    nro_dia: 1,
+    itinerario_id: '',
     nombre: '',
-    descripcion: '',
-    estado_activo: '',
+    observacion: '',
+    estado_activo: 1,
     destino_turistico_id: '',
 
     destino_turistico_detalle_servicio: [],
@@ -194,6 +193,7 @@ const calcularVenta = () => {
     const margen = destinoTuristico.value.margen
     const porcentaje = margen / 100;
     const venta = costoTotal + costoTotal * porcentaje;
+    destinoTuristico.value.ganancia = costoTotal * porcentaje;
     destinoTuristico.value.venta = venta;
 };
 
@@ -212,7 +212,7 @@ const handleInput = (event) => {
   // Si el input está vacío, esperar 1 segundo antes de asignar "0"
   if (!validatedValue) {
     emptyInputTimeout = setTimeout(() => {
-      destinoTuristico.value.margen = "0";
+      destinoTuristico.value.margen = 0;
       calcularVenta(validatedValue);
     }, 1000); // 1000 ms = 1 segundo
   } else {
@@ -232,7 +232,7 @@ const actualizarTotalHijo = () => {
             )
         );
     }, 0);
-    destinoTuristico.value.dias = destinoTuristico.value.destino_turistico_detalle.length;
+    destinoTuristico.value.nro_dias = destinoTuristico.value.destino_turistico_detalle.length;
     calcularVenta();
 };
 
@@ -240,22 +240,21 @@ function agregarDetalle() {
     destinoTuristico.value.destino_turistico_detalle.push({ ...destinoTuristicoDetalle.value });
     destinoTuristicoDetalle.value = {
         nro_dia: destinoTuristico.value.destino_turistico_detalle.length + 1,
-        itinerario: '',
+        itinerario_id: '',
         nombre: '',
-        descripcion: '',
-        estado_activo: '',
+        observacion: '',
+        estado_activo: 1,
         destino_turistico_id: '',
 
         destino_turistico_detalle_servicio: [],
     };
 
-    destinoTuristico.value.dias = destinoTuristico.value.destino_turistico_detalle.length;
+    destinoTuristico.value.nro_dias = destinoTuristico.value.destino_turistico_detalle.length;
 }
 
-async function submitProveedor() {
+async function submitDestinoTuristico() {
     try {
-        console.log(destinoTuristico.value);
-        const response = await axios.post(route('proveedor_servicio.store'), destinoTuristico.value);
+        const response = await axios.post(route('destino_turistico.store'), destinoTuristico.value);
 
         if (response.status === 200) {
             Swal.fire({
@@ -264,7 +263,7 @@ async function submitProveedor() {
                 text: response.data.message,
                 confirmButtonText: 'Aceptar',
             }).then(() => {
-                window.location.href = route('destinoTuristico'); // Redirige después de cerrar el modal.
+                window.location.href = route('destino_turistico'); // Redirige después de cerrar el modal.
             });
         } else {
             Swal.fire({

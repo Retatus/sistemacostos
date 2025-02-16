@@ -2,14 +2,14 @@
 
 namespace App\Models;
 use App\Http\Requests\DestinoTuristico\StoreRequest;
-        use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DestinoTuristico extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nombre', 'descripcion', 'pais', 'dias', 'costo_total', 'descuento_tipo', 'descuento_estudiante', 'descuento_ninio', 'descuento_otros', 'margen', 'venta', 'estado_activo'];
+    protected $fillable = ['nombre', 'descripcion', 'pais', 'nro_dias', 'costo_total', 'margen', 'ganancia', 'venta', 'estado_activo'];
     
     public function destinoturistico()
     {
