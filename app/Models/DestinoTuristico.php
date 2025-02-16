@@ -9,13 +9,13 @@ class DestinoTuristico extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nombre', 'descripcion', 'pais', 'nro_dias', 'costo_total', 'margen', 'ganancia', 'venta', 'estado_activo'];
+    protected $fillable = ['nombre', 'descripcion', 'pais_id', 'nro_dias', 'costo_total', 'margen', 'ganancia', 'venta', 'estado_activo'];
     
-    public function destinoturistico()
+    public function pais()
     {
-        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
+        return $this->belongsTo(Pais::class, 'pais_id', 'id');
     }
-
+    
     public static function getFormattedForDropdown()
     {
         return self::orderBy('id', 'desc')

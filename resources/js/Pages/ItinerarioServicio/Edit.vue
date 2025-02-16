@@ -10,7 +10,7 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
   
     const props = defineProps({
-        destinoTuristico: {
+        itinerarioservicio: {
             type: Object, 
             required: true
         } 
@@ -18,28 +18,12 @@
  
     console.log(props);
     const form = useForm({
-        nombre: props.destinoTuristico.nombre,
-        descripcion: props.destinoTuristico.descripcion,
-        pais_id: props.destinoTuristico.pais_id,
-        nro_dias: props.destinoTuristico.nro_dias,
-        costo_total: props.destinoTuristico.costo_total,
-        
-        margen: props.destinoTuristico.margen,
-        ganancia: props.destinoTuristico.ganancia,
-        venta: props.destinoTuristico.venta,
-        estado_activo: props.destinoTuristico.estado_activo,
+        nombre: props.itinerarioservicio.nombre,
+        estado_activo: props.itinerarioservicio.estado_activo,
     });
 
     const formFields = {   
         nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
-        descripcion: { type: 'textarea', placeholder: 'Ingrese la descripcion', label: 'descripcion' },
-        pais_id: { type: 'text', placeholder: 'Ingrese el pais', label: 'pais' },
-        nro_dias: { type: 'text', placeholder: 'Ingrese los dias', label: 'dias' },
-        costo_total: { type: 'text', placeholder: 'Ingrese el costo_total', label: 'costo_total' },
-        
-        margen: { type: 'text', placeholder: 'Ingrese el margen', label: 'margen' },
-        ganancia: { type: 'text', placeholder: 'Ingrese la ganancia', label: 'ganancia' },
-        venta: { type: 'text', placeholder: 'Ingrese la venta', label: 'venta' },
         estado_activo: { 
             type: 'select', 
             options: [
@@ -56,10 +40,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  DestinoTuristico
+                  ItinerarioServicio
               </h2>   
-              <Link :href="route('destino_turistico')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista DestinoTuristico
+              <Link :href="route('itinerario_servicio')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ItinerarioServicio
               </Link>                             
           </div>    
         </template>
@@ -70,7 +54,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="true"
-                        @submit="form.patch(route('destino_turistico.update', destinoTuristico))" 
+                        @submit="form.patch(route('itinerario_servicio.update', itinerarioservicio))" 
                     />
                 </div>
             </div>
