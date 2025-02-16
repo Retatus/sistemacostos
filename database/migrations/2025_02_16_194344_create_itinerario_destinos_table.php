@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('nro_dia');
              
-
             // Define la columna que será la clave foránea
             $table->unsignedBigInteger('itinerario_id');
 
@@ -24,7 +23,6 @@ return new class extends Migration
                 ->references('id')->on('itinerarios')
                 ->onUpdate('cascade')->onDelete('cascade');
              
-
             // Define la columna que será la clave foránea
             $table->unsignedBigInteger('destino_turistico_id');
 
@@ -32,7 +30,9 @@ return new class extends Migration
             $table->foreign('destino_turistico_id')
                 ->references('id')->on('destino_turisticos')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->string('observacion', 100)->nullable()->default('');
+            $table->string('nombre', 45);
+            $table->text('descripcion')->nullable()->default('');
+            $table->string('observacion', 100);
             $table->tinyInteger('estado_activo' )->default(1);
             $table->timestamps();
 

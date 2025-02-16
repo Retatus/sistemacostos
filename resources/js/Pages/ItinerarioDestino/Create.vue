@@ -10,9 +10,11 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
 
     const form = useForm({
-                nro_dia: "",
+        nro_dia: "",
         itinerario_id: "",
         destino_turistico_id: "",
+        nombre: "",
+        descripcion: "",
         observacion: "",
         estado_activo: "",
 

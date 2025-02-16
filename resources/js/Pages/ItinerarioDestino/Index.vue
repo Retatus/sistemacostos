@@ -60,6 +60,12 @@
                                         destino_turistico_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
+                                        nombre
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        descripcion
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         observacion
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -81,6 +87,12 @@
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{itinerariodestino.destino_turistico_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{itinerariodestino.nombre}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{itinerariodestino.descripcion}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{itinerariodestino.observacion}}

@@ -9,5 +9,5 @@ class ItinerarioDestino extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nro_dia', 'itinerario_id', 'destino_turistico_id', 'observacion' => null, 'estado_activo'];
+    protected $fillable = ['nro_dia', 'itinerario_id', 'destino_turistico_id', 'nombre', 'descripcion', 'observacion', 'estado_activo'];
 }

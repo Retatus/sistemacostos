@@ -22,9 +22,11 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "nro_dia" => 'required',
+            "nro_dia" => 'required',
             "itinerario_id" => 'required',
             "destino_turistico_id" => 'required',
+            "nombre" => 'required|min:3|max:45',
+            "descripcion" => 'required',
             "observacion" => 'required|min:3|max:100',
             "estado_activo" => 'required',
 

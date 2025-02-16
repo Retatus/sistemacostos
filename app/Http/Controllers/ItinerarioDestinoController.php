@@ -68,6 +68,6 @@ class ItinerarioDestinoController extends Controller
     public function destroy(ItinerarioDestino $itinerarioDestino)
     {
         $itinerarioDestino->delete();
-        return to_route('itinerarioDestino');
+        return to_route('itinerario_destino');
     }
 }
