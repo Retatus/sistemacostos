@@ -145,7 +145,7 @@
         correo: '',
         tipo_sunat: '',
         contacto: '',
-        estado_activo: '1',
+        estado_activo: 1,
         proveedor_categoria_id: '',
         
         detalles: [],
@@ -158,7 +158,7 @@
         ubicacion: '',
         tipo_pax: 'ADULTO',
         servicio_detalle_id: '',
-        estado_activo: '1',
+        estado_activo: 1,
     });
 
     async function CategoryListUpdate() {
@@ -193,7 +193,7 @@
             ubicacion: '',
             tipo_pax: 'ADULTO',
             servicio_detalle_id: '',
-            estado_activo: '1',
+            estado_activo: 1,
         };
     }
   

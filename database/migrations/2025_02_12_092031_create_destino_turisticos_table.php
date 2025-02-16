@@ -18,10 +18,10 @@ return new class extends Migration
              
 
             // Define la columna que será la clave foránea
-            $table->unsignedBigInteger('pais');
+            $table->unsignedBigInteger('pais_id');
 
             // Define la relación con la tabla `pais`
-            $table->foreign('pais')
+            $table->foreign('pais_id')
                 ->references('id')->on('pais')
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->integer('nro_dias');

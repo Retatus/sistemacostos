@@ -19,22 +19,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 class DestinoTuristicoController extends Controller
-{
-    protected $itinerario_destino;
-    protected $itinerario_servicio;
-
-    public function __construct(ItinerarioDestinoController $itinerario_destino, ItinerarioServicioController $itinerario_servicio)
-    {
-        $this->itinerario_destino = $itinerario_destino;
-        $this->itinerario_servicio = $itinerario_servicio;
-    }
+{    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //$destinoturistico = DestinoTuristico::all();
-        $destinoturisticos = DestinoTuristico::orderBy('id', 'desc')->get();
+        $destinoturisticos = DestinoTuristico::with('pais:id,nombre')
+        ->where('estado_activo', 1)
+        ->orderBy('id', 'desc')
+        ->get(); // Ordenar por ID descendente
+        //dd($destinoturisticos);
         return Inertia::render('DestinoTuristico/Index', compact('destinoturisticos'));
         //return response()->json( ['destinoturistico' => $destinoturistico]);
     }

@@ -17,7 +17,7 @@ class DestinoTuristicoRequest extends FormRequest
             // Reglas generales
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string|max:1000',
-            'pais' => 'required|integer|exists:pais,id',
+            'pais_id' => 'required|integer|exists:pais,id',
             'nro_dias' => 'required|integer|min:1',
             'costo_total' => 'required|numeric|min:0',
             'margen' => 'required|numeric|min:0|max:100',
@@ -51,8 +51,8 @@ class DestinoTuristicoRequest extends FormRequest
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.max' => 'El nombre no puede superar los 255 caracteres.',
             'descripcion.max' => 'La descripción no puede superar los 1000 caracteres.',
-            'pais.required' => 'El país es obligatorio.',
-            'pais.exists' => 'El país seleccionado no es válido.',
+            'pais_id.required' => 'El país es obligatorio.',
+            'pais_id.exists' => 'El país seleccionado no es válido.',
             'nro_dias.required' => 'El número de días es obligatorio.',
             'nro_dias.min' => 'El número de días debe ser al menos 1.',
             'costo_total.required' => 'El costo total es obligatorio.',
@@ -89,7 +89,7 @@ class DestinoTuristicoRequest extends FormRequest
             // Atributos generales
             'nombre' => 'nombre',
             'descripcion' => 'descripción',
-            'pais' => 'país',
+            'pais_id' => 'país',
             'nro_dias' => 'número de días',
             'costo_total' => 'costo total',
             'margen' => 'margen',
