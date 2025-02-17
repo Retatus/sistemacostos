@@ -15,6 +15,10 @@ class DestinoTuristico extends Model
     {
         return $this->belongsTo(Pais::class, 'pais_id', 'id');
     }
+
+    public function itinerarios() {
+        return $this->hasMany(ItinerarioDestino::class, 'destino_turistico_id');
+    }
     
     public static function getFormattedForDropdown()
     {

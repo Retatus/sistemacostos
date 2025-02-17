@@ -127,6 +127,7 @@ const props = defineProps({
   const selectedValueProveedor = ref("");
   const selectedValueServicio = ref("");
   const selectedValueServicioMonto = ref("");
+  const selectedValueServicioObservacion = ref("");
 
   const destinoTuristicoDetalleServicio = ref({
     nro_orden: 1,
@@ -138,17 +139,17 @@ const props = defineProps({
   });
 
   // Sincronizar los valores individuales con el objeto principal
-  watch([selectedValueCategoria, selectedValueProveedor, selectedValueServicio, selectedValueServicioMonto], 
-    ([categoriaTemp, proveedorTemp, servicioTemp, costoTemp]) => {
+  watch([selectedValueCategoria, selectedValueProveedor, selectedValueServicio, selectedValueServicioMonto, selectedValueServicioObservacion], 
+    ([categoriaTemp, proveedorTemp, servicioTemp, costoTemp, observacionTemp]) => {
       destinoTuristicoDetalleServicio.value.proveedor_categoria_id = categoriaTemp;
       destinoTuristicoDetalleServicio.value.proveedor_id = proveedorTemp;
       destinoTuristicoDetalleServicio.value.servicio_id = servicioTemp;
       destinoTuristicoDetalleServicio.value.costo = costoTemp;
+      destinoTuristicoDetalleServicio.value.observacion = observacionTemp;
     }
   );   
   
     function agregarDestinoTuristicoDetalleServicio() { 
-
       props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
         // Reiniciar los valores individuales y el objeto
         // selectedValueCategoria.value = '';
@@ -175,7 +176,8 @@ const props = defineProps({
       const selectElement = event.target;
       const selectedOption = selectElement.options[selectElement.selectedIndex];
       const monto = selectedOption.getAttribute('data-info');
-      selectedValueServicioMonto.value = monto;        
+      selectedValueServicioMonto.value = monto; 
+      selectedValueServicioObservacion.value = selectElement.options[selectElement.selectedIndex].label;  
   };
 
     const calcularTotal = () => {

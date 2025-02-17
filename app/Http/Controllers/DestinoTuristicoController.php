@@ -60,7 +60,6 @@ class DestinoTuristicoController extends Controller
             // 'categoriaDistribuciones' => $formattedDistribuciones,
             'ListaServicio' => $formattedServicio,
         ]);
-        return Inertia::render('DestinoTuristico/CreateDestinoTuristico');
     }
 
     /**
@@ -94,6 +93,7 @@ class DestinoTuristicoController extends Controller
             foreach ($destino_turistico_detalle as $itinerarioDestinoData) {
                 // Añadir `destino_turistico_id` al itinerarioDestino
                 $itinerarioDestinoData['destino_turistico_id'] = $destinoTuristicoId;
+                
                 $itinerarioDestinoId = ItinerarioDestino::create($itinerarioDestinoData);
 
                 // $itinerarioDestinoResponse = $this->itinerario_destino->store($itinerarioDestinoData);
@@ -108,7 +108,6 @@ class DestinoTuristicoController extends Controller
 
                 foreach ($destino_turistico_detalle_servicio as $itinerarioServicioData) {
                     $itinerarioServicioData['itinerario_id'] = $itinerarioId;
-                    $itinerarioServicioData['observacion'] = $itinerarioDestinoData['observacion'];
                     $itinerarioServicioId = ItinerarioServicio::create($itinerarioServicioData);
                     // $itinerarioServicioResponse = $this->itinerario_servicio->store($itinerarioServicioData);
 
@@ -170,8 +169,69 @@ class DestinoTuristicoController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(DestinoTuristico $destinoTuristico)
-    {
-        return Inertia::render('DestinoTuristico/Edit', compact('destinoTuristico'));
+    {        
+        $destinoTuristico = DestinoTuristico::with('itinerarios.servicios')->find($destinoTuristico->id);
+        dd($destinoTuristico->toArray());
+        
+        if (!$destinoTuristico) {
+            return response()->json(['message' => 'Destino turístico no encontrado'], 404);
+        }
+
+        $response = [
+            'nombre' => $destinoTuristico->nombre,
+            'descripcion' => $destinoTuristico->descripcion,
+            'destino_turistico_detalle' => []
+        ];
+
+        foreach ($destinoTuristico->itinerariosDestino as $itinerarioDestino) {
+            $itinerario = $itinerarioDestino->itinerario;
+
+            $detalle = [
+                'nro_dia' => $itinerarioDestino->nro_dia,
+                'itinerario_id' => $itinerario->id,
+                'nombre' => $itinerario->nombre,
+                'destino_turistico_detalle_servicio' => []
+            ];
+
+            foreach ($itinerario->servicios as $servicio) {
+                $detalle['destino_turistico_detalle_servicio'][] = [
+                    'nro_orden' => $servicio->nro_orden,
+                    'servicio_id' => $servicio->servicio_id,
+                    'observacion' => $servicio->observacion,
+                    'costo' => $servicio->costo
+                ];
+            }
+
+            $response['destino_turistico_detalle'][] = $detalle;
+        }
+
+        return response()->json($response);
+
+        
+        dd($destinoTuristico);
+
+        $destinoTuristicoDetalle = ItinerarioDestino::where('destino_turistico_id', $destinoTuristico->id)->get();
+        $destinoTuristicoDetalleServicio = ItinerarioServicio::where('destino_turistico_id', $destinoTuristico->id)->get();
+        $formattedPaises = Pais::getFormattedForDropdown();
+        $formattedItinerarios = Itinerario::getFormattedForDropdown();
+        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedProveedores = proveedor::getFormattedForDropdown();
+        // $formattedCostos = Costo::getFormattedForDropdown();
+        // $formattedDestinos = Destino::getFormattedForDropdown();
+        // $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
+        $formattedServicio = Servicio::getFormattedForDropdown();
+        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        return Inertia::render('DestinoTuristico/EditDestinoTuristico', 
+        [
+            'ListaPaises' => $formattedPaises,
+            'ListaItinerarios' => $formattedItinerarios,
+            'ListaProveedorCategorias' => $formattedCategorias,
+            'ListaProveedor' =>  $formattedProveedores,
+            // 'categoriaDestinos' => $formattedDestinos,
+            // 'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaServicio' => $formattedServicio,
+        ]);
     }
 
     /**

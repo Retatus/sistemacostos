@@ -29,11 +29,11 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle' => 'required|array|min:1',
             'destino_turistico_detalle.*.nro_dia' => 'required|integer|min:1',
             'destino_turistico_detalle.*.itinerario_id' => 'required|integer|exists:itinerarios,id',
-            'destino_turistico_detalle.*.nombre' => 'nullable|string|max:255',
-            'destino_turistico_detalle.*.observacion' => 'nullable|string|max:1000',
+            'destino_turistico_detalle.*.nombre' => 'nullable|string|max:45',
+            'destino_turistico_detalle.*.descripcion' => 'nullable|string|max:1000',
             'destino_turistico_detalle.*.estado_activo' => 'required|boolean',
             'destino_turistico_detalle.*.destino_turistico_id' => 'nullable|integer|exists:destinos_turisticos,id',
-            'destino_turistico_detalle.*.descripcion' => 'nullable|string|max:1000',
+            'destino_turistico_detalle.*.observacion' => 'nullable|string|max:100',
 
             // Reglas de los servicios anidados
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio' => 'required|array|min:1',
@@ -72,7 +72,9 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle.*.nro_dia.required' => 'El número de día es obligatorio para el detalle :index.',
             'destino_turistico_detalle.*.itinerario_id.required' => 'El itinerario es obligatorio para el detalle :index.',
             'destino_turistico_detalle.*.itinerario_id.exists' => 'El itinerario seleccionado no es válido para el detalle :index.',
+            'destino_turistico_detalle.*.nombre.max' => 'El nombre no puede superar los 45 caracteres en el detalle :index.',
             'destino_turistico_detalle.*.descripcion.max' => 'La descripción no puede superar los 1000 caracteres en el detalle :index.',
+            'destino_turistico_detalle.*.observacion.max' => 'La observación no puede superar los 100 caracteres en el detalle :index.',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.required' => 'Debe incluir al menos un servicio en el detalle del destino turístico :index.',
 
             // Mensajes de los servicios anidados
@@ -101,7 +103,9 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle' => 'detalles del destino turístico',
             'destino_turistico_detalle.*.nro_dia' => 'número de día',
             'destino_turistico_detalle.*.itinerario_id' => 'itinerario',
+            'destino_turistico_detalle.*.nombre' => 'nombre',
             'destino_turistico_detalle.*.descripcion' => 'descripción',
+            'destino_turistico_detalle.*.observacion' => 'observacion',
 
             // Atributos de los servicios anidados
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_categoria_id' => 'categoría del proveedor',

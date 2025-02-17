@@ -109,7 +109,9 @@ function ItinerarioDescripcion(index) {
     const selectElement = event.target;
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const descripcion = selectedOption.getAttribute('data-info');
-    props.Lista_destino_turistico_detalle[index].descripcion = descripcion;        
+    const nombre = selectElement.options[selectElement.selectedIndex].label;
+    props.Lista_destino_turistico_detalle[index].descripcion = descripcion;   
+    props.Lista_destino_turistico_detalle[index].nombre = nombre;     
 };
 
 function showModal(index) {
