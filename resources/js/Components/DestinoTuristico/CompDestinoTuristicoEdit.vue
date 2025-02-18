@@ -97,7 +97,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
+import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleEdit.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 
@@ -123,6 +123,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    
+    DestinoTuristico: {
+        type: Object,        
+        required: true
+    }
 });
 
 // Variables reactivas
@@ -171,6 +176,8 @@ const destinoTuristicoDetalle = ref({
 
     destino_turistico_detalle_servicio: [],
 });
+
+destinoTuristico.value = props.DestinoTuristico;
 
 const mostrarConsola = () => {
     console.log(destinoTuristico.value);
@@ -227,7 +234,7 @@ const actualizarTotalHijo = () => {
         return (
             suma +
             detalle.destino_turistico_detalle_servicio.reduce(
-                (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.costo || 0),
+                (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.monto || 0),
                 0
             )
         );

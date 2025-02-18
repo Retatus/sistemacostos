@@ -16,7 +16,7 @@ class DestinoTuristico extends Model
         return $this->belongsTo(Pais::class, 'pais_id', 'id');
     }
 
-    public function itinerarios() {
+    public function destino_turistico_detalle() {
         return $this->hasMany(ItinerarioDestino::class, 'destino_turistico_id');
     }
     

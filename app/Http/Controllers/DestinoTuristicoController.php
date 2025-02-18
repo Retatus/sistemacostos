@@ -44,20 +44,13 @@ class DestinoTuristicoController extends Controller
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
-        // $formattedCostos = Costo::getFormattedForDropdown();
-        // $formattedDestinos = Destino::getFormattedForDropdown();
-        // $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
         [
-            'ListaPaises' => $formattedPaises,
-            'ListaItinerarios' => $formattedItinerarios,
             'ListaProveedorCategorias' => $formattedCategorias,
             'ListaProveedor' =>  $formattedProveedores,
-            // 'categoriaDestinos' => $formattedDestinos,
-            // 'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaPaises' => $formattedPaises,
+            'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
         ]);
     }
@@ -68,9 +61,9 @@ class DestinoTuristicoController extends Controller
     public function store(DestinoTuristicoRequest $request)
     {
         // $data = $request->all(); 
-        // $destino_turistico = $request->except(['destino_turistico_detalle']);
-        // $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
-        // dd($destino_turistico_detalle, $destino_turistico);
+        $destino_turistico = $request->except(['destino_turistico_detalle']);
+        $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
+        //dd($destino_turistico_detalle, $destino_turistico);
         // DestinoTuristico::create($destino_turistico);
         // return to_route('destino_turistico');
         
@@ -170,67 +163,26 @@ class DestinoTuristicoController extends Controller
      */
     public function edit(DestinoTuristico $destinoTuristico)
     {        
-        $destinoTuristico = DestinoTuristico::with('itinerarios.servicios')->find($destinoTuristico->id);
-        dd($destinoTuristico->toArray());
+        $destinoTuristico = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoTuristico->id);
+        // dd($destinoTuristico->toJson());
         
-        if (!$destinoTuristico) {
-            return response()->json(['message' => 'Destino turístico no encontrado'], 404);
-        }
-
-        $response = [
-            'nombre' => $destinoTuristico->nombre,
-            'descripcion' => $destinoTuristico->descripcion,
-            'destino_turistico_detalle' => []
-        ];
-
-        foreach ($destinoTuristico->itinerariosDestino as $itinerarioDestino) {
-            $itinerario = $itinerarioDestino->itinerario;
-
-            $detalle = [
-                'nro_dia' => $itinerarioDestino->nro_dia,
-                'itinerario_id' => $itinerario->id,
-                'nombre' => $itinerario->nombre,
-                'destino_turistico_detalle_servicio' => []
-            ];
-
-            foreach ($itinerario->servicios as $servicio) {
-                $detalle['destino_turistico_detalle_servicio'][] = [
-                    'nro_orden' => $servicio->nro_orden,
-                    'servicio_id' => $servicio->servicio_id,
-                    'observacion' => $servicio->observacion,
-                    'costo' => $servicio->costo
-                ];
-            }
-
-            $response['destino_turistico_detalle'][] = $detalle;
-        }
-
-        return response()->json($response);
-
-        
-        dd($destinoTuristico);
-
-        $destinoTuristicoDetalle = ItinerarioDestino::where('destino_turistico_id', $destinoTuristico->id)->get();
-        $destinoTuristicoDetalleServicio = ItinerarioServicio::where('destino_turistico_id', $destinoTuristico->id)->get();
+        // if (!$destinoTuristico) {
+        //     return response()->json(['message' => 'Destino turístico no encontrado'], 404);
+        // }
+        // return response()->json($destinoTuristico);
         $formattedPaises = Pais::getFormattedForDropdown();
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
-        // $formattedCostos = Costo::getFormattedForDropdown();
-        // $formattedDestinos = Destino::getFormattedForDropdown();
-        // $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/EditDestinoTuristico', 
         [
-            'ListaPaises' => $formattedPaises,
-            'ListaItinerarios' => $formattedItinerarios,
             'ListaProveedorCategorias' => $formattedCategorias,
             'ListaProveedor' =>  $formattedProveedores,
-            // 'categoriaDestinos' => $formattedDestinos,
-            // 'categoriaDistribuciones' => $formattedDistribuciones,
+            'ListaPaises' => $formattedPaises,
+            'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
+            'DestinoTuristico' => $destinoTuristico
         ]);
     }
 

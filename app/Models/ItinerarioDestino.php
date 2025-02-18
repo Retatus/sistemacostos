@@ -11,7 +11,7 @@ class ItinerarioDestino extends Model
 
     protected $fillable = ['nro_dia', 'itinerario_id', 'destino_turistico_id', 'nombre', 'descripcion', 'observacion', 'estado_activo'];
   
-    public function servicios()
+    public function destino_turistico_detalle_servicio()
     {
         return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
     }
