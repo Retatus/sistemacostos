@@ -117,9 +117,7 @@ const props = defineProps({
       required: true,
     },
   });
-
-  console.log('bbbbbbbbbbbbbbbb', props.Lista_destino_turistico_detalle_servicio);
-
+  
   const emit = defineEmits(['update', 'actualizarTotal']); // Define el evento que vas a emitir
 
   const ListaServiciosXProveedor = ref("");
