@@ -40,7 +40,7 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_categoria_id' => 'required|integer|exists:proveedor_categorias,id',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_id' => 'required|integer|exists:proveedors,id',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.servicio_id' => 'required|integer|exists:servicios,id',
-            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.costo' => 'required|numeric|min:0',
+            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.monto' => 'required|numeric|min:0',
         ];
     }
 
@@ -81,7 +81,7 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_categoria_id.required' => 'La categoría del proveedor es obligatoria para el servicio :service_index del detalle :index.',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_id.required' => 'El proveedor es obligatorio para el servicio :service_index del detalle :index.',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.servicio_id.required' => 'El detalle del servicio es obligatorio para el servicio :service_index del detalle :index.',
-            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.costo.required' => 'El costo es obligatorio para el servicio :service_index del detalle :index.',
+            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.monto.required' => 'El monto es obligatorio para el servicio :service_index del detalle :index.',
         ];
     }
 
@@ -111,7 +111,7 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_categoria_id' => 'categoría del proveedor',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.proveedor_id' => 'proveedor',
             'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.servicio_id' => 'detalle del servicio',
-            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.costo' => 'costo',
+            'destino_turistico_detalle.*.destino_turistico_detalle_servicio.*.monto' => 'monto',
         ];
     }
 }

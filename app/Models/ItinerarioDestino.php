@@ -13,7 +13,7 @@ class ItinerarioDestino extends Model
   
     public function servicios()
     {
-        return $this->hasMany(ItinerarioServicio::class, 'itinerario_id', 'itinerario_id');
+        return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
     }
 
     public function itinerario()

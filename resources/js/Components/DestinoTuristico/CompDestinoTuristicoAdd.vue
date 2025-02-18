@@ -227,7 +227,7 @@ const actualizarTotalHijo = () => {
         return (
             suma +
             detalle.destino_turistico_detalle_servicio.reduce(
-                (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.costo || 0),
+                (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.monto || 0),
                 0
             )
         );
