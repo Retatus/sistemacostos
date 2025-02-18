@@ -12,7 +12,7 @@
     const form = useForm({
         nro_orden: "",
         servicio_id: "",
-        itinerario_id: "",
+        itinerario_destino_id: "",
         observacion: "",
         estado_activo: "",
     });

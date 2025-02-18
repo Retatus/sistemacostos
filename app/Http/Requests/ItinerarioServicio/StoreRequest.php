@@ -22,12 +22,12 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "nro_orden" => 'required',
+            "nro_orden" => 'required',
             "servicio_id" => 'required',
-            "itinerario_id" => 'required',
+            "itinerario_destino_id" => 'required',
             "observacion" => 'required|min:3|max:100',
+            "monto" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "estado_activo" => 'required',
-
         ];
     }
 }

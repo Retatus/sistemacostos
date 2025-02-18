@@ -57,7 +57,7 @@
                                         servicio_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        itinerario_id
+                                        itinerario_destino_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         observacion
@@ -80,7 +80,7 @@
                                         {{itinerarioservicio.servicio_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{itinerarioservicio.itinerario_id}}
+                                        {{itinerarioservicio.itinerario_destino_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{itinerarioservicio.observacion}}

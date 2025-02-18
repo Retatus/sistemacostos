@@ -103,11 +103,11 @@ class DestinoTuristicoController extends Controller
                 // }
 
                 // SECCION ITINERARIO SERVICIO
-                $itinerarioId = $itinerarioDestinoData['itinerario_id'];
+                $itinerarioId = $itinerarioDestinoId->id;
                 $destino_turistico_detalle_servicio = $itinerarioDestinoData['destino_turistico_detalle_servicio'] ?? [];
 
                 foreach ($destino_turistico_detalle_servicio as $itinerarioServicioData) {
-                    $itinerarioServicioData['itinerario_id'] = $itinerarioId;
+                    $itinerarioServicioData['itinerario_destino_id'] = $itinerarioId;
                     $itinerarioServicioId = ItinerarioServicio::create($itinerarioServicioData);
                     // $itinerarioServicioResponse = $this->itinerario_servicio->store($itinerarioServicioData);
 
