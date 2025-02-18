@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\DestinoTuristicoDetalle;
+namespace App\Http\Requests\ItinerarioServicio;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-class UpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,12 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "nro_dia" => 'required',
-            "nombre" => 'required|min:3|max:100',
-            "descripcion" => 'required',
+            "nro_orden" => 'required',
+            "servicio_id" => 'required',
+            "itinerario_destino_id" => 'required',
+            "observacion" => 'required|min:3|max:100',
+            "monto" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "estado_activo" => 'required',
-            "destino_turistico_id" => 'required',
-
         ];
     }
 }

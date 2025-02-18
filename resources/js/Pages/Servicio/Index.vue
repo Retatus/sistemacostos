@@ -12,30 +12,18 @@
     const Servicios = ref(page.props.servicios.data);
     
     async function changePage(page) {
-        debugger
         if(page > 0 && page <= Paginate.value.last_page){
             // Incluye los filtros actuales en la solicitud            
             const filters = {
                 page: page
             };
-
-            // Agregar categoría solo si tiene un valor válido
-            if (proveedor_categoria.value) {
-                filters.categoria = proveedor_categoria.value;
-            }
-
-            // Agregar búsqueda solo si tiene un valor válido
-            if (ruc_razonsocial.value) {
-                filters.ruc_razonsocial = ruc_razonsocial.value;
-            }
-
             // Envía la solicitud con los filtros y la página
             router.get(window.location.pathname, filters, {
                 preserveScroll: true, // Mantiene la posición del scroll
                 preserveState: true,  // Mantiene los datos actuales en la vista
                 onSuccess: (page) => {
-                    Paginate.value = page.props.proveedors; // Asegúrate de que los datos reactivos se actualicen
-                    Proveedors.value = page.props.proveedors.data; // Asegúrate de que los datos reactivos se actualicen
+                    Paginate.value = page.props.servicios; // Asegúrate de que los datos reactivos se actualicen
+                    Servicios.value = page.props.servicios.data; // Asegúrate de que los datos reactivos se actualicen
                 }
             });
         }

@@ -11,21 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('destino_turistico_detalles', function (Blueprint $table) {
+        Schema::create('destino_turisticos', function (Blueprint $table) {
             $table->id();
-            $table->integer('nro_dia');
             $table->string('nombre', 100);
             $table->text('descripcion')->nullable();
-            $table->tinyInteger('estado_activo' )->default(1);
              
 
             // Define la columna que será la clave foránea
-            $table->unsignedBigInteger('destino_turistico_id');
+            $table->unsignedBigInteger('pais_id');
 
-            // Define la relación con la tabla `destino_turisticos`
-            $table->foreign('destino_turistico_id')
-                ->references('id')->on('destino_turisticos')
+            // Define la relación con la tabla `pais`
+            $table->foreign('pais_id')
+                ->references('id')->on('pais')
                 ->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('nro_dias');
+            $table->decimal('costo_total', 10, 2);
+            $table->integer('margen');
+            $table->decimal('ganancia', 10, 2);
+            $table->decimal('venta', 10, 2);
+            $table->tinyInteger('estado_activo' )->default(1);
             $table->timestamps();
 
         });
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('destino_turistico_detalles');
+        Schema::dropIfExists('destino_turisticos');
     }
 };

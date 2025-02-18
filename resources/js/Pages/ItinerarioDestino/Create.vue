@@ -10,27 +10,18 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
 
     const form = useForm({
+        nro_dia: "",
+        itinerario_id: "",
+        destino_turistico_id: "",
         nombre: "",
         descripcion: "",
-        pais: "",
-        nro_dias: "",
-        costo_total: "",
-        margen: "",
-        ganancia: "",
-        venta: "",
+        observacion: "",
+        estado_activo: "",
 
     });
 
     const formFields = {   
         nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
-        descripcion: { type: 'textarea', placeholder: 'Ingrese la descripcion', label: 'descripcion' },
-        pais: { type: 'text', placeholder: 'Ingrese el pais', label: 'pais' },
-        nro_dias: { type: 'text', placeholder: 'Ingrese los dias', label: 'dias' },
-        costo_total: { type: 'text', placeholder: 'Ingrese el costo_total', label: 'costo_total' },
-        
-        margen: { type: 'text', placeholder: 'Ingrese el margen', label: 'margen' },
-        ganancia: { type: 'text', placeholder: 'Ingrese la ganancia', label: 'ganancia' },
-        venta: { type: 'text', placeholder: 'Ingrese la venta', label: 'venta' },
         estado_activo: { 
             type: 'select', 
             options: [
@@ -47,10 +38,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  DestinoTuristico
+                  ItinerarioDestino
               </h2>   
-              <Link :href="route('destino_turistico')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista DestinoTuristico
+              <Link :href="route('itinerario_destino')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ItinerarioDestino
               </Link>                             
           </div>    
         </template>
@@ -61,7 +52,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="false"
-                        @submit="form.post(route('destino_turistico.store'))" 
+                        @submit="form.post(route('itinerario_destino.store'))" 
                     />
                 </div>
             </div>

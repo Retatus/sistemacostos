@@ -2,7 +2,7 @@
 <script setup>
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
-    import CompDestinoTuristicoAdd from '@/Components/DestinoTuristico/CompDestinoTuristicoAdd.vue';
+    import CompDestinoTuristicoEdit from '@/Components/DestinoTuristico/CompDestinoTuristicoEdit.vue';
 
     const props = defineProps({
         ListaPaises: {
@@ -13,15 +13,19 @@
             type: Object, 
             required: true
         },
+        ListaServicio: {
+            type: Object, 
+            required: true
+        },
+        DestinoTuristico: {
+            type: Object, 
+            required: true
+        },
         ListaProveedorCategorias: {
             type: Object, 
             required: true
         },
         ListaProveedor: {
-            type: Object, 
-            required: true
-        },
-        ListaServicio: {
             type: Object, 
             required: true
         },
@@ -43,12 +47,13 @@
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <CompDestinoTuristicoAdd 
+                    <CompDestinoTuristicoEdit 
                         :Lista_paises="ListaPaises"
                         :Lista_itinerarios="ListaItinerarios"
                         :Lista_proveedor_categorias="ListaProveedorCategorias" 
                         :Lista_proveedor="ListaProveedor"
-                        :Lista_servicio="ListaServicio"       
+                        :Lista_servicio="ListaServicio"    
+                        :DestinoTuristico="DestinoTuristico"   
                     />
                 </div>
             </div>

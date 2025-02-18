@@ -2,20 +2,24 @@
 
 namespace App\Models;
 use App\Http\Requests\DestinoTuristico\StoreRequest;
-        use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DestinoTuristico extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nombre', 'descripcion', 'pais', 'dias', 'costo_total', 'descuento_tipo', 'descuento_estudiante', 'descuento_ninio', 'descuento_otros', 'margen', 'venta', 'estado_activo'];
+    protected $fillable = ['nombre', 'descripcion', 'pais_id', 'nro_dias', 'costo_total', 'margen', 'ganancia', 'venta', 'estado_activo'];
     
-    public function destinoturistico()
+    public function pais()
     {
-        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
+        return $this->belongsTo(Pais::class, 'pais_id', 'id');
     }
 
+    public function destino_turistico_detalle() {
+        return $this->hasMany(ItinerarioDestino::class, 'destino_turistico_id');
+    }
+    
     public static function getFormattedForDropdown()
     {
         return self::orderBy('id', 'desc')

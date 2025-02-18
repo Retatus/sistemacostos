@@ -5,7 +5,13 @@ use App\Http\Controllers\CostoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinoController;
 use App\Http\Controllers\DestinoTuristicoController;
+use App\Http\Controllers\DestinoTuristicoDetalleController;
 use App\Http\Controllers\DistribucionVentaController;
+use App\Http\Controllers\ItinerarioController;
+use App\Http\Controllers\ItinerarioDestinoController;
+use App\Http\Controllers\ItinerarioServicioController;
+use App\Http\Controllers\PaisController;
+use App\Http\Controllers\PrecioController;
 use App\Http\Controllers\ServicioClaseController;
 use App\Http\Controllers\ServicioDetalleController;
 use App\Http\Controllers\ProveedorCategoriaController;
@@ -13,6 +19,9 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ProveedorServicioController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\TipoPasajeroController;
+use App\Http\Controllers\UbicacionController;
+use App\Models\ItinerarioDestino;
 use Illuminate\Support\Facades\Route;
 
 // No autenticadas
@@ -53,6 +62,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/proveedor/createProveedor', [ProveedorController::class, 'createProveedor'])->name('proveedor.createProveedor');
     Route::post('/dashboard/proveedor/indexProveedor', [ProveedorController::class, 'indexProveedor'])->name('proveedor.indexProveedor');
     Route::post('/dashboard/proveedor', [ProveedorController::class, 'store'])->name('proveedor.store');
+    
+    Route::post('/dashboard/proveedor/proveedorList', [ProveedorController::class, 'proveedorList'])->name('proveedor.proveedorList');
     Route::get('/dashboard/proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
     Route::patch('/dashboard/proveedor/{proveedor}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
     Route::delete('/dashboard/proveedor/{proveedor}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
@@ -100,6 +111,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/servicio', [ServicioController::class, 'index'])->name('servicio');
     Route::get('/dashboard/servicio/create', [ServicioController::class, 'create'])->name('servicio.create');
     Route::post('/dashboard/servicio', [ServicioController::class, 'store'])->name('servicio.store');
+    Route::post('/dashboard/servicio/servicioList', [ServicioController::class, 'servicioList'])->name('servicio.servicioList');
     Route::get('/dashboard/servicio/{servicio}/edit', [ServicioController::class, 'edit'])->name('servicio.edit');
     Route::patch('/dashboard/servicio/{servicio}/update', [ServicioController::class, 'update'])->name('servicio.update');
     Route::delete('/dashboard/servicio/{servicio}/destroy', [ServicioController::class, 'destroy'])->name('servicio.destroy');
@@ -117,4 +129,69 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/destino_turistico/{destino_turistico}/edit', [DestinoTuristicoController::class, 'edit'])->name('destino_turistico.edit');
     Route::patch('/dashboard/destino_turistico/{destino_turistico}/update', [DestinoTuristicoController::class, 'update'])->name('destino_turistico.update');
     Route::delete('/dashboard/destino_turistico/{destino_turistico}/destroy', [DestinoTuristicoController::class, 'destroy'])->name('destino_turistico.destroy');
+
+    // Route::get('/dashboard/destino_turistico_detalle', [DestinoTuristicoDetalleController::class, 'index'])->name('destino_turistico_detalle');
+    // Route::get('/dashboard/destino_turistico_detalle/create', [DestinoTuristicoDetalleController::class, 'create'])->name('destino_turistico_detalle.create');
+    // Route::post('/dashboard/destino_turistico_detalle', [DestinoTuristicoDetalleController::class, 'store'])->name('destino_turistico_detalle.store');
+    // Route::get('/dashboard/destino_turistico_detalle/{destino_turistico_detalle}/edit', [DestinoTuristicoDetalleController::class, 'edit'])->name('destino_turistico_detalle.edit');
+    // Route::patch('/dashboard/destino_turistico_detalle/{destino_turistico_detalle}/update', [DestinoTuristicoDetalleController::class, 'update'])->name('destino_turistico_detalle.update');
+    // Route::delete('/dashboard/destino_turistico_detalle/{destino_turistico_detalle}/destroy', [DestinoTuristicoDetalleController::class, 'destroy'])->name('destino_turistico_detalle.destroy');
+
+    //Route::resource('/dashboard/pais', PaisController::class);
+    Route::get('/dashboard/pais', [PaisController::class, 'index'])->name('pais');
+    Route::get('/dashboard/pais/create', [PaisController::class, 'create'])->name('pais.create');
+    Route::post('/dashboard/pais', [PaisController::class, 'store'])->name('pais.store');
+    Route::get('/dashboard/pais/{pais}/edit', [PaisController::class, 'edit'])->name('pais.edit');
+    Route::patch('/dashboard/pais/{pais}/update', [PaisController::class, 'update'])->name('pais.update');
+    Route::delete('/dashboard/pais/{pais}/destroy', [PaisController::class, 'destroy'])->name('pais.destroy');
+
+    //Route::resource('/dashboard/ubicacions', UbicacionController::class);
+    Route::get('/dashboard/ubicacion', [UbicacionController::class, 'index'])->name('ubicacion');
+    Route::get('/dashboard/ubicacion/create', [UbicacionController::class, 'create'])->name('ubicacion.create');
+    Route::post('/dashboard/ubicacion', [UbicacionController::class, 'store'])->name('ubicacion.store');
+    Route::get('/dashboard/ubicacion/{ubicacion}/edit', [UbicacionController::class, 'edit'])->name('ubicacion.edit');
+    Route::patch('/dashboard/ubicacion/{ubicacion}/update', [UbicacionController::class, 'update'])->name('ubicacion.update');
+    Route::delete('/dashboard/ubicacion/{ubicacion}/destroy', [UbicacionController::class, 'destroy'])->name('ubicacion.destroy');
+
+    Route::get('/dashboard/itinerario', [ItinerarioController::class, 'index'])->name('itinerario');
+    Route::get('/dashboard/itinerario/create', [ItinerarioController::class, 'create'])->name('itinerario.create');
+    Route::post('/dashboard/itinerario', [ItinerarioController::class, 'store'])->name('itinerario.store');
+    Route::get('/dashboard/itinerario/{itinerario}/edit', [ItinerarioController::class, 'edit'])->name('itinerario.edit');
+    Route::patch('/dashboard/itinerario/{itinerario}/update', [ItinerarioController::class, 'update'])->name('itinerario.update');
+    Route::delete('/dashboard/itinerario/{itinerario}/destroy', [ItinerarioController::class, 'destroy'])->name('itinerario.destroy');
+
+    Route::get('/dashboard/tipo_pasajero', [TipoPasajeroController::class, 'index'])->name('tipo_pasajero');
+    Route::get('/dashboard/tipo_pasajero/create', [TipoPasajeroController::class, 'create'])->name('tipo_pasajero.create');
+    Route::post('/dashboard/tipo_pasajero', [TipoPasajeroController::class, 'store'])->name('tipo_pasajero.store');
+    Route::get('/dashboard/tipo_pasajero/{tipo_pasajero}/edit', [TipoPasajeroController::class, 'edit'])->name('tipo_pasajero.edit');
+    Route::patch('/dashboard/tipo_pasajero/{tipo_pasajero}/update', [TipoPasajeroController::class, 'update'])->name('tipo_pasajero.update');
+    Route::delete('/dashboard/tipo_pasajero/{tipo_pasajero}/destroy', [TipoPasajeroController::class, 'destroy'])->name('tipo_pasajero.destroy');
+
+    Route::get('/dashboard/precio', [PrecioController::class, 'index'])->name('precio');
+    Route::get('/dashboard/precio/create', [PrecioController::class, 'create'])->name('precio.create');
+    Route::post('/dashboard/precio', [PrecioController::class, 'store'])->name('precio.store');
+    Route::get('/dashboard/precio/{precio}/edit', [PrecioController::class, 'edit'])->name('precio.edit');
+    Route::patch('/dashboard/precio/{precio}/update', [PrecioController::class, 'update'])->name('precio.update');
+    Route::delete('/dashboard/precio/{precio}/destroy', [PrecioController::class, 'destroy'])->name('precio.destroy');
+
+    Route::get('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'index'])->name('itinerario_destino');
+    Route::get('/dashboard/itinerario_destino/create', [ItinerarioDestinoController::class, 'create'])->name('itinerario_destino.create');
+    Route::post('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'store'])->name('itinerario_destino.store');
+    Route::get('/dashboard/itinerario_destino/{itinerario_destino}/edit', [ItinerarioDestinoController::class, 'edit'])->name('itinerario_destino.edit');
+    Route::patch('/dashboard/itinerario_destino/{itinerario_destino}/update', [ItinerarioDestinoController::class, 'update'])->name('itinerario_destino.update');
+    Route::delete('/dashboard/itinerario_destino/{itinerario_destino}/destroy', [ItinerarioDestinoController::class, 'destroy'])->name('itinerario_destino.destroy');
+
+    Route::get('/dashboard/itinerario_servicio', [ItinerarioServicioController::class, 'index'])->name('itinerario_servicio');
+    Route::get('/dashboard/itinerario_servicio/create', [ItinerarioServicioController::class, 'create'])->name('itinerario_servicio.create');
+    Route::post('/dashboard/itinerario_servicio', [ItinerarioServicioController::class, 'store'])->name('itinerario_servicio.store');
+    Route::get('/dashboard/itinerario_servicio/{itinerario_servicio}/edit', [ItinerarioServicioController::class, 'edit'])->name('itinerario_servicio.edit');
+    Route::patch('/dashboard/itinerario_servicio/{itinerario_servicio}/update', [ItinerarioServicioController::class, 'update'])->name('itinerario_servicio.update');
+    Route::delete('/dashboard/itinerario_servicio/{itinerario_servicio}/destroy', [ItinerarioServicioController::class, 'destroy'])->name('itinerario_servicio.destroy');
+
+    // Route::get('/dashboard/itinerario_destino', [PrecioController::class, 'index'])->name('itinerario_destino');
+    // Route::get('/dashboard/itinerario_destino/create', [PrecioController::class, 'create'])->name('itinerario_destino.create');
+    // Route::post('/dashboard/itinerario_destino', [PrecioController::class, 'store'])->name('itinerario_destino.store');
+    // Route::get('/dashboard/itinerario_destino/{itinerario_destino}/edit', [PrecioController::class, 'edit'])->name('itinerario_destino.edit');
+    // Route::patch('/dashboard/itinerario_destino/{itinerario_destino}/update', [PrecioController::class, 'update'])->name('itinerario_destino.update');
+    // Route::delete('/dashboard/itinerario_destino/{itinerario_destino}/destroy', [PrecioController::class, 'destroy'])->name('itinerario_destino.destroy');
 });

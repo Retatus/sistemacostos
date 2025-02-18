@@ -8,34 +8,22 @@
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
-
+  
     const props = defineProps({
-        destinoturisticoslista: {
+        itinerariodestino: {
             type: Object, 
             required: true
         } 
     })
-
+ 
     console.log(props);
-
     const form = useForm({
-        nro_dia: "",
-        nombre: "" ,
-        descripcion: "",
-        estado_activo: "",
-        destino_turistico_id: "",
+        nombre: props.itinerariodestino.nombre,
+        estado_activo: props.itinerariodestino.estado_activo,
     });
 
     const formFields = {   
         nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
-        descripcion: { type: 'textarea', placeholder: 'Ingrese la descripcion', label: 'descripcion' }, 
-        nro_dia: { type: 'text', placeholder: 'Ingrese el nro_dia', label: 'nro_dia' },
-        
-        destino_turistico_id: { 
-            type: 'select', 
-            label: 'Destino Turistico',
-            options: props.destinoturisticoslista
-        },
         estado_activo: { 
             type: 'select', 
             options: [
@@ -52,10 +40,10 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  DestinoTuristicoDetalle
+                  ItinerarioDestino
               </h2>   
-              <Link :href="route('destino_turistico_detalle')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista DestinoTuristicoDetalle
+              <Link :href="route('itinerario_destino')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ItinerarioDestino
               </Link>                             
           </div>    
         </template>
@@ -65,8 +53,8 @@
                     <FormularioDinamico
                         :form="form"
                         :fields="formFields"                            
-                        :updating="false"
-                        @submit="form.post(route('destino_turistico_detalle.store'))" 
+                        :updating="true"
+                        @submit="form.patch(route('itinerario_destino.update', itinerariodestino))" 
                     />
                 </div>
             </div>

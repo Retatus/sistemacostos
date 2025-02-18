@@ -76,7 +76,7 @@
 <script setup>
 import { ref, computed, toRefs, onMounted } from 'vue';
 import Modal from '@/Components/Modal.vue';
-import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServicio/CompDestinoTuristicoDetalleServicioAdd.vue';
+import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServicio/CompDestinoTuristicoDetalleServicioEdit.vue';
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -104,6 +104,8 @@ const props = defineProps({
 
 const indice = ref(0);
 const isModalVisible = ref(false);
+ 
+console.log('aaaaaaaaaaaaaa assssssssssss', props.Lista_destino_turistico_detalle);
 
 function ItinerarioDescripcion(index) {
     const selectElement = event.target;

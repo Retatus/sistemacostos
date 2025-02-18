@@ -24,16 +24,12 @@ class UpdateRequest extends FormRequest
         return [
              "nombre" => 'required|min:3|max:100',
             "descripcion" => 'required',
-            "pais" => 'required|min:3|max:25',
-            "dias" => 'required',
+            "pais" => 'required',
+            "nro_dias" => 'required',
             "costo_total" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "descuento_tipo" => 'required',
-            "descuento_estudiante" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "descuento_ninio" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "descuento_otros" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "margen" => 'required',
+            "ganancia" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "venta" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "estado_activo" => 'required',
 
         ];
     }

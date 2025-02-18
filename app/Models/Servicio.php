@@ -25,4 +25,34 @@ class Servicio extends Model
     {
         return $this->belongsTo(ServicioClase::class, 'servicio_clase_id', 'id');
     }
+
+    public static function getFormattedForDropdown($parametro = null)
+    {
+        // return self::select('servicios.id', 'servicios.moneda', 'servicios.monto', 'servicios.tipo_pax', 'servicios.servicio_clase_id', 'servicio_detalles.descripcion as servicio_detalle_nombre')
+        //     ->join('servicio_detalles', 'servicios.servicio_detalle_id', '=', 'servicio_detalles.id') // INNER JOIN con servicio_detalles
+        //     ->orderBy('servicios.id', 'desc') // Ordenar por el ID de servicios
+        //     ->when($parametro, function ($query, $parametro) {
+        //         return $query->where('servicios.proveedor_id', $parametro); // Filtro por proveedor_id
+        //     })
+        //     ->get()
+        //     ->map(function ($servicio) {
+        //         return [
+        //             'value' => $servicio->id,
+        //             'label' => $servicio->moneda . ' [ ' . $servicio->monto . ' ] ' . $servicio->servicio_detalle_nombre . ' ' . $servicio->tipo_pax . ' [ ' . $servicio->servicio_clase->nombre . ' ]', // Incluye el nombre de serviciosdetalle en el label
+        //         ];
+        //     });
+
+        return self::orderBy('id', 'desc')
+            ->when($parametro, function ($query, $parametro) {
+                return $query->where('proveedor_id', $parametro);
+            })
+            ->get()
+            ->map(function ($servicio) {
+                return [
+                    'value' => $servicio->id,
+                    'label' => $servicio->moneda . ' [' . $servicio->monto . '] ' . $servicio->servicio_detalle->descripcion . ' [' . $servicio->tipo_pax . ']  [' . $servicio->servicio_clase->nombre . ']', // Incluye el nombre de serviciosdetalle en el label
+                    'monto' => $servicio->monto,
+                ];
+            });
+    }  
 }
