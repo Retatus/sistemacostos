@@ -32,7 +32,7 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle.*.nombre' => 'nullable|string|max:45',
             'destino_turistico_detalle.*.descripcion' => 'nullable|string|max:1000',
             'destino_turistico_detalle.*.estado_activo' => 'required|boolean',
-            'destino_turistico_detalle.*.destino_turistico_id' => 'nullable|integer|exists:destinos_turisticos,id',
+            'destino_turistico_detalle.*.destino_turistico_id' => 'nullable|integer|exists:destino_turisticos,id',
             'destino_turistico_detalle.*.observacion' => 'nullable|string|max:100',
 
             // Reglas de los servicios anidados

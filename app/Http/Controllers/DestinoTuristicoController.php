@@ -70,6 +70,12 @@ class DestinoTuristicoController extends Controller
         return DB::transaction(function () use ($request) {
             // SECCION DESTINO TURISTICO
             $destinoTuristico = $request->except(['destino_turistico_detalle', 'destino_turistico_detalle_servicio']);
+
+            if (array_key_exists('id', $destinoTuristico)) {
+                //dd("entro", $destinoTuristico['id']);
+                DestinoTuristico::where('id', $destinoTuristico['id'])->update(['estado_activo' => 0]);
+            }
+
             $destinoTuriaticoResponse = DestinoTuristico::create($destinoTuristico);
             //$destinoTuriaticoResponse = $this->itinerario_destino->store($destinoTuristico);
 
