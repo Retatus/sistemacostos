@@ -32,9 +32,7 @@ class UpdateRequest extends FormRequest
                 ->ignore(id: request('update'), idColumn: 'id') // Ignora el registro actual al actualizar
               //->ignore($this->route('tipoDocumento')->id, 'id') // Ignora el registro actual al actualizar
             ],
-            'estado_activo' => [
-                'required|in:1,0',        // Campo obligatorio y debe ser 1 o 0
-            ],
+            'estado_activo' => 'required',
         ];
     }
 

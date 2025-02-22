@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
                 Rule::unique(table: 'tipo_documentos', column: 'nombre')
                 ->ignore(id: request('store'), idColumn: 'id')
             ],
-            'estado' => 'required',
+            'estado_activo' => 'required',
         ];
     }
 
