@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\CostoController;
+use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinoController;
 use App\Http\Controllers\DestinoTuristicoController;
@@ -18,8 +19,10 @@ use App\Http\Controllers\ProveedorCategoriaController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ProveedorServicioController;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\TipoComprobanteController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoPasajeroController;
+use App\Http\Controllers\TipoSunatController;
 use App\Http\Controllers\UbicacionController;
 use App\Models\ItinerarioDestino;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +52,20 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::patch('/dashboard/tipo_documento/{tipo_documento}/update', [TipoDocumentoController::class, 'update'])->name('tipo_documento.update');
     Route::delete('/dashboard//tipo_documento/{tipo_documento}/destroy', [TipoDocumentoController::class, 'destroy'])->name('tipo_documento.destroy');
     //Route::get('/categoria/crear', [CategoriaController::class, 'crear'])->name('categoria.crear');
+
+    Route::get('/dashboard/tipo_comprobante', [TipoComprobanteController::class, 'index'])->name('tipo_comprobante');
+    Route::get('/dashboard/tipo_comprobante/create', [TipoComprobanteController::class, 'create'])->name('tipo_comprobante.create');
+    Route::post('/dashboard/tipo_comprobante', [TipoComprobanteController::class, 'store'])->name('tipo_comprobante.store');
+    Route::get('/dashboard/tipo_comprobante/{tipo_comprobante}/edit', [TipoComprobanteController::class, 'edit'])->name('tipo_comprobante.edit');
+    Route::patch('/dashboard/tipo_comprobante/{tipo_comprobante}/update', [TipoComprobanteController::class, 'update'])->name('tipo_comprobante.update');
+    Route::delete('/dashboard//tipo_comprobante/{tipo_comprobante}/destroy', [TipoComprobanteController::class, 'destroy'])->name('tipo_comprobante.destroy');
+
+    Route::get('/dashboard/tipo_sunat', [TipoSunatController::class, 'index'])->name('tipo_sunat');
+    Route::get('/dashboard/tipo_sunat/create', [TipoSunatController::class, 'create'])->name('tipo_sunat.create');
+    Route::post('/dashboard/tipo_sunat', [TipoSunatController::class, 'store'])->name('tipo_sunat.store');
+    Route::get('/dashboard/tipo_sunat/{tipo_sunat}/edit', [TipoSunatController::class, 'edit'])->name('tipo_sunat.edit');
+    Route::patch('/dashboard/tipo_sunat/{tipo_sunat}/update', [TipoSunatController::class, 'update'])->name('tipo_sunat.update');
+    Route::delete('/dashboard//tipo_sunat/{tipo_sunat}/destroy', [TipoSunatController::class, 'destroy'])->name('tipo_sunat.destroy');
 
     Route::get('/dashboard/proveedor_categoria', [ProveedorCategoriaController::class, 'index'])->name('proveedor_categoria');
     Route::get('/dashboard/proveedor_categoria/create', [ProveedorCategoriaController::class, 'create'])->name('proveedor_categoria.create');
@@ -194,4 +211,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     // Route::get('/dashboard/itinerario_destino/{itinerario_destino}/edit', [PrecioController::class, 'edit'])->name('itinerario_destino.edit');
     // Route::patch('/dashboard/itinerario_destino/{itinerario_destino}/update', [PrecioController::class, 'update'])->name('itinerario_destino.update');
     // Route::delete('/dashboard/itinerario_destino/{itinerario_destino}/destroy', [PrecioController::class, 'destroy'])->name('itinerario_destino.destroy');
+
+    Route::get('/dashboard/cotizacion', [CotizacionController::class, 'index'])->name('cotizacion');
+    Route::get('/dashboard/cotizacion/create', [CotizacionController::class, 'create'])->name('cotizacion.create');
+    Route::post('/dashboard/cotizacion', [CotizacionController::class, 'store'])->name('cotizacion.store');
+    Route::get('/dashboard/cotizacion/{cotizacion}/edit', [CotizacionController::class, 'edit'])->name('cotizacion.edit');
+    Route::patch('/dashboard/cotizacion/{cotizacion}/update', [CotizacionController::class, 'update'])->name('cotizacion.update');
+    Route::delete('/dashboard/cotizacion/{cotizacion}/destroy', [CotizacionController::class, 'destroy'])->name('cotizacion.destroy');
 });
