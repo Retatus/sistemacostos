@@ -9,6 +9,14 @@
             type: Object, 
             required: true
         },
+        ListaTipoComprobante: {
+            type: Object, 
+            required: true
+        },
+        ListaTipoSunat: {
+            type: Object, 
+            required: true
+        },
         ListaServicio_clase: {
           type: Object, 
           required: true
@@ -54,6 +62,8 @@
                         :categoriaDestinos="categoriaDestinos" 
                         :categoriaDistribuciones="categoriaDistribuciones"
                         :proveedorcategorias="proveedorcategorias" 
+                        :ListaTipoComprobante="ListaTipoComprobante"
+                        :ListaTipoSunat="ListaTipoSunat"
                         :ListaServicio_clase="ListaServicio_clase" 
                         :ListaServicio_detalle="ListaServicio_detalle"
                     />

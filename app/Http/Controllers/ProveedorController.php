@@ -11,6 +11,8 @@ use App\Models\proveedor;
 use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
+use App\Models\TipoComprobante;
+use App\Models\TipoSunat;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ProveedorController extends Controller
@@ -89,6 +91,8 @@ class ProveedorController extends Controller
     public function create()
     {
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedComprobante = TipoComprobante::getFormattedForDropdown();
+        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
         $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
@@ -97,6 +101,8 @@ class ProveedorController extends Controller
         return Inertia::render('proveedor/CreateProveedor', 
         [
             'proveedorcategorias' => $formattedCategorias,
+            'ListaTipoComprobante' => $formattedComprobante,
+            'ListaTipoSunat' => $formattedTipoSunat,
             'categoriaCostos' => $formattedCostos,
             'categoriaDestinos' => $formattedDestinos,
             'categoriaDistribuciones' => $formattedDistribuciones,
@@ -116,11 +122,20 @@ class ProveedorController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        //dd($request);
         $data = $request->all();
-        //dd($data);
         $proveedor = proveedor::create($data);
         //return to_route('proveedor');
-        return response()->json($proveedor);
+        if ($proveedor) {
+            return response()->json([
+                'message' => 'Proveedor creado exitosamente',
+                'data' => $proveedor
+            ], 201); // 201 Created
+        } else {
+            return response()->json([
+                'message' => 'Error al crear el proveedor'
+            ], 500); // 500 Internal Server Error
+        }
     }
 
     public function proveedorList(Request $request)
@@ -145,6 +160,8 @@ class ProveedorController extends Controller
     {
         $servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
         $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedComprobante = TipoComprobante::getFormattedForDropdown();
+        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
         $formattedCostos = Costo::getFormattedForDropdown();
         $formattedDestinos = Destino::getFormattedForDropdown();
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
@@ -155,6 +172,8 @@ class ProveedorController extends Controller
             'proveedor_edit' => $proveedor,
             'servicio_edit' => $servicio,
             'proveedorcategorias' => $formattedCategorias,
+            'ListaTipoComprobante' => $formattedComprobante,
+            'ListaTipoSunat' => $formattedTipoSunat,
             'categoriaCostos' => $formattedCostos,
             'categoriaDestinos' => $formattedDestinos,
             'categoriaDistribuciones' => $formattedDistribuciones,

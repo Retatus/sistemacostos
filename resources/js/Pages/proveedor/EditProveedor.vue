@@ -17,6 +17,14 @@
             type: Object, 
             required: true
         },
+        ListaTipoComprobante: {
+            type: Object, 
+            required: true
+        },
+        ListaTipoSunat: {
+            type: Object, 
+            required: true
+        },
         ListaServicio_clase: {
           type: Object, 
           required: true
@@ -50,6 +58,8 @@
                         :proveedor_edit="proveedor_edit"
                         :servicio_edit="servicio_edit"
                         :proveedorcategorias="proveedorcategorias" 
+                        :ListaTipoComprobante="ListaTipoComprobante"
+                        :ListaTipoSunat="ListaTipoSunat"
                         :ListaServicio_clase="ListaServicio_clase" 
                         :ListaServicio_detalle="ListaServicio_detalle"  
                     />
