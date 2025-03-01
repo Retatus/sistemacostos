@@ -148,14 +148,16 @@
                     </select>
                 </div>
                 <div class="col-span-1 ">
-                    <label for="fecha_inicio" class=" text-sm font-medium text-gray-700">Fecha Inicio</label>
-                    <input v-model="cotizacion.fecha_inicio" @input="handleInput" type="text" id="fecha_inicio"
-                            class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese la Fecha Inicio">
+                    <Datepicker 
+                        label="Ingrese la Fecha Inicio"
+                        v-model="cotizacion.fecha_inicio" 
+                    />
                 </div>
                 <div class="col-span-1">
-                    <label for="fecha_fin" class="block text-sm font-medium text-gray-700">Fecha Fin</label>
-                    <input v-model="cotizacion.fecha_fin" type="text" id="fecha_fin" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Fecha Fin">
+                    <Datepicker 
+                        label="Ingrese la Fecha Fin" 
+                        v-model="cotizacion.fecha_fin" 
+                    />
                 </div>
                 <div class="col-span-1">
                     <label for="nro_dias" class="block text-sm font-medium text-gray-700">Dias</label>
@@ -224,6 +226,7 @@ import ContadorInput from '@/ComponentModal/ContadorInput.vue';
 import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
+import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
 
 // Definir las props
 const props = defineProps({
@@ -252,6 +255,7 @@ const Pais = ref([...props.Lista_paises]);
 const DestinoTuristico = ref([...props.Lista_destinos_turistico]);
 const Correlativo = ref(props.Correlativo);
 const fechaActual = ref(new Date().toISOString().slice(0, 10));
+console.log('fechaActual ', fechaActual.value);
 const Idioma = ref([
     { value: '1', label: 'ENGLISH' },
     { value: '2', label: 'SPANISH' },
@@ -296,8 +300,8 @@ const cotizacion = ref({
     mercado : '',
     destino_turistico_id : '',
     pais_id : '',
-    fecha_inicio : '',
-    fecha_fin : '',
+    fecha_inicio : fechaActual.value,
+    fecha_fin : fechaActual.value,
     nro_dias : '',
     estado_cotizacion : '',
     costo_parcial : '',
