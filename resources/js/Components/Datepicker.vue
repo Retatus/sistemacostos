@@ -28,8 +28,13 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const fechaInterna = ref(props.modelValue ? new Date(props.modelValue) : null);
+const fechaInterna = ref(props.modelValue ? ajustarZonaHoraria(props.modelValue) : null);
 
+function ajustarZonaHoraria(fechaString) {
+    const fecha = new Date(fechaString);
+    fecha.setHours(fecha.getHours() + fecha.getTimezoneOffset() / 60); // Ajuste a la hora local
+    return fecha;
+}
 // Función para formatear la fecha
 const formatearFecha = computed(() => {
   return fechaInterna.value ? format(fechaInterna.value, props.format) : "";

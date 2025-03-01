@@ -8,11 +8,11 @@
                 </div>
                 <div class="col-span-4">
                     <label for="proveedor_id" class="block text-sm font-medium text-gray-700">Cliente</label>
-                    <input v-model="cotizacion.proveedor_id" @input="handleInput1" type="text" id="costo_total" required="true"
+                    <input v-model="cotizacion.proveedor_id" @input="handleInput1" type="text" id="proveedor_id" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente">
                 </div>
                 <div class="col-span-1 ">
-                    <label for="buscar" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button"
                         class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         @click="agregarDetalle">
@@ -33,7 +33,7 @@
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Nombre de file">
                 </div>
                 <div class="col-span-1 ">
-                    <label for="buscar" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button"
                         class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         @click="agregarDetalle">
@@ -46,7 +46,7 @@
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="comprobante_id" class="block text-sm font-medium text-gray-700">Tipo comprobante</label>
-                    <select v-model="cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
+                    <select v-model="cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="comprobante_id">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in TipoComprobante" :key="option.value" :value="option.value">
                             {{ option.label }}
@@ -73,7 +73,7 @@
                     <label for="nro_ninio" class="block text-sm font-medium text-gray-700">Niño</label>
                     <ContadorInput
                         v-model="numeroNinos"
-                        id="nro_estudiante"
+                        id="nro_ninio"
                         placeholder="0"
                         :required="true"
                     />                      
@@ -102,7 +102,7 @@
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="idioma" class="block text-sm font-medium text-gray-700">Idioma</label>
-                    <select v-model="cotizacion.idioma" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
+                    <select v-model="cotizacion.idioma" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="idioma">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in Idioma" :key="option.value" :value="option.value">
                             {{ option.label }}
@@ -110,8 +110,8 @@
                     </select>
                 </div>
                 <div class="col-span-1">
-                    <label for="cliente" class="block text-sm font-medium text-gray-700">Mercado</label>
-                    <select v-model="cotizacion.mercado" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
+                    <label for="mercado" class="block text-sm font-medium text-gray-700">Mercado</label>
+                    <select v-model="cotizacion.mercado" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="mercado">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in Mercado" :key="option.value" :value="option.value">
                             {{ option.label }}
@@ -131,7 +131,7 @@
             <div class="grid grid-cols-6 gap-6 w-full p-5"> -->
                 <!-- Tercera fila -->
                 <div class="col-span-1">
-                    <label for="buscar" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button"
                         class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         @click="agregarDetalle">
@@ -204,7 +204,7 @@
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Costo Total">
                 </div>
                 <div class="col-span-1">
-                    <label for="buscar" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <!-- Botón para agregar el ítem -->
                     <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
                     <button type ="button" @click="mostrarConsola()">
