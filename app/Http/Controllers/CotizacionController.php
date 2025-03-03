@@ -6,8 +6,10 @@ use App\Models\Cotizacion;
 use App\Models\Destino;
 use App\Models\DestinoTuristico;
 use App\Models\Pais;
+use App\Models\ServicioClase;
 use App\Models\TipoComprobante;
 use App\Models\TipoDocumento;
+use App\Models\TipoPasajero;
 use App\Models\TipoSunat;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -41,13 +43,19 @@ class CotizacionController extends Controller
         $formattedTipoComprobante = TipoComprobante::getFormattedForDropdown();
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
         $formattedPaises = Pais::getFormattedForDropdown();
+        $formattedTipodocumento = TipoDocumento::getFormattedForDropdown();
+        $formattedTipoPasajero = TipoPasajero::getFormattedForDropdown();
+        $formattedTipoClase = ServicioClase::getFormattedForDropdown();
         $correlatico = Cotizacion::generarCorrelativo();
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
             'Correlativo' => $correlatico,
             'ListaTipoComprobante' => $formattedTipoComprobante,
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
-            'ListaPaises' => $formattedPaises
+            'ListaPaises' => $formattedPaises,
+            'ListaTipoDocumento' => $formattedTipodocumento,
+            'ListaTipoPasajero' => $formattedTipoPasajero,
+            'ListaTipoClase' => $formattedTipoClase
         ]);
     }
 
