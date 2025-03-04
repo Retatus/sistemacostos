@@ -14,7 +14,7 @@
                 <div class="col-span-1 ">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="agregarDetalle">
+                        @click="">
                         Nuevo
                     </PrimaryButton>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="col-span-1 ">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="agregarDetalle">
+                        @click="">
                         Nuevo
                     </PrimaryButton>
                 </div>
@@ -154,12 +154,19 @@
                         </option>
                     </select>
                 </div>
+                <div>
+                    <h1>Contador en el padre: {{ contador }}</h1>
+                    <button type="button" @click="contador++">Incrementar en el padre</button>
+                </div>
                 <!-- </div>
             <div class="grid grid-cols-6 gap-4 w-full p-5"> -->
                 <div class="col-span-6">
                     <ServicioDetalle
-                        :Lista_proveedor_categorias = "ProveedorCategorias" 
+                        :Lista_proveedor_categorias = "listaProveedorCategorias" 
                         :Lista_servicio_detalle = "listaServicioDetalle"
+                         
+                        v-model="contador"
+                        @update:modelValue="dato = $event"
                         @actualizarMontoPadre="actualizarTotalHijo" />
                 </div>
             </div>
@@ -230,7 +237,6 @@ import { ref, watch, computed } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ContadorInput from '@/ComponentModal/ContadorInput.vue';
-import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
@@ -267,6 +273,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    Lista_Proveedor_Categorias: {
+        type: Array,
+        required: true,
+    },
+
 });
 
 // Variables reactivas
@@ -357,16 +368,7 @@ const pasajerosDetalle = ref({
     clase_id: '',
 });
 
-const destinoTuristicoDetalle = ref({
-    nro_dia: 1,
-    itinerario_id: '',
-    nombre: '',
-    observacion: '',
-    estado_activo: 1,
-    destino_turistico_id: '',
 
-    destino_turistico_detalle_servicio: [],
-});
 
 const numeroAdultos = ref(0);
 const numeroNinos = ref(0);
@@ -375,11 +377,16 @@ const numeroEstudiantes = ref(0);
 const errorFecha = ref("");
 const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
 
+const listaProveedorCategorias = ref([...props.Lista_Proveedor_Categorias]);
 const listaServicioDetalle = ref([]);
-
+const dato = ref(cotizacion.value.nro_pasajeros);
 // **Función para bloquear fechas anteriores a fecha_inicio en fecha_fin**
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
 
+const contador = ref(0);
+// Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
+//const contador = computed(() => cotizacion.value.nro_pasajeros);
+ 
 async function ListaCategoriaProveedor() {
     try {     
         const data = {
@@ -391,7 +398,7 @@ async function ListaCategoriaProveedor() {
             //console.log('Listado de categorias:', response.data);  
             //calcularTotalesPorProveedor(response.data);
             console.log(calcularTotalesPorProveedor(response.data)); 
-            listaServicioDetalle.value = response.data;         
+            listaServicioDetalle.value = calcularTotalesPorProveedor(response.data);         
             //ListaProveedorXCategoria.value = response.data;
         }               
     } catch (error) {
@@ -401,25 +408,24 @@ async function ListaCategoriaProveedor() {
 
 function calcularTotalesPorProveedor(destino) {
     const resultado = {};
-
+        
     destino.destino_turistico_detalle.forEach(detalle => {
         detalle.destino_turistico_detalle_servicio.forEach(servicio => {
             const categoriaId = servicio.proveedor_categoria_id;
             const monto = parseFloat(servicio.monto) || 0;
 
-            if (!resultado[categoriaId]) { 
+            if (!resultado[categoriaId]) {
                 resultado[categoriaId] = {
+                    categoria: categoriaId,
                     total_monto: 0,
                     cantidad: 0
                 };
             }
-
             resultado[categoriaId].total_monto += monto;
             resultado[categoriaId].cantidad += 1;
         });
     });
-
-    return resultado;
+    return Object.values(resultado);
 }
 
 // **Observar cambios en fecha_inicio**
@@ -591,21 +597,7 @@ const eliminarPasajero = (tipoPasajero) => {
     }
 }
 
-function agregarDetalle() {
-    cotizacion.value.destino_turistico_detalle.push({ ...destinoTuristicoDetalle.value });
-    destinoTuristicoDetalle.value = {
-        nro_dia: cotizacion.value.destino_turistico_detalle.length + 1,
-        itinerario_id: '',
-        nombre: '',
-        observacion: '',
-        estado_activo: 1,
-        destino_turistico_id: '',
 
-        destino_turistico_detalle_servicio: [],
-    };
-
-    cotizacion.value.nro_dias = cotizacion.value.destino_turistico_detalle.length;
-}
 
 async function submitDestinoTuristico() {
     try {

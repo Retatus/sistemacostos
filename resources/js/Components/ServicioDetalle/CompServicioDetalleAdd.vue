@@ -52,12 +52,16 @@
           </tr>
         </tbody>
       </table>
+      <div>
+    <h2>Contador en el hijo: {{ modelValue }}</h2>
+    <button type="button" @click="incrementar">Incrementar en el hijo</button>
+  </div>
     </div>
   </div>
 </template>
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-
+const emit = defineEmits(['update:modelValue']);  // Define evento para actualizar
 const props = defineProps({ 
     Lista_proveedor_categorias: {
       type: Object,
@@ -73,6 +77,9 @@ const props = defineProps({
     },
   });
   
+  const incrementar = () => {
+  emit('update:modelValue', props.modelValue + 1);  // Envía el nuevo valor al padre
+};
 
   // Definir los eventos
 //const emit = defineEmits(['update:modelValue']);
@@ -82,7 +89,7 @@ const props = defineProps({
 //   emit('update:modelValue', nuevoValor);
 // };
 
-defineEmits(['update:modelValue']);
+//defineEmits(['update:modelValue']);
 
   console.log(props.Nro_pax);
 
