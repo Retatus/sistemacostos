@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in Lista_servicio_detalle" :key="index" className="bg-white border-b text-gray-900">
+          <tr v-if="Lista_servicio_detalle.length > 0" v-for="(item, index) in Lista_servicio_detalle" :key="index" className="bg-white border-b text-gray-900">
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.categoria" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
@@ -22,7 +22,6 @@
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <!-- <input v-model="Nro_pax" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" /> -->
                 <input :value="modelValue" 
                 @input="$emit('update:modelValue', $event.target.value)"
                   type="text" required="true" 
@@ -46,22 +45,17 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
-
               </button>
             </td>
           </tr>
         </tbody>
       </table>
-      <div>
-    <h2>Contador en el hijo: {{ modelValue }}</h2>
-    <button type="button" @click="incrementar">Incrementar en el hijo</button>
-  </div>
     </div>
   </div>
 </template>
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-const emit = defineEmits(['update:modelValue']);  // Define evento para actualizar
+const emit = defineEmits(['update']);  // Define evento para actualizar
 const props = defineProps({ 
     Lista_proveedor_categorias: {
       type: Object,
@@ -72,28 +66,10 @@ const props = defineProps({
       required: true,
     },
     modelValue: {
-      type: Number, // Tipo de la prop
-      required: true, // Hacerla obligatoria
+      type: Number, 
+      required: true, 
     },
   });
-  
-  const incrementar = () => {
-  emit('update:modelValue', props.modelValue + 1);  // Envía el nuevo valor al padre
-};
-
-  // Definir los eventos
-//const emit = defineEmits(['update:modelValue']);
-
-// Función para emitir el evento con el nuevo valor
-// const actualizarValor = (nuevoValor) => {
-//   emit('update:modelValue', nuevoValor);
-// };
-
-//defineEmits(['update:modelValue']);
-
-  console.log(props.Nro_pax);
-
-  //const emit = defineEmits(['update']); // Define el evento que vas a emitir
 
   const removeItem = (index) => {
     props.Lista_destino_turistico_detalle_servicio.splice(index, 1);

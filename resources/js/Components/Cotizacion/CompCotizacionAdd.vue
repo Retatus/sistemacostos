@@ -2,9 +2,9 @@
     <div class="container mx-auto">
         <form @submit.prevent="submitDestinoTuristico">
             <div class="grid grid-cols-6 gap-6 w-full p-5">
-                <!-- Tercera fila -->
+                <!-- Primera fila -->
                 <div class="col-span-1">
-                    <label for="costo_total" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label for="" class="block text-sm font-medium text-gray-700">&nbsp;</label>
                 </div>
                 <div class="col-span-4">
                     <label for="proveedor_id" class="block text-sm font-medium text-gray-700">Cliente</label>
@@ -18,9 +18,7 @@
                         Nuevo
                     </PrimaryButton>
                 </div>
-                <!-- </div>
-            <div class="grid grid-cols-6 gap-6 w-full p-5"> -->
-                <!-- Tercera fila -->
+                <!-- Segunda fila -->
                 <div class="col-span-1">
                     <label for="file_nro" class="block text-sm font-medium text-gray-700">Nro file</label>
                     <input v-model="cotizacion.file_nro" disabled type="text" id="file_nro" required="true"
@@ -39,9 +37,6 @@
                         Nuevo
                     </PrimaryButton>
                 </div>
-                <!-- </div>
-            
-            <div class="grid grid-cols-6 gap-6 w-full p-5"> -->
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="comprobante_id" class="block text-sm font-medium text-gray-700">Tipo comprobante</label>
@@ -65,22 +60,17 @@
                 </div>
                 <div class="col-span-1">
                     <label for="nro_ninio" class="block text-sm font-medium text-gray-700">Niño</label>
-                    <ContadorInput v-model="numeroNinos" id="nro_ninio" placeholder="0" :required="true" @accion-realizada="manejarAccion"/>
-                    <!-- <p v-if="ultimaAccion.id === 'nro_ninio'">Última acción (Niño): {{ ultimaAccion.accion }}</p> -->
+                    <ContadorInput v-model="numeroNinos" id="nro_ninio" placeholder="0" :required="true" @accion-realizada="manejarAccion"/>                    
                 </div>
                 <div class="col-span-1">
                     <label for="nro_adulto" class="block text-sm font-medium text-gray-700">Adulto</label>
-                    <ContadorInput v-model="numeroAdultos" id="nro_adulto" placeholder="0" :required="true" @accion-realizada="manejarAccion"/>
-                    <!-- <p v-if="ultimaAccion.id === 'nro_adulto'">Última acción (Adulto): {{ ultimaAccion.accion }}</p> -->
+                    <ContadorInput v-model="numeroAdultos" id="nro_adulto" placeholder="0" :required="true" @accion-realizada="manejarAccion"/>                    
                 </div>
                 <div class="col-span-1">
                     <label for="nro_estudiante" class="block text-sm font-medium text-gray-700">Estudiante</label>
-                    <ContadorInput v-model="numeroEstudiantes" id="nro_estudiante" placeholder="0" :required="true"@accion-realizada="manejarAccion"/>
-                    <!-- <p v-if="ultimaAccion.id === 'nro_estudiante'">Última acción (Estudiante): {{ ultimaAccion.accion }}</p> -->
+                    <ContadorInput v-model="numeroEstudiantes" id="nro_estudiante" placeholder="0" :required="true"@accion-realizada="manejarAccion"/>                    
                 </div>
-                <!-- </div>
-            <div class="grid grid-cols-6 gap-6 w-full p-5"> -->
-                <!-- Tercera fila -->
+                <!-- Cuarta fila -->
                 <div class="col-span-1">
                     <label for="idioma" class="block text-sm font-medium text-gray-700">Idioma</label>
                     <select v-model="cotizacion.idioma" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
@@ -112,9 +102,7 @@
                         </option>
                     </select>
                 </div>
-                <!-- </div>
-            <div class="grid grid-cols-6 gap-6 w-full p-5"> -->
-                <!-- Tercera fila -->
+                <!-- Quinta fila -->
                 <div class="col-span-1">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -153,28 +141,19 @@
                             {{ option.label }}
                         </option>
                     </select>
-                </div>
-                <div>
-                    <h1>Contador en el padre: {{ contador }}</h1>
-                    <button type="button" @click="contador++">Incrementar en el padre</button>
-                </div>
-                <!-- </div>
-            <div class="grid grid-cols-6 gap-4 w-full p-5"> -->
+                </div>                
                 <div class="col-span-6">
                     <ServicioDetalle
                         :Lista_proveedor_categorias = "listaProveedorCategorias" 
-                        :Lista_servicio_detalle = "listaServicioDetalle"
-                         
-                        v-model="contador"
-                        @update:modelValue="dato = $event"
-                        @actualizarMontoPadre="actualizarTotalHijo" />
+                        :Lista_servicio_detalle = "listaServicioDetalle"                         
+                        v-model="contador" />
                 </div>
             </div>
             <div class="grid grid-cols-6 gap-6 w-full p-5">
-                <!-- Tercera fila -->
+                <!-- Sexta fila -->
                 <div class="col-span-1">
                     <label for="costo_parcial" class="block text-sm font-medium text-gray-700">C. Parcial</label>
-                    <input v-model="cotizacion.costo_parcial" @input="handleInput1" type="text" id="costo_parcial"
+                    <input v-model="cotizacion.costo_parcial" type="text" id="costo_parcial"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="C. Parcial">
                 </div>
@@ -204,7 +183,6 @@
                 </div>
                 <div class="col-span-1">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                    <!-- Botón para agregar el ítem -->
                     <PrimaryButton type="submit" class="mt-2">
                         Registrar
                     </PrimaryButton>
@@ -345,15 +323,15 @@ const cotizacion = ref({
     fecha_fin: fechaActual.value,
     nro_dias: 0,
     estado_cotizacion: '',
-    costo_parcial: '',
+    costo_parcial: 0,
     descuento_estudiante: 0,
     descuento_ninio: 0,
     descuento_otro: 0,
-    costo_total: '',
+    costo_total: 0,
     estado_activo: '',
 
     pasajeros_detalle: [],
-    destino_turistico_detalle: [],
+    servicios_detalle: [],
 });
 
 const pasajerosDetalle = ref({
@@ -368,8 +346,6 @@ const pasajerosDetalle = ref({
     clase_id: '',
 });
 
-
-
 const numeroAdultos = ref(0);
 const numeroNinos = ref(0);
 const numeroEstudiantes = ref(0);
@@ -378,37 +354,40 @@ const errorFecha = ref("");
 const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
 
 const listaProveedorCategorias = ref([...props.Lista_Proveedor_Categorias]);
-const listaServicioDetalle = ref([]);
-const dato = ref(cotizacion.value.nro_pasajeros);
-// **Función para bloquear fechas anteriores a fecha_inicio en fecha_fin**
+console.log('antessssssssss ', cotizacion.value.servicios_detalle.length);
+console.log('despuessssssss ', [].length);
+const listaServicioDetalle = ref([cotizacion.value.servicios_detalle]);
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
 
-const contador = ref(0);
 // Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
-//const contador = computed(() => cotizacion.value.nro_pasajeros);
+const contador = computed(() => cotizacion.value.nro_pasajeros);
+
+// Observa cambios en `nro_pasajeros` y ejecuta `calcularVenta`
+watch(() => cotizacion.value.nro_pasajeros, (newValue) => {
+  console.log("Nuevo valor de nro_pasajeros:", newValue);
+  calcularVenta();
+});
+
  
 async function ListaCategoriaProveedor() {
     try {     
         const data = {
             destino_turistico_id: cotizacion.value.destino_turistico_id,
         }     
-        const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);   
-        debugger
+        const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);  
         if (response.status === 200) {
-            //console.log('Listado de categorias:', response.data);  
-            //calcularTotalesPorProveedor(response.data);
-            console.log(calcularTotalesPorProveedor(response.data)); 
-            listaServicioDetalle.value = calcularTotalesPorProveedor(response.data);         
-            //ListaProveedorXCategoria.value = response.data;
+            listaServicioDetalle.value = calcularTotalesPorCategoria(response.data);   
+            cotizacion.value.servicios_detalle = calcularTotalesPorCategoria(response.data);  
+            calcularVenta();
         }               
     } catch (error) {
         console.error('Error al actualizar los datos:', error);
     }        
 };
 
-function calcularTotalesPorProveedor(destino) {
+function calcularTotalesPorCategoria(destino) {
     const resultado = {};
-        
+
     destino.destino_turistico_detalle.forEach(detalle => {
         detalle.destino_turistico_detalle_servicio.forEach(servicio => {
             const categoriaId = servicio.proveedor_categoria_id;
@@ -484,7 +463,6 @@ const contarPasajerosPorTipo = (tipo) => {
     return pasajeros.value.filter((pasajero) => pasajero.tipo_pasajero_id === tipo).length || 0;
 };
 
-
 // Función para calcular el total de pasajeros
 const calcularTotalPasajeros = () => {
     cotizacion.value.nro_ninio = numeroNinos.value;
@@ -502,6 +480,35 @@ const mostrarConsola = () => {
     console.log(cotizacion.value);
 }
 
+// Función para calcular el monto de la venta
+const calcularVenta = () => {
+    const sumaTotal = listaServicioDetalle.value.reduce((acc, item) => acc + (item.total_monto * cotizacion.value.nro_pasajeros), 0);
+    const sumaDescuentos = cotizacion.value.descuento_estudiante + cotizacion.value.descuento_ninio + cotizacion.value.descuento_otro;
+    cotizacion.value.costo_parcial = sumaTotal;
+    cotizacion.value.costo_total = sumaTotal - sumaDescuentos;
+};
+
+const handleInput = (event, field) => {
+  const validatedValue = validateInput(event.target.value);
+  cotizacion.value[field] = Number(validatedValue);
+
+  // Limpiar cualquier temporizador existente
+  if (emptyInputTimeout) {
+    clearTimeout(emptyInputTimeout);
+  }
+
+  // Si el input está vacío, esperar 1 segundo antes de asignar "0"
+  if (!validatedValue) {
+    emptyInputTimeout = setTimeout(() => {
+      cotizacion.value[field] = 0;
+      calcularVenta(validatedValue);
+    }, 1000); // 1000 ms = 1 segundo
+  } else {
+    // Calcular venta si el valor es válido
+    calcularVenta(validatedValue);
+  }
+};
+
 // Función para validar el input (solo números y un punto decimal permitido)
 const validateInput = (value) => {
     const validValue = value.replace(/[^0-9.]/g, ""); // Remover caracteres no numéricos
@@ -513,61 +520,7 @@ const validateInput = (value) => {
     return validValue;
 };
 
-// Función para calcular el monto de la venta
-const calcularVenta = () => {
-    const costoTotal = cotizacion.value.costo_total;
-    const margen = cotizacion.value.margen
-    const porcentaje = margen / 100;
-    const venta = costoTotal + costoTotal * porcentaje;
-    cotizacion.value.ganancia = costoTotal * porcentaje;
-    cotizacion.value.venta = venta;
-};
-
-
-
-const handleInput = (event, campo) => {
-    console.log(`handleInput (${campo}) `, event.target.value);
-
-    // Validar y actualizar dinámicamente el campo
-    const validatedValue = validateInput(event.target.value);
-    cotizacion.value[campo] = validatedValue;
-
-    // Limpiar cualquier temporizador existente
-    if (emptyInputTimeout) {
-        clearTimeout(emptyInputTimeout);
-    }
-
-    // Si el input está vacío, esperar 1 segundo antes de asignar "0"
-    if (!validatedValue) {
-        emptyInputTimeout = setTimeout(() => {
-            cotizacion.value[campo] = 0;
-            calcularVenta();
-        }, 1000);
-    } else {
-        calcularVenta();
-    }
-};
-
-// Función para actualizar el total general del Padre
-const actualizarTotalHijo = () => {
-    cotizacion.value.costo_total = cotizacion.value.destino_turistico_detalle.reduce((suma, detalle) => {
-        return (
-            suma +
-            detalle.destino_turistico_detalle_servicio.reduce(
-                (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.monto || 0),
-                0
-            )
-        );
-    }, 0);
-    cotizacion.value.nro_dias = cotizacion.value.destino_turistico_detalle.length;
-    calcularVenta();
-};
-
 function agregarDetallePasajero() {
-    // const nroPasajeros = cotizacion.value.nro_pasajeros;
-    // for (let i = 0; i < nroPasajeros; i++) {
-    //     agregarPasajero();
-    // }
     pasajeros.value = cotizacion.value.pasajeros_detalle;
     showModal.value = true;
 }
@@ -587,17 +540,6 @@ function agregarPasajero(tipoPasajero) {
         clase_id: '',
     };
 }
-
-const eliminarPasajero = (tipoPasajero) => {
-    const index = cotizacion.value.pasajeros_detalle.findIndex(
-        (pasajero) => pasajero.tipo_pasajero_id === tipoPasajero
-    );
-    if (index >= 0) {
-        cotizacion.value.pasajeros_detalle.splice(index, 1);
-    }
-}
-
-
 
 async function submitDestinoTuristico() {
     try {
