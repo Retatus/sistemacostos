@@ -156,6 +156,17 @@ class DestinoTuristicoController extends Controller
         return response()->json($servicioDetalle);
     }
 
+    public function destinoServicios(Request $request)
+    {
+        $data = $request->all();
+        $destinoId = $data["destino_turistico_id"];
+        $destinoServicios = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoId);
+        //$destinoServicios->makeHidden(['created_at', 'updated_at', 'destino_turistico_detalle.created_at', 'destino_turistico_detalle.updated_at']); // Ocultar campos
+        // dd($destinoServicios->toJson());
+        // $destinoServicios = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoServicios->id);
+        return response()->json($destinoServicios);
+    }
+
     /**
      * Display the specified resource.
      */

@@ -1,47 +1,49 @@
 <template>
-    <div class="overflow-x-auto py-0 pt-5">
-      <div class="grid grid-cols-8 gap-4 w-full p-5">
-            <div class="col-span-1">
-              <label class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-              <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                  </option>
-              </select>
-            </div>
-            <div class="col-span-2">
-              <label class="block text-sm font-medium text-gray-700">Proveedor</label>           
-              <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                  </option>
-              </select>
-            </div>
-            
-            <!-- Primera fila -->
-            <div class="col-span-4 ">
-              <label class="block text-sm font-medium text-gray-700">Servicio detalle</label>           
-              <select v-model="selectedValueServicio" @change="ServicioMonto" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-info="option.monto">
-                  {{ option.label }}
-                  </option>
-              </select>
-            </div>
-            <div class="col-span-1">
-              <label class="block text-sm font-medium text-gray-700"> ....</label>
-                <PrimaryButton 
-                  type="button"
-                  class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                  @click="agregarDestinoTuristicoDetalleServicio"
-                  >
-                  Agregar
-                </PrimaryButton>
-            </div>            
+  <!-- Header -->
+  <div class="px-4 py-3 border-b">
+      <h2 class="text-lg font-semibold text-gray-700">Agregar servicio</h2>
+  </div>
+  <!-- Body -->
+  <div class="overflow-x-auto py-0">
+    <div class="grid grid-cols-8 gap-4 w-full p-5">
+      <div class="col-span-1">
+        <label class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
+        <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+          <option disabled value="">-- Selecciona una opción --</option>
+          <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
+          {{ option.label }}
+          </option>
+        </select>
       </div>
-      
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Proveedor</label>           
+        <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+          <option disabled value="">-- Selecciona una opción --</option>
+          <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
+          {{ option.label }}
+          </option>
+        </select>
+      </div>
+      <div class="col-span-4 ">
+        <label class="block text-sm font-medium text-gray-700">Servicio detalle</label>           
+        <select v-model="selectedValueServicio" @change="ServicioMonto" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+            <option disabled value="">-- Selecciona una opción --</option>
+            <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-info="option.monto">
+            {{ option.label }}
+            </option>
+        </select>
+      </div>
+      <div class="col-span-1">
+        <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
+        <PrimaryButton 
+          type="button"
+          class="mt-2"
+          @click="agregarDestinoTuristicoDetalleServicio">
+          Agregar
+        </PrimaryButton>
+      </div>            
+    </div>
+    <div class="px-4 py-3">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
           <tr class="bg-gray-100">
@@ -91,11 +93,17 @@
           </tr>
         </tbody>
       </table>
-      <!-- <button @click.prevent="addItem">Agregar Ítem</button> -->
     </div>
-  </template>
+  </div>
+  <!-- Footer -->
+  <div class="px-4 border-t text-right">
+    <PrimaryButton @click="closeModal" type="button" class="mt-4 btn btn-secondary">
+      Cerrar
+    </PrimaryButton>
+  </div>
+</template>
 <script setup>
-import { ref, watch, toRefs } from 'vue';
+import { ref, watch } from 'vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import { defineProps, defineEmits } from 'vue';
 
@@ -118,7 +126,7 @@ const props = defineProps({
     },
   });
 
-  const emit = defineEmits(['update', 'actualizarTotal']); // Define el evento que vas a emitir
+  const emit = defineEmits(['close', 'update', 'actualizarTotal']); // Define el evento que vas a emitir
 
   const ListaServiciosXProveedor = ref("");
   const ListaProveedorXCategoria = ref("");
@@ -167,6 +175,10 @@ const props = defineProps({
         };
         calcularTotal();
     }
+
+    function closeModal() {
+      emit('close');
+  }
 
     const removeItem = (index) => {
       props.Lista_destino_turistico_detalle_servicio.splice(index, 1);

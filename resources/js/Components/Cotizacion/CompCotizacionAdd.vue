@@ -104,7 +104,7 @@
                 <div class="col-span-4 ">
                     <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino
                         Turistico</label>
-                    <select v-model="cotizacion.destino_turistico_id"
+                    <select v-model="cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
@@ -157,13 +157,10 @@
                 <!-- </div>
             <div class="grid grid-cols-6 gap-4 w-full p-5"> -->
                 <div class="col-span-6">
-                    <!-- <DestinioTuristicoDetalle
-                        :Lista_destino_turistico_detalle = "cotizacion.destino_turistico_detalle"
+                    <ServicioDetalle
                         :Lista_proveedor_categorias = "ProveedorCategorias" 
-                        :Lista_itinerarios = "Itinerarios"
-                        :Lista_proveedor = "Proveedores" 
-                        :Lista_servicio="Servicios" 
-                        @actualizarMontoPadre="actualizarTotalHijo" /> -->
+                        :Lista_servicio_detalle = "listaServicioDetalle"
+                        @actualizarMontoPadre="actualizarTotalHijo" />
                 </div>
             </div>
             <div class="grid grid-cols-6 gap-6 w-full p-5">
@@ -201,7 +198,8 @@
                 <div class="col-span-1">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <!-- Botón para agregar el ítem -->
-                    <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar
+                    <PrimaryButton type="submit" class="mt-2">
+                        Registrar
                     </PrimaryButton>
                     <button type="button" @click="mostrarConsola()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -223,7 +221,7 @@
         :ListaPasajeros = pasajeros
         :errorMessage="error"
         @close="showModal = false"
-        @actualizar-pasajeros="actualizarPasajeros"
+        @update= recalcularTotalPasajeros
     /> 
 </template>
 
@@ -236,6 +234,7 @@ import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompD
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
+import ServicioDetalle from '@/Components/ServicioDetalle/CompServicioDetalleAdd.vue';
 import PasajeroModal from '@/Pages/Pasajero/CompModalPasajero.vue';
 
 // Definir las props
@@ -374,9 +373,54 @@ const numeroNinos = ref(0);
 const numeroEstudiantes = ref(0);
 
 const errorFecha = ref("");
+const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
+
+const listaServicioDetalle = ref([]);
 
 // **Función para bloquear fechas anteriores a fecha_inicio en fecha_fin**
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
+
+async function ListaCategoriaProveedor() {
+    try {     
+        const data = {
+            destino_turistico_id: cotizacion.value.destino_turistico_id,
+        }     
+        const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);   
+        debugger
+        if (response.status === 200) {
+            //console.log('Listado de categorias:', response.data);  
+            //calcularTotalesPorProveedor(response.data);
+            console.log(calcularTotalesPorProveedor(response.data)); 
+            listaServicioDetalle.value = response.data;         
+            //ListaProveedorXCategoria.value = response.data;
+        }               
+    } catch (error) {
+        console.error('Error al actualizar los datos:', error);
+    }        
+};
+
+function calcularTotalesPorProveedor(destino) {
+    const resultado = {};
+
+    destino.destino_turistico_detalle.forEach(detalle => {
+        detalle.destino_turistico_detalle_servicio.forEach(servicio => {
+            const categoriaId = servicio.proveedor_categoria_id;
+            const monto = parseFloat(servicio.monto) || 0;
+
+            if (!resultado[categoriaId]) { 
+                resultado[categoriaId] = {
+                    total_monto: 0,
+                    cantidad: 0
+                };
+            }
+
+            resultado[categoriaId].total_monto += monto;
+            resultado[categoriaId].cantidad += 1;
+        });
+    });
+
+    return resultado;
+}
 
 // **Observar cambios en fecha_inicio**
 watch(() => cotizacion.value.fecha_inicio, (nuevaFechaInicio) => {
@@ -421,6 +465,19 @@ const calcularDiferenciaDias = () => {
     const fin = new Date(cotizacion.value.fecha_fin);
     cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24));
 };
+
+// Función para calcular el total de pasajeros
+const recalcularTotalPasajeros = () => {
+    numeroNinos.value = contarPasajerosPorTipo('1');
+    numeroEstudiantes.value = contarPasajerosPorTipo('2');
+    numeroAdultos.value = contarPasajerosPorTipo('3');
+};
+
+// Función para contar pasajeros por tipo
+const contarPasajerosPorTipo = (tipo) => {
+    return pasajeros.value.filter((pasajero) => pasajero.tipo_pasajero_id === tipo).length || 0;
+};
+
 
 // Función para calcular el total de pasajeros
 const calcularTotalPasajeros = () => {
@@ -499,8 +556,6 @@ const actualizarTotalHijo = () => {
     cotizacion.value.nro_dias = cotizacion.value.destino_turistico_detalle.length;
     calcularVenta();
 };
-
-const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
 
 function agregarDetallePasajero() {
     // const nroPasajeros = cotizacion.value.nro_pasajeros;

@@ -12,6 +12,7 @@ use App\Http\Controllers\ItinerarioController;
 use App\Http\Controllers\ItinerarioDestinoController;
 use App\Http\Controllers\ItinerarioServicioController;
 use App\Http\Controllers\PaisController;
+use App\Http\Controllers\PasajeroController;
 use App\Http\Controllers\PrecioController;
 use App\Http\Controllers\ServicioClaseController;
 use App\Http\Controllers\ServicioDetalleController;
@@ -218,4 +219,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/cotizacion/{cotizacion}/edit', [CotizacionController::class, 'edit'])->name('cotizacion.edit');
     Route::patch('/dashboard/cotizacion/{cotizacion}/update', [CotizacionController::class, 'update'])->name('cotizacion.update');
     Route::delete('/dashboard/cotizacion/{cotizacion}/destroy', [CotizacionController::class, 'destroy'])->name('cotizacion.destroy');
+
+    Route::get('/dashboard/pasajero', [PasajeroController::class, 'index'])->name('pasajero');
+    Route::get('/dashboard/pasajero/create', [PasajeroController::class, 'create'])->name('pasajero.create');
+    Route::post('/dashboard/pasajero', [PasajeroController::class, 'store'])->name('pasajero.store');
+    Route::get('/dashboard/pasajero/{pasajero}/edit', [PasajeroController::class, 'edit'])->name('pasajero.edit');
+    Route::patch('/dashboard/pasajero/{pasajero}/update', [PasajeroController::class, 'update'])->name('pasajero.update');
+    Route::delete('/dashboard/pasajero/{pasajero}/destroy', [PasajeroController::class, 'destroy'])->name('pasajero.destroy');
 });
