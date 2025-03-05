@@ -145,7 +145,10 @@
                 <div class="col-span-6">
                     <ServicioDetalle
                         :Lista_proveedor_categorias = "listaProveedorCategorias" 
-                        :Lista_servicio_detalle = "listaServicioDetalle"                         
+                        :Lista_tipo_pasajero = Lista_tipo_pasajero
+                        :Lista_servicio_detalle = "listaServicioDetalle" 
+                        :Lista_tipo_documento = Lista_tipo_documento
+                        :Lista_Pasajeros = pasajeros                        
                         v-model="contador" />
                 </div>
             </div>
