@@ -23,16 +23,14 @@
                         <div class="col-span-2">
                             <label for="ruc" class=" text-sm font-medium text-gray-700">Numero</label>
                             <input v-model="personas.ruc" type="text" id="ruc"
-                                class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el numero">
+                                class="mt-1 w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el numero">
                         </div>
-                        <div class="col-span-1 ">
-                            <label class="block text-sm font-medium text-gray-700">Estado Activo</label>
-                            <div class="flex items-center space-x-2">
-                                <PrimaryButtonBuscar type="button"
-                                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"> 
-                                    Buscar
-                                </PrimaryButtonBuscar>
-                            </div>
+                        <div class="col-span-1">
+                            <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                            <PrimaryButtonBuscar type="button"
+                                class="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"> 
+                                Buscar
+                            </PrimaryButtonBuscar>
                         </div>                                               
                     </div>
                     <div class="grid grid-cols-1 gap-4 w-full p-5">

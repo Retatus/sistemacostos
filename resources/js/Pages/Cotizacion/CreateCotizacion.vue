@@ -21,6 +21,22 @@
             type: Object,
             required: true,
         },
+        ListaTipoDocumento: {
+            type: Object,
+            required: true,
+        },
+        ListaTipoPasajero: {
+            type: Object,
+            required: true,
+        },        
+        ListaTipoClase: {
+            type: Object,
+            required: true,
+        },
+        ListaProveedorCategorias: {
+            type: Object,
+            required: true,
+        },
     })  
 
     console.log('asasas ', props);
@@ -46,6 +62,10 @@
                         :Lista_tipo_comprobante="ListaTipoComprobante"
                         :Lista_destinos_turistico="ListaDestinosTuristicos"
                         :Lista_paises="ListaPaises" 
+                        :Lista_tipo_documento="ListaTipoDocumento"
+                        :Lista_tipo_pasajero="ListaTipoPasajero"
+                        :Lista_tipo_clase="ListaTipoClase"
+                        :Lista_Proveedor_Categorias="ListaProveedorCategorias"
                     />
                 </div>
             </div>

@@ -58,24 +58,24 @@
                     </option>
                 </select>
             </div>  
-            <div class="col-span-1">
+            <div class="col-span-1 ">
                 <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
-                <select v-model="proveedor.estado_activo" id="estado_activo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                    <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in estadoActivo" :key="option.id" :value="option.id">
-                    {{ option.nombre }}
-                    </option>
-                </select>
-            </div>                
+                <div class="flex items-center space-x-2">
+                    <select v-model="proveedor.estado_activo" id="estado_activo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option v-for="option in estadoActivo" :key="option.id" :value="option.id">
+                        {{ option.nombre }}
+                        </option>
+                    </select>
+                    <PrimaryButton 
+                        type="button"
+                        class="mt-2 ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        @click="agregarDetalle">
+                        Agregar
+                    </PrimaryButton>
+                </div>
+            </div>                 
         </div>
-        <PrimaryButton 
-            type="button"
-            class="mt-2 ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            @click="agregarDetalle"
-            >
-            Agregar
-        </PrimaryButton>
-
         <Servicio
             :items="proveedor.detalles"
             :ListaServicio_clase="ServicioClases" 

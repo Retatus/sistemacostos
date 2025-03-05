@@ -65,11 +65,9 @@
         :Lista_proveedor = "Lista_proveedor"     
         :Lista_destino_turistico_detalle_servicio = Lista_destino_turistico_detalle[indice].destino_turistico_detalle_servicio
         :Lista_servicio="Lista_servicio"
+        @close="closeModal"
         @actualizarTotal="actualizarTotalNieto"
       />
-      <button @click="closeModal" type="button" class="mt-4 btn btn-secondary">
-        Cerrar
-      </button>
     </div>
   </Modal>
 </template>
