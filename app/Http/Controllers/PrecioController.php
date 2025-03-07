@@ -36,7 +36,11 @@ class PrecioController extends Controller
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
         $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion')
+        $formattedServicios = Servicio::with(
+            [
+                'proveedor:id,razon_social',
+                'servicio_detalle:id,descripcion'
+            ])
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc') 
         ->get();
@@ -82,7 +86,12 @@ class PrecioController extends Controller
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
         $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion') 
+        $formattedServicios = Servicio::with(
+            [
+                'proveedor:id,razon_social',
+                'servicio_detalle:id,descripcion'
+            ])
+        ->where('estado_activo', 1)
         ->orderBy('id', 'desc') 
         ->get();
         

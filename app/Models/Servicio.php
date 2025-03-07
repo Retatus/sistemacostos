@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Http\Requests\Servicio\StoreRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Servicio extends Model
 {
@@ -26,6 +27,30 @@ class Servicio extends Model
         return $this->belongsTo(Ubicacion::class, 'ubicacion_id', 'id');
     }
 
+    public function precios()
+    {
+        return $this->hasMany(Precio::class, 'servicio_id');
+    }
+
+    public static function getFormattedForDropdownPrecio($parametro = null)
+    {
+        $precios = DB::table('precios')
+            ->join('servicios', 'precios.servicio_id', '=', 'servicios.id')
+            ->join('tipo_pasajeros', 'precios.tipo_pasajero_id', '=', 'tipo_pasajeros.id')
+            ->join('servicio_detalles', 'servicio_detalles.id', '=', 'servicios.servicio_detalle_id') // Asegúrate de que existe este campo
+            ->where('servicios.proveedor_id', $parametro)
+            ->select('precios.id as precio_id', 'tipo_pasajeros.nombre as tipo_pasajero_nombre', 'precios.monto', 'servicios.id as servicio_id', 'servicio_detalles.descripcion')
+            ->get()
+            ->map(function ($servicio) {
+                return [
+                    'value' => $servicio->servicio_id,
+                    'label' => $servicio->descripcion . ' [' . $servicio->tipo_pasajero_nombre . ']' . ' [' . $servicio->monto . ']',
+                    'monto' => $servicio->monto
+                ];
+            });
+        return $precios;
+    }
+
     public static function getFormattedForDropdown($parametro = null)
     {
         return self::orderBy('id', 'desc')
@@ -36,8 +61,8 @@ class Servicio extends Model
             ->map(function ($servicio) {
                 return [
                     'value' => $servicio->id,
-                    'label' => $servicio->moneda . ' [' . $servicio->monto . '] ' . $servicio->servicio_detalle->descripcion . ' [' . $servicio->tipo_pax . ']  [' . $servicio->servicio_clase->nombre . ']', // Incluye el nombre de serviciosdetalle en el label
-                    'monto' => $servicio->monto,
+                    'label' => $servicio->servicio_detalle->descripcion // . ' [' . $servicio->monto . '] ' . $servicio->servicio_detalle->descripcion . ' [' . $servicio->tipo_pax . ']  [' . $servicio->servicio_clase->nombre . ']', // Incluye el nombre de serviciosdetalle en el label
+                    //'monto' => $servicio->monto,
                 ];
             });
     }  

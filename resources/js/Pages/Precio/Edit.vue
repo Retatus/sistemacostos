@@ -36,7 +36,7 @@
     props.servicios.forEach(servicio => {
         ListaServicios.value.push({
             value: servicio.id,
-            label: `${servicio.servicio_detalle.descripcion} [ ${servicio.tipo_pax} ]`
+            label: `[${servicio.proveedor.razon_social}] ${servicio.servicio_detalle.descripcion}`
         });
     });
 

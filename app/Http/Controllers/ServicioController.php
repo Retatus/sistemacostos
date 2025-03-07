@@ -55,8 +55,9 @@ class ServicioController extends Controller
     public function servicioList(Request $request)
     {
         $data = $request->all();
-        $servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);
-        
+        $servicioList = Servicio::getFormattedForDropdownPrecio($data['proveedor_id']);
+        //$servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);        
+        //dd($servicioList1->toJson(), $servicioList->toJson());
         return response()->json($servicioList);
     }
 
