@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Precio\StoreRequest;
 use App\Models\Precio;
 use App\Models\Servicio;
+use App\Models\ServicioClase;
 use App\Models\TipoPasajero;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,7 +16,15 @@ class PrecioController extends Controller
     public function index()
     {
         //$precio = Precio::all();
-        $precios = Precio::orderBy('id', 'desc')->get();
+        //$precios = Precio::orderBy('id', 'desc')->get();
+        $precios = Precio::with(
+            [
+                'servicio.servicio_detalle:id,descripcion',
+                'tipo_pasajero:id,nombre',
+                'servicio_clase:id,nombre',
+            ])
+        ->orderBy('id', 'desc')->get();
+        //dd($precios);
         return Inertia::render('Precio/Index', compact('precios'));
         //return response()->json( ['precio' => $precio]);
     }
@@ -26,10 +35,12 @@ class PrecioController extends Controller
     public function create()
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
-        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion') 
+        $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
+        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion')
+        ->where('estado_activo', 1)
         ->orderBy('id', 'desc') 
         ->get();
-
+//dd($formattedServicios->toJson());
         // $formattedServicios = Servicio::select('id', 'monto', 'moneda')
         // ->with(['servicio_detalle' => function ($query) {
         //     $query->select('id', 'descripcion', 'servicio_clase_id');
@@ -41,6 +52,7 @@ class PrecioController extends Controller
         return Inertia::render('Precio/Create', 
         [
             'tipopasajeros' => $formattedTipoPasajeros,
+            'servicios_clases' => $formattedServiciosClase,
             'servicios' => $formattedServicios,
         ]); //compact('proveedorcategorias'));
     }
@@ -69,6 +81,7 @@ class PrecioController extends Controller
     public function edit(Precio $precio)
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
+        $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
         $formattedServicios = Servicio::with('servicio_detalle:id,descripcion') 
         ->orderBy('id', 'desc') 
         ->get();
@@ -77,6 +90,7 @@ class PrecioController extends Controller
         [
             'tipopasajeros' => $formattedTipoPasajeros,
             'servicios' => $formattedServicios,
+            'servicios_clases' => $formattedServiciosClase,
             'precio' => $precio
         ]); //compact('proveedorcategorias'));
         //return Inertia::render('Precio/Edit', compact('precio'));

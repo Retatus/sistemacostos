@@ -71,12 +71,6 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
-                                        monto
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        moneda
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
                                         proveedor_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -84,12 +78,6 @@
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         ubicacion
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        tipo_pax
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        servicio_clase_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
@@ -102,12 +90,6 @@
                             </thead>
                             <tbody>
                                 <tr v-for="servicio in Servicios" className="bg-white border-b ">
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.monto}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.moneda}}
-                                    </td> 
                                     <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{servicio.proveedor_id}}
                                     </td> 
@@ -120,18 +102,12 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{servicio.servicio_detalle.descripcion}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.ubicacion}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.tipo_pax}}
-                                    </td> 
                                     <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.servicio_clase_id}}
-                                    </td> 
+                                        {{servicio.ubicacion_id}}
+                                    </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.servicio_clase.nombre}}
-                                    </td> 
+                                        {{servicio.ubicacion.nombre}}
+                                    </td>                                     
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{servicio.estado_activo}}
                                     </td> 

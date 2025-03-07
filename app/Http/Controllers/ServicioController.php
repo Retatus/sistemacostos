@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Servicio\StoreRequest;
 use App\Models\proveedor;
 use App\Models\Servicio;
-use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ServicioController extends Controller
@@ -22,7 +22,7 @@ class ServicioController extends Controller
             [
                 'proveedor:id,razon_social',
                 'servicio_detalle:id,descripcion',
-                'servicio_clase:id,nombre',
+                'ubicacion:id,nombre',
             ])
         ->orderBy('id', 'desc')
         ->paginate(10);
@@ -36,9 +36,9 @@ class ServicioController extends Controller
     public function create()
     {
         $formattedProveedor = Proveedor::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedUbicacion = Ubicacion::getFormattedForDropdown();
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
-        return Inertia::render('Servicio/Create', ['ListaProveedor' => $formattedProveedor, 'ListaServicio_clase' => $formattedServicioClase, 'ListaServicio_detalle' => $formattedServicioDetalle]);
+        return Inertia::render('Servicio/Create', ['ListaProveedor' => $formattedProveedor, 'ListaUbicacion' => $formattedUbicacion, 'ListaServicio_detalle' => $formattedServicioDetalle]);
     }
 
     /**
@@ -48,8 +48,8 @@ class ServicioController extends Controller
     {
         $data = $request->all();
         $proveedor = Servicio::create($data);
-        //return to_route('servicio');
-        return response()->json($proveedor);
+        return to_route('servicio');
+        //return response()->json($proveedor);
     }
 
     public function servicioList(Request $request)
@@ -74,9 +74,9 @@ class ServicioController extends Controller
     public function edit(Servicio $servicio)
     {
         $formattedProveedor = Proveedor::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+        $formattedUbicacion = Ubicacion::getFormattedForDropdown();
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
-        return Inertia::render('Servicio/Edit', ['servicio' => $servicio, 'ListaProveedor' => $formattedProveedor, 'ListaServicio_clase' => $formattedServicioClase, 'ListaServicio_detalle' => $formattedServicioDetalle]);
+        return Inertia::render('Servicio/Edit', ['servicio' => $servicio, 'ListaProveedor' => $formattedProveedor, 'ListaUbicacion' => $formattedUbicacion, 'ListaServicio_detalle' => $formattedServicioDetalle]);
     }
 
     /**

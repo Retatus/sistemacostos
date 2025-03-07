@@ -22,13 +22,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "monto" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "moneda" => 'required',
             "proveedor_id" => 'required',
             "servicio_detalle_id" => 'required',
-            "ubicacion" => 'required|min:3|max:50',
-            "tipo_pax" => 'required',
-            "servicio_clase_id" => 'required',
+            "ubicacion_id" => 'required',
             "estado_activo" => 'required|in:1,0',
 
         ];
