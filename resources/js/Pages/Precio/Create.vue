@@ -14,14 +14,16 @@
         tipopasajeros: {
             type: Object, 
             required: true
-        },
+        },        
         servicios: {
           type: Object, 
           required: true
-        } 
+        },
+        servicios_clases: {
+            type: Object, 
+            required: true
+        }
     })  
-
-    console.log(props.servicios);
 
     const ListaServicios = ref([]);
 
@@ -32,14 +34,13 @@
         });
     });
 
-    console.log(ListaServicios.value);
-
     const form = useForm({
         anio: "",
         moneda: "DOLARES",
         monto: "",
         tipo_pasajero_id: "",
         servicio_id: "",
+        servicio_clase_id: "",
         estado_activo: "1",
     });
 
@@ -68,6 +69,14 @@
             options: [
                 { value: '', label: '--Seleccionar--' },
                 ... ListaServicios.value
+            ]
+        },
+        servicio_clase_id: {
+            label: 'Servicio Clase',
+            type: 'select',
+            options: [
+                { value: '', label: '--Seleccionar--' },
+                ... props.servicios_clases
             ]
         },
         estado_activo: { 

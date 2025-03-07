@@ -66,9 +66,11 @@
                                         servicio_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
+                                        servicio
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         estado_activo
                                     </th> 
-
                                     <th scope="col" className="px-6 py-3">
                                         Acciones
                                     </th>
@@ -85,16 +87,24 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.monto}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.tipo_pasajero_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.tipo_pasajero.nombre}}
+                                    </td> 
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.servicio_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.servicio_clase.nombre}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.servicio.servicio_detalle.descripcion}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.estado_activo}}
                                     </td> 
-
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
                                             <Link :href="route('precio.edit', precio)">

@@ -19,6 +19,10 @@
           type: Object, 
           required: true
         },
+        servicios_clases: {
+            type: Object, 
+            required: true
+        },
         precio: {
             type: Object, 
             required: true
@@ -44,6 +48,7 @@
         monto: props.precio.monto,
         tipo_pasajero_id: props.precio.tipo_pasajero_id,
         servicio_id: props.precio.servicio_id,
+        servicio_clase_id: props.precio.servicio_clase_id,
         estado_activo: props.precio.estado_activo,
     });
 
@@ -72,6 +77,14 @@
             options: [
                 { value: '', label: '--Seleccionar--' },
                 ... ListaServicios.value
+            ]
+        },
+        servicio_clase_id: {
+            label: 'Servicio Clase',
+            type: 'select',
+            options: [
+                { value: '', label: '--Seleccionar--' },
+                ... props.servicios_clases
             ]
         },
         estado_activo: { 
