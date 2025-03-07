@@ -14,6 +14,10 @@
             type: Object, 
             required: true
         },
+        ListaUbicacion: {
+            type: Object, 
+            required: true  
+        },
         ListaServicio_clase: {
             type: Object, 
             required: true
@@ -23,29 +27,15 @@
             required: true
         } 
     })
-console.log(props);
+
     const form = useForm({
-        monto: "",
-        moneda: "DOLARES",
         proveedor_id: "",
         servicio_detalle_id: "",
-        ubicacion: "",
-        tipo_pax: "ADULTO",
-        servicio_clase_id: "",
+        ubicacion_id: "",
         estado_activo: "1",
-
     });
 
     const formFields = {   
-        monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },     
-        moneda: { 
-            label: 'Moneda',
-            type: 'select', 
-            options: [
-                { value: 'SOLES', label: 'SOLES' }, 
-                { value: 'DOLARES', label: 'DOLARES' },
-            ],             
-        },
         proveedor_id: { 
             label: 'Proveedor', 
             type: 'select', 
@@ -62,23 +52,13 @@ console.log(props);
                 ...props.ListaServicio_detalle
             ]
         },
-        ubicacion: { type: 'text', placeholder: 'Ingrese la ubicacion', label: 'ubicacion' },
-        tipo_pax: { 
-            label: 'Tipo pax', 
+        ubicacion_id: { 
+            label: 'Ubicacion', 
             type: 'select', 
             options: [
-                { value: 'ADULTO', label: 'ADULTO' }, 
-                { value: 'ESTUDIANTE', label: 'ESTUDIANTE' },
-                { value: 'NINIO', label: 'NIÑO' }
+                { value: '', label: '--Seleccionar--' },  
+                ...props.ListaUbicacion
             ], 
-        },
-        servicio_clase_id: { 
-            label: 'Servicio Clase', 
-            type: 'select', 
-            options: [
-                { value: '', label: '--Seleccionar--' }, 
-                ...props.ListaServicio_clase
-            ]
         },
         estado_activo: { 
             label: 'Estado activo',

@@ -18,6 +18,10 @@
             type: Object, 
             required: true
         },
+        ListaUbicacion: {
+            type: Object, 
+            required: true  
+        },
         ListaServicio_clase: {
             type: Object, 
             required: true
@@ -31,26 +35,13 @@
     console.log(props.servicio);
 
     const form = useForm({
-        monto: props.servicio.monto,
-        moneda: props.servicio.moneda,
         proveedor_id: props.servicio.proveedor_id,
         servicio_detalle_id: props.servicio.servicio_detalle_id,
-        ubicacion: props.servicio.ubicacion,
-        tipo_pax: props.servicio.tipo_pax,
-        servicio_clase_id: props.servicio.servicio_clase_id,
+        ubicacion_id: props.servicio.ubicacion_id,
         estado_activo: props.servicio.estado_activo,
     });
 
     const formFields = {   
-        monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },     
-        moneda: { 
-            label: 'Moneda',
-            type: 'select', 
-            options: [
-                { value: 'SOLES', label: 'SOLES' }, 
-                { value: 'DOLARES', label: 'DOLARES' },
-            ],             
-        },
         proveedor_id: { 
             label: 'Proveedor', 
             type: 'select', 
@@ -59,30 +50,20 @@
                 ... props.ListaProveedor
             ]
         },
+        ubicacion_id: { 
+            label: 'Ubicacion', 
+            type: 'select', 
+            options: [
+                { value: '', label: '--Seleccionar--' }, 
+                ...props.ListaUbicacion
+            ], 
+        },
         servicio_detalle_id: { 
             label: 'Servicio Detalle', 
             type: 'select', 
             options: [
                 { value: '', label: '--Seleccionar--' }, 
                 ...props.ListaServicio_detalle
-            ]
-        },
-        ubicacion: { type: 'text', placeholder: 'Ingrese la ubicacion', label: 'ubicacion' },
-        tipo_pax: { 
-            label: 'Tipo pax', 
-            type: 'select', 
-            options: [
-                { value: 'ADULTO', label: 'ADULTO' }, 
-                { value: 'ESTUDIANTE', label: 'ESTUDIANTE' },
-                { value: 'NINIO', label: 'NIÑO' }
-            ], 
-        },
-        servicio_clase_id: { 
-            label: 'Servicio Clase', 
-            type: 'select', 
-            options: [
-                { value: '', label: '--Seleccionar--' }, 
-                ...props.ListaServicio_clase
             ]
         },
         estado_activo: { 

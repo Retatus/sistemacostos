@@ -9,7 +9,7 @@ class Servicio extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['monto', 'moneda', 'proveedor_id', 'servicio_detalle_id', 'ubicacion', 'tipo_pax', 'servicio_clase_id', 'estado_activo'];
+    protected $fillable = ['proveedor_id', 'servicio_detalle_id', 'ubicacion_id', 'estado_activo'];
     
     public function proveedor()
     {
@@ -21,27 +21,13 @@ class Servicio extends Model
         return $this->belongsTo(ServicioDetalle::class, 'servicio_detalle_id', 'id');
     }
 
-    public function servicio_clase()
+    public function ubicacion()
     {
-        return $this->belongsTo(ServicioClase::class, 'servicio_clase_id', 'id');
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_id', 'id');
     }
 
     public static function getFormattedForDropdown($parametro = null)
     {
-        // return self::select('servicios.id', 'servicios.moneda', 'servicios.monto', 'servicios.tipo_pax', 'servicios.servicio_clase_id', 'servicio_detalles.descripcion as servicio_detalle_nombre')
-        //     ->join('servicio_detalles', 'servicios.servicio_detalle_id', '=', 'servicio_detalles.id') // INNER JOIN con servicio_detalles
-        //     ->orderBy('servicios.id', 'desc') // Ordenar por el ID de servicios
-        //     ->when($parametro, function ($query, $parametro) {
-        //         return $query->where('servicios.proveedor_id', $parametro); // Filtro por proveedor_id
-        //     })
-        //     ->get()
-        //     ->map(function ($servicio) {
-        //         return [
-        //             'value' => $servicio->id,
-        //             'label' => $servicio->moneda . ' [ ' . $servicio->monto . ' ] ' . $servicio->servicio_detalle_nombre . ' ' . $servicio->tipo_pax . ' [ ' . $servicio->servicio_clase->nombre . ' ]', // Incluye el nombre de serviciosdetalle en el label
-        //         ];
-        //     });
-
         return self::orderBy('id', 'desc')
             ->when($parametro, function ($query, $parametro) {
                 return $query->where('proveedor_id', $parametro);
