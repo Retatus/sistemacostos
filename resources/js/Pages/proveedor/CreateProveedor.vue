@@ -36,6 +36,14 @@
         categoriaDistribuciones: {
             type: Object, 
             required: true
+        },
+        ListaTipoPasajero: {
+            type: Object, 
+            required: true
+        },
+        ListaUbicacion: {
+            type: Object, 
+            required: true
         } 
     })  
 
@@ -66,6 +74,8 @@
                         :ListaTipoSunat="ListaTipoSunat"
                         :ListaServicio_clase="ListaServicio_clase" 
                         :ListaServicio_detalle="ListaServicio_detalle"
+                        :ListaTipoPasajero="ListaTipoPasajero"
+                        :ListaUbicacion="ListaUbicacion"
                     />
                 </div>
             </div>

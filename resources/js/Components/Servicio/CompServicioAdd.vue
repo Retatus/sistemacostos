@@ -40,13 +40,19 @@
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <input v-model="item.ubicacion" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <select v-model="item.ubicacion_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                  <option disabled value="">-- Selecciona una opción --</option>
+                  <option v-for="option in ListaUbicacion" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.tipo_pax" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                  <option value="ADULTO">ADULTO</option>
-                  <option value="ESTUDIANTE">ESTUDIANTE</option>
-                  <option value="NINIO">NIÑO</option>
+                <select v-model="item.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                  <option disabled value="">-- Selecciona una opción --</option>
+                  <option v-for="option in ListaTipoPasajero" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </option>
                 </select>
             </td>          
             <td hidden class="px-4 py-2 text-sm">
@@ -78,7 +84,15 @@
       ListaServicio_detalle: {
           type: Object, 
           required: true
-      } 
+      },
+      ListaTipoPasajero: {
+          type: Object, 
+          required: true
+      },
+      ListaUbicacion: {
+          type: Object, 
+          required: true
+      }   
     })
 
     const emit = defineEmits(['update']); // Define el evento que vas a emitir
