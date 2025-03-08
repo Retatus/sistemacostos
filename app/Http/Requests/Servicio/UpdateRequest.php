@@ -25,8 +25,7 @@ class UpdateRequest extends FormRequest
             "proveedor_id" => 'required',
             "servicio_detalle_id" => 'required',
             "ubicacion_id" => 'required',
-            "estado_activo" => 'required|in:1,0',
-
+            "estado_activo" => 'required',
         ];
     }
 }

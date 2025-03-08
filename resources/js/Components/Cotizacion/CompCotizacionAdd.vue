@@ -14,7 +14,7 @@
                 <div class="col-span-1 ">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="">
+                        @click="showModalProveedor = true">
                         Nuevo
                     </PrimaryButton>
                 </div>
@@ -211,6 +211,14 @@
         @close="showModal = false"
         @update= recalcularTotalPasajeros
     /> 
+    <ProveedorModal
+        :isModalVisibleProveedor="showModalProveedor"
+        :ListaTipoDocumento = Lista_tipo_documento
+        :ListaTipoSunat = ListaTipoSunat
+        :errorMessage="error"
+        @close="showModalProveedor = false"
+        @submit="recuperarValorModal"
+    />   
 </template>
 
 <script setup>
@@ -223,6 +231,7 @@ import InputError from '@/Components/InputError.vue';
 import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
 import ServicioDetalle from '@/Components/ServicioDetalle/CompServicioDetalleAdd.vue';
 import PasajeroModal from '@/Pages/Pasajero/CompModalPasajero.vue';
+import ProveedorModal from '@/Components/Proveedor/CompModalProveedor.vue';
 
 // Definir las props
 const props = defineProps({
@@ -258,13 +267,17 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-
+    ListaTipoSunat: {
+        type: Object,
+        required: true,
+    }
 });
 
 // Variables reactivas
 const error = ref('');
 const ultimaAccion = ref('');
 const showModal = ref(false);
+const showModalProveedor = ref(false);
 const TipoComprobante = ref([...props.Lista_tipo_comprobante]);
 const Pais = ref([...props.Lista_paises]);
 const DestinoTuristico = ref([...props.Lista_destinos_turistico]);
@@ -361,6 +374,11 @@ console.log('antessssssssss ', cotizacion.value.servicios_detalle.length);
 console.log('despuessssssss ', [].length);
 const listaServicioDetalle = ref([cotizacion.value.servicios_detalle]);
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
+
+async function recuperarValorModal(valor) {
+    showModalProveedor.value = false;
+    cotizacion.value.proveedor_id = valor; // Asignar el valor recibido
+}
 
 // Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
 const contador = computed(() => cotizacion.value.nro_pasajeros);
@@ -580,6 +598,9 @@ async function submitDestinoTuristico() {
         error.value = errorMessage;
     }
 }
+
+
+
 </script>
 
 <style scoped>

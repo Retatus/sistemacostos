@@ -47,16 +47,26 @@ class ServicioController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $proveedor = Servicio::create($data);
-        return to_route('servicio');
-        //return response()->json($proveedor);
+        $servicio = Servicio::create($data);
+        //return to_route('servicio');
+        if ($servicio) {
+            return response()->json([
+                'message' => 'Servicio creado exitosamente',
+                'data' => $servicio
+            ], 201); // 201 Created
+        } else {
+            return response()->json([
+                'message' => 'Error al crear el servicio'
+            ], 500); // 500 Internal Server Error
+        }
     }
 
     public function servicioList(Request $request)
     {
         $data = $request->all();
-        $servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);
-        
+        $servicioList = Servicio::getFormattedForDropdownPrecio($data['proveedor_id']);
+        //$servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);        
+        //dd($servicioList1->toJson(), $servicioList->toJson());
         return response()->json($servicioList);
     }
 

@@ -79,8 +79,9 @@
         <Servicio
             :items="proveedor.detalles"
             :ListaServicio_clase="ServicioClases" 
-            :ListaServicio_detalle="ServicioDetalles"   
-            
+            :ListaServicio_detalle="ServicioDetalles" 
+            :ListaTipoPasajero ="ListaTipoPasajero"
+            :ListaUbicacion="ListaUbicacion"            
         />
 
         <!-- Botón para agregar el ítem -->  
@@ -119,6 +120,14 @@
             type: Object,
             required: true,
         },
+        ListaTipoPasajero: {
+            type: Object,
+            required: true,
+        },
+        ListaUbicacion: {
+            type: Object,
+            required: true
+        }
     });
 
     
@@ -155,8 +164,8 @@
         monto: '',
         moneda: 'DOLARES',
         servicio_clase_id: '',
-        ubicacion: '',
-        tipo_pax: 'ADULTO',
+        ubicacion_id: '',
+        tipo_pasajero_id: '',
         servicio_detalle_id: '',
         estado_activo: 1,
     });
@@ -190,8 +199,8 @@
             monto: '',
             moneda: 'DOLARES',
             servicio_clase_id: '',
-            ubicacion: '',
-            tipo_pax: 'ADULTO',
+            ubicacion_id: '',
+            tipo_pasajero_id: '',
             servicio_detalle_id: '',
             estado_activo: 1,
         };

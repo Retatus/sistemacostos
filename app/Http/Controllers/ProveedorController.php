@@ -12,7 +12,9 @@ use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
 use App\Models\TipoComprobante;
+use App\Models\TipoPasajero;
 use App\Models\TipoSunat;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ProveedorController extends Controller
@@ -98,6 +100,8 @@ class ProveedorController extends Controller
         $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
         $formattedServicioClase = ServicioClase::getFormattedForDropdown();
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
+        $formattedTipoPasajero = TipoPasajero::getFormattedForDropdown();
+        $formattedUbicacion = Ubicacion::getFormattedForDropdown();
         return Inertia::render('proveedor/CreateProveedor', 
         [
             'proveedorcategorias' => $formattedCategorias,
@@ -107,7 +111,9 @@ class ProveedorController extends Controller
             'categoriaDestinos' => $formattedDestinos,
             'categoriaDistribuciones' => $formattedDistribuciones,
             'ListaServicio_clase' => $formattedServicioClase,
-            'ListaServicio_detalle' => $formattedServicioDetalle
+            'ListaServicio_detalle' => $formattedServicioDetalle,
+            'ListaTipoPasajero' => $formattedTipoPasajero,
+            'ListaUbicacion' => $formattedUbicacion
         ]); //compact('proveedorcategorias'));
     }
 

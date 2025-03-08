@@ -22,13 +22,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "anio" => 'required|min:3|max:4',
+            "anio" => 'required',
             "moneda" => 'required',
             "monto" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "tipo_pasajero_id" => 'required',
             "servicio_id" => 'required',
+            "servicio_clase_id" => 'required',
             "estado_activo" => 'required',
-
         ];
     }
 }

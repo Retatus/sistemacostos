@@ -1,5 +1,5 @@
 <template>
-    <Modal :show="isModalVisible" maxWidth="70" closeable @close="closeModal">
+    <Modal :show="isModalVisibleProveedor" maxWidth="2xl" closeable @close="closeModal">
         <template #default>
             <div class="p-1">
                 <!-- Header -->
@@ -8,9 +8,8 @@
                 </div>
                 <!-- Body -->
                 <form @submit.prevent="addCliente">
-                    <div class="grid grid-cols-5 gap-4 w-full p-5">
-                        <!-- Primera fila -->
-                        <div class="col-span-2">
+                    <div class="grid grid-cols-6 gap-6 w-full p-5">
+                        <div class="col-span-3">
                             <label for="tipo_documento" class=" text-sm font-medium text-gray-700">Tipo Documento</label>                            
                             <select v-model="personas.tipo_documento_id" id="tipo_documento"
                                 class="mt-1   w-full border-gray-300 rounded-md shadow-sm">
@@ -19,35 +18,29 @@
                                     {{ option.label }}
                                 </option>
                             </select>
-                        </div>
-                        <div class="col-span-2">
+                        </div>                   
+                        <div class="col-span-3 ">
                             <label for="ruc" class=" text-sm font-medium text-gray-700">Numero</label>
-                            <input v-model="personas.ruc" type="text" id="ruc"
+                            <div class="flex items-center space-x-2">
+                                <input v-model="personas.ruc" type="text" id="ruc"
                                 class="mt-1 w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el numero">
+                                <PrimaryButton type="button"
+                                    class="mt-1">
+                                    Buscar
+                                </PrimaryButton>
+                            </div>
                         </div>
-                        <div class="col-span-1">
-                            <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                            <PrimaryButtonBuscar type="button"
-                                class="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"> 
-                                Buscar
-                            </PrimaryButtonBuscar>
-                        </div>                                               
-                    </div>
-                    <div class="grid grid-cols-1 gap-4 w-full p-5">
-                        <!-- Primera fila -->
-                        <div class="col-span-1 ">
+                        <div class="col-span-6">
                             <label for="razon_social" class=" text-sm font-medium text-gray-700">Razon social</label>
                             <input v-model="personas.razon_social" type="text" id="razon_social"
                                 class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el razon social">
                         </div>
-                        <div class="col-span-1 ">
+                        <div class="col-span-6">
                             <label for="direccion" class=" text-sm font-medium text-gray-700">Direccion</label>
                             <input v-model="personas.direccion" type="text" id="direccion"
                                 class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el direccion">
                         </div>
-                    </div> 
-                    <div class="grid grid-cols-3 gap-4 w-full p-5">
-                        <div class="col-span-1">
+                        <div class="col-span-2">
                             <label for="tipo_sunat" class=" text-sm font-medium text-gray-700">Tipo Sunat</label>
                             <select v-model="personas.tipo_sunat" id="tipo_sunat" 
                                 class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -57,12 +50,12 @@
                                 </option>
                             </select> 
                         </div>
-                        <div class="col-span-1 ">
+                        <div class="col-span-2">
                             <label for="contacto" class=" text-sm font-medium text-gray-700">Contacto</label>
                             <input v-model="personas.contacto" type="text" id="contacto"
                                 class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el contacto">
                         </div>
-                        <div class="col-span-1 ">
+                        <div class="col-span-2">
                             <label for="correo" class=" text-sm font-medium text-gray-700">Correo</label>
                             <input v-model="personas.correo" type="email" id="correo"
                                 class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el correo">
@@ -95,7 +88,7 @@ const props = defineProps({
         type: Object,
         required: true, 
     },
-    isModalVisible: { 
+    isModalVisibleProveedor: { 
         type: Boolean, 
         required: true 
     },
@@ -121,31 +114,29 @@ const tiposSunat = ref({ ...props.ListaTipoSunat });
 const emit = defineEmits(['close', 'submit']);
 
 function closeModal() {
-    // resetFormData(); // Limpiar los datos al cerrar el modal
-    // validationError.value = ''; // Limpiar mensajes de error
     emit('close');
 }
 
+const inputValue = ref('');
 async function addCliente() {
     try {
         const response = await axios.post(`${route('proveedor.store')}`, personas.value);  
-        debugger;  
-        console.log('Elemento agregado:', response.data);            
-        if (response.status === 201) {        
-            props.isModalVisible = false;
+        if (response.status === 201) { 
+            inputValue.value = response.data.data.id;   
+            emit('submit', inputValue.value);
+            //props.isModalVisibleProveedor = false;
             // Swal.fire({
             //     title: 'Registro exitoso',
             //     html: `Este elemento <strong>${personas.value.razon_social}</strong> agregado correctamente.`,
             //     icon: 'success',
             //     timer: 2000,
             //     showConfirmButton: false,
-            // }); 
-            emit('submit', response.data);
+            // });             
         }else{
             //console.error('Error al agregar el elemento:', error);
             alert('Error al agregar el elemento:', response.data);
         }
-
+        
     } catch (err) {
         error.value = err.response?.data?.message || 'Ocurrió un error';
     }

@@ -36,7 +36,11 @@ class PrecioController extends Controller
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
         $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion')
+        $formattedServicios = Servicio::with(
+            [
+                'proveedor:id,razon_social',
+                'servicio_detalle:id,descripcion'
+            ])
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc') 
         ->get();
@@ -63,8 +67,18 @@ class PrecioController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        Precio::create($data);
-        return to_route('precio');
+        $precio = Precio::create($data);
+        //return to_route('precio');
+        if ($precio) {
+            return response()->json([
+                'message' => 'Precio creado exitosamente',
+                'data' => $precio
+            ], 201); // 201 Created
+        } else {
+            return response()->json([
+                'message' => 'Error al crear el precio'
+            ], 500); // 500 Internal Server Error
+        }
     }
 
     /**
@@ -82,7 +96,12 @@ class PrecioController extends Controller
     {
         $formattedTipoPasajeros = TipoPasajero::getFormattedForDropdown();
         $formattedServiciosClase = ServicioClase::getFormattedForDropdown();
-        $formattedServicios = Servicio::with('servicio_detalle:id,descripcion') 
+        $formattedServicios = Servicio::with(
+            [
+                'proveedor:id,razon_social',
+                'servicio_detalle:id,descripcion'
+            ])
+        ->where('estado_activo', 1)
         ->orderBy('id', 'desc') 
         ->get();
         

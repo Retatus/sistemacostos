@@ -96,7 +96,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="cotizacion in Cotizacions" className="bg-white border-b ">
-                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.proveedor_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
