@@ -49,6 +49,7 @@ class CotizacionController extends Controller
         $formattedTipoClase = ServicioClase::getFormattedForDropdown();
         $correlatico = Cotizacion::generarCorrelativo();
         $formattedProveedorCategorias = ProveedorCategoria::getFormattedForDropdown();
+        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
             'Correlativo' => $correlatico,
@@ -59,6 +60,7 @@ class CotizacionController extends Controller
             'ListaTipoPasajero' => $formattedTipoPasajero,
             'ListaTipoClase' => $formattedTipoClase,
             'ListaProveedorCategorias' => $formattedProveedorCategorias,
+            'ListaTipoSunat' => $formattedTipoSunat
         ]);
     }
 

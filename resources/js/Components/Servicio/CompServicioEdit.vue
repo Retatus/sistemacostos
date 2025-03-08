@@ -8,7 +8,7 @@
             <th class="w-7/24 px-4 py-2 text-sm font-medium">Servicio clase</th>
             <th class="w-7/24 px-4 py-2 text-sm font-medium">Servicio detalle</th>
             <th class="w-4/24 px-4 py-2 text-sm font-medium">Ubicacion</th>
-            <th class="w-2/24 px-4 py-2 text-sm font-medium">Tipo Pax</th>
+            <th class="w-2/24 px-4 py-2 text-sm font-medium">Tipo pasajero</th>
             <th class="w-2/24  px-4 py-2 text-sm font-medium">Acciones</th>
           </tr>
         </thead>
