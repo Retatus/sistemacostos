@@ -47,6 +47,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/tipo_documento/crear', [TipoDocumentoController::class, 'crear'])->name('tipo_documento.crear');
 
     Route::get('/dashboard/tipo_documento', [TipoDocumentoController::class, 'index'])->name('tipo_documento');
+    Route::get('/dashboard/tipo_documento/selectOptions', [TipoDocumentoController::class, 'selectOptions'])->name('tipo_documento.selectOptions'); 
     Route::get('/dashboard/tipo_documento/create', [TipoDocumentoController::class, 'create'])->name('tipo_documento.create');
     Route::post('/dashboard/tipo_documento', [TipoDocumentoController::class, 'store'])->name('tipo_documento.store');
     Route::get('/dashboard/tipo_documento/{tipo_documento}/edit', [TipoDocumentoController::class, 'edit'])->name('tipo_documento.edit');
@@ -55,6 +56,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //Route::get('/categoria/crear', [CategoriaController::class, 'crear'])->name('categoria.crear');
 
     Route::get('/dashboard/tipo_comprobante', [TipoComprobanteController::class, 'index'])->name('tipo_comprobante');
+    Route::get('/dashboard/tipo_comprobante/selectOptions', [TipoComprobanteController::class, 'selectOptions'])->name('tipo_comprobante.selectOptions'); 
     Route::get('/dashboard/tipo_comprobante/create', [TipoComprobanteController::class, 'create'])->name('tipo_comprobante.create');
     Route::post('/dashboard/tipo_comprobante', [TipoComprobanteController::class, 'store'])->name('tipo_comprobante.store');
     Route::get('/dashboard/tipo_comprobante/{tipo_comprobante}/edit', [TipoComprobanteController::class, 'edit'])->name('tipo_comprobante.edit');
@@ -62,6 +64,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::delete('/dashboard//tipo_comprobante/{tipo_comprobante}/destroy', [TipoComprobanteController::class, 'destroy'])->name('tipo_comprobante.destroy');
 
     Route::get('/dashboard/tipo_sunat', [TipoSunatController::class, 'index'])->name('tipo_sunat');
+    Route::get('/dashboard/tipo_sunat/selectOptions', [TipoSunatController::class, 'selectOptions'])->name('tipo_sunat.selectOptions'); 
     Route::get('/dashboard/tipo_sunat/create', [TipoSunatController::class, 'create'])->name('tipo_sunat.create');
     Route::post('/dashboard/tipo_sunat', [TipoSunatController::class, 'store'])->name('tipo_sunat.store');
     Route::get('/dashboard/tipo_sunat/{tipo_sunat}/edit', [TipoSunatController::class, 'edit'])->name('tipo_sunat.edit');
@@ -69,6 +72,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::delete('/dashboard//tipo_sunat/{tipo_sunat}/destroy', [TipoSunatController::class, 'destroy'])->name('tipo_sunat.destroy');
 
     Route::get('/dashboard/proveedor_categoria', [ProveedorCategoriaController::class, 'index'])->name('proveedor_categoria');
+    Route::get('/dashboard/proveedor_categoria/selectOptions', [ProveedorCategoriaController::class, 'selectOptions'])->name('proveedor_categoria.selectOptions');    
     Route::get('/dashboard/proveedor_categoria/create', [ProveedorCategoriaController::class, 'create'])->name('proveedor_categoria.create');
     Route::post('/dashboard/proveedor_categoria', [ProveedorCategoriaController::class, 'store'])->name('proveedor_categoria.store');
     Route::get('/dashboard/proveedor_categoria/{proveedor_categoria}/edit', [ProveedorCategoriaController::class, 'edit'])->name('proveedor_categoria.edit');
@@ -89,6 +93,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     //Route::get('/api/proveedores', function (Request $request) { return Proveedor::paginate(10); });
     //Route::resource('/dashboard/servicio_clase', ServicioClaseController::class);
     Route::get('/dashboard/servicio_clase', [ServicioClaseController::class, 'index'])->name('servicio_clase');
+    Route::get('/dashboard/servicio_clase/selectOptions', [ServicioClaseController::class, 'selectOptions'])->name('servicio_clase.selectOptions'); 
     Route::get('/dashboard/servicio_clase/create', [ServicioClaseController::class, 'create'])->name('servicio_clase.create');
     Route::post('/dashboard/servicio_clase', [ServicioClaseController::class, 'store'])->name('servicio_clase.store');
     Route::post('/dashboard/servicio_clase/storemodal', [ServicioClaseController::class, 'storemodal'])->name('servicio_clase.storemodal');
@@ -158,6 +163,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     //Route::resource('/dashboard/pais', PaisController::class);
     Route::get('/dashboard/pais', [PaisController::class, 'index'])->name('pais');
+    Route::get('/dashboard/pais/selectOptions', [PaisController::class, 'selectOptions'])->name('pais.selectOptions'); 
     Route::get('/dashboard/pais/create', [PaisController::class, 'create'])->name('pais.create');
     Route::post('/dashboard/pais', [PaisController::class, 'store'])->name('pais.store');
     Route::get('/dashboard/pais/{pais}/edit', [PaisController::class, 'edit'])->name('pais.edit');
@@ -166,6 +172,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     //Route::resource('/dashboard/ubicacions', UbicacionController::class);
     Route::get('/dashboard/ubicacion', [UbicacionController::class, 'index'])->name('ubicacion');
+    Route::get('/dashboard/ubicacion/selectOptions', [UbicacionController::class, 'selectOptions'])->name('ubicacion.selectOptions'); 
     Route::get('/dashboard/ubicacion/create', [UbicacionController::class, 'create'])->name('ubicacion.create');
     Route::post('/dashboard/ubicacion', [UbicacionController::class, 'store'])->name('ubicacion.store');
     Route::get('/dashboard/ubicacion/{ubicacion}/edit', [UbicacionController::class, 'edit'])->name('ubicacion.edit');
@@ -180,6 +187,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::delete('/dashboard/itinerario/{itinerario}/destroy', [ItinerarioController::class, 'destroy'])->name('itinerario.destroy');
 
     Route::get('/dashboard/tipo_pasajero', [TipoPasajeroController::class, 'index'])->name('tipo_pasajero');
+    Route::get('/dashboard/tipo_pasajero/selectOptions', [TipoPasajeroController::class, 'selectOptions'])->name('tipo_pasajero.selectOptions'); 
     Route::get('/dashboard/tipo_pasajero/create', [TipoPasajeroController::class, 'create'])->name('tipo_pasajero.create');
     Route::post('/dashboard/tipo_pasajero', [TipoPasajeroController::class, 'store'])->name('tipo_pasajero.store');
     Route::get('/dashboard/tipo_pasajero/{tipo_pasajero}/edit', [TipoPasajeroController::class, 'edit'])->name('tipo_pasajero.edit');
