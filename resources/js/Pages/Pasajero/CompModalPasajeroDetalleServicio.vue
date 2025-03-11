@@ -7,7 +7,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">{{ Titulo }} </h2>
                     <select v-model="props.SelectValueCategoria" class="mt-1 w-1/2 border-gray-300 rounded-md shadow-sm">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in ListaCategoria" :key="option.value" :value="option.value">
+                        <option v-for="option in ProveedorCategoria" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
@@ -67,7 +67,7 @@
                                     <select v-model="item.documento_tipo_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in ListaTipoPasajero" :key="option.value"
+                                        <option v-for="option in TipoPasajero" :key="option.value"
                                             :value="option.value">
                                             {{ option.label }}
                                         </option>
@@ -81,7 +81,7 @@
                                     <select v-model="item.documento_tipo_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in ListaTipoPasajero" :key="option.value"
+                                        <option v-for="option in TipoPasajero" :key="option.value"
                                             :value="option.value">
                                             {{ option.label }}
                                         </option>
@@ -101,7 +101,7 @@
                                     <select v-model="item.clase_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Lista_tipo_clase" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoClase" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -170,10 +170,10 @@
     })
 
     const nroDias = ref(props.Lista_servicio_x_dia);
-    const ListaCategoria = ref({ ...categoriesStore.globals.proveedor_categories });
+    const ProveedorCategoria = ref({ ...categoriesStore.globals.proveedor_categories });
     const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
-    const ListaTipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
-    const Lista_tipo_clase = ref({ ...categoriesStore.globals.servicio_clases });
+    const TipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const TipoClase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const Clase = ref([
         { value: '1', label: 'PEND' },

@@ -8,9 +8,11 @@ use App\Http\Controllers\DestinoController;
 use App\Http\Controllers\DestinoTuristicoController;
 use App\Http\Controllers\DestinoTuristicoDetalleController;
 use App\Http\Controllers\DistribucionVentaController;
+use App\Http\Controllers\IdiomaController;
 use App\Http\Controllers\ItinerarioController;
 use App\Http\Controllers\ItinerarioDestinoController;
 use App\Http\Controllers\ItinerarioServicioController;
+use App\Http\Controllers\MercadoController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\PasajeroController;
 use App\Http\Controllers\PrecioController;
@@ -235,4 +237,20 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/pasajero/{pasajero}/edit', [PasajeroController::class, 'edit'])->name('pasajero.edit');
     Route::patch('/dashboard/pasajero/{pasajero}/update', [PasajeroController::class, 'update'])->name('pasajero.update');
     Route::delete('/dashboard/pasajero/{pasajero}/destroy', [PasajeroController::class, 'destroy'])->name('pasajero.destroy');
+
+    Route::get('/dashboard/idioma', [IdiomaController::class, 'index'])->name('idioma');
+    Route::get('/dashboard/idioma/selectOptions', [IdiomaController::class, 'selectOptions'])->name('idioma.selectOptions'); 
+    Route::get('/dashboard/idioma/create', [IdiomaController::class, 'create'])->name('idioma.create');
+    Route::post('/dashboard/idioma', [IdiomaController::class, 'store'])->name('idioma.store');
+    Route::get('/dashboard/idioma/{idioma}/edit', [IdiomaController::class, 'edit'])->name('idioma.edit');
+    Route::patch('/dashboard/idioma/{idioma}/update', [IdiomaController::class, 'update'])->name('idioma.update');
+    Route::delete('/dashboard/idioma/{idioma}/destroy', [IdiomaController::class, 'destroy'])->name('idioma.destroy');
+
+    Route::get('/dashboard/mercado', [MercadoController::class, 'index'])->name('mercado');
+    Route::get('/dashboard/mercado/selectOptions', [MercadoController::class, 'selectOptions'])->name('mercado.selectOptions'); 
+    Route::get('/dashboard/mercado/create', [MercadoController::class, 'create'])->name('mercado.create');
+    Route::post('/dashboard/mercado', [MercadoController::class, 'store'])->name('mercado.store');
+    Route::get('/dashboard/mercado/{mercado}/edit', [MercadoController::class, 'edit'])->name('mercado.edit');
+    Route::patch('/dashboard/mercado/{mercado}/update', [MercadoController::class, 'update'])->name('mercado.update');
+    Route::delete('/dashboard/mercado/{mercado}/destroy', [MercadoController::class, 'destroy'])->name('mercado.destroy');
 });

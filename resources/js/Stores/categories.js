@@ -13,6 +13,8 @@ export const useCategoriesStore = defineStore("categories", () => {
       tipo_documentos: [],
       pais: [],
       servicio_clases: [],
+      idioma: [],
+      mercado: []
     });
 
     async function initializeGlobals() {
@@ -25,6 +27,8 @@ export const useCategoriesStore = defineStore("categories", () => {
             globals.tipo_documentos = await apiService.getTipoDocumentos();
             globals.pais = await apiService.getPais();
             globals.servicio_clases = await apiService.getServicioClases();
+            globals.idioma = await apiService.getIdioma();
+            globals.mercado = await apiService.getMercado();
         } catch (error) {
             console.log('Error al inicializar los datos globales:', error);
         }

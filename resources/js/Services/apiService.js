@@ -42,6 +42,16 @@ const apiService = {
     const response = await axios.get(`/dashboard/servicio_clase/selectOptions`); 
     return response.data;
   },
+
+  async getIdioma() {
+    const response = await axios.get(`/dashboard/idioma/selectOptions`); 
+    return response.data;
+  },
+
+  async getMercado() {
+    const response = await axios.get(`/dashboard/mercado/selectOptions`); 
+    return response.data;
+  },
 };
 
 export default apiService;

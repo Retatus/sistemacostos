@@ -243,6 +243,9 @@ const props = defineProps({
 
 const TipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
 const Pais = ref([...categoriesStore.globals.pais]);
+const Idioma = ref([...categoriesStore.globals.idioma]);
+const Mercado = ref([...categoriesStore.globals.mercado]);
+
 // Variables reactivas
 const error = ref('');
 const ultimaAccion = ref('');
@@ -251,34 +254,12 @@ const showModalProveedor = ref(false);
 const DestinoTuristico = ref([...props.Lista_destinos_turistico]);
 const Correlativo = ref(props.Correlativo);
 const fechaActual = ref(new Date().toISOString().slice(0, 10));
-console.log('fechaActual ', fechaActual.value);
-const Idioma = ref([
-    { value: '1', label: 'ENGLISH' },
-    { value: '2', label: 'SPANISH' },
-    { value: '3', label: 'FRENCH' },
-    { value: '4', label: 'GERMAN' },
-    { value: '5', label: 'ITALIAN' },
-    { value: '6', label: 'PORTUGUESE' },
-    { value: '7', label: 'JAPANESE' },
-    { value: '8', label: 'CHINESE' },
-    { value: '9', label: 'KOREAN' },
-    { value: '10', label: 'RUSSIAN' },
-    { value: '11', label: 'OTHER' },
-]);
-
-const Mercado = ref([
-    { value: '1', label: 'WEB' },
-    { value: '2', label: 'RECOMENDACION' },
-    { value: '3', label: 'WHATSAAP' },
-    { value: '4', label: 'ENDOCE' },
-]);
 
 const EstadoCotizacion = ref([
     { value: '1', label: 'PENDIENTE' },
     { value: '2', label: 'CONFIRMADA' },
     { value: '3', label: 'CANCELADA' },
 ]);
-
 
 // Timer para controlar el delay
 let emptyInputTimeout = null;

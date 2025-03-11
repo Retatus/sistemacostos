@@ -80,7 +80,7 @@
                                     <select v-model="item.tipo_pasajero_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in TipoPax" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoPasajero" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -89,7 +89,7 @@
                                     <select v-model="item.clase_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoClase" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -160,8 +160,8 @@
 
     const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
     const Pais = ref({ ...categoriesStore.globals.pais });
-    const TipoPax = ref({ ...categoriesStore.globals.tipo_pasajeros });
-    const Clase = ref({ ...categoriesStore.globals.servicio_clases });
+    const TipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const TipoClase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const EstadoDocumentacion = ref([
         { value: '1', label: 'PEND' },
