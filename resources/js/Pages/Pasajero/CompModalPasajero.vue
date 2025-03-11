@@ -144,24 +144,10 @@
     import { ref, defineProps, defineEmits } from 'vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
-        ListaTipoDocumento: {
-            type: Object,
-            required: true,
-        },
-        ListaPais: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoPax: {
-            type: Object,
-            required: true,
-        },
-        ListaClase: {
-            type: Object,
-            required: true,
-        },
         isModalVisible: {
             type: Boolean,
             required: true
@@ -172,10 +158,10 @@
         },
     })
 
-    const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-    const Pais = ref({ ...props.ListaPais });
-    const TipoPax = ref({ ...props.ListaTipoPax });
-    const Clase = ref({ ...props.ListaClase });
+    const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
+    const Pais = ref({ ...categoriesStore.globals.pais });
+    const TipoPax = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const Clase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const EstadoDocumentacion = ref([
         { value: '1', label: 'PEND' },

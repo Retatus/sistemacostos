@@ -4,8 +4,7 @@
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   Cotizacion
-              </h2>   
-              <button @click="showModal = true">Agregar Servicio Clase Modal</button> 
+              </h2>  
               <Link :href="route('cotizacion.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar Cotizacion
               </Link>                    
@@ -188,14 +187,6 @@
             </div>
         </div>
     </AppLayout>  
-    <ProveedorModal
-        :isModalVisible="showModal"
-        :ListaTipoDocumento = ListaTipoDocumento
-        :ListaTipoSunat = ListaTipoSunat
-        :errorMessage="error"
-        @close="showModal = false"
-        @submit="addServiceClass"
-    /> 
 </template>
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
@@ -203,15 +194,9 @@
     import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
-    import ProveedorModal from '@/Components/Proveedor/CompModalProveedor.vue';
 
     const page = usePage();
     const Cotizacions = ref(page.props.cotizacions);
-    const ListaTipoDocumento = ref(page.props.ListaTipoDocumento);
-    const ListaTipoSunat = ref(page.props.ListaTipoSunat);
-
-    const showModal = ref(false);
-    const error = ref('');
     
     const onDeleteConfirm = (Cotizacion) => {
         Swal.fire({
@@ -234,32 +219,7 @@
         });
     };
 
-    async function addServiceClass(data) {
-        try {
-            const response = await axios.post(`${route('proveedor.store')}`, data);    
-            console.log('Elemento agregado:', response.data);            
-            if (response.status === 200) {        
-                ServicioClases.value = response.data;    
-                showModal.value = false;
-
-                // isModalVisible.value = false;
-                // newItem.value = { nombre: ''};
-                // Swal.fire({
-                //     title: 'Registro exitoso',
-                //     html: `Este elemento <strong>${nombre.value}</strong> agregado correctamente.`,
-                //     icon: 'success',
-                //     timer: 2000,
-                //     showConfirmButton: false,
-                // }); 
-            }else{
-                //console.error('Error al agregar el elemento:', error);
-                alert('Error al agregar el elemento:', response.data);
-            }
-
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Ocurrió un error';
-        }
-    }
+ 
 </script>
 
 

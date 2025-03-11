@@ -5,9 +5,9 @@
         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
           <tr class="bg-gray-100">
             <th class="w-2/6 px-4 py-2">Servicio</th>
-            <th class="w-1/6 px-4 py-2">Nro Pax</th>
+            <th class="w-1/6 px-4 py-2">Nro Pasajero</th>
             <th class="w-1/6 px-4 py-2">Costo</th>
-            <th class="w-1/6 px-4 py-2">Nro Sericio/Pax</th>
+            <th class="w-1/6 px-4 py-2">Nro Servicio/Pasajero</th>
             <th colspan="2" class="w-1/6 px-4 py-2">Acciones</th>
           </tr>
         </thead>
@@ -16,7 +16,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.categoria" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
+                  <option v-for="option in categoriesStore.globals.proveedor_categories" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -55,19 +55,15 @@
 
   <PasajeroDetalleModal
     :Titulo = "selectedLabel"
-    :ListaCategoria = Lista_proveedor_categorias
-    :SelectValueCategoria = "selectedValue.toString()"
-    :ListaTipoDocumento = Lista_tipo_documento
-    :ListaTipoPasajero = Lista_tipo_pasajero
+    :SelectValueCategoria = "selectedValue_Categoria.toString()"
     :isModalVisible="isModalVisibleDetalle"
     :ListaPasajeros = Lista_Pasajeros
+    :Lista_servicio_x_dia = "Lista_servicio_x_dia"
     @close="isModalVisibleDetalle = false"        
   />  
   <PasajeroEditModal
     :Titulo = "selectedLabel"
-    :ListaCategoria = Lista_proveedor_categorias
-    :SelectValueCategoria = "selectedValue.toString()"
-    :ListaTipoDocumento = Lista_tipo_documento
+    :SelectValueCategoria = "selectedValue_Categoria.toString()"
     :isModalVisible="isModalVisibleEdit"
     :ListaPasajeros = Lista_Pasajeros
     @close="isModalVisibleEdit = false"        
@@ -78,21 +74,16 @@ import PasajeroDetalleModal from '@/Pages/Pasajero/CompModalPasajeroDetalleServi
 import PasajeroEditModal from '@/Pages/Pasajero/CompModalPasajeroEditServicio.vue';
 import { defineProps, defineEmits } from 'vue';
 import { ref, watch, toRefs } from 'vue';
+import { useCategoriesStore } from '@/Stores/categories';
+const categoriesStore = useCategoriesStore();
+
 const emit = defineEmits(['update']);  // Define evento para actualizar
 const props = defineProps({ 
-    Lista_proveedor_categorias: {
-      type: Object,
-      required: true,
-    },
-    Lista_tipo_documento: {
-      type: Object,
-      required: true,
-    },
-    Lista_tipo_pasajero: {
+    Lista_servicio_detalle: {
       type: Array,
       required: true,
     },
-    Lista_servicio_detalle: {
+    Lista_servicio_x_dia: {
       type: Array,
       required: true,
     },
@@ -106,14 +97,12 @@ const props = defineProps({
     },
   });
 
-  console.log("lisaaaaaaaaaaaaaaaa ", props.Lista_proveedor_categorias);
-
   const indice = ref(0);
   const isModalVisibleDetalle = ref(false);
   const isModalVisibleEdit = ref(false);
 
   const selectedLabel = ref('');
-  const selectedValue = ref('');
+  const selectedValue_Categoria = ref('');
 
   const removeItem = (index) => {
     props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
@@ -121,11 +110,12 @@ const props = defineProps({
   }   
   
   function showModalDetalle(index) {
-    selectedValue.value = props.Lista_servicio_detalle[index].categoria;
-    selectedLabel.value = props.Lista_proveedor_categorias.find(option => option.value === selectedValue.value).label;
     indice.value = index;
+    selectedValue_Categoria.value = props.Lista_servicio_detalle[index].categoria;
+    selectedLabel.value = categoriesStore.globals.proveedor_categories.find(option => option.value === selectedValue_Categoria.value).label;
     isModalVisibleDetalle.value = true;
-    console.log("indice ", selectedValue.value);
+    console.log("indice ", selectedValue_Categoria.value);
+    filterByCategoria(props.Lista_servicio_x_dia, 1, selectedValue_Categoria.value);
   }
 
   function closeModalDetalle() {
@@ -139,6 +129,21 @@ const props = defineProps({
 
   function closeModalEdit() {
     isModalVisibleEdit.value = false;
+  }
+
+  function filterByCategoria(ListaServicio, dia, categoria) {
+    //return props.Lista_servicio_detalle.filter(item => item.categoria === categoria);
+
+    const resultadoFiltrado = ListaServicio
+    .filter(item => item.nro_dia === dia) // Filtrar por nro_dia = 1
+    .map(item => ({
+      ...item,
+      destino_turistico_detalle_servicio: item.destino_turistico_detalle_servicio
+        .filter(servicio => servicio.proveedor_categoria_id === categoria) // Filtrar por proveedor_categoria_id = 2
+    }))
+    .filter(item => item.destino_turistico_detalle_servicio.length > 0); // Eliminar elementos con array vacío
+
+    console.log("resultadoFiltrado", resultadoFiltrado);
   }
 </script>
 

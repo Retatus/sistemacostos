@@ -4,12 +4,14 @@
             <div class="grid grid-cols-6 gap-6 w-full p-5">
                 <!-- Primera fila -->
                 <div class="col-span-1">
-                    <label for="" class="block text-sm font-medium text-gray-700">&nbsp;</label>
+                    <label for="" class="block text-sm font-medium text-gray-700">Cliente Id</label>
+                    <input v-model="cotizacion.proveedor_id" type="text" id="proveedor_id"
+                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente id">
                 </div>
                 <div class="col-span-4">
-                    <label for="proveedor_id" class="block text-sm font-medium text-gray-700">Cliente</label>
-                    <input v-model="cotizacion.proveedor_id" @input="handleInput1" type="text" id="proveedor_id"
-                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente">
+                    <label for="proveedor_razon_social" class="block text-sm font-medium text-gray-700">Cliente nombre</label>
+                    <input v-model="cotizacion.proveedor_razon_social" type="text" id="proveedor_razon_social"
+                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente nombre">
                 </div>
                 <div class="col-span-1 ">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
@@ -26,7 +28,7 @@
                 </div>
                 <div class="col-span-4">
                     <label for="file_nombre" class="block text-sm font-medium text-gray-700">Nombre de file</label>
-                    <input v-model="cotizacion.file_nombre" @input="handleInput1" type="text" id="file_nombre"
+                    <input v-model="cotizacion.file_nombre" type="text" id="file_nombre"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="Nombre de file">
                 </div>
@@ -144,11 +146,9 @@
                 </div>                
                 <div class="col-span-6">
                     <ServicioDetalle
-                        :Lista_proveedor_categorias = "listaProveedorCategorias" 
-                        :Lista_tipo_pasajero = Lista_tipo_pasajero
                         :Lista_servicio_detalle = "listaServicioDetalle" 
-                        :Lista_tipo_documento = Lista_tipo_documento
-                        :Lista_Pasajeros = pasajeros                        
+                        :Lista_servicio_x_dia = "servicioXDia"
+                        :Lista_Pasajeros = pasajeros                    
                         v-model="contador" />
                 </div>
             </div>
@@ -202,10 +202,6 @@
     </div>
     <PasajeroModal
         :isModalVisible="showModal"
-        :ListaTipoDocumento = Lista_tipo_documento
-        :ListaPais = Lista_paises
-        :ListaTipoPax = Lista_tipo_pasajero
-        :ListaClase = Lista_tipo_clase
         :ListaPasajeros = pasajeros
         :errorMessage="error"
         @close="showModal = false"
@@ -213,8 +209,6 @@
     /> 
     <ProveedorModal
         :isModalVisibleProveedor="showModalProveedor"
-        :ListaTipoDocumento = Lista_tipo_documento
-        :ListaTipoSunat = ListaTipoSunat
         :errorMessage="error"
         @close="showModalProveedor = false"
         @submit="recuperarValorModal"
@@ -232,6 +226,8 @@ import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
 import ServicioDetalle from '@/Components/ServicioDetalle/CompServicioDetalleAdd.vue';
 import PasajeroModal from '@/Pages/Pasajero/CompModalPasajero.vue';
 import ProveedorModal from '@/Components/Proveedor/CompModalProveedor.vue';
+import { useCategoriesStore } from '@/Stores/categories';
+const categoriesStore = useCategoriesStore();
 
 // Definir las props
 const props = defineProps({
@@ -239,47 +235,19 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    Lista_tipo_comprobante: {
-        type: Object,
-        required: true,
-    },
     Lista_destinos_turistico: {
         type: Object,
         required: true,
     },
-    Lista_paises: {
-        type: Object,
-        required: true,
-    },
-    Lista_tipo_documento: {
-        type: Object,
-        required: true,
-    },
-    Lista_tipo_pasajero: {
-        type: Object,
-        required: true,
-    },
-    Lista_tipo_clase: {
-        type: Object,
-        required: true,
-    },
-    Lista_Proveedor_Categorias: {
-        type: Array,
-        required: true,
-    },
-    ListaTipoSunat: {
-        type: Object,
-        required: true,
-    }
 });
 
+const TipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
+const Pais = ref([...categoriesStore.globals.pais]);
 // Variables reactivas
 const error = ref('');
 const ultimaAccion = ref('');
 const showModal = ref(false);
 const showModalProveedor = ref(false);
-const TipoComprobante = ref([...props.Lista_tipo_comprobante]);
-const Pais = ref([...props.Lista_paises]);
 const DestinoTuristico = ref([...props.Lista_destinos_turistico]);
 const Correlativo = ref(props.Correlativo);
 const fechaActual = ref(new Date().toISOString().slice(0, 10));
@@ -323,6 +291,7 @@ const estadoActivo = ref([
 // Variables para el cotizacion y detalle temporal
 const cotizacion = ref({
     proveedor_id: '',
+    proveedor_razon_social: '',
     file_nro: Correlativo.value,
     file_nombre: '',
     comprobante_id: '',
@@ -368,16 +337,18 @@ const numeroEstudiantes = ref(0);
 
 const errorFecha = ref("");
 const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
-
-const listaProveedorCategorias = ref([...props.Lista_Proveedor_Categorias]);
 console.log('antessssssssss ', cotizacion.value.servicios_detalle.length);
 console.log('despuessssssss ', [].length);
 const listaServicioDetalle = ref([cotizacion.value.servicios_detalle]);
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
 
+const servicioXDia = ref([]);
+
 async function recuperarValorModal(valor) {
+    debugger
     showModalProveedor.value = false;
-    cotizacion.value.proveedor_id = valor; // Asignar el valor recibido
+    cotizacion.value.proveedor_id = valor.id;
+    cotizacion.value.proveedor_razon_social = valor.nombre;
 }
 
 // Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
@@ -425,8 +396,35 @@ function calcularTotalesPorCategoria(destino) {
             resultado[categoriaId].cantidad += 1;
         });
     });
+    
+
+    // Transformar el array original
+    const datosTransformados = destino.destino_turistico_detalle.map(item => {
+        const itemLimpio = limpiarObjeto(item);
+
+        // Limpiar los objetos dentro de "destino_turistico_detalle_servicio"
+        if (itemLimpio.destino_turistico_detalle_servicio) {
+            itemLimpio.destino_turistico_detalle_servicio = itemLimpio.destino_turistico_detalle_servicio.map(servicio => limpiarObjeto(servicio));
+        }
+
+        return itemLimpio;
+    });
+
+    servicioXDia.value = datosTransformados;
+
     return Object.values(resultado);
 }
+
+// Función para eliminar propiedades no deseadas
+const limpiarObjeto = (objeto) => {
+    const { 
+        created_at, updated_at, estado_activo, descripcion, observacion, 
+        nro_orden, monto, id, itinerario_id, destino_turistico_id,
+        servicio_id,itinerario_destino_id, nombre,
+        ...rest 
+    } = objeto;
+    return rest;
+};
 
 // **Observar cambios en fecha_inicio**
 watch(() => cotizacion.value.fecha_inicio, (nuevaFechaInicio) => {

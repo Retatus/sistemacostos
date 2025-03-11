@@ -75,25 +75,17 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import PrimaryButtonBuscar from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Modal from '@/Components/Modal.vue';
+import { useCategoriesStore } from '@/Stores/categories';
+const categoriesStore = useCategoriesStore();
 
 const props = defineProps({
-    ListaTipoDocumento: { 
-        type: Object,
-        required: true, 
-    },
-    ListaTipoSunat: { 
-        type: Object,
-        required: true, 
-    },
     isModalVisibleProveedor: { 
         type: Boolean, 
         required: true 
     },
 })
-
 
 // Variables para el personas y detalle temporal
 const personas = ref({
@@ -109,21 +101,25 @@ const personas = ref({
     estado_activo: 1,
 });
 
-const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-const tiposSunat = ref({ ...props.ListaTipoSunat });
+const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
+const tiposSunat = ref({ ...categoriesStore.globals.tipo_sunat });
 const emit = defineEmits(['close', 'submit']);
 
 function closeModal() {
     emit('close');
 }
 
-const inputValue = ref('');
+const Cliente = ref({
+    id: '',
+    nombre: '',
+});
 async function addCliente() {
     try {
         const response = await axios.post(`${route('proveedor.store')}`, personas.value);  
         if (response.status === 201) { 
-            inputValue.value = response.data.data.id;   
-            emit('submit', inputValue.value);
+            Cliente.value.id = response.data.data.id;
+            Cliente.value.nombre = response.data.data.razon_social;  
+            emit('submit', Cliente.value);
             //props.isModalVisibleProveedor = false;
             // Swal.fire({
             //     title: 'Registro exitoso',
@@ -136,11 +132,9 @@ async function addCliente() {
             //console.error('Error al agregar el elemento:', error);
             alert('Error al agregar el elemento:', response.data);
         }
-        
+
     } catch (err) {
         error.value = err.response?.data?.message || 'Ocurrió un error';
     }
 }
-
-
 </script>

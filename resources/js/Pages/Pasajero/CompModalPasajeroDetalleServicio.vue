@@ -11,6 +11,11 @@
                             {{ option.label }}
                         </option>
                     </select>
+                    <select v-model="props.SelectValueCategoria" class="mt-1 w-1/2 border-gray-300 rounded-md shadow-sm">
+                        <option v-for="option in Lista_servicio_x_dia" :key="option.nro_dia" :value="option.nro_dia">
+                            Dia {{ option.nro_dia }}
+                        </option>
+                    </select>
                     <label class="text-lg font-semibold text-gray-700">Detalle {{ Titulo.toLocaleLowerCase() }}</label>
                 </div>    
                 <!-- Body -->
@@ -18,13 +23,14 @@
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                             <tr class="bg-gray-100">
-                                <th colspan="3" class="w-3/10 px-4 py-2 text-sm font-medium">Nombre de pax</th>
+                                <th colspan="3" class="w-3/10 px-4 py-2 text-sm font-medium">Nombre de pasajero</th>
                                 <th class="w-1/10 px-4 py-2 text-sm font-medium">Tipo Doc</th>
                                 <th class="w-1/10 px-4 py-2 text-sm font-medium">Nro Doc</th>
+                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Pasajero</th>
                                 <th class="w-1/10 px-4 py-2 text-sm font-medium">Tarifa</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Tipo Pax</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Categoria </th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Clase </th>
+                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Servicio </th>
+                                <th class="w-1/10 px-4 py-2 text-sm font-medium">S/Pasajero</th>
+                                <th class="w-1/10 px-4 py-2 text-sm font-medium">S/Clase </th>
                                 <th class="w-1/10 px-4 py-2 text-sm font-medium">Acciones </th>
                             </tr>
                         </thead>
@@ -54,7 +60,18 @@
                                 </td>
                                 <td class="px-4 py-2 text-sm">
                                     <input v-model="item.documento_numero" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                </td>
+                                
+                                <td class="px-4 py-2 text-sm">
+                                    <select v-model="item.documento_tipo_id"
+                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <option disabled value="">-- Selecciona una opción --</option>
+                                        <option v-for="option in ListaTipoPasajero" :key="option.value"
+                                            :value="option.value">
+                                            {{ option.label }}
+                                        </option>
+                                    </select>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
                                     <input v-model="item.apellido_materno" type="text" required="true"
@@ -71,10 +88,11 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.clase_id"
+                                    <select v-model="item.documento_tipo_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoDocumento" :key="option.value"
+                                            :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -83,7 +101,7 @@
                                     <select v-model="item.clase_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                        <option v-for="option in Lista_tipo_clase" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -125,25 +143,15 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
-        ListaTipoDocumento: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoPasajero: {
-            type: Object,
-            required: true,
-        },
-        ListaCategoria: {
-            type: Object,
-            required: true,
-        },
-        SelectValueCategoria: {
+        Titulo: {
             type: String,
             required: true,
         },
-        Titulo: {
+        SelectValueCategoria: {
             type: String,
             required: true,
         },
@@ -155,12 +163,17 @@
             type: Array,
             required: true
         },
+        Lista_servicio_x_dia: {
+            type: Array,
+            required: true,
+        },
     })
 
-    const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-    // const Pais = ref({ ...props.ListaPais });
-    // const TipoPax = ref({ ...props.ListaTipoPax });
-    // const Clase = ref({ ...props.ListaClase });
+    const nroDias = ref(props.Lista_servicio_x_dia);
+    const ListaCategoria = ref({ ...categoriesStore.globals.proveedor_categories });
+    const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
+    const ListaTipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const Lista_tipo_clase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const Clase = ref([
         { value: '1', label: 'PEND' },
