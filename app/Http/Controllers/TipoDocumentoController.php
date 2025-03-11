@@ -19,6 +19,12 @@ class TipoDocumentoController extends Controller
         //return response()->json( ['tipodocumento' => $tipodocumento]);
     }
 
+    public function selectOptions()
+    {
+        $categories = TipoDocumento::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

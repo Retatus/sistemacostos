@@ -18,6 +18,12 @@ class ProveedorCategoriaController extends Controller
         //return response()->json( ['proveedorcategoria' => $proveedorcategoria]);
     }
 
+    public function selectOptions()
+    {
+        $categories = ProveedorCategoria::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

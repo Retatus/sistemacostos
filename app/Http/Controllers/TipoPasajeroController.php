@@ -18,6 +18,12 @@ class TipoPasajeroController extends Controller
         //return response()->json( ['tipopasajero' => $tipopasajero]);
     }
 
+    public function selectOptions()
+    {
+        $categories = TipoPasajero::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

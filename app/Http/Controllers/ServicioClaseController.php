@@ -18,6 +18,12 @@ class ServicioClaseController extends Controller
         //return response()->json( ['servicioclase' => $servicioclase]);
     }
 
+    public function selectOptions()
+    {
+        $categories = ServicioClase::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

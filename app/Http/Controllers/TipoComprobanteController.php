@@ -18,6 +18,12 @@ class TipoComprobanteController extends Controller
         //return response()->json( ['tipocomprobante' => $tipocomprobante]);
     }
 
+    public function selectOptions()
+    {
+        $categories = TipoComprobante::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
