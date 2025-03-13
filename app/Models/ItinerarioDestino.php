@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ItinerarioDestino extends Model
 {
     use HasFactory;    
+    
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = ['nro_dia', 'itinerario_id', 'destino_turistico_id', 'nombre', 'descripcion', 'observacion', 'estado_activo'];
   

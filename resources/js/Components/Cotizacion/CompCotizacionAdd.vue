@@ -298,6 +298,7 @@ const cotizacion = ref({
 
     pasajeros_detalle: [],
     servicios_detalle: [],
+    pasajero_servicio: [],
 });
 
 const pasajerosDetalle = ref({
@@ -312,15 +313,27 @@ const pasajerosDetalle = ref({
     clase_id: '',
 });
 
+const pasajeroServicio = ref({
+    nombre: '',
+    apellido_paterno: '',
+    apellido_materno: '',
+    documento_tipo_id: '',
+    documento_numero: '',
+    tipo_pasajero_id: '',
+    tarifa: 0,
+    servicio_id: '',
+    servicio_tipo_pasajero_id: '',
+    servicio_clase_id: '',    
+});
+
 const numeroAdultos = ref(0);
 const numeroNinos = ref(0);
 const numeroEstudiantes = ref(0);
 
 const errorFecha = ref("");
 const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
-console.log('antessssssssss ', cotizacion.value.servicios_detalle.length);
-console.log('despuessssssss ', [].length);
-const listaServicioDetalle = ref([cotizacion.value.servicios_detalle]);
+const listaServicioDetalle = ref([...cotizacion.value.servicios_detalle]);
+const destinoTuristicoDetalleServicio = ref([]);
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
 
 const servicioXDia = ref([]);
@@ -349,8 +362,10 @@ async function ListaCategoriaProveedor() {
         }     
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);  
         if (response.status === 200) {
-            listaServicioDetalle.value = calcularTotalesPorCategoria(response.data);   
-            cotizacion.value.servicios_detalle = calcularTotalesPorCategoria(response.data);  
+            console.log("se recupera desde controller", response.data);
+            listaServicioDetalle.value = calcularTotalesPorCategoria(response.data); 
+            destinoTuristicoDetalleServicio.value = response.data.destino_turistico_detalle;
+            agregarPasajeroServicio();  
             calcularVenta();
         }               
     } catch (error) {
@@ -377,7 +392,7 @@ function calcularTotalesPorCategoria(destino) {
             resultado[categoriaId].cantidad += 1;
         });
     });
-    
+
 
     // Transformar el array original
     const datosTransformados = destino.destino_turistico_detalle.map(item => {
@@ -387,7 +402,6 @@ function calcularTotalesPorCategoria(destino) {
         if (itemLimpio.destino_turistico_detalle_servicio) {
             itemLimpio.destino_turistico_detalle_servicio = itemLimpio.destino_turistico_detalle_servicio.map(servicio => limpiarObjeto(servicio));
         }
-
         return itemLimpio;
     });
 
@@ -399,10 +413,8 @@ function calcularTotalesPorCategoria(destino) {
 // Función para eliminar propiedades no deseadas
 const limpiarObjeto = (objeto) => {
     const { 
-        created_at, updated_at, estado_activo, descripcion, observacion, 
-        nro_orden, monto, id, itinerario_id, destino_turistico_id,
-        servicio_id,itinerario_destino_id, nombre,
-        ...rest 
+        estado_activo, descripcion, observacion, nro_orden, monto, id, itinerario_id, 
+        destino_turistico_id, servicio_id,itinerario_destino_id, nombre, ...rest 
     } = objeto;
     return rest;
 };
@@ -541,6 +553,58 @@ function agregarPasajero(tipoPasajero) {
     };
 }
 
+function agregarPasajeroServicio(){
+    if (destinoTuristicoDetalleServicio.value.length > 0 && pasajeros.value.length > 0) {
+        const jsonServicio = destinoTuristicoDetalleServicio.value;
+        jsonServicio.forEach((jsonDetalleServicio) => {
+            jsonDetalleServicio.destino_turistico_detalle_servicio.forEach((element) => { 
+                console.log(`ID: ${element.monto}, Nombre: ${element.servicio_id}`);
+                pasajeroServicio.value.tarifa = element.monto;
+                pasajeroServicio.value.servicio_id = element.servicio_id;
+                pasajeroServicio.value.servicio_tipo_pasajero_id = 1;
+                pasajeroServicio.value.servicio_clase_id = 1;
+
+                const jsonPasajero = pasajeros.value;
+                jsonPasajero.forEach((pasajero) => {
+                    console.log(`ID: ${pasajero.nombre}, Nombre: ${pasajero.apellido_paterno}`);
+                    pasajeroServicio.value.nombre = pasajero.nombre;
+                    pasajeroServicio.value.apellido_paterno = pasajero.apellido_paterno;
+                    pasajeroServicio.value.apellido_materno = pasajero.apellido_materno;
+                    pasajeroServicio.value.documento_tipo_id = pasajero.documento_tipo_id;
+                    pasajeroServicio.value.documento_numero = pasajero.documento_numero;
+                    pasajeroServicio.value.tipo_pasajero_id = pasajero.tipo_pasajero_id;
+
+                    cotizacion.value.pasajero_servicio.push({ ...pasajeroServicio.value });
+                    pasajeroServicio.value = {
+                        nombre: '',    
+                        apellido_paterno: '',
+                        apellido_materno: '',
+                        documento_tipo_id: '',
+                        documento_numero: '',
+                        tipo_pasajero_id: '',
+                        tarifa: 0,
+                        servicio_id: '',
+                        servicio_tipo_pasajero_id: '',
+                        servicio_clase_id: '',  
+                    }
+                });                
+            });
+        });
+    }    
+    else{
+        alert("Verificar servicios y pasajeros");
+    }
+}
+
+const eliminarPasajero = (tipoPasajero) => {
+    const index = cotizacion.value.pasajeros_detalle.findIndex(
+        (pasajero) => pasajero.tipo_pasajero_id === tipoPasajero
+    );
+    if (index >= 0) {
+        cotizacion.value.pasajeros_detalle.splice(index, 1);
+    }
+}
+
 async function submitDestinoTuristico() {
     try {
         const response = await axios.post(route('destino_turistico.store'), cotizacion.value);
@@ -565,7 +629,6 @@ async function submitDestinoTuristico() {
     } catch (err) {
         console.error('Error al registrar el cotizacion:', err);
         const errorMessage = err.response?.data?.message || 'Ocurrió un error inesperado';
-
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -577,13 +640,8 @@ async function submitDestinoTuristico() {
         error.value = errorMessage;
     }
 }
-
-
-
 </script>
 
 <style scoped>
-
-
 
 </style>

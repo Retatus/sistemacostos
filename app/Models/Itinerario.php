@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Itinerario extends Model
 {
-    use HasFactory;    
+    use HasFactory;  
+    
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = ['nombre', 'descripcion', 'duracion', 'estado_activo'];
 
