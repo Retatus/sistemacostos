@@ -314,20 +314,6 @@ const pasajerosDetalle = ref({
     clase_id: '',
 });
 
-const pasajeroServicio = ref({
-    nombre: '',
-    apellido_paterno: '',
-    apellido_materno: '',
-    documento_tipo_id: '',
-    documento_numero: '',
-    tipo_pasajero_id: '',
-    tarifa: 0,
-    servicio_id: '',
-    servicio_tipo_pasajero_id: '',
-    servicio_clase_id: '',    
-});
-
-
 //const ListaPasajerosTemp = reactive([{ id: 1, name: 'Juan' },{ id: 2, name: 'María' }]);
 const ListaPasajerosTemp = reactive([...cotizacion.value.pasajeros_detalle]);
 // const ListaServiciosTemp = ([...cotizacion.value.servicios_detalle]);
@@ -341,28 +327,28 @@ watch(() => cotizacion.value.pasajeros_detalle, (newVal) => {
     ListaPasajerosTemp.splice(0, ListaPasajerosTemp.length, ...newVal);
 }, { deep: true });
 
-
-
 const ListaServicioPasajeroTemp = reactive([]);
 
 function agregarServicioPasajeroTemp() {    
     const jsonServicio = destinoTuristicoDetalleServicio.value;
     jsonServicio.forEach((servicio) => {
-        console.log("dia ", servicio.nro_dia);
+        //console.log("dia ", servicio.nro_dia);
         const servicioXdia = {
             dia : servicio.nro_dia,
             detalle : []
         }
         servicioXdia.dia = servicio.nro_dia;
-        servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
-            console.log("orden ", servicioDetalle.nro_orden);
-            ListaPasajerosTemp.forEach(pasajeroTemp => {
-                const nuevoServicioPasajeroTemp = {    
-                    pasajeroTemp,
-                    servicioDetalle
-                };
-                servicioXdia.detalle.push(nuevoServicioPasajeroTemp);                
+        ListaPasajerosTemp.forEach(pasajero => {
+            //console.log("pasajero ", pasajero.nombre);
+            const pasajeroServicio = {    
+                pasajero,
+                pasajeroServicio: []
+            };
+            servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
+                //console.log("servicio ", servicioDetalle.observacion);
+                pasajeroServicio.pasajeroServicio.push(servicioDetalle);                               
             });
+            servicioXdia.detalle.push(pasajeroServicio);         
         });
         ListaServicioPasajeroTemp.push(servicioXdia);
     });
@@ -381,7 +367,6 @@ const minFechaFin = ref(cotizacion.value.fecha_inicio);
 const servicioXDia = ref([]);
 
 async function recuperarValorModal(valor) {
-    debugger
     showModalProveedor.value = false;
     cotizacion.value.proveedor_id = valor.id;
     cotizacion.value.proveedor_razon_social = valor.nombre;
@@ -407,7 +392,6 @@ async function ListaCategoriaProveedor() {
             console.log("se recupera desde controller", response.data);
             listaServicioDetalle.value = calcularTotalesPorCategoria(response.data); 
             destinoTuristicoDetalleServicio.value = response.data.destino_turistico_detalle;
-            //agregarPasajeroServicio(); 
             agregarServicioPasajeroTemp();
             calcularVenta();
         }               
@@ -418,7 +402,6 @@ async function ListaCategoriaProveedor() {
 
 function calcularTotalesPorCategoria(destino) {
     const resultado = {};
-
     destino.destino_turistico_detalle.forEach(detalle => {
         detalle.destino_turistico_detalle_servicio.forEach(servicio => {
             const categoriaId = servicio.proveedor_categoria_id;
@@ -435,7 +418,6 @@ function calcularTotalesPorCategoria(destino) {
             resultado[categoriaId].cantidad += 1;
         });
     });
-
 
     // Transformar el array original
     const datosTransformados = destino.destino_turistico_detalle.map(item => {
@@ -595,49 +577,6 @@ function agregarPasajero(tipoPasajero) {
         tipo_pasajero_id: '',
         clase_id: '',
     };
-}
-
-function agregarPasajeroServicio(){
-    if (destinoTuristicoDetalleServicio.value.length > 0 && pasajeros.value.length > 0) {
-        const jsonServicio = destinoTuristicoDetalleServicio.value;
-        jsonServicio.forEach((jsonDetalleServicio) => {
-            jsonDetalleServicio.destino_turistico_detalle_servicio.forEach((element) => { 
-                console.log(`ID: ${element.monto}, Nombre: ${element.servicio_id}`);
-                pasajeroServicio.value.tarifa = element.monto;
-                pasajeroServicio.value.servicio_id = element.servicio_id;
-                pasajeroServicio.value.servicio_tipo_pasajero_id = 1;
-                pasajeroServicio.value.servicio_clase_id = 1;
-
-                const jsonPasajero = pasajeros.value;
-                jsonPasajero.forEach((pasajero) => {
-                    console.log(`ID: ${pasajero.nombre}, Nombre: ${pasajero.apellido_paterno}`);
-                    pasajeroServicio.value.nombre = pasajero.nombre;
-                    pasajeroServicio.value.apellido_paterno = pasajero.apellido_paterno;
-                    pasajeroServicio.value.apellido_materno = pasajero.apellido_materno;
-                    pasajeroServicio.value.documento_tipo_id = pasajero.documento_tipo_id;
-                    pasajeroServicio.value.documento_numero = pasajero.documento_numero;
-                    pasajeroServicio.value.tipo_pasajero_id = pasajero.tipo_pasajero_id;
-
-                    cotizacion.value.pasajero_servicio.push({ ...pasajeroServicio.value });
-                    pasajeroServicio.value = {
-                        nombre: '',    
-                        apellido_paterno: '',
-                        apellido_materno: '',
-                        documento_tipo_id: '',
-                        documento_numero: '',
-                        tipo_pasajero_id: '',
-                        tarifa: 0,
-                        servicio_id: '',
-                        servicio_tipo_pasajero_id: '',
-                        servicio_clase_id: '',  
-                    }
-                });                
-            });
-        });
-    }    
-    else{
-        alert("Verificar servicios y pasajeros");
-    }
 }
 
 const eliminarPasajero = (tipoPasajero) => {

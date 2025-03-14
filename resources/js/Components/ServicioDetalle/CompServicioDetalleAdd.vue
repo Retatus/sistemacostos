@@ -97,13 +97,6 @@ const props = defineProps({
     },
   });
 
-  //import { reactive, computed } from 'vue';
-
-
-
-
-  const listaPasajeros = ref(...props.Lista_Pasajeros);
-  const existePasajeros = ref(false);
   const indice = ref(0);
   const isModalVisibleDetalle = ref(false);
   const isModalVisibleEdit = ref(false);
@@ -121,8 +114,6 @@ const props = defineProps({
     selectedValue_Categoria.value = props.Lista_servicio_detalle[index].categoria;
     selectedLabel.value = categoriesStore.globals.proveedor_categories.find(option => option.value === selectedValue_Categoria.value).label;
     isModalVisibleDetalle.value = true;
-    console.log("indice ", selectedValue_Categoria.value);
-    filterByCategoria(props.Lista_servicio_x_dia, 2, selectedValue_Categoria.value);
   }
 
   function closeModalDetalle() {
@@ -138,25 +129,6 @@ const props = defineProps({
     isModalVisibleEdit.value = false;
   }
 
-  function filterByCategoria(ListaServicio, dia, categoria) {
-    //return props.Lista_servicio_detalle.filter(item => item.categoria === categoria);
-
-    const resultadoFiltrado = ListaServicio
-    .filter(item => item.nro_dia === dia) // Filtrar por nro_dia = 1
-    .map(item => ({
-      ...item,
-      destino_turistico_detalle_servicio: item.destino_turistico_detalle_servicio
-        .filter(servicio => servicio.proveedor_categoria_id === categoria) // Filtrar por proveedor_categoria_id = 2
-    }))
-    .filter(item => item.destino_turistico_detalle_servicio.length > 0); // Eliminar elementos con array vacío
-
-    console.log("resultadoFiltrado", resultadoFiltrado);
-  }
-
-  watch(() => listaPasajeros.value, () => {
-    console.log("cambio pasajeros...");
-    existePasajeros.value = true;
-  });
 </script>
 
 
