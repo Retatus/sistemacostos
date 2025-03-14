@@ -324,32 +324,51 @@ const ListaPasajerosTemp = reactive([...cotizacion.value.pasajeros_detalle]);
 
 // Observar cambios en el store
 watch(() => cotizacion.value.pasajeros_detalle, (newVal) => {
+    console.log("nuevo pasajero ", newVal);
     ListaPasajerosTemp.splice(0, ListaPasajerosTemp.length, ...newVal);
+
 }, { deep: true });
+
+// Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
+const contador = computed(() => cotizacion.value.nro_pasajeros);
+
+// Observa cambios en `nro_pasajeros` y ejecuta `calcularVenta`
+watch(() => cotizacion.value.nro_pasajeros, (newValue) => {
+  console.log("Nuevo valor de nro_pasajeros:", newValue);
+  agregarServicioPasajeroTemp();
+  calcularVenta();
+});
+
 
 const ListaServicioPasajeroTemp = reactive([]);
 
 function agregarServicioPasajeroTemp() {    
+    if (ListaServicioPasajeroTemp.length > 0) {
+        ListaServicioPasajeroTemp.length = 0;
+        debugger
+        console.log("limpieza ",ListaServicioPasajeroTemp.length);
+    }
     const jsonServicio = destinoTuristicoDetalleServicio.value;
     jsonServicio.forEach((servicio) => {
-        //console.log("dia ", servicio.nro_dia);
+        console.log("dia ", servicio.nro_dia);
         const servicioXdia = {
             dia : servicio.nro_dia,
             detalle : []
         }
         servicioXdia.dia = servicio.nro_dia;
         ListaPasajerosTemp.forEach(pasajero => {
-            //console.log("pasajero ", pasajero.nombre);
+            console.log("pasajero ", pasajero.nombre);
             const pasajeroServicio = {    
                 pasajero,
                 pasajeroServicio: []
             };
             servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
-                //console.log("servicio ", servicioDetalle.observacion);
+                console.log("servicio ", servicioDetalle.observacion);
                 pasajeroServicio.pasajeroServicio.push(servicioDetalle);                               
             });
             servicioXdia.detalle.push(pasajeroServicio);         
         });
+
         ListaServicioPasajeroTemp.push(servicioXdia);
     });
 }
@@ -364,23 +383,11 @@ const listaServicioDetalle = ref([...cotizacion.value.servicios_detalle]);
 const destinoTuristicoDetalleServicio = ref([]);
 const minFechaFin = ref(cotizacion.value.fecha_inicio);
 
-const servicioXDia = ref([]);
-
 async function recuperarValorModal(valor) {
     showModalProveedor.value = false;
     cotizacion.value.proveedor_id = valor.id;
     cotizacion.value.proveedor_razon_social = valor.nombre;
 }
-
-// Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
-const contador = computed(() => cotizacion.value.nro_pasajeros);
-
-// Observa cambios en `nro_pasajeros` y ejecuta `calcularVenta`
-watch(() => cotizacion.value.nro_pasajeros, (newValue) => {
-  console.log("Nuevo valor de nro_pasajeros:", newValue);
-  calcularVenta();
-});
-
  
 async function ListaCategoriaProveedor() {
     try {     
@@ -389,8 +396,8 @@ async function ListaCategoriaProveedor() {
         }     
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);  
         if (response.status === 200) {
-            console.log("se recupera desde controller", response.data);
-            listaServicioDetalle.value = calcularTotalesPorCategoria(response.data); 
+            console.log("se recupera desde controller", response.data); 
+            calcularTotalesPorCategoria(response.data);
             destinoTuristicoDetalleServicio.value = response.data.destino_turistico_detalle;
             agregarServicioPasajeroTemp();
             calcularVenta();
@@ -419,30 +426,8 @@ function calcularTotalesPorCategoria(destino) {
         });
     });
 
-    // Transformar el array original
-    const datosTransformados = destino.destino_turistico_detalle.map(item => {
-        const itemLimpio = limpiarObjeto(item);
-
-        // Limpiar los objetos dentro de "destino_turistico_detalle_servicio"
-        if (itemLimpio.destino_turistico_detalle_servicio) {
-            itemLimpio.destino_turistico_detalle_servicio = itemLimpio.destino_turistico_detalle_servicio.map(servicio => limpiarObjeto(servicio));
-        }
-        return itemLimpio;
-    });
-
-    servicioXDia.value = datosTransformados;
-
-    return Object.values(resultado);
+    listaServicioDetalle.value = Object.values(resultado);
 }
-
-// Función para eliminar propiedades no deseadas
-const limpiarObjeto = (objeto) => {
-    const { 
-        estado_activo, descripcion, observacion, nro_orden, monto, id, itinerario_id, 
-        destino_turistico_id, servicio_id,itinerario_destino_id, nombre, ...rest 
-    } = objeto;
-    return rest;
-};
 
 // **Observar cambios en fecha_inicio**
 watch(() => cotizacion.value.fecha_inicio, (nuevaFechaInicio) => {
@@ -478,7 +463,7 @@ const manejarAccion = ({ accion, id }) => {
     agregarPasajero(tipo_pasajero);
   }else{
     eliminarPasajero(tipo_pasajero);
-  }
+  }  
 };
 
 const calcularDiferenciaDias = () => {
