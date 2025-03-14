@@ -147,7 +147,7 @@
                 <div class="col-span-6">
                     <ServicioDetalle
                         :Lista_servicio_detalle = "listaServicioDetalle" 
-                        :Lista_servicio_x_dia = "servicioXDia"
+                        :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
                         :Lista_Pasajeros = pasajeros                    
                         v-model="contador" />
                 </div>
@@ -216,7 +216,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, reactive, computed } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ContadorInput from '@/ComponentModal/ContadorInput.vue';
@@ -302,6 +302,7 @@ const cotizacion = ref({
 });
 
 const pasajerosDetalle = ref({
+    id: 0,
     nombre: '',    
     apellido_paterno: '',
     apellido_materno: '',
@@ -325,6 +326,47 @@ const pasajeroServicio = ref({
     servicio_tipo_pasajero_id: '',
     servicio_clase_id: '',    
 });
+
+
+//const ListaPasajerosTemp = reactive([{ id: 1, name: 'Juan' },{ id: 2, name: 'María' }]);
+const ListaPasajerosTemp = reactive([...cotizacion.value.pasajeros_detalle]);
+// const ListaServiciosTemp = ([...cotizacion.value.servicios_detalle]);
+// const ListaServiciosTemp = [
+//     { id: 'A', name: 'Servicio A' },
+//     { id: 'B', name: 'Servicio B' }
+// ];
+
+// Observar cambios en el store
+watch(() => cotizacion.value.pasajeros_detalle, (newVal) => {
+    ListaPasajerosTemp.splice(0, ListaPasajerosTemp.length, ...newVal);
+}, { deep: true });
+
+
+
+const ListaServicioPasajeroTemp = reactive([]);
+
+function agregarServicioPasajeroTemp() {    
+    const jsonServicio = destinoTuristicoDetalleServicio.value;
+    jsonServicio.forEach((servicio) => {
+        console.log("dia ", servicio.nro_dia);
+        const servicioXdia = {
+            dia : servicio.nro_dia,
+            detalle : []
+        }
+        servicioXdia.dia = servicio.nro_dia;
+        servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
+            console.log("orden ", servicioDetalle.nro_orden);
+            ListaPasajerosTemp.forEach(pasajeroTemp => {
+                const nuevoServicioPasajeroTemp = {    
+                    pasajeroTemp,
+                    servicioDetalle
+                };
+                servicioXdia.detalle.push(nuevoServicioPasajeroTemp);                
+            });
+        });
+        ListaServicioPasajeroTemp.push(servicioXdia);
+    });
+}
 
 const numeroAdultos = ref(0);
 const numeroNinos = ref(0);
@@ -365,7 +407,8 @@ async function ListaCategoriaProveedor() {
             console.log("se recupera desde controller", response.data);
             listaServicioDetalle.value = calcularTotalesPorCategoria(response.data); 
             destinoTuristicoDetalleServicio.value = response.data.destino_turistico_detalle;
-            agregarPasajeroServicio();  
+            //agregarPasajeroServicio(); 
+            agregarServicioPasajeroTemp();
             calcularVenta();
         }               
     } catch (error) {
@@ -541,6 +584,7 @@ function agregarPasajero(tipoPasajero) {
     pasajerosDetalle.value.tipo_pasajero_id = tipoPasajero;
     cotizacion.value.pasajeros_detalle.push({ ...pasajerosDetalle.value });
     pasajerosDetalle.value = {
+        id: pasajerosDetalle.value.tipo_pasajero_id.length,
         nombre: '',    
         apellido_paterno: '',
         apellido_materno: '',
