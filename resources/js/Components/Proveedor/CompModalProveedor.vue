@@ -97,7 +97,8 @@ const personas = ref({
     tipo_documento_id: '',
     tipo_comprobante: 1,//otros
     tipo_sunat: 1,
-    proveedor_categoria_id: 11,//cliente
+    proveedor_categoria_id: 0,//cliente
+    escliente: 1,
     estado_activo: 1,
 });
 

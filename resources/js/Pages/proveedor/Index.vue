@@ -6,6 +6,8 @@
     import { router } from '@inertiajs/vue3';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
     
     const Page = usePage();
     const Paginate = ref(Page.props.proveedors);
@@ -18,27 +20,31 @@
 
     console.log(ProveedorCategorias);
 
-    const tiposDocumento = ref([
-        { id: '00', nombre: 'OTROS' },
-        { id: '01', nombre: 'FACTURA' },
-        { id: '02', nombre: 'RECIBO POR HONORARIOS' },
-        { id: '03', nombre: 'BOLETA' },
+    const tiposDocumento = ref([...categoriesStore.globals.tipo_comprobantes]);
+    const tiposSunat = ref([...categoriesStore.globals.tipo_sunat]);
+
+    const esCliente = ref([
+        { id: '1', nombre: 'CLIENTE' }, 
+        { id: '0', nombre: 'PROVEEDOR' }
     ]);
 
-    const tiposSunat = ref([
-        { id: '2', nombre: 'AGENTE PERCEPCION' },
-        { id: '1', nombre: 'AGENTE PERCEPCION' }, 
-        { id: '0', nombre: 'AGENTE RETENCION' }
+    const estadoActivo = ref([
+        { id: '1', nombre: 'ACTIVO' }, 
+        { id: '0', nombre: 'DESACTIVO' }
     ]);
 
     const documentosConTipoTexto = computed(() => {
         return Proveedors.value.map((doc) => {
-            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.id == doc.tipo_comprobante);
-            const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.id == doc.tipo_sunat);
+            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.value == doc.tipo_comprobante);
+            const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.value == doc.tipo_sunat);
+            const escliente = esCliente.value.find((escliente) => escliente.id == doc.escliente);
+            const estadoactivo = estadoActivo.value.find((estadoactivo) => estadoactivo.id == doc.estado_activo);
             return {
             ...doc,
-            tipo_documento_nombre: tipoComprobante ? tipoComprobante.nombre : 'Desconocido',
-            tipo_sunat_nombre: tipoSunat ? tipoSunat.nombre : 'Desconocido',
+            tipo_documento_nombre: tipoComprobante ? tipoComprobante.label : 'Desconocido',
+            tipo_sunat_nombre: tipoSunat ? tipoSunat.label : 'Desconocido',
+            es_cliente: escliente ? escliente.nombre : 'Desconocido',
+            estado_activo: estadoactivo ? estadoactivo.nombre : 'Desconocido',
             };
         });
     });
@@ -186,6 +192,9 @@
                                         contacto
                                     </th>
                                     <th scope='col' className='px-6 py-3'>
+                                        cliente
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
                                         estado_activo
                                     </th>
                                     <th scope='col' className='px-6 py-3'>
@@ -218,6 +227,9 @@
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium'>
                                         {{ proveedor.contacto }}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium'>
+                                        {{ proveedor.es_cliente }}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium'>
                                         {{ proveedor.estado_activo }}

@@ -9,7 +9,7 @@ class proveedor extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['ruc', 'razon_social', 'direccion', 'tipo_comprobante', 'correo', 'tipo_sunat', 'contacto', 'estado_activo', 'proveedor_categoria_id'];
+    protected $fillable = ['ruc', 'razon_social', 'direccion', 'tipo_comprobante', 'correo', 'tipo_sunat', 'contacto', 'escliente', 'editado', 'estado_activo', 'proveedor_categoria_id'];
 
     public function categoria()
     {
