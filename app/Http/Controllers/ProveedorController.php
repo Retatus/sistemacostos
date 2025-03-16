@@ -8,13 +8,7 @@ use App\Models\Destino;
 use App\Models\DistribucionVenta;
 use App\Models\ProveedorCategoria;
 use App\Models\proveedor;
-use App\Models\Servicio;
-use App\Models\ServicioClase;
 use App\Models\ServicioDetalle;
-use App\Models\TipoComprobante;
-use App\Models\TipoPasajero;
-use App\Models\TipoSunat;
-use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ProveedorController extends Controller
@@ -91,29 +85,12 @@ class ProveedorController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
-        $formattedComprobante = TipoComprobante::getFormattedForDropdown();
-        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
-        $formattedCostos = Costo::getFormattedForDropdown();
-        $formattedDestinos = Destino::getFormattedForDropdown();
-        $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+    {       
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown();
-        $formattedTipoPasajero = TipoPasajero::getFormattedForDropdown();
-        $formattedUbicacion = Ubicacion::getFormattedForDropdown();
+        
         return Inertia::render('proveedor/CreateProveedor', 
         [
-            'proveedorcategorias' => $formattedCategorias,
-            'ListaTipoComprobante' => $formattedComprobante,
-            'ListaTipoSunat' => $formattedTipoSunat,
-            'categoriaCostos' => $formattedCostos,
-            'categoriaDestinos' => $formattedDestinos,
-            'categoriaDistribuciones' => $formattedDistribuciones,
-            'ListaServicio_clase' => $formattedServicioClase,
-            'ListaServicio_detalle' => $formattedServicioDetalle,
-            'ListaTipoPasajero' => $formattedTipoPasajero,
-            'ListaUbicacion' => $formattedUbicacion
+            'ListaServicioDetalle' => $formattedServicioDetalle
         ]); //compact('proveedorcategorias'));
     }
 
@@ -164,27 +141,13 @@ class ProveedorController extends Controller
      */
     public function edit(proveedor $proveedor)
     {
-        $servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
-        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
-        $formattedComprobante = TipoComprobante::getFormattedForDropdown();
-        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
-        $formattedCostos = Costo::getFormattedForDropdown();
-        $formattedDestinos = Destino::getFormattedForDropdown();
-        $formattedDistribuciones = DistribucionVenta::getFormattedForDropdown();
-        $formattedServicioClase = ServicioClase::getFormattedForDropdown();
+      //$servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
+        $proveedor = proveedor::with('servicios.precios')->find($proveedor->id);
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown($parametro = null);
         return Inertia::render('proveedor/EditProveedor',
         [
-            'proveedor_edit' => $proveedor,
-            'servicio_edit' => $servicio,
-            'proveedorcategorias' => $formattedCategorias,
-            'ListaTipoComprobante' => $formattedComprobante,
-            'ListaTipoSunat' => $formattedTipoSunat,
-            'categoriaCostos' => $formattedCostos,
-            'categoriaDestinos' => $formattedDestinos,
-            'categoriaDistribuciones' => $formattedDistribuciones,
-            'ListaServicio_clase' => $formattedServicioClase,
-            'ListaServicio_detalle' => $formattedServicioDetalle
+            'Proveedor' => $proveedor,
+            'ListaServicioDetalle' => $formattedServicioDetalle
         ]); //compact('proveedorcategorias'));
     }
 

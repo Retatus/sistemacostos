@@ -10,6 +10,8 @@ class Servicio extends Model
 {
     use HasFactory;    
 
+    protected $hidden = ['created_at', 'updated_at'];
+    
     protected $fillable = ['proveedor_id', 'servicio_detalle_id', 'ubicacion_id', 'estado_activo'];
     
     public function proveedor()

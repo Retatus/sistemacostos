@@ -5,38 +5,16 @@
     import FormularioProveedorEdit from '@/Components/Proveedor/CompProveedorEdit.vue';
 
     const props = defineProps({
-        proveedor_edit: {
+        Proveedor: {
             type: Object, 
             required: true
         },
-        servicio_edit: {
-            type: Object, 
-            required: true
-        },
-        proveedorcategorias: {
-            type: Object, 
-            required: true
-        },
-        ListaTipoComprobante: {
-            type: Object, 
-            required: true
-        },
-        ListaTipoSunat: {
-            type: Object, 
-            required: true
-        },
-        ListaServicio_clase: {
-          type: Object, 
-          required: true
-        } ,
-        ListaServicio_detalle: {
+        ListaServicioDetalle: {
             type: Object, 
             required: true
         } 
     })
    
-    //console.log("que fue" + props);
-    //console.log(props.proveedor_edit);
 </script>
 
 <template>
@@ -55,13 +33,8 @@
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <FormularioProveedorEdit  
-                        :proveedor_edit="proveedor_edit"
-                        :servicio_edit="servicio_edit"
-                        :proveedorcategorias="proveedorcategorias" 
-                        :ListaTipoComprobante="ListaTipoComprobante"
-                        :ListaTipoSunat="ListaTipoSunat"
-                        :ListaServicio_clase="ListaServicio_clase" 
-                        :ListaServicio_detalle="ListaServicio_detalle"  
+                        :Proveedor="Proveedor"
+                        :ListaServicioDetalle="ListaServicioDetalle"  
                     />
                 </div>
             </div>

@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in items" :key="index" className="bg-white border-b text-gray-900">
+          <tr v-for="(item, index) in Servicio" :key="index" className="bg-white border-b text-gray-900">
             <td class="px-4 py-2 text-sm">
                 <input v-model="item.monto" type="number" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
             </td>
@@ -26,7 +26,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaServicio_clase" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaClases" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -34,7 +34,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.servicio_detalle_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaServicio_detalle" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaServicioDetalle" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -42,7 +42,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.ubicacion_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaUbicacion" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaUbicaciones" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -50,7 +50,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in ListaTipoPasajero" :key="option.value" :value="option.value">
+                  <option v-for="option in ListaTipoPasajeros" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -72,34 +72,30 @@
     </div>
   </template>
 <script setup>
+  import { ref } from 'vue';
+  import { useCategoriesStore } from '@/Stores/categories';
+  const categoriesStore = useCategoriesStore();
+
     const props = defineProps({
-      items: {
+      Servicio: {
         type: Array,
         required: true,
       },
-      ListaServicio_clase: {
+      ListaServicioDetalle: {
           type: Object, 
           required: true
-      } ,
-      ListaServicio_detalle: {
-          type: Object, 
-          required: true
-      },
-      ListaTipoPasajero: {
-          type: Object, 
-          required: true
-      },
-      ListaUbicacion: {
-          type: Object, 
-          required: true
-      }   
+      }
     })
+
+    const ListaClases = ref({ ...categoriesStore.globals.servicio_clases });
+    const ListaUbicaciones = ref({ ...categoriesStore.globals.ubicaciones });
+    const ListaTipoPasajeros = ref({ ...categoriesStore.globals.tipo_pasajeros });
 
     const emit = defineEmits(['update']); // Define el evento que vas a emitir
     
     const removeItem = (index) => {
-      props.items.splice(index, 1);
-      emit('update', props.items);
+      props.Servicio.splice(index, 1);
+      emit('update', props.Servicio);
     }   
       
 </script>

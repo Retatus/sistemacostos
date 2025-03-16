@@ -10,6 +10,8 @@ class Precio extends Model
 {
     use HasFactory;    
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = ['anio', 'moneda', 'monto', 'tipo_pasajero_id', 'servicio_id', 'servicio_clase_id', 'estado_activo'];
 
     public function servicio()
