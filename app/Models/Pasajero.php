@@ -35,4 +35,16 @@ class Pasajero extends Model
     {
         return $this->belongsTo(cotizacion::class, 'cotizacion_id', 'id');
     }
+
+    public static function getFormattedForDropdown()
+    {
+        return self::orderBy('id', 'desc')
+            ->get()
+            ->map(function ($pasajero) {
+                return [
+                    'value' => $pasajero->id,
+                    'label' => $pasajero->nombre.' '.$pasajero->apellido_paterno.' '.$pasajero->apellido_materno,
+                ];
+            });
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\ItinerarioServicioController;
 use App\Http\Controllers\MercadoController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\PasajeroController;
+use App\Http\Controllers\PasajeroServicioController;
 use App\Http\Controllers\PrecioController;
 use App\Http\Controllers\ServicioClaseController;
 use App\Http\Controllers\ServicioDetalleController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\TipoPasajeroController;
 use App\Http\Controllers\TipoSunatController;
 use App\Http\Controllers\UbicacionController;
 use App\Models\ItinerarioDestino;
+use App\Models\PasajeroServicio;
 use Illuminate\Support\Facades\Route;
 
 // No autenticadas
@@ -253,4 +255,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/mercado/{mercado}/edit', [MercadoController::class, 'edit'])->name('mercado.edit');
     Route::patch('/dashboard/mercado/{mercado}/update', [MercadoController::class, 'update'])->name('mercado.update');
     Route::delete('/dashboard/mercado/{mercado}/destroy', [MercadoController::class, 'destroy'])->name('mercado.destroy');
+
+    Route::get('/dashboard/pasajero_servicio', [PasajeroServicioController::class, 'index'])->name('pasajero_servicio');
+    Route::get('/dashboard/pasajero_servicio/create', [PasajeroServicioController::class, 'create'])->name('pasajero_servicio.create');
+    Route::post('/dashboard/pasajero_servicio', [PasajeroServicioController::class, 'store'])->name('pasajero_servicio.store');
+    Route::get('/dashboard/pasajero_servicio/{pasajero_servicio}/edit', [PasajeroServicioController::class, 'edit'])->name('pasajero_servicio.edit');
+    Route::patch('/dashboard/pasajero_servicio/{pasajero_servicio}/update', [PasajeroServicioController::class, 'update'])->name('pasajero_servicio.update');
+    Route::delete('/dashboard/pasajero_servicio/{pasajero_servicio}/destroy', [PasajeroServicioController::class, 'destroy'])->name('pasajero_servicio.destroy');
 });

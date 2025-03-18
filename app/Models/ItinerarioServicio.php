@@ -12,4 +12,16 @@ class ItinerarioServicio extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = ['nro_orden', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'monto', 'estado_activo'];
+
+    public static function getFormattedForDropdown()
+    {
+        return self::orderBy('id', 'desc')
+            ->get()
+            ->map(function ($itinerarioServicio) {
+                return [
+                    'value' => $itinerarioServicio->id,
+                    'label' => $itinerarioServicio->observacion,
+                ];
+            });
+    }
 }
