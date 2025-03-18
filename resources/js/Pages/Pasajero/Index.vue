@@ -51,6 +51,9 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
+                                        file nro
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -83,7 +86,6 @@
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
                                     </th> 
-
                                     <th scope="col" className="px-6 py-3">
                                         Acciones
                                     </th>
@@ -91,6 +93,9 @@
                             </thead>
                             <tbody>
                                 <tr v-for="pasajero in Pasajeros" className="bg-white border-b ">
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajero.cotizacion.file_nro}}
+                                    </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.nombre}}
                                     </td> 

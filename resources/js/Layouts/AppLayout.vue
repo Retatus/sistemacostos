@@ -71,10 +71,10 @@ const logout = () => {
                                             Proveedores
                                         </Link>
                                         <Link :href="route('proveedor_categoria')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                            Proveedor categoria
+                                            Categoria
                                         </Link>
                                         <Link :href="route('servicio_clase')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                            Servicio clase
+                                            Clase
                                         </Link>
                                         <Link :href="route('serviciodetalle')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Servicio detalle
@@ -100,6 +100,9 @@ const logout = () => {
                                     <div class="hidden group-hover:block absolute bg-white border border-gray-200 rounded-md shadow-lg mt-2 z-10">
                                         <Link :href="route('cotizacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Cotizaciones
+                                        </Link>
+                                        <Link :href="route('pasajero')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Pasajeros
                                         </Link>
                                     </div>
                                 </div>
@@ -133,6 +136,9 @@ const logout = () => {
                                     </Link>
                                     <Link :href="route('pais')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Pais
+                                    </Link>
+                                    <Link :href="route('pais')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Idioma
                                     </Link>
                                     <Link :href="route('ubicacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Ubicacion

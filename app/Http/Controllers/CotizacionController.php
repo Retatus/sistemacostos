@@ -9,6 +9,7 @@ use App\Models\Destino;
 use App\Models\DestinoTuristico;
 use App\Models\Pais;
 use App\Models\Pasajero;
+use App\Models\PasajeroServicio;
 use App\Models\ProveedorCategoria;
 use App\Models\ServicioClase;
 use App\Models\TipoComprobante;
@@ -100,14 +101,13 @@ class CotizacionController extends Controller
 
                     $pasajeroResponse = Pasajero::create($pasajero);
 
-                    $pasajero_servicio_detalle = $pasajero_detalle['servicio_detalle'] ?? [];
+                    $pasajero_servicio_detalle = $servicio['servicio_detalle'] ?? [];
 
                     foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // ServicioDetalle
-                        $servicio_detalle['pasajero_id'] = $pasajeroResponse->id;
-                        $servicio_detalle['itinerario_servicio_id'] = $servicio_detalle['id'];
-                        $servicio_detalle['cotizacion_id'] = $cotizacionResponse->id;
-                        $servicio_detalle['servicio_id'] = $servicio['id'];
-                        //$servicio_detalle_response = ServicioDetalle::create($servicio_detalle);
+                        $pasajerocotizacion['pasajero_id'] = $pasajeroResponse->id;
+                        $pasajerocotizacion['itinerario_servicio_id'] = $servicio_detalle['id'];
+                                          
+                        $pasajero_servicio_response = PasajeroServicio::create($pasajerocotizacion);
                     }
                 }
             }

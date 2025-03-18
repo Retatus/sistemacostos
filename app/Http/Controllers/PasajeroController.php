@@ -18,6 +18,7 @@ class PasajeroController extends Controller
         //$pasajero = Pasajero::all();
         //$pasajeros = Pasajero::orderBy('id', 'desc')->get();
         $pasajeros = Pasajero::with([
+            'cotizacion:id,file_nro',
             'tipo_docuemento:id,nombre',
             'pais:id,nombre',
             'tipo_pasajero:id,nombre',
