@@ -26,15 +26,13 @@
                                 <th class="w-1/6 px-4 py-2 text-sm font-medium">Estatus</th>
                                 </tr>
                             </thead>
-                        <tbody>
-                            <tr v-for="detalle in diaData.detalle" :key="detalle.pasajero.id" className="bg-white border-b text-gray-900">
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="detalle.pasajero.nombre" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
+                            <tbody>
+                                <tr v-for="detalle in diaData.detalle" :key="detalle.pasajero.id" className="bg-white border-b text-gray-900">
                                     <td class="px-4 py-2 text-sm">
-                                        <select v-model="detalle.pasajero.tipo_pasajero_id"
-                                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <input v-model="detalle.pasajero.nombre" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select v-model="detalle.pasajero.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option disabled value="">-- Selecciona una opción --</option>
                                             <option v-for="option in TipoPasajero" :key="option.value"
                                                 :value="option.value">
@@ -42,26 +40,25 @@
                                             </option>
                                         </select>
                                     </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select @change="handleSelectChange($event.target.value)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="servicio in detalle.pasajeroServicio.filter(s => s.proveedor_categoria_id == SelectValueCategoria)" 
-                                                :key="servicio.id" :value="servicio.monto">
-                                            {{ servicio.observacion }} - ${{ servicio.monto }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="detalle.pasajero.clase_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select @change="handleSelectChange($event.target.value)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option v-for="servicio in detalle.servicio_detalle.filter(s => s.proveedor_categoria_id == SelectValueCategoria)" 
+                                                    :key="servicio.id" :value="servicio.monto">
+                                                {{ servicio.observacion }} - ${{ servicio.monto }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select v-model="detalle.pasajero.clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                                {{ option.label }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -113,7 +110,7 @@
 
     const Clase = ref([
         { value: '1', label: 'PROVISIONAL' },
-        { value: '2', label: 'CONFORMADO' },
+        { value: '2', label: 'CONFIRMADO' },
     ]);
 
     const emit = defineEmits(['close', 'update']);

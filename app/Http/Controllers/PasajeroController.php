@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\Pasajero\StoreRequest;
+use App\Models\Cotizacion;
 use App\Models\Pasajero;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 class PasajeroController extends Controller
 {
@@ -13,7 +16,17 @@ class PasajeroController extends Controller
     public function index()
     {
         //$pasajero = Pasajero::all();
-        $pasajeros = Pasajero::orderBy('id', 'desc')->get();
+        //$pasajeros = Pasajero::orderBy('id', 'desc')->get();
+        $pasajeros = Pasajero::with([
+            'tipo_docuemento:id,nombre',
+            'pais:id,nombre',
+            'tipo_pasajero:id,nombre',
+            'tipo_clase:id,nombre',
+            'cotizacion:id,file_nro',
+        ])
+        ->where('estado_activo', 1)
+        ->orderBy('id', 'desc')
+        ->paginate(10);
         return Inertia::render('Pasajero/Index', compact('pasajeros'));
         //return response()->json( ['pasajero' => $pasajero]);
     }
@@ -23,7 +36,11 @@ class PasajeroController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Pasajero/Create');
+        $formattedCotizaciones = Cotizacion::getFormattedForDropdown();
+        return Inertia::render('Pasajero/Create', 
+        [
+            'ListaCotizaciones' => $formattedCotizaciones
+        ]);
     }
 
     /**
@@ -31,7 +48,13 @@ class PasajeroController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->except('documento_file');
+        if ($request->hasFile('documento_file')) {
+            $file = $request->file('documento_file');
+            $rutename = $file->store('documento_pasajero', ['disk' => 'public']);
+            $data['documento_file'] = $rutename;
+        }
+        //dd($data);
         Pasajero::create($data);
         return to_route('pasajero');
     }
@@ -49,7 +72,13 @@ class PasajeroController extends Controller
      */
     public function edit(Pasajero $pasajero)
     {
-        return Inertia::render('Pasajero/Edit', compact('pasajero'));
+        $formattedCotizaciones = Cotizacion::getFormattedForDropdown();
+        return Inertia::render('Pasajero/Edit', 
+        [
+            'ListaCotizaciones' => $formattedCotizaciones,
+            'pasajero' => $pasajero      
+        ]);
+        //return Inertia::render('Pasajero/Edit', compact('pasajero'));
     }
 
     /**
@@ -58,6 +87,19 @@ class PasajeroController extends Controller
     public function update(Request $request, Pasajero $pasajero)
     {
         $data = $request->all();
+
+        $request->except('documento_file'); // Exceptua algun campo antes de ser insertado en la base de datos 
+
+        if ($request->hasFile('documento_file'));{
+            $file = $request->file('documento_file');
+            $rutename = $file->store('documento_pasajero', ['disk' => 'public']);
+            $data['documento_file'] = $rutename;
+
+            if($pasajero->documento_file){
+                Storage::disk('public')->delete($pasajero->documento_file);
+            }
+        }
+
         $pasajero->update($data);
         return Inertia::render('Pasajero/Edit', compact('pasajero'));
     }
@@ -67,6 +109,9 @@ class PasajeroController extends Controller
      */
     public function destroy(Pasajero $pasajero)
     {
+        if($pasajero->documento_file){
+            Storage::disk('public')->delete($pasajero->documento_file);
+         }
         $pasajero->delete();
         return to_route('pasajero');
     }

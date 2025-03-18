@@ -122,6 +122,12 @@ const logout = () => {
                                     <Link :href="route('itinerario')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Itinerario
                                     </Link>
+                                    <Link :href="route('itinerario_destino')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Itinerario destino
+                                    </Link>
+                                    <Link :href="route('itinerario_servicio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Itinerario servicio
+                                    </Link>
                                     <Link :href="route('precio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Precio
                                     </Link>
@@ -130,8 +136,7 @@ const logout = () => {
                                     </Link>
                                     <Link :href="route('ubicacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Ubicacion
-                                    </Link>
-                                    
+                                    </Link>                                    
                                 </div>
                             </div>
                         </div>

@@ -11,16 +11,17 @@
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                             <tr class="bg-gray-100">
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Nombre</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">apellido_paterno</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">apellido_materno</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Tipo Doc</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Nro Doc</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Pais</th>
-                                <th class="w-3/12 px-4 py-2 text-sm font-medium">Adjunto</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Tipo Pax</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Clase </th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Acciones </th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nombre</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_paterno</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_materno</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Doc</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nro Doc</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Pais</th>
+                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Preview</th>
+                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Adjunto</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Pax</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Clase </th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Acciones </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,14 +63,18 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
+                                    <div v-if="item.urlPrevisualizacion">
+                                        <embed :src="item.urlPrevisualizacion" type="application/pdf" width="150px" height="100px" />
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 text-sm">
                                     <input type="file" hidden :id="'fileInput-' + index" @change="handleFileChange($event, index)" />
                                     <!-- Botón personalizado -->
                                     <div class="flex items-center space-x-2">
-                                        <input v-model="item.documento_file" type="text" required="true"
-                                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.documento_file" type="text" hidden required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.documento_file_name" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                         <label :for="'fileInput-' + index" class="custom-file-label">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
                                             </svg>
@@ -172,7 +177,20 @@
     const emit = defineEmits(['close', 'update']);
 
     const handleFileChange = (event, index) => {
-        props.ListaPasajeros[index].documento_file = event.target.files[0].name;
+        const file = event.target.files[0];       
+
+        if (!file) return;        
+
+        const formatosPermitidos = ["image/jpeg", "image/png", "application/pdf"];
+
+        if (!formatosPermitidos.includes(file.type)) {
+            alert("Solo se permiten archivos JPG, PNG y PDF");
+            return;
+        }
+
+        props.ListaPasajeros[index].documento_file_name = file.name;
+        props.ListaPasajeros[index].documento_file = file;
+        props.ListaPasajeros[index].urlPrevisualizacion = URL.createObjectURL(file);
     };
 
     function closeModal() {

@@ -22,13 +22,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-             "nombre" => 'required|min:3|max:25',
+            "nombre" => 'required|min:3|max:25',
             "apellido_paterno" => 'required|min:3|max:25',
             "apellido_materno" => 'required|min:3|max:25',
             "documento_tipo_id" => 'required',
             "documento_numero" => 'required|min:3|max:15',
             "pais_id" => 'required',
-            "documento_file" => 'required|min:3|max:225',
+            "documento_file" => 'nulleable|mimes:pdf,jpeg,jpg,png|max:2048',
             "tipo_pasajero_id" => 'required',
             "clase_id" => 'required',
             "cotizacion_id" => 'required',

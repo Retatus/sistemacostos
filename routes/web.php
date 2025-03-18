@@ -235,7 +235,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/pasajero/create', [PasajeroController::class, 'create'])->name('pasajero.create');
     Route::post('/dashboard/pasajero', [PasajeroController::class, 'store'])->name('pasajero.store');
     Route::get('/dashboard/pasajero/{pasajero}/edit', [PasajeroController::class, 'edit'])->name('pasajero.edit');
-    Route::patch('/dashboard/pasajero/{pasajero}/update', [PasajeroController::class, 'update'])->name('pasajero.update');
+    Route::post('/dashboard/pasajero/{pasajero}/update', [PasajeroController::class, 'update'])->name('pasajero.update');
     Route::delete('/dashboard/pasajero/{pasajero}/destroy', [PasajeroController::class, 'destroy'])->name('pasajero.destroy');
 
     Route::get('/dashboard/idioma', [IdiomaController::class, 'index'])->name('idioma');

@@ -6,7 +6,7 @@
     import { router } from '@inertiajs/vue3';
 
     const page = usePage();
-    const Pasajeros = ref(page.props.pasajeros);
+    const Pasajeros = ref(page.props.pasajeros.data);
     
     const onDeleteConfirm = (Pasajero) => {
         Swal.fire({
@@ -21,7 +21,7 @@
             if (result.isConfirmed) {
             router.delete(route('pasajero.destroy', Pasajero), {
                 onSuccess: (page) => {
-                Pasajeros.value = page.props.pasajeros;
+                Pasajeros.value = page.props.pasajeros.data;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
@@ -44,13 +44,13 @@
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                                                        <th scope='col' className='px-6 py-3'>
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -91,7 +91,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="pasajero in Pasajeros" className="bg-white border-b ">
-                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
@@ -100,27 +100,42 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.apellido_materno}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.documento_tipo_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajero.tipo_docuemento.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.documento_numero}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.pais_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{pasajero.documento_file}}
+                                        {{pasajero.pais.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        <img class="h-16" :src="`/storage/${pasajero.documento_file}`"/>
+                                    </td> 
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.tipo_pasajero_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajero.tipo_pasajero.nombre}}
+                                    </td> 
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.clase_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajero.tipo_clase.nombre}}
+                                    </td> 
+                                    <td  hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.cotizacion_id}}
                                     </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajero.cotizacion.file_nro}}
+                                    </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajero.estado_activo}}
                                     </td> 
