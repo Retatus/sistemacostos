@@ -3,14 +3,19 @@
         <form @submit.prevent="submitDestinoTuristico">
             <div class="grid grid-cols-6 gap-6 w-full p-5">
                 <!-- Primera fila -->
-                <div class="col-span-1">
+                <div hidden class="col-span-1">
                     <label for="" class="block text-sm font-medium text-gray-700">Cliente Id</label>
-                    <input v-model="cotizacion.proveedor_id" type="text" id="proveedor_id"
+                    <input v-model="Cotizacion.proveedor_id" type="text" id="proveedor_id"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente id">
+                </div>
+                <div class="col-span-1">
+                    <label for="" class="block text-sm font-medium text-gray-700">Cliente nro doc.</label>
+                    <input type="text" id="cliente_nro_doc"
+                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente nro doc.">
                 </div>
                 <div class="col-span-4">
                     <label for="proveedor_razon_social" class="block text-sm font-medium text-gray-700">Cliente nombre</label>
-                    <input v-model="cotizacion.proveedor_razon_social" type="text" id="proveedor_razon_social"
+                    <input v-model="Cotizacion.proveedor_razon_social" type="text" id="proveedor_razon_social"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente nombre">
                 </div>
                 <div class="col-span-1 ">
@@ -23,12 +28,12 @@
                 <!-- Segunda fila -->
                 <div class="col-span-1">
                     <label for="file_nro" class="block text-sm font-medium text-gray-700">Nro file</label>
-                    <input v-model="cotizacion.file_nro" disabled type="text" id="file_nro" required="true"
+                    <input v-model="Cotizacion.file_nro" disabled type="text" id="file_nro" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Nro file">
                 </div>
                 <div class="col-span-4">
                     <label for="file_nombre" class="block text-sm font-medium text-gray-700">Nombre de file</label>
-                    <input v-model="cotizacion.file_nombre" type="text" id="file_nombre"
+                    <input v-model="Cotizacion.file_nombre" type="text" id="file_nombre"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="Nombre de file">
                 </div>
@@ -42,22 +47,22 @@
                 <!-- Tercera fila -->
                 <div class="col-span-1">
                     <label for="comprobante_id" class="block text-sm font-medium text-gray-700">Tipo comprobante</label>
-                    <select v-model="cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                    <select v-model="Cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="comprobante_id">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in TipoComprobante" :key="option.value" :value="option.value">
+                        <option v-for="option in sTipoComprobante" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
                 <div class="col-span-1 ">
                     <label for="fecha" class=" text-sm font-medium text-gray-700">Fecha</label>
-                    <input v-model="cotizacion.fecha" disabled type="text" id="fecha"
+                    <input v-model="Cotizacion.fecha" disabled type="text" id="fecha"
                         class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese la Fecha">
                 </div>
                 <div class="col-span-1">
                     <label for="nro_pasajeros" class="block text-sm font-medium text-gray-700">Nro de Pax</label>
-                    <input v-model="cotizacion.nro_pasajeros" type="text" id="nro_pasajeros" required="true"
+                    <input v-model="Cotizacion.nro_pasajeros" type="text" id="nro_pasajeros" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Nro de Pax" readonly>
                 </div>
                 <div class="col-span-1">
@@ -75,28 +80,27 @@
                 <!-- Cuarta fila -->
                 <div class="col-span-1">
                     <label for="idioma" class="block text-sm font-medium text-gray-700">Idioma</label>
-                    <select v-model="cotizacion.idioma" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                    <select v-model="Cotizacion.idioma_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="idioma">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in Idioma" :key="option.value" :value="option.value">
+                        <option v-for="option in sIdioma" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
                 <div class="col-span-1">
                     <label for="mercado" class="block text-sm font-medium text-gray-700">Mercado</label>
-                    <select v-model="cotizacion.mercado" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                    <select v-model="Cotizacion.mercado_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="mercado">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in Mercado" :key="option.value" :value="option.value">
+                        <option v-for="option in sMercado" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
                 <div class="col-span-4 ">
-                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino
-                        Turistico</label>
-                    <select v-model="cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
+                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino Turistico</label>
+                    <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
@@ -114,29 +118,29 @@
                 </div>
                 <div class="col-span-1 ">
                     <label for="pais_id" class="block text-sm font-medium text-gray-700">Pais</label>
-                    <select v-model="cotizacion.pais_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                    <select v-model="Cotizacion.pais_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="pais_id">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in Pais" :key="option.value" :value="option.value">
+                        <option v-for="option in sPais" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
                 <div class="col-span-1 ">
-                    <Datepicker label="Fecha Inicio" v-model="cotizacion.fecha_inicio" />
+                    <Datepicker label="Fecha Inicio" v-model="Cotizacion.fecha_inicio" />
                 </div>
                 <div class="col-span-1">
-                    <Datepicker label="Fecha Fin" v-model="cotizacion.fecha_fin" />
+                    <Datepicker label="Fecha Fin" v-model="Cotizacion.fecha_fin" />
                 </div>
                 <div class="col-span-1">
                     <label for="nro_dias" class="block text-sm font-medium text-gray-700">Dias</label>
-                    <input disabled v-model="cotizacion.nro_dias" type="text" id="nro_dias" required="true"
+                    <input disabled v-model="Cotizacion.nro_dias" type="text" id="nro_dias" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Dias">
                 </div>
                 <div class="col-span-1">
                     <label for="estado_cotizacion" class="block text-sm font-medium text-gray-700">Estado
-                        cotizacion</label>
-                    <select v-model="cotizacion.estado_cotizacion"
+                        Cotizacion</label>
+                    <select v-model="Cotizacion.estado_cotizacion"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="estado_cotizacion">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in EstadoCotizacion" :key="option.value" :value="option.value">
@@ -156,32 +160,32 @@
                 <!-- Sexta fila -->
                 <div class="col-span-1">
                     <label for="costo_parcial" class="block text-sm font-medium text-gray-700">C. Parcial</label>
-                    <input v-model="cotizacion.costo_parcial" type="text" id="costo_parcial"
+                    <input v-model="Cotizacion.costo_parcial" type="text" id="costo_parcial"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="C. Parcial">
                 </div>
                 <div class="col-span-1 ">
                     <label for="descuento_estudiante" class=" text-sm font-medium text-gray-700">Desc.
                         Estudiante</label>
-                    <input v-model="cotizacion.descuento_estudiante" @input="(event) => handleInput(event, 'descuento_estudiante')" type="text"
+                    <input v-model="Cotizacion.descuento_estudiante" @input="(event) => handleInput(event, 'descuento_estudiante')" type="text"
                         id="descuento_estudiante" class="w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="Desc. Estudiante">
                 </div>
                 <div class="col-span-1">
                     <label for="descuento_ninio" class="block text-sm font-medium text-gray-700">Descuento Niño</label>
-                    <input v-model="cotizacion.descuento_ninio" @input="(event) => handleInput(event, 'descuento_ninio')" type="text" id="descuento_ninio"
+                    <input v-model="Cotizacion.descuento_ninio" @input="(event) => handleInput(event, 'descuento_ninio')" type="text" id="descuento_ninio"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="Descuento Niño">
                 </div>
                 <div class="col-span-1">
                     <label for="descuento_otro" class="block text-sm font-medium text-gray-700">Descuento Otro</label>
-                    <input v-model="cotizacion.descuento_otro" @input="(event) => handleInput(event, 'descuento_otro')" type="text" id="descuento_otro"
+                    <input v-model="Cotizacion.descuento_otro" @input="(event) => handleInput(event, 'descuento_otro')" type="text" id="descuento_otro"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
                         placeholder="Descuento Otro">
                 </div>
                 <div class="col-span-1">
                     <label for="costo_total" class="block text-sm font-medium text-gray-700">Costo Total</label>
-                    <input v-model="cotizacion.costo_total" type="text" id="costo_total" required="true"
+                    <input v-model="Cotizacion.costo_total" type="text" id="costo_total" required="true"
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Costo Total">
                 </div>
                 <div class="col-span-1">
@@ -202,12 +206,12 @@
     </div>
     <PasajeroModal
         :isModalVisible="showModal"
-        :ListaPasajeros = pasajeros
+        :ListaPasajeros = Cotizacion.Pasajeros
         :errorMessage="error"
         @close="showModal = false"
         @update= recalcularTotalPasajeros
     /> 
-    <ProveedorModal
+    <ClienteModal
         :isModalVisibleProveedor="showModalProveedor"
         :errorMessage="error"
         @close="showModalProveedor = false"
@@ -225,7 +229,7 @@ import InputError from '@/Components/InputError.vue';
 import Datepicker from '@/Components/Datepicker.vue'; // Importa el componente
 import ServicioDetalle from '@/Components/ServicioDetalle/CompServicioDetalleAdd.vue';
 import PasajeroModal from '@/Pages/Pasajero/CompModalPasajero.vue';
-import ProveedorModal from '@/Components/Proveedor/CompModalProveedor.vue';
+import ClienteModal from '@/Components/Proveedor/CompModalProveedor.vue';
 import { useCategoriesStore } from '@/Stores/categories';
 const categoriesStore = useCategoriesStore();
 
@@ -241,10 +245,10 @@ const props = defineProps({
     },
 });
 
-const TipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
-const Pais = ref([...categoriesStore.globals.pais]);
-const Idioma = ref([...categoriesStore.globals.idioma]);
-const Mercado = ref([...categoriesStore.globals.mercado]);
+const sTipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
+const sPais = ref([...categoriesStore.globals.pais]);
+const sIdioma = ref([...categoriesStore.globals.idioma]);
+const sMercado = ref([...categoriesStore.globals.mercado]);
 
 // Variables reactivas
 const error = ref('');
@@ -270,38 +274,38 @@ const estadoActivo = ref([
 ]);
 
 // Variables para el cotizacion y detalle temporal
-const cotizacion = ref({
+const Cotizacion = ref({
     proveedor_id: '',
     proveedor_razon_social: '',
     file_nro: Correlativo.value,
-    file_nombre: '',
+    file_nombre: '',    
     comprobante_id: '',
     fecha: fechaActual.value,
     nro_pasajeros: 0,
     nro_ninio: 0,
     nro_adulto: 0,
     nro_estudiante: 0,
-    idioma: '',
-    mercado: '',
+    idioma_id: '',
+    mercado_id: '',
     destino_turistico_id: '',
     pais_id: '',
     fecha_inicio: fechaActual.value,
     fecha_fin: fechaActual.value,
-    nro_dias: 0,
+    nro_dias: 1,
     estado_cotizacion: '',
     costo_parcial: 0,
     descuento_estudiante: 0,
     descuento_ninio: 0,
     descuento_otro: 0,
     costo_total: 0,
-    estado_activo: '',
+    estado_activo: 1,
 
-    pasajeros_detalle: [],
-    servicios_detalle: [],
-    pasajero_servicio: [],
+    Pasajeros: [],
+    Servicios: [],
+    PasajeroServicio: [],
 });
 
-const pasajerosDetalle = ref({
+const pasajeroTemp = ref({
     id: 0,
     nombre: '',    
     apellido_paterno: '',
@@ -310,30 +314,41 @@ const pasajerosDetalle = ref({
     documento_numero: '',
     pais_id: '',
     documento_file: '',
+    temp_file_name: '',
+    temp_file_preview: '',
     tipo_pasajero_id: '',
     clase_id: '',
+    cotizacion_id: '',
+    estado_activo: 1,
+});
+
+const pasajeroServicioTemp = ref({
+    id: 0,
+    pasajero_id: 0,    
+    servicio_id: 0,
+    estado_pasajero_servicio: 0,
 });
 
 //const ListaPasajerosTemp = reactive([{ id: 1, name: 'Juan' },{ id: 2, name: 'María' }]);
-const ListaPasajerosTemp = reactive([...cotizacion.value.pasajeros_detalle]);
-// const ListaServiciosTemp = ([...cotizacion.value.servicios_detalle]);
+const ListaPasajerosTemp = reactive([...Cotizacion.value.Pasajeros]);
+// const ListaServiciosTemp = ([...Cotizacion.value.Servicios]);
 // const ListaServiciosTemp = [
 //     { id: 'A', name: 'Servicio A' },
 //     { id: 'B', name: 'Servicio B' }
 // ];
 
 // Observar cambios en el store
-watch(() => cotizacion.value.pasajeros_detalle, (newVal) => {
+watch(() => Cotizacion.value.Pasajeros, (newVal) => {
     console.log("nuevo pasajero ", newVal);
     ListaPasajerosTemp.splice(0, ListaPasajerosTemp.length, ...newVal);
 
 }, { deep: true });
 
 // Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
-const contador = computed(() => cotizacion.value.nro_pasajeros);
+const contador = computed(() => Cotizacion.value.nro_pasajeros);
 
 // Observa cambios en `nro_pasajeros` y ejecuta `calcularVenta`
-watch(() => cotizacion.value.nro_pasajeros, (newValue) => {
+watch(() => Cotizacion.value.nro_pasajeros, (newValue) => {
   console.log("Nuevo valor de nro_pasajeros:", newValue);
   agregarServicioPasajeroTemp();
   calcularVenta();
@@ -345,8 +360,6 @@ const ListaServicioPasajeroTemp = reactive([]);
 function agregarServicioPasajeroTemp() {    
     if (ListaServicioPasajeroTemp.length > 0) {
         ListaServicioPasajeroTemp.length = 0;
-        debugger
-        console.log("limpieza ",ListaServicioPasajeroTemp.length);
     }
     const jsonServicio = destinoTuristicoDetalleServicio.value;
     jsonServicio.forEach((servicio) => {
@@ -355,22 +368,24 @@ function agregarServicioPasajeroTemp() {
             dia : servicio.nro_dia,
             detalle : []
         }
-        servicioXdia.dia = servicio.nro_dia;
         ListaPasajerosTemp.forEach(pasajero => {
             console.log("pasajero ", pasajero.nombre);
             const pasajeroServicio = {    
                 pasajero,
-                pasajeroServicio: []
+                servicio_detalle: []
             };
             servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
                 console.log("servicio ", servicioDetalle.observacion);
-                pasajeroServicio.pasajeroServicio.push(servicioDetalle);                               
+                console.log("servicio ", servicioDetalle);
+
+                pasajeroServicio.servicio_detalle.push(servicioDetalle);                            
             });
-            servicioXdia.detalle.push(pasajeroServicio);         
+            servicioXdia.detalle.push(pasajeroServicio);
         });
 
         ListaServicioPasajeroTemp.push(servicioXdia);
     });
+    Cotizacion.value.PasajeroServicio = ListaServicioPasajeroTemp;
 }
 
 const numeroAdultos = ref(0);
@@ -378,21 +393,24 @@ const numeroNinos = ref(0);
 const numeroEstudiantes = ref(0);
 
 const errorFecha = ref("");
-const pasajeros = ref([...cotizacion.value.pasajeros_detalle]);
-const listaServicioDetalle = ref([...cotizacion.value.servicios_detalle]);
+const pasajeros = ref([...Cotizacion.value.Pasajeros]);
+const listaServicioDetalle = ref([...Cotizacion.value.Servicios]);
 const destinoTuristicoDetalleServicio = ref([]);
-const minFechaFin = ref(cotizacion.value.fecha_inicio);
+const minFechaFin = ref(Cotizacion.value.fecha_inicio);
 
 async function recuperarValorModal(valor) {
+    console.log('recuperarValorModal ', valor);
     showModalProveedor.value = false;
-    cotizacion.value.proveedor_id = valor.id;
-    cotizacion.value.proveedor_razon_social = valor.nombre;
+    Cotizacion.value.proveedor_id = valor.id;
+    Cotizacion.value.proveedor_razon_social = valor.nombre;
+    const nroDoc = document.getElementById('cliente_nro_doc');
+    nroDoc.value = valor.numero;
 }
  
 async function ListaCategoriaProveedor() {
     try {     
         const data = {
-            destino_turistico_id: cotizacion.value.destino_turistico_id,
+            destino_turistico_id: Cotizacion.value.destino_turistico_id,
         }     
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);  
         if (response.status === 200) {
@@ -425,28 +443,27 @@ function calcularTotalesPorCategoria(destino) {
             resultado[categoriaId].cantidad += 1;
         });
     });
-
     listaServicioDetalle.value = Object.values(resultado);
 }
 
 // **Observar cambios en fecha_inicio**
-watch(() => cotizacion.value.fecha_inicio, (nuevaFechaInicio) => {
+watch(() => Cotizacion.value.fecha_inicio, (nuevaFechaInicio) => {
     console.log('uno111111111 ', nuevaFechaInicio);
     const inicio = new Date(nuevaFechaInicio);
-    const fin = new Date(cotizacion.value.fecha_fin);
+    const fin = new Date(Cotizacion.value.fecha_fin);
 
     // **Actualizar fecha mínima permitida en fecha_fin**
     minFechaFin.value = nuevaFechaInicio;
 
     // **Si la fecha de fin es menor, actualizarla automáticamente**
     if (fin < inicio) {
-        cotizacion.value.fecha_fin = nuevaFechaInicio;
+        Cotizacion.value.fecha_fin = nuevaFechaInicio;
     }
     calcularDiferenciaDias();
 });
 
 // **Validar que fecha_inicio nunca sea mayor a fecha_fin**
-watch([() => cotizacion.value.fecha_inicio, () => cotizacion.value.fecha_fin], ([inicio, fin]) => {
+watch([() => Cotizacion.value.fecha_inicio, () => Cotizacion.value.fecha_fin], ([inicio, fin]) => {
     console.log('dos2222222 ', inicio, fin);
     if (new Date(inicio) > new Date(fin)) {
         errorFecha.value = "La fecha de inicio no puede ser mayor que la fecha fin.";
@@ -467,10 +484,10 @@ const manejarAccion = ({ accion, id }) => {
 };
 
 const calcularDiferenciaDias = () => {
-    console.log('calcularDiferenciaDias ', cotizacion.value.fecha_inicio, cotizacion.value.fecha_fin);
-    const inicio = new Date(cotizacion.value.fecha_inicio);
-    const fin = new Date(cotizacion.value.fecha_fin);
-    cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24));
+    console.log('calcularDiferenciaDias ', Cotizacion.value.fecha_inicio, Cotizacion.value.fecha_fin);
+    const inicio = new Date(Cotizacion.value.fecha_inicio);
+    const fin = new Date(Cotizacion.value.fecha_fin);
+    Cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24));
 };
 
 // Función para calcular el total de pasajeros
@@ -487,10 +504,10 @@ const contarPasajerosPorTipo = (tipo) => {
 
 // Función para calcular el total de pasajeros
 const calcularTotalPasajeros = () => {
-    cotizacion.value.nro_ninio = numeroNinos.value;
-    cotizacion.value.nro_adulto = numeroAdultos.value;
-    cotizacion.value.nro_estudiante = numeroEstudiantes.value;
-    cotizacion.value.nro_pasajeros = numeroAdultos.value + numeroNinos.value + numeroEstudiantes.value;
+    Cotizacion.value.nro_ninio = numeroNinos.value;
+    Cotizacion.value.nro_adulto = numeroAdultos.value;
+    Cotizacion.value.nro_estudiante = numeroEstudiantes.value;
+    Cotizacion.value.nro_pasajeros = numeroAdultos.value + numeroNinos.value + numeroEstudiantes.value;
 };
 
 // Observar cambios en los valores de adultos, niños y bebés
@@ -499,20 +516,20 @@ watch([numeroAdultos, numeroNinos, numeroEstudiantes], () => {
 });
 
 const mostrarConsola = () => {
-    console.log(cotizacion.value);
+    console.log(Cotizacion.value);
 }
 
 // Función para calcular el monto de la venta
 const calcularVenta = () => {
-    const sumaTotal = listaServicioDetalle.value.reduce((acc, item) => acc + (item.total_monto * cotizacion.value.nro_pasajeros), 0);
-    const sumaDescuentos = cotizacion.value.descuento_estudiante + cotizacion.value.descuento_ninio + cotizacion.value.descuento_otro;
-    cotizacion.value.costo_parcial = sumaTotal;
-    cotizacion.value.costo_total = sumaTotal - sumaDescuentos;
+    const sumaTotal = listaServicioDetalle.value.reduce((acc, item) => acc + (item.total_monto * Cotizacion.value.nro_pasajeros), 0);
+    const sumaDescuentos = Cotizacion.value.descuento_estudiante + Cotizacion.value.descuento_ninio + Cotizacion.value.descuento_otro;
+    Cotizacion.value.costo_parcial = sumaTotal;
+    Cotizacion.value.costo_total = sumaTotal - sumaDescuentos;
 };
 
 const handleInput = (event, field) => {
   const validatedValue = validateInput(event.target.value);
-  cotizacion.value[field] = Number(validatedValue);
+  Cotizacion.value[field] = Number(validatedValue);
 
   // Limpiar cualquier temporizador existente
   if (emptyInputTimeout) {
@@ -522,7 +539,7 @@ const handleInput = (event, field) => {
   // Si el input está vacío, esperar 1 segundo antes de asignar "0"
   if (!validatedValue) {
     emptyInputTimeout = setTimeout(() => {
-      cotizacion.value[field] = 0;
+      Cotizacion.value[field] = 0;
       calcularVenta(validatedValue);
     }, 1000); // 1000 ms = 1 segundo
   } else {
@@ -543,15 +560,15 @@ const validateInput = (value) => {
 };
 
 function agregarDetallePasajero() {
-    pasajeros.value = cotizacion.value.pasajeros_detalle;
+    pasajeros.value = Cotizacion.value.Pasajeros;
     showModal.value = true;
 }
 
 function agregarPasajero(tipoPasajero) {
-    pasajerosDetalle.value.tipo_pasajero_id = tipoPasajero;
-    cotizacion.value.pasajeros_detalle.push({ ...pasajerosDetalle.value });
-    pasajerosDetalle.value = {
-        id: pasajerosDetalle.value.tipo_pasajero_id.length,
+    pasajeroTemp.value.tipo_pasajero_id = tipoPasajero;
+    Cotizacion.value.Pasajeros.push({ ...pasajeroTemp.value });
+    pasajeroTemp.value = {
+        id: pasajeroTemp.value.tipo_pasajero_id.length,
         nombre: '',    
         apellido_paterno: '',
         apellido_materno: '',
@@ -565,17 +582,30 @@ function agregarPasajero(tipoPasajero) {
 }
 
 const eliminarPasajero = (tipoPasajero) => {
-    const index = cotizacion.value.pasajeros_detalle.findIndex(
+    const index = Cotizacion.value.Pasajeros.findIndex(
         (pasajero) => pasajero.tipo_pasajero_id === tipoPasajero
     );
     if (index >= 0) {
-        cotizacion.value.pasajeros_detalle.splice(index, 1);
+        Cotizacion.value.Pasajeros.splice(index, 1);
     }
 }
 
 async function submitDestinoTuristico() {
     try {
-        const response = await axios.post(route('destino_turistico.store'), cotizacion.value);
+        Swal.fire({
+            title: 'Cargando...',
+            text: 'Por favor, espera mientras se cargan los datos.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const response = await axios.post(route('cotizacion.store'), Cotizacion.value, {
+            headers: { "Content-Type": "multipart/form-data" },
+        }); 
+
+        Swal.close();
 
         if (response.status === 200) {
             Swal.fire({
@@ -584,7 +614,7 @@ async function submitDestinoTuristico() {
                 text: response.data.message,
                 confirmButtonText: 'Aceptar',
             }).then(() => {
-                window.location.href = route('destino_turistico'); // Redirige después de cerrar el modal.
+                window.location.href = route('cotizacion'); // Redirige después de cerrar el modal.
             });
         } else {
             Swal.fire({

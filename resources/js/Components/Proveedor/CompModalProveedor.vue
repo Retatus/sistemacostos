@@ -4,7 +4,7 @@
             <div class="p-1">
                 <!-- Header -->
                 <div class="px-4 py-3 border-b">
-                    <h2 class="text-lg font-semibold text-gray-700">Agregar persona</h2>
+                    <h2 class="text-lg font-semibold text-gray-700">Agregar cliente</h2>
                 </div>
                 <!-- Body -->
                 <form @submit.prevent="addCliente">
@@ -112,6 +112,7 @@ function closeModal() {
 
 const Cliente = ref({
     id: '',
+    numero: '',
     nombre: '',
 });
 async function addCliente() {
@@ -119,6 +120,7 @@ async function addCliente() {
         const response = await axios.post(`${route('proveedor.store')}`, personas.value);  
         if (response.status === 201) { 
             Cliente.value.id = response.data.data.id;
+            Cliente.value.numero = response.data.data.ruc;
             Cliente.value.nombre = response.data.data.razon_social;  
             emit('submit', Cliente.value);
             //props.isModalVisibleProveedor = false;

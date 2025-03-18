@@ -63,8 +63,9 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
-                                    <div v-if="item.urlPrevisualizacion">
-                                        <embed :src="item.urlPrevisualizacion" type="application/pdf" width="150px" height="100px" />
+                                    <div v-if="item.temp_file_preview" class="text-sm text-gray-500">
+                                        <img v-if="item.documento_file.type !== 'application/pdf'" :src="item.temp_file_preview" class="h-20 w-20 object-cover mt-2" />
+                                        <embed v-else :src="item.temp_file_preview" type="application/pdf" width="150px" height="100px" />
                                     </div>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
@@ -72,7 +73,7 @@
                                     <!-- Botón personalizado -->
                                     <div class="flex items-center space-x-2">
                                         <input v-model="item.documento_file" type="text" hidden required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                        <input v-model="item.documento_file_name" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.temp_file_name" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                         <label :for="'fileInput-' + index" class="custom-file-label">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -177,8 +178,7 @@
     const emit = defineEmits(['close', 'update']);
 
     const handleFileChange = (event, index) => {
-        const file = event.target.files[0];       
-
+        const file = event.target.files[0];
         if (!file) return;        
 
         const formatosPermitidos = ["image/jpeg", "image/png", "application/pdf"];
@@ -187,10 +187,9 @@
             alert("Solo se permiten archivos JPG, PNG y PDF");
             return;
         }
-
-        props.ListaPasajeros[index].documento_file_name = file.name;
         props.ListaPasajeros[index].documento_file = file;
-        props.ListaPasajeros[index].urlPrevisualizacion = URL.createObjectURL(file);
+        props.ListaPasajeros[index].temp_file_name = file.name;
+        props.ListaPasajeros[index].temp_file_preview = URL.createObjectURL(file);
     };
 
     function closeModal() {

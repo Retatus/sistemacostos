@@ -34,6 +34,11 @@ class Servicio extends Model
         return $this->hasMany(Precio::class, 'servicio_id');
     }
 
+    public function itinerario_servicio_detalle()
+    {
+        return $this->hasMany(ItinerarioServicio::class, 'servicio_id');
+    }
+
     public static function getFormattedForDropdownPrecio($parametro = null)
     {
         $precios = DB::table('precios')

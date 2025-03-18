@@ -104,8 +104,11 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.file_nombre}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.comprobante_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{cotizacion.tipo_comprobante.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.fecha}}
@@ -123,10 +126,10 @@
                                         {{cotizacion.nro_estudiante}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.idioma}}
+                                        {{cotizacion.idioma.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.mercado}}
+                                        {{cotizacion.mercado.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.destino_turistico_id}}
@@ -196,7 +199,7 @@
     import { router } from '@inertiajs/vue3';
 
     const page = usePage();
-    const Cotizacions = ref(page.props.cotizacions);
+    const Cotizacions = ref(page.props.cotizacions.data);
     
     const onDeleteConfirm = (Cotizacion) => {
         Swal.fire({
