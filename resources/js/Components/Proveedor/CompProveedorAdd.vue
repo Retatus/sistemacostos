@@ -25,7 +25,7 @@
                 <select v-model="proveedor.tipo_comprobante" id="tipo_comprobante" 
                     class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in TiposComprobante" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaTipoComprobantes" :key="option.value" :value="option.value">
                         {{ option.label }}
                     </option>
                 </select>                  
@@ -40,7 +40,7 @@
                 <label for="tipo_sunat" class="block text-sm font-medium text-gray-700">Tipo Sunat</label>
                 <select v-model="proveedor.tipo_sunat" id="tipo_sunat" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in TiposSunat" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaTipoSunats" :key="option.value" :value="option.value">
                         {{ option.label }}
                     </option>
                 </select>  
@@ -53,7 +53,7 @@
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
                 <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaProveedorCategorias" :key="option.value" :value="option.value">
                     {{ option.label }}
                     </option>
                 </select>
@@ -77,11 +77,8 @@
             </div>              
         </div>
         <Servicio
-            :items="proveedor.detalles"
-            :ListaServicio_clase="ServicioClases" 
-            :ListaServicio_detalle="ServicioDetalles" 
-            :ListaTipoPasajero ="ListaTipoPasajero"
-            :ListaUbicacion="ListaUbicacion"            
+            :Servicio="proveedor.detalles"
+            :ListaServicioDetalle="ListaServicioDetalle"
         />
 
         <!-- Botón para agregar el ítem -->  
@@ -97,39 +94,16 @@
     import Servicio from '../Servicio/CompServicioAdd.vue';
     import PrimaryButton from '../PrimaryButton.vue';
     import InputError from '@/Components/InputError.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
     
     // Definir las props
     const props = defineProps({
-        proveedorcategorias: {
+        ListaServicioDetalle: {
             type: Object,
             required: true,
-        },
-        ListaTipoComprobante: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoSunat: {
-            type: Object,
-            required: true,
-        },
-        ListaServicio_clase: {
-            type: Object,
-            required: true,
-        },
-        ListaServicio_detalle: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoPasajero: {
-            type: Object,
-            required: true,
-        },
-        ListaUbicacion: {
-            type: Object,
-            required: true
         }
     });
-
     
     const estadoActivo = ref([
         { id: '1', nombre: 'ACTIVO' }, 
@@ -139,10 +113,10 @@
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
-    const ServicioDetalles = ref([...props.ListaServicio_detalle]);
-    const ServicioClases = ref([...props.ListaServicio_clase]);
-    const TiposComprobante = ref([...props.ListaTipoComprobante]);
-    const TiposSunat = ref([...props.ListaTipoSunat]);
+    const ListaServicioDetalle = ref([...props.ListaServicioDetalle]);
+    const sListaProveedorCategorias = ref({ ...categoriesStore.globals.proveedor_categories });
+    const sListaTipoComprobantes = ref({ ...categoriesStore.globals.tipo_comprobantes });
+    const sListaTipoSunats = ref({ ...categoriesStore.globals.tipo_sunat });
     
     // Variables para el proveedor y detalle temporal
     const proveedor = ref({
@@ -153,6 +127,7 @@
         correo: '',
         tipo_sunat: '',
         contacto: '',
+        editado: 0,
         estado_activo: 1,
         tipo_documento_id: 1,
         proveedor_categoria_id: '',
@@ -163,6 +138,7 @@
     const detalleTemporal = ref({
         monto: '',
         moneda: 'DOLARES',
+        proveedor_categoria_id: '',
         servicio_clase_id: '',
         ubicacion_id: '',
         tipo_pasajero_id: '',
@@ -171,7 +147,6 @@
     });
 
     async function CategoryListUpdate() {
-        alert("CategoryListUpdate");
         try {     
             const data = {
                 proveedor_categoria_id: proveedor.value.proveedor_categoria_id,
@@ -179,7 +154,7 @@
             const response = await axios.post(`${route('serviciodetalle')}/serviceCategory`, data);   
             if (response.status === 200) {
                 console.log('Elemento agregado:', response.data);            
-                ServicioDetalles.value = response.data;
+                ListaServicioDetalle.value = response.data;
             }   
             
         } catch (error) {
@@ -198,6 +173,7 @@
         detalleTemporal.value = {
             monto: '',
             moneda: 'DOLARES',
+            proveedor_categoria_id: '',
             servicio_clase_id: '',
             ubicacion_id: '',
             tipo_pasajero_id: '',

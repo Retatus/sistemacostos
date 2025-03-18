@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Termwind\Components\Dd;
 
 class ProveedorServicioService
 {
@@ -49,8 +50,7 @@ class ProveedorServicioService
                 }            
     
                 // Llamar al método `store` del controlador de proveedor
-                $proveedorResponse = $this->proveedorController->store(new ProveedorStoreRequest($validatorProveedor->validated()));                
-
+                $proveedorResponse = $this->proveedorController->store(new ProveedorStoreRequest($validatorProveedor->validated()));  
                 if ($proveedorResponse->getStatusCode() !== 201) {
                     throw new \Exception('Error al insertar proveedor' . json_decode($proveedorResponse->getContent())->data->id);
                 } 
@@ -159,13 +159,16 @@ class ProveedorServicioService
 
     public function handleValidationAndUpdating(Request $request)
     {
-        // Usar una transacción para asegurar que ambas inserciones sean atómicas.
+    try {
         return DB::transaction(function () use ($request) {
             $proveedorResponseUpdate = $this->proveedorController->updateEstado($request->id);
-
-            // Validar e insertar proveedor
+            // **Validar e insertar el proveedor**
+            // Validar los datos del proveedor usando las reglas de ProveedorStoreRequest
+            $proveedorData = $request->except(['servicio']);
+            $proveedorData['editado'] = 1;
+            //dd($request->all());
             $validatorProveedor = Validator::make(
-                $request->except(['detalles']),
+                $proveedorData,
                 (new ProveedorUpdateRequest())->rules(),
                 (new ProveedorUpdateRequest())->messages()
             );
@@ -174,34 +177,25 @@ class ProveedorServicioService
                 throw new \Illuminate\Validation\ValidationException($validatorProveedor);
                 //throw new CustomValidationException($validatorProveedor);
             }   
-            
             // Llamar al método `store` del controlador de proveedor
-            $proveedorResponse = $this->proveedorController->store(new ProveedorStoreRequest($validatorProveedor->validated()));
-
-            if ($proveedorResponse->getStatusCode() !== 200) {
-                throw new \Exception('Error al insertar proveedor' . json_decode($proveedorResponse->getContent())->id);
+            $proveedorResponse = $this->proveedorController->store(new ProveedorStoreRequest($validatorProveedor->validated()));  
+            if ($proveedorResponse->getStatusCode() !== 201) {
+                throw new \Exception('Error al insertar proveedor' . json_decode($proveedorResponse->getContent())->data->id);
             } 
 
-            $proveedorId = json_decode($proveedorResponse->getContent())->id;
-            
+            $proveedorId = json_decode($proveedorResponse->getContent())->data->id;
+            //dd($proveedorId);
             // **Validar e insertar servicios**
-            $detalles = $request->get('detalles', []);
+            $detalles = $request->get('servicio', []);
 
             $precioData = [];
             $servicioData = [];
 
-            // Actualizar el estado_activo del detalle de servicio a 0 para poder insertar un nuevo servicio
-            $proveedorResponseUpdate = $this->servicioController->updateEstado($request->id);
-           
-            foreach ($detalles as $detalleData) {
+            foreach ($detalles as $servicioData) {
                 // Añadir `proveedor_id` al servicio
-                $servicioData = [
-                    'proveedor_id' => $proveedorId,
-                    'servicio_detalle_id' => $detalleData['servicio_detalle_id'],
-                    'ubicacion_id' => $detalleData['ubicacion_id'],
-                    'estado_activo' => $detalleData['estado_activo']
-                ];
+                $servicioData['proveedor_id'] = $proveedorId;
                 
+                // Validar los datos del servicio usando las reglas de ServicioStoreRequest
                 $validatorServicio = Validator::make(
                     $servicioData,
                     (new ServicioUpdateRequest())->rules(),
@@ -215,29 +209,31 @@ class ProveedorServicioService
 
                 // Llamar al método `store` del controlador de servicio
                 $servicioResponse = $this->servicioController->store(new ServicioStoreRequest($validatorServicio->validated()));
-    
-                if ($servicioResponse->getStatusCode() !== 200) {
+
+                if ($servicioResponse->getStatusCode() !== 201) {
                     throw new \Exception('Error al insertar servicio');
+                }
+
+                // Verificar si la respuesta no es 201 (Created)
+                if ($servicioResponse->getStatusCode() !== 201) {
+                    throw new \Exception(
+                        "Error al insertar servicio. Código de estado: " . $servicioResponse->getStatusCode() . ". " .
+                        "Respuesta: " . $servicioResponse->getContent()
+                    );
                 }
 
                 $servicioId = json_decode($servicioResponse->getContent())->data->id;
 
-                $precioData = [
-                    'anio' =>  date('Y'),
-                    'moneda' => $detalleData['moneda'],
-                    'monto' => $detalleData['monto'],
-                    'tipo_pasajero_id' => $detalleData['tipo_pasajero_id'],
-                    'servicio_id' => $servicioId,
-                    'servicio_clase_id' => $detalleData['servicio_clase_id'],                        
-                    'estado_activo' => $detalleData['estado_activo']
-                ];
+                $precioData = $servicioData['precios'][0];
+                $precioData['anio'] = date('Y');
+                $precioData['servicio_id'] = $servicioId;
 
                 $validatorPrecio = Validator::make(
                     $precioData,
                     (new PrecioUpdateRequest())->rules(),
                     (new PrecioUpdateRequest())->messages()
                 );
-
+                //dd($precioData, $validatorPrecio);
                 if ($validatorPrecio->fails()) {
                     throw new \Illuminate\Validation\ValidationException($validatorPrecio);
                     //throw new CustomValidationException($validatorPrecio, $proveedorId);
@@ -245,16 +241,36 @@ class ProveedorServicioService
 
                 $precioResponse = $this->precioController->store(new PrecioStoreRequest($validatorPrecio->validated()));
 
-                if ($precioResponse->getStatusCode() !== 200) {
+                if ($precioResponse->getStatusCode() !== 201) {
                     throw new \Exception('Error al insertar precio');
                 }
             }
+
             return [
                 'proveedorUpdate' => $proveedorResponseUpdate,
-                'proveedor' => $proveedorResponse,                
-                'servicio' => $servicioResponse ,
+                'proveedor' => $proveedorResponse,           
+                'servicio' => $servicioResponse,
+                'precio' => $precioResponse,
                 'message' => 'Proveedor y servicios actualizados correctamente',
             ];
         });
+    // } catch (CustomValidationException $e) {
+    //     return response()->json([
+    //         'message' => 'Errores de validación',
+    //         'errors' => $e->errors(), // Contiene los errores por campo
+    //         'index' => $e->getCode() === 0 ? null : $e->getCode(), // Indica el índice en caso de error en un servicio
+    //     ], 422);  
+    // } catch (\Exception $e) {
+    //     return response()->json([
+    //         'message' => $e->getMessage(),
+    //     ], 500);
+    // } 
+    } catch (\Exception $e) {
+        // Capturar la excepción y agregar el trace
+        throw new \Exception(
+            "Error en la creación del servicio: " . $e->getMessage() . "\n" .
+            "Trace: " . $e->getTraceAsString()
+        );
     }
+    }  
 }

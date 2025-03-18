@@ -11,16 +11,17 @@
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                             <tr class="bg-gray-100">
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Nombre</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">apellido_paterno</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">apellido_materno</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Tipo Doc</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Nro Doc</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Pais</th>
-                                <th class="w-3/12 px-4 py-2 text-sm font-medium">Adjunto</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Tipo Pax</th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Clase </th>
-                                <th class="w-1/12 px-4 py-2 text-sm font-medium">Acciones </th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nombre</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_paterno</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_materno</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Doc</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nro Doc</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Pais</th>
+                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Preview</th>
+                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Adjunto</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Pax</th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Clase </th>
+                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Acciones </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,14 +63,19 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-2 text-sm">
+                                    <div v-if="item.temp_file_preview" class="text-sm text-gray-500">
+                                        <img v-if="item.documento_file.type !== 'application/pdf'" :src="item.temp_file_preview" class="h-20 w-20 object-cover mt-2" />
+                                        <embed v-else :src="item.temp_file_preview" type="application/pdf" width="150px" height="100px" />
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 text-sm">
                                     <input type="file" hidden :id="'fileInput-' + index" @change="handleFileChange($event, index)" />
                                     <!-- Botón personalizado -->
                                     <div class="flex items-center space-x-2">
-                                        <input v-model="item.documento_file" type="text" required="true"
-                                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.documento_file" type="text" hidden required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.temp_file_name" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                         <label :for="'fileInput-' + index" class="custom-file-label">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
                                             </svg>
@@ -80,7 +86,7 @@
                                     <select v-model="item.tipo_pasajero_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in TipoPax" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoPasajero" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -89,7 +95,7 @@
                                     <select v-model="item.clase_id"
                                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                         <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                        <option v-for="option in TipoClase" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
@@ -144,24 +150,10 @@
     import { ref, defineProps, defineEmits } from 'vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
-        ListaTipoDocumento: {
-            type: Object,
-            required: true,
-        },
-        ListaPais: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoPax: {
-            type: Object,
-            required: true,
-        },
-        ListaClase: {
-            type: Object,
-            required: true,
-        },
         isModalVisible: {
             type: Boolean,
             required: true
@@ -172,10 +164,10 @@
         },
     })
 
-    const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-    const Pais = ref({ ...props.ListaPais });
-    const TipoPax = ref({ ...props.ListaTipoPax });
-    const Clase = ref({ ...props.ListaClase });
+    const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
+    const Pais = ref({ ...categoriesStore.globals.pais });
+    const TipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const TipoClase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const EstadoDocumentacion = ref([
         { value: '1', label: 'PEND' },
@@ -186,7 +178,18 @@
     const emit = defineEmits(['close', 'update']);
 
     const handleFileChange = (event, index) => {
-        props.ListaPasajeros[index].documento_file = event.target.files[0].name;
+        const file = event.target.files[0];
+        if (!file) return;        
+
+        const formatosPermitidos = ["image/jpeg", "image/png", "application/pdf"];
+
+        if (!formatosPermitidos.includes(file.type)) {
+            alert("Solo se permiten archivos JPG, PNG y PDF");
+            return;
+        }
+        props.ListaPasajeros[index].documento_file = file;
+        props.ListaPasajeros[index].temp_file_name = file.name;
+        props.ListaPasajeros[index].temp_file_preview = URL.createObjectURL(file);
     };
 
     function closeModal() {

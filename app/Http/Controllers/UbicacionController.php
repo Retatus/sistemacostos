@@ -18,6 +18,12 @@ class UbicacionController extends Controller
         //return response()->json( ['ubicacion' => $ubicacion]);
     }
 
+    public function selectOptions()
+    {
+        $categories = Ubicacion::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

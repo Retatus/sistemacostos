@@ -71,10 +71,10 @@ const logout = () => {
                                             Proveedores
                                         </Link>
                                         <Link :href="route('proveedor_categoria')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                            Proveedor categoria
+                                            Categoria
                                         </Link>
                                         <Link :href="route('servicio_clase')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                            Servicio clase
+                                            Clase
                                         </Link>
                                         <Link :href="route('serviciodetalle')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                             Servicio detalle
@@ -89,9 +89,23 @@ const logout = () => {
                                 </div>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')">
-                                    Operaciones
-                                </NavLink>
+                                <div class="group">
+                                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')" class="flex items-center mt-5">
+                                        Operaciones
+                                        <svg class="w-4 h-4 ms-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06 0L10 10.93l3.71-3.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                        </svg>
+                                    </NavLink>
+                                    <!-- Dropdown content -->
+                                    <div class="hidden group-hover:block absolute bg-white border border-gray-200 rounded-md shadow-lg mt-2 z-10">
+                                        <Link :href="route('cotizacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Cotizaciones
+                                        </Link>
+                                        <Link :href="route('pasajero')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                            Pasajeros
+                                        </Link>
+                                    </div>
+                                </div>
                                 <NavLink :href="route('dashboard')">
                                     Compras
                                 </NavLink>
@@ -111,16 +125,24 @@ const logout = () => {
                                     <Link :href="route('itinerario')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Itinerario
                                     </Link>
+                                    <Link :href="route('itinerario_destino')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Itinerario destino
+                                    </Link>
+                                    <Link :href="route('itinerario_servicio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Itinerario servicio
+                                    </Link>
                                     <Link :href="route('precio')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Precio
                                     </Link>
                                     <Link :href="route('pais')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Pais
                                     </Link>
+                                    <Link :href="route('pais')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Idioma
+                                    </Link>
                                     <Link :href="route('ubicacion')" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                                         Ubicacion
-                                    </Link>
-                                    
+                                    </Link>                                    
                                 </div>
                             </div>
                         </div>

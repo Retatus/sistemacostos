@@ -2,52 +2,14 @@
 <script setup>
     import {Link, useForm} from '@inertiajs/vue3';
     import AppLayout from '@/Layouts/AppLayout.vue';
-    import FormularioProveedor from '@/Components/Proveedor/CompProveedorAdd.vue';
+    import FormularioProveedorAdd from '@/Components/Proveedor/CompProveedorAdd.vue';
 
-    const props = defineProps({
-        proveedorcategorias: {
+    const props = defineProps({ 
+        ListaServicioDetalle: {
             type: Object, 
             required: true
-        },
-        ListaTipoComprobante: {
-            type: Object, 
-            required: true
-        },
-        ListaTipoSunat: {
-            type: Object, 
-            required: true
-        },
-        ListaServicio_clase: {
-          type: Object, 
-          required: true
-        } ,
-        ListaServicio_detalle: {
-            type: Object, 
-            required: true
-        },
-        categoriaCostos: {
-            type: Object, 
-            required: true
-        },
-        categoriaDestinos: {
-            type: Object, 
-            required: true
-        } ,
-        categoriaDistribuciones: {
-            type: Object, 
-            required: true
-        },
-        ListaTipoPasajero: {
-            type: Object, 
-            required: true
-        },
-        ListaUbicacion: {
-            type: Object, 
-            required: true
-        } 
-    })  
-
-    console.log(props.proveedorcategorias);
+        }
+    })
 </script>
 
 <template>
@@ -65,17 +27,8 @@
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <FormularioProveedor  
-                        :categoriaCostos="categoriaCostos" 
-                        :categoriaDestinos="categoriaDestinos" 
-                        :categoriaDistribuciones="categoriaDistribuciones"
-                        :proveedorcategorias="proveedorcategorias" 
-                        :ListaTipoComprobante="ListaTipoComprobante"
-                        :ListaTipoSunat="ListaTipoSunat"
-                        :ListaServicio_clase="ListaServicio_clase" 
-                        :ListaServicio_detalle="ListaServicio_detalle"
-                        :ListaTipoPasajero="ListaTipoPasajero"
-                        :ListaUbicacion="ListaUbicacion"
+                    <FormularioProveedorAdd
+                        :ListaServicioDetalle="ListaServicioDetalle"
                     />
                 </div>
             </div>

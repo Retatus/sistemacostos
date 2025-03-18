@@ -10,6 +10,8 @@ class Servicio extends Model
 {
     use HasFactory;    
 
+    protected $hidden = ['created_at', 'updated_at'];
+    
     protected $fillable = ['proveedor_id', 'servicio_detalle_id', 'ubicacion_id', 'estado_activo'];
     
     public function proveedor()
@@ -30,6 +32,11 @@ class Servicio extends Model
     public function precios()
     {
         return $this->hasMany(Precio::class, 'servicio_id');
+    }
+
+    public function itinerario_servicio_detalle()
+    {
+        return $this->hasMany(ItinerarioServicio::class, 'servicio_id');
     }
 
     public static function getFormattedForDropdownPrecio($parametro = null)

@@ -125,20 +125,10 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
-        // ListaTipoDocumento: {
-        //     type: Object,
-        //     required: true,
-        // },
-        // ListaPais: {
-        //     type: Object,
-        //     required: true,
-        // },
-        ListaCategoria: {
-            type: Object,
-            required: true,
-        },
         SelectValueCategoria: {
             type: String,
             required: true,
@@ -157,11 +147,6 @@
         },
     })
 
-    // const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-    // const Pais = ref({ ...props.ListaPais });
-    // const TipoPax = ref({ ...props.ListaTipoPax });
-    // const Clase = ref({ ...props.ListaClase });
-
     const EstadoDocumentacion = ref([
         { value: '1', label: 'PEND' },
         { value: '2', label: 'OK' },
@@ -170,6 +155,7 @@
 
     const emit = defineEmits(['close', 'update']);
     const selectedValue = ref(props.SelectValueCategoria);
+    const ListaCategoria = ref({ ...categoriesStore.globals.proveedor_categories });
 
     const handleFileChange = (event, index) => {
         props.ListaPasajeros[index].documento_file = event.target.files[0].name;

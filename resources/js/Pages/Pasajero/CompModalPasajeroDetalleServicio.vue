@@ -7,7 +7,7 @@
                     <h2 class="text-lg font-semibold text-gray-700">{{ Titulo }} </h2>
                     <select v-model="props.SelectValueCategoria" class="mt-1 w-1/2 border-gray-300 rounded-md shadow-sm">
                         <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in ListaCategoria" :key="option.value" :value="option.value">
+                        <option v-for="option in ProveedorCategoria" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
@@ -15,100 +15,52 @@
                 </div>    
                 <!-- Body -->
                 <div class="overflow-x-auto p-5 border-b">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead className="text-xs text-gray-900 uppercase bg-gray-50">
-                            <tr class="bg-gray-100">
-                                <th colspan="3" class="w-3/10 px-4 py-2 text-sm font-medium">Nombre de pax</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Tipo Doc</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Nro Doc</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Tarifa</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Tipo Pax</th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Categoria </th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Clase </th>
-                                <th class="w-1/10 px-4 py-2 text-sm font-medium">Acciones </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(item, index) in ListaPasajeros" :key="index" className="bg-white border-b text-gray-900">
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="item.nombre" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="item.apellido_paterno" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="item.apellido_materno" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.documento_tipo_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in TipoDocumento" :key="option.value"
-                                            :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="item.documento_numero" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <input v-model="item.apellido_materno" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.documento_tipo_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in ListaTipoPasajero" :key="option.value"
-                                            :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.clase_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.clase_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <select v-model="item.clase_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                        <option disabled value="">-- Selecciona una opción --</option>
-                                        <option v-for="option in Clase" :key="option.value" :value="option.value">
-                                            {{ option.label }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <!-- <td class="px-4 py-2 text-sm hover:text-red-700 text-center">
-                                    <button type="button" @click="removeItem(index)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                        </svg>
-                                    </button>
-                                </td> -->
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div v-for="diaData in data" :key="diaData.dia">
+                        <h2>Día {{ diaData.dia }}</h2>
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+                                <tr class="bg-gray-100">
+                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Nombre</th>
+                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Pasajero</th>
+                                <th class="w-3/6 px-4 py-2 text-sm font-medium">Servicio</th>
+                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="detalle in diaData.detalle" :key="detalle.pasajero.id" className="bg-white border-b text-gray-900">
+                                    <td class="px-4 py-2 text-sm">
+                                        <input v-model="detalle.pasajero.nombre" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select v-model="detalle.pasajero.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option v-for="option in TipoPasajero" :key="option.value"
+                                                :value="option.value">
+                                                {{ option.label }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select @change="handleSelectChange($event.target.value)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option v-for="servicio in detalle.servicio_detalle.filter(s => s.proveedor_categoria_id == SelectValueCategoria)" 
+                                                    :key="servicio.id" :value="servicio.monto">
+                                                {{ servicio.observacion }} - ${{ servicio.monto }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-2 text-sm">
+                                        <select v-model="detalle.pasajero.clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                                {{ option.label }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Footer -->
                 <div class="px-4 py-3 border-t flex justify-end space-x-2">
@@ -125,25 +77,15 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
-        ListaTipoDocumento: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoPasajero: {
-            type: Object,
-            required: true,
-        },
-        ListaCategoria: {
-            type: Object,
-            required: true,
-        },
-        SelectValueCategoria: {
+        Titulo: {
             type: String,
             required: true,
         },
-        Titulo: {
+        SelectValueCategoria: {
             type: String,
             required: true,
         },
@@ -151,36 +93,34 @@
             type: Boolean,
             required: true
         },
-        ListaPasajeros: {
+        Lista_servicio_x_dia: {
             type: Array,
-            required: true
-        },
+            required: true,
+        }
     })
 
-    const TipoDocumento = ref({ ...props.ListaTipoDocumento });
-    // const Pais = ref({ ...props.ListaPais });
-    // const TipoPax = ref({ ...props.ListaTipoPax });
-    // const Clase = ref({ ...props.ListaClase });
+    console.log("objeto pasajero servicio ", props.Lista_servicio_x_dia);
+
+    const data = ref(props.Lista_servicio_x_dia);
+
+    const ProveedorCategoria = ref({ ...categoriesStore.globals.proveedor_categories });
+    const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
+    const TipoPasajero = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const TipoClase = ref({ ...categoriesStore.globals.servicio_clases });
 
     const Clase = ref([
-        { value: '1', label: 'PEND' },
-        { value: '2', label: 'OK' },
-        { value: '3', label: 'OBS' },
+        { value: '1', label: 'PROVISIONAL' },
+        { value: '2', label: 'CONFIRMADO' },
     ]);
 
     const emit = defineEmits(['close', 'update']);
-    const selectedValue = ref(props.SelectValueCategoria);
-
-    const handleFileChange = (event, index) => {
-        props.ListaPasajeros[index].documento_file = event.target.files[0].name;
-    };
 
     function closeModal() {
         emit('close');
     }
 
-    const removeItem = (index) => {
-        props.ListaPasajeros.splice(index, 1);
-        emit('update', props.ListaPasajeros);
-    }
+    // Maneja el cambio del select
+    const handleSelectChange = (monto) => {
+        console.log("Monto seleccionado:", monto);
+    };
 </script>

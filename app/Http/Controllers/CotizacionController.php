@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\Cotizacion\StoreRequest;
+use App\Http\Requests\Cotizacion\UpdateRequest;
+use App\Http\Requests\Cotizacion\CotizacionRequest;
 use App\Models\Cotizacion;
 use App\Models\Destino;
 use App\Models\DestinoTuristico;
 use App\Models\Pais;
+use App\Models\Pasajero;
+use App\Models\PasajeroServicio;
 use App\Models\ProveedorCategoria;
 use App\Models\ServicioClase;
 use App\Models\TipoComprobante;
@@ -13,6 +17,7 @@ use App\Models\TipoDocumento;
 use App\Models\TipoPasajero;
 use App\Models\TipoSunat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 class CotizacionController extends Controller
 {
@@ -22,17 +27,18 @@ class CotizacionController extends Controller
     public function index()
     {
         //$cotizacion = Cotizacion::all();
-        $formattedTipodocumento = TipoDocumento::getFormattedForDropdown();
-        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
-        $cotizacions = Cotizacion::orderBy('id', 'desc')->get();
-        //return Inertia::render('Cotizacion/Index', compact('cotizacions'));
-        return Inertia::render('Cotizacion/Index', 
-        [
-            'cotizacions' => $cotizacions, 
-            'ListaTipoDocumento' => $formattedTipodocumento,
-            //'ListaTipoComprobante' => $formattedTipodocomprobante,
-            'ListaTipoSunat' => $formattedTipoSunat
-        ]);
+        //$cotizacions = Cotizacion::orderBy('id', 'desc')->get();
+        $cotizacions = Cotizacion::with([
+            'tipo_comprobante:id,nombre',
+            'pais:id,nombre',
+            'idioma:id,nombre',
+            'mercado:id,nombre',
+        ])
+        ->where('estado_activo', 1)
+        ->orderBy('id', 'desc')
+        ->paginate(10);
+
+        return Inertia::render('Cotizacion/Index', ['cotizacions' => $cotizacions]);
         //return response()->json( ['cotizacion' => $cotizacion]);
     }
 
@@ -69,9 +75,43 @@ class CotizacionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        //dd($data);
-        Cotizacion::create($data);
+        return DB::transaction(function () use ($request) {
+            $data = $request->all();
+            $dataCotizacion = $request->except(['Pasajeros','PasajeroServicio']);
+            $dataCotizacion['file_nro'] = Cotizacion::generarCorrelativo();
+            $cotizacionResponse = Cotizacion::create($dataCotizacion);
+
+            $pasajero_servicios = $data['PasajeroServicio'] ?? [];
+
+            foreach ($pasajero_servicios as $pasajero_servicio) {                   // PasajeroServicio
+
+                $detalle = $pasajero_servicio['detalle'] ?? [];
+
+                foreach ($detalle as $servicio) {                                   // Detalle
+
+                    $pasajero = $servicio['pasajero'] ?? [];
+                    $pasajero['cotizacion_id'] = $cotizacionResponse->id;
+
+                    // Verificar si existe un archivo 'documento_file' en el array $pasajero
+                    if (isset($pasajero['documento_file']) && $pasajero['documento_file'] instanceof \Illuminate\Http\UploadedFile) {
+                        $file = $pasajero['documento_file'];
+                        $rutename = $file->store('documento_pasajero', ['disk' => 'public']);
+                        $pasajero['documento_file'] = $rutename; // Guardar la ruta del archivo en el array
+                    }
+
+                    $pasajeroResponse = Pasajero::create($pasajero);
+
+                    $pasajero_servicio_detalle = $servicio['servicio_detalle'] ?? [];
+
+                    foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // ServicioDetalle
+                        $pasajerocotizacion['pasajero_id'] = $pasajeroResponse->id;
+                        $pasajerocotizacion['itinerario_servicio_id'] = $servicio_detalle['id'];
+                                          
+                        $pasajero_servicio_response = PasajeroServicio::create($pasajerocotizacion);
+                    }
+                }
+            }
+        });
         return to_route('cotizacion');
     }
 

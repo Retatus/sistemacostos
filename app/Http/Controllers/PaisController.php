@@ -18,6 +18,12 @@ class PaisController extends Controller
         //return response()->json( ['pais' => $pais]);
     }
 
+    public function selectOptions()
+    {
+        $categories = Pais::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

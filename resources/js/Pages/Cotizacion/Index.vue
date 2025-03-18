@@ -4,8 +4,7 @@
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
                   Cotizacion
-              </h2>   
-              <button @click="showModal = true">Agregar Servicio Clase Modal</button> 
+              </h2>  
               <Link :href="route('cotizacion.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar Cotizacion
               </Link>                    
@@ -105,8 +104,11 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.file_nombre}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.comprobante_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{cotizacion.tipo_comprobante.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.fecha}}
@@ -124,10 +126,10 @@
                                         {{cotizacion.nro_estudiante}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.idioma}}
+                                        {{cotizacion.idioma.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.mercado}}
+                                        {{cotizacion.mercado.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.destino_turistico_id}}
@@ -188,14 +190,6 @@
             </div>
         </div>
     </AppLayout>  
-    <ProveedorModal
-        :isModalVisible="showModal"
-        :ListaTipoDocumento = ListaTipoDocumento
-        :ListaTipoSunat = ListaTipoSunat
-        :errorMessage="error"
-        @close="showModal = false"
-        @submit="addServiceClass"
-    /> 
 </template>
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
@@ -203,15 +197,9 @@
     import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
-    import ProveedorModal from '@/Components/Proveedor/CompModalProveedor.vue';
 
     const page = usePage();
-    const Cotizacions = ref(page.props.cotizacions);
-    const ListaTipoDocumento = ref(page.props.ListaTipoDocumento);
-    const ListaTipoSunat = ref(page.props.ListaTipoSunat);
-
-    const showModal = ref(false);
-    const error = ref('');
+    const Cotizacions = ref(page.props.cotizacions.data);
     
     const onDeleteConfirm = (Cotizacion) => {
         Swal.fire({
@@ -234,32 +222,7 @@
         });
     };
 
-    async function addServiceClass(data) {
-        try {
-            const response = await axios.post(`${route('proveedor.store')}`, data);    
-            console.log('Elemento agregado:', response.data);            
-            if (response.status === 200) {        
-                ServicioClases.value = response.data;    
-                showModal.value = false;
-
-                // isModalVisible.value = false;
-                // newItem.value = { nombre: ''};
-                // Swal.fire({
-                //     title: 'Registro exitoso',
-                //     html: `Este elemento <strong>${nombre.value}</strong> agregado correctamente.`,
-                //     icon: 'success',
-                //     timer: 2000,
-                //     showConfirmButton: false,
-                // }); 
-            }else{
-                //console.error('Error al agregar el elemento:', error);
-                alert('Error al agregar el elemento:', response.data);
-            }
-
-        } catch (err) {
-            error.value = err.response?.data?.message || 'Ocurrió un error';
-        }
-    }
+ 
 </script>
 
 

@@ -25,7 +25,7 @@
                 <select v-model="proveedor.tipo_comprobante" id="tipo_comprobante" 
                     class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in TiposComprobante" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaTipoComprobantes" :key="option.value" :value="option.value">
                         {{ option.label }}
                     </option>
                 </select>                  
@@ -40,7 +40,7 @@
                 <label for="tipo_sunat" class="block text-sm font-medium text-gray-700">Tipo Sunat</label>
                 <select v-model="proveedor.tipo_sunat" id="tipo_sunat" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in TiposSunat" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaTipoSunats" :key="option.value" :value="option.value">
                         {{ option.label }}
                     </option>
                 </select>  
@@ -53,7 +53,7 @@
                 <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
                 <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
-                    <option v-for="option in proveedorcategorias" :key="option.value" :value="option.value">
+                    <option v-for="option in sListaProveedorCategorias" :key="option.value" :value="option.value">
                     {{ option.label }}
                     </option>
                 </select>
@@ -74,12 +74,11 @@
                         Agregar
                     </PrimaryButton>
                 </div>
-            </div>                 
+            </div>              
         </div>
         <Servicio
-            :items="proveedor.detalles"
-            :ListaServicio_clase="ServicioClases" 
-            :ListaServicio_detalle="ServicioDetalles"   
+            :Servicio="proveedor.servicios"
+            :ListaServicioDetalle="ListaServicioDetalle"
             @update="updateDetalles"
         />
 
@@ -93,42 +92,23 @@
     import { ref } from 'vue';
     import axios from 'axios';
     import Swal from 'sweetalert2';
-    import Servicio from '../Servicio/CompServicioAdd.vue';
+    import Servicio from '../Servicio/CompServicioEdit.vue';
     import PrimaryButton from '../PrimaryButton.vue';
     import InputError from '@/Components/InputError.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
     
     // Definir las props
     const props = defineProps({
-        proveedor_edit: {
+        Proveedor: {
             type: Object, 
             required: true
         },
-        servicio_edit: {
-            type: Object, 
-            required: true
-        },
-        proveedorcategorias: {
+        ListaServicioDetalle: {
             type: Object,
             required: true,
-        },
-        ListaTipoComprobante: {
-            type: Object,
-            required: true,
-        },
-        ListaTipoSunat: {
-            type: Object,
-            required: true,
-        },
-        ListaServicio_clase: {
-            type: Object,
-            required: true,
-        },
-        ListaServicio_detalle: {
-            type: Object,
-            required: true,
-        },
+        }
     });
-
     
     const estadoActivo = ref([
         { id: '1', nombre: 'ACTIVO' }, 
@@ -138,45 +118,53 @@
     // Variables reactivas
     const showModal = ref(false);
     const error = ref('');
-    const ServicioDetalles = ref([...props.ListaServicio_detalle]);
-    const ServicioClases = ref([...props.ListaServicio_clase]);
-    const TiposComprobante = ref([...props.ListaTipoComprobante]);
-    const TiposSunat = ref([...props.ListaTipoSunat]);
+    const ListaServicioDetalle = ref([...props.ListaServicioDetalle]);
+    const sListaProveedorCategorias = ref({ ...categoriesStore.globals.proveedor_categories });
+    const sListaTipoComprobantes = ref({ ...categoriesStore.globals.tipo_comprobantes });
+    const sListaTipoSunats = ref({ ...categoriesStore.globals.tipo_sunat });
+
+    console.log("editar proveedores   ", props.Proveedor);
+    const proveedor = ref({ ...props.Proveedor });
     
     // Variables para el proveedor y detalle temporal
-    const proveedor = ref({
-        ruc: '',
-        razon_social: '',
-        direccion: '',
-        tipo_comprobante: '',
-        correo: '',
-        tipo_sunat: '',
-        contacto: '',
-        estado_activo: '',
-        tipo_documento_id: 1,
-        proveedor_categoria_id: '',
-        servicio_detalle: '',
+    // const proveedor = ref({
+    //     ruc: '',
+    //     razon_social: '',
+    //     direccion: '',
+    //     tipo_comprobante: '',
+    //     correo: '',
+    //     tipo_sunat: '',
+    //     contacto: '',
+    //     editado: 1,
+    //     estado_activo: '',
+    //     tipo_documento_id: 1,
+    //     proveedor_categoria_id: '',
         
-        detalles: [],
-    });
-
-    proveedor.value = props.proveedor_edit;
-
-    const detalleTemporal = ref({
-        monto: '',
-        moneda: 'DOLARES',
-        proveedor_categoria_id: '',
+    //     detalles: [],
+    // });
+    
+    //proveedor.value = props.Proveedor;
+    const precio = ref({
+        id: '',
+        anio: "2025",
+        moneda: "DOLARES",
+        monto: "",
+        tipo_pasajero_id: '',
+        servicio_id: '',
         servicio_clase_id: '',
-        ubicacion: '',
-        tipo_pax: 'ADULTO',
-        servicio_detalle_id: '',
-        estado_activo: 1,
+        estado_activo: 1
     });
 
-    proveedor.value.detalles = props.servicio_edit;
+    const servicios = ref({
+        id: '',
+        proveedor_id: '',
+        servicio_detalle_id: '',
+        ubicacion_id: '',
+        estado_activo: 1,
+        precios: [precio.value],
+    });
 
     async function CategoryListUpdate() {
-        alert("CategoryListUpdate");
         try {     
             const data = {
                 proveedor_categoria_id: proveedor.value.proveedor_categoria_id,
@@ -184,7 +172,7 @@
             const response = await axios.post(`${route('serviciodetalle')}/serviceCategory`, data);   
             if (response.status === 200) {
                 console.log('Elemento agregado:', response.data);            
-                ServicioDetalles.value = response.data;
+                ListaServicioDetalle.value = response.data;
             }   
             
         } catch (error) {
@@ -193,23 +181,45 @@
     };
     
     function updateDetalles(nuevosDetalles) {
-        detalleTemporal.value = nuevosDetalles;
+        console.log("QUE FUE     ", nuevosDetalles);
+        //detalleTemporal.value = nuevosDetalles;
     }
     
     function agregarDetalle() {
         // Agrega el detalle temporal a la lista de detalles
-        proveedor.value.detalles.push({ ...detalleTemporal.value });
-        // Limpia el detalle temporal
-        detalleTemporal.value = {
-            monto: '',
-            moneda: 'DOLARES',
-            proveedor_categoria_id: '',
+        proveedor.value.servicios.push({ ...servicios.value });
+
+        precio.value = {
+            id: '',
+            anio: "2025",
+            moneda: "DOLARES",
+            monto: "",
+            tipo_pasajero_id: '',
+            servicio_id: '',
             servicio_clase_id: '',
-            ubicacion: '',
-            tipo_pax: 'ADULTO',
-            servicio_detalle_id: '',
-            estado_activo: '1',
+            estado_activo: 1
         };
+
+        servicios.value = {
+            id: '',
+            proveedor_id: '',
+            servicio_detalle_id: '',
+            ubicacion_id: '',
+            estado_activo: 1,
+            precios: [precio.value],
+        };
+
+        // Limpia el detalle temporal
+        // detalleTemporal.value = {
+        //     monto: '',
+        //     moneda: 'DOLARES',
+        //     proveedor_categoria_id: '',
+        //     servicio_clase_id: '',
+        //     ubicacion_id: '',
+        //     tipo_pasajero_id: '',
+        //     servicio_detalle_id: '',
+        //     estado_activo: 1,
+        // };
     }
   
     async function submitProveedor() {

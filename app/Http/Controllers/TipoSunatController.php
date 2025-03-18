@@ -18,6 +18,12 @@ class TipoSunatController extends Controller
         //return response()->json( ['tiposunat' => $tiposunat]);
     }
 
+    public function selectOptions()
+    {
+        $categories = TipoSunat::getFormattedForDropdown();
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
