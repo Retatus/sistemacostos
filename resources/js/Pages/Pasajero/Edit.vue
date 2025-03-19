@@ -44,7 +44,7 @@
         form.post(route('pasajero.update', pasajero),{
             onSuccess: (e) => {
                 console.log('pasajero actualizado');
-                pasajero = e.props.pasajero;
+                //pasajero = e.props.pasajero;
             }
         });
     }
