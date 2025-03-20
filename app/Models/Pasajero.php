@@ -33,7 +33,7 @@ class Pasajero extends Model
 
     public function cotizacion()
     {
-        return $this->belongsTo(cotizacion::class, 'cotizacion_id', 'id');
+        return $this->belongsTo(Cotizacion::class, 'cotizacion_id', 'id');
     }
 
     public static function getFormattedForDropdown()
