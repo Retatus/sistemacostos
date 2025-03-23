@@ -27,7 +27,8 @@ class proveedor extends Model
     {
         return self::orderBy('id', 'desc')
             ->when($parametro, function ($query, $parametro) {
-                return $query->where('proveedor_categoria_id', $parametro);
+                return $query->where('proveedor_categoria_id', $parametro) 
+                ->where('estado_activo', 1);
             })
             ->get()
             ->map(function ($proveedor) {
@@ -36,6 +37,21 @@ class proveedor extends Model
                     'label' => $proveedor->ruc . ' - ' . $proveedor->razon_social,
                 ];
             });
+    }  
+
+    public static function findProveedor($tipoDoc, $ruc)
+    {
+        return self::where('tipo_documento_id', $tipoDoc)
+                      ->where('ruc', $ruc)
+                        ->where('estado_activo', 1)
+                      ->first();
+
+            // ->map(function ($proveedor) {
+            //     return [
+            //         'value' => $proveedor->id,
+            //         'label' => $proveedor->ruc . ' - ' . $proveedor->razon_social,
+            //     ];
+            // });
     }  
 
     public function desactivar()

@@ -127,6 +127,7 @@
         correo: '',
         tipo_sunat: '',
         contacto: '',
+        escliente: 0,
         editado: 0,
         estado_activo: 1,
         tipo_documento_id: 1,

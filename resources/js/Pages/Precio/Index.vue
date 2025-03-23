@@ -1,35 +1,3 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
-
-    const page = usePage();
-    const Precios = ref(page.props.precios);
-    
-    const onDeleteConfirm = (Precio) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${Precio.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('precio.destroy', Precio), {
-                onSuccess: (page) => {
-                Precios.value = page.props.precios;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -44,7 +12,7 @@
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -122,9 +90,44 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- Componente de paginación -->
+                        <Pagination :paginate="Paginate" :paginatedDataKey="'precios'" @update:data="Precios = $event" />
                     </div>                    
                 </div>                
             </div>
         </div>
     </AppLayout>  
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import Pagination from '@/Components/Pagination.vue';
+
+    const page = usePage();
+    const Paginate = ref(page.props.precios);
+    const Precios = ref(page.props.precios.data);
+    
+    const onDeleteConfirm = (Precio) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${Precio.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('precio.destroy', Precio), {
+                onSuccess: (page) => {
+                Precios.value = page.props.precios;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+</script>

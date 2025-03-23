@@ -1,35 +1,3 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
-
-    const page = usePage();
-    const Itinerarios = ref(page.props.itinerarios);
-    
-    const onDeleteConfirm = (Itinerario) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${Itinerario.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('itinerario.destroy', Itinerario), {
-                onSuccess: (page) => {
-                Itinerarios.value = page.props.itinerarios;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -44,13 +12,13 @@
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                                                        <th scope='col' className='px-6 py-3'>
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -70,7 +38,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="itinerario in Itinerarios" className="bg-white border-b ">
-                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{itinerario.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
@@ -100,9 +68,44 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- Componente de paginación -->
+                        <Pagination :paginate="Paginate" :paginatedDataKey="'itinerarios'" @update:data="Itinerarios = $event" />
                     </div>                    
                 </div>                
             </div>
         </div>
     </AppLayout>  
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import Pagination from '@/Components/Pagination.vue';
+
+    const page = usePage();
+    const Paginate = ref(page.props.itinerarios);
+    const Itinerarios = ref(page.props.itinerarios.data);
+    
+    const onDeleteConfirm = (Itinerario) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${Itinerario.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('itinerario.destroy', Itinerario), {
+                onSuccess: (page) => {
+                Itinerarios.value = page.props.itinerarios;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+</script>

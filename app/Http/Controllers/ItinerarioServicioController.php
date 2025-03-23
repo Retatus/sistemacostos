@@ -13,7 +13,7 @@ class ItinerarioServicioController extends Controller
     public function index()
     {
         //$itinerarioservicio = ItinerarioServicio::all();
-        $itinerarioservicios = ItinerarioServicio::orderBy('id', 'desc')->get();
+        $itinerarioservicios = ItinerarioServicio::orderBy('id', 'desc')->paginate(10); //->get();
         return Inertia::render('ItinerarioServicio/Index', compact('itinerarioservicios'));
         //return response()->json( ['itinerarioservicio' => $itinerarioservicio]);
     }

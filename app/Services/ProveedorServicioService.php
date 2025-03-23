@@ -164,9 +164,8 @@ class ProveedorServicioService
             $proveedorResponseUpdate = $this->proveedorController->updateEstado($request->id);
             // **Validar e insertar el proveedor**
             // Validar los datos del proveedor usando las reglas de ProveedorStoreRequest
-            $proveedorData = $request->except(['servicio']);
-            $proveedorData['editado'] = 1;
-            //dd($request->all());
+            $proveedorData = $request->except(['servicios']);
+            //dd($proveedorData);
             $validatorProveedor = Validator::make(
                 $proveedorData,
                 (new ProveedorUpdateRequest())->rules(),
@@ -186,8 +185,7 @@ class ProveedorServicioService
             $proveedorId = json_decode($proveedorResponse->getContent())->data->id;
             //dd($proveedorId);
             // **Validar e insertar servicios**
-            $detalles = $request->get('servicio', []);
-
+            $detalles = $request->get('servicios', []);
             $precioData = [];
             $servicioData = [];
 

@@ -5,11 +5,11 @@
     import CompDestinoTuristicoEdit from '@/Components/DestinoTuristico/CompDestinoTuristicoEdit.vue';
 
     const props = defineProps({
-        ListaPaises: {
+        ListaItinerarios: {
             type: Object, 
             required: true
         },
-        ListaItinerarios: {
+        ListaProveedor: {
             type: Object, 
             required: true
         },
@@ -18,14 +18,6 @@
             required: true
         },
         DestinoTuristico: {
-            type: Object, 
-            required: true
-        },
-        ListaProveedorCategorias: {
-            type: Object, 
-            required: true
-        },
-        ListaProveedor: {
             type: Object, 
             required: true
         },
@@ -47,10 +39,8 @@
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <CompDestinoTuristicoEdit 
-                        :Lista_paises="ListaPaises"
-                        :Lista_itinerarios="ListaItinerarios"
-                        :Lista_proveedor_categorias="ListaProveedorCategorias" 
+                    <CompDestinoTuristicoEdit
+                        :Lista_itinerarios="ListaItinerarios" 
                         :Lista_proveedor="ListaProveedor"
                         :Lista_servicio="ListaServicio"    
                         :DestinoTuristico="DestinoTuristico"   

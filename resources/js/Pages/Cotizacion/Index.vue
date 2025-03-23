@@ -94,7 +94,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="cotizacion in Cotizacions" className="bg-white border-b ">
+                                <tr v-for="cotizacion in cotizacions" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.proveedor_id}}
                                     </td> 
@@ -185,6 +185,8 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- Componente de paginación -->
+                        <Pagination :paginate="Paginate" :paginatedDataKey="'cotizacions'" @update:data="cotizacions = $event" />
                     </div>                    
                 </div>                
             </div>
@@ -197,9 +199,13 @@
     import Swal from 'sweetalert2';
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
+    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import Pagination from '@/Components/Pagination.vue';
 
     const page = usePage();
-    const Cotizacions = ref(page.props.cotizacions.data);
+    const Paginate = ref(page.props.cotizacions);
+    const cotizacions = ref(page.props.cotizacions.data);
     
     const onDeleteConfirm = (Cotizacion) => {
         Swal.fire({
@@ -214,15 +220,11 @@
             if (result.isConfirmed) {
             router.delete(route('cotizacion.destroy', Cotizacion), {
                 onSuccess: (page) => {
-                Cotizacions.value = page.props.cotizacions;
+                cotizacions.value = page.props.cotizacions;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
             }
         });
     };
-
- 
 </script>
-
-

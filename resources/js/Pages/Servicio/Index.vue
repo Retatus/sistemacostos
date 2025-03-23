@@ -1,55 +1,3 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref, computed } from 'vue';
-    import { router } from '@inertiajs/vue3';
-    import PrimaryButton from '@/Components/PrimaryButton.vue';
-    import SecondaryButton from '@/Components/SecondaryButton.vue';
-
-    const page = usePage();
-    const Paginate = ref(page.props.servicios);
-    const Servicios = ref(page.props.servicios.data);
-    
-    async function changePage(page) {
-        if(page > 0 && page <= Paginate.value.last_page){
-            // Incluye los filtros actuales en la solicitud            
-            const filters = {
-                page: page
-            };
-            // Envía la solicitud con los filtros y la página
-            router.get(window.location.pathname, filters, {
-                preserveScroll: true, // Mantiene la posición del scroll
-                preserveState: true,  // Mantiene los datos actuales en la vista
-                onSuccess: (page) => {
-                    Paginate.value = page.props.servicios; // Asegúrate de que los datos reactivos se actualicen
-                    Servicios.value = page.props.servicios.data; // Asegúrate de que los datos reactivos se actualicen
-                }
-            });
-        }
-    }   
-    const onDeleteConfirm = (Servicio) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${Servicio.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('servicio.destroy', Servicio), {
-                onSuccess: (page) => {
-                Servicios.value = page.props.servicios;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -128,24 +76,63 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="flex justify-between items-center gap-4 mt-5 mb-5">
-                            <span>Total de proveedores: {{ Paginate.total }}</span>
-
-                            <div v-if="Paginate.last_page > 1" class="flex items-center gap-4">
-                                <SecondaryButton @click="changePage(Paginate.current_page - 1)"
-                                    :disabled="Paginate.current_page === 1">
-                                    Anterior
-                                </SecondaryButton>
-                                <span>Página {{ Paginate.current_page }} de {{ Paginate.last_page }}</span>
-                                <SecondaryButton @click="changePage(Paginate.current_page + 1)"
-                                    :disabled="Paginate.current_page === Paginate.last_page">
-                                    Siguiente
-                                </SecondaryButton>
-                            </div>
-                        </div>
+                        <!-- Componente de paginación -->
+                       <Pagination :paginate="Paginate" :paginatedDataKey="'servicios'" @update:data="Servicios = $event" />
                     </div>                    
                 </div>                
             </div>
         </div>
     </AppLayout>  
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref, computed } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import Pagination from '@/Components/Pagination.vue';
+
+    const page = usePage();
+    const Paginate = ref(page.props.servicios);
+    const Servicios = ref(page.props.servicios.data);
+    
+    async function changePage(page) {
+        if(page > 0 && page <= Paginate.value.last_page){
+            // Incluye los filtros actuales en la solicitud            
+            const filters = {
+                page: page
+            };
+            // Envía la solicitud con los filtros y la página
+            router.get(window.location.pathname, filters, {
+                preserveScroll: true, // Mantiene la posición del scroll
+                preserveState: true,  // Mantiene los datos actuales en la vista
+                onSuccess: (page) => {
+                    Paginate.value = page.props.servicios; // Asegúrate de que los datos reactivos se actualicen
+                    Servicios.value = page.props.servicios.data; // Asegúrate de que los datos reactivos se actualicen
+                }
+            });
+        }
+    }   
+    const onDeleteConfirm = (Servicio) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${Servicio.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('servicio.destroy', Servicio), {
+                onSuccess: (page) => {
+                Servicios.value = page.props.servicios;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+</script>

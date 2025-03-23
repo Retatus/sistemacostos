@@ -5,15 +5,7 @@
     import CompDestinoTuristicoAdd from '@/Components/DestinoTuristico/CompDestinoTuristicoAdd.vue';
 
     const props = defineProps({
-        ListaPaises: {
-            type: Object, 
-            required: true
-        },
         ListaItinerarios: {
-            type: Object, 
-            required: true
-        },
-        ListaProveedorCategorias: {
             type: Object, 
             required: true
         },
@@ -44,9 +36,7 @@
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <CompDestinoTuristicoAdd 
-                        :Lista_paises="ListaPaises"
-                        :Lista_itinerarios="ListaItinerarios"
-                        :Lista_proveedor_categorias="ListaProveedorCategorias" 
+                        :Lista_itinerarios="ListaItinerarios" 
                         :Lista_proveedor="ListaProveedor"
                         :Lista_servicio="ListaServicio"       
                     />

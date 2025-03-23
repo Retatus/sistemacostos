@@ -1,134 +1,3 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref, computed } from 'vue';
-    import { router } from '@inertiajs/vue3';
-    import PrimaryButton from '@/Components/PrimaryButton.vue';
-    import SecondaryButton from '@/Components/SecondaryButton.vue';
-    import { useCategoriesStore } from '@/Stores/categories';
-    const categoriesStore = useCategoriesStore();
-    
-    const Page = usePage();
-    const Paginate = ref(Page.props.proveedors);
-    const Proveedors = ref(Page.props.proveedors.data);
-    const ProveedorCategorias = ref(Page.props.proveedorcategorias);
-
-    // Campos del formulario (reactivos)
-    const proveedor_categoria = ref('');
-    const ruc_razonsocial = ref('');
-
-    console.log(ProveedorCategorias);
-
-    const tiposDocumento = ref([...categoriesStore.globals.tipo_comprobantes]);
-    const tiposSunat = ref([...categoriesStore.globals.tipo_sunat]);
-
-    const esCliente = ref([
-        { id: '1', nombre: 'CLIENTE' }, 
-        { id: '0', nombre: 'PROVEEDOR' }
-    ]);
-
-    const estadoActivo = ref([
-        { id: '1', nombre: 'ACTIVO' }, 
-        { id: '0', nombre: 'DESACTIVO' }
-    ]);
-
-    const documentosConTipoTexto = computed(() => {
-        return Proveedors.value.map((doc) => {
-            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.value == doc.tipo_comprobante);
-            const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.value == doc.tipo_sunat);
-            const escliente = esCliente.value.find((escliente) => escliente.id == doc.escliente);
-            const estadoactivo = estadoActivo.value.find((estadoactivo) => estadoactivo.id == doc.estado_activo);
-            return {
-            ...doc,
-            tipo_documento_nombre: tipoComprobante ? tipoComprobante.label : 'Desconocido',
-            tipo_sunat_nombre: tipoSunat ? tipoSunat.label : 'Desconocido',
-            es_cliente: escliente ? escliente.nombre : 'Desconocido',
-            estado_activo: estadoactivo ? estadoactivo.nombre : 'Desconocido',
-            };
-        });
-    });
-
-    async function changePage(page) {
-        debugger
-        if(page > 0 && page <= Paginate.value.last_page){
-            // Incluye los filtros actuales en la solicitud            
-            const filters = {
-                page: page
-            };
-
-            // Agregar categoría solo si tiene un valor válido
-            if (proveedor_categoria.value) {
-                filters.categoria = proveedor_categoria.value;
-            }
-
-            // Agregar búsqueda solo si tiene un valor válido
-            if (ruc_razonsocial.value) {
-                filters.ruc_razonsocial = ruc_razonsocial.value;
-            }
-
-            // Envía la solicitud con los filtros y la página
-            router.get(window.location.pathname, filters, {
-                preserveScroll: true, // Mantiene la posición del scroll
-                preserveState: true,  // Mantiene los datos actuales en la vista
-                onSuccess: (page) => {
-                    Paginate.value = page.props.proveedors; // Asegúrate de que los datos reactivos se actualicen
-                    Proveedors.value = page.props.proveedors.data; // Asegúrate de que los datos reactivos se actualicen
-                }
-            });
-        }
-    }   
-
-    const handleSearch = async () => {
-        try {
-            // Datos a enviar en la petición
-            const parameters = {
-                proveedor_categoria: proveedor_categoria.value,
-                ruc_razonsocial: ruc_razonsocial.value,
-            };
-
-            // Petición POST usando axios
-            //const response = await axios.post(route('proveedor.indexProveedor'), parameters);
-            const response = await axios.get(route('proveedor'), {params: parameters});
-
-            // Manejo de la respuesta
-            if (response.status === 200) {
-                Proveedors.value = response.data.proveedors.data;  
-                Paginate.value = response.data.proveedors;
-            }
-        } catch (error) {
-            console.error('Error en la búsqueda:', error);
-            alert('Ocurrió un error al realizar la búsqueda. Por favor, intenta nuevamente.');
-        }
-    };
-
-    const handleCancel = () => {
-        window.location.href = route('proveedor');
-    };
-
-    const onDeleteConfirm = (proveedor) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${proveedor.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('proveedor.destroy', proveedor), {
-                onSuccess: (page) => {
-                    Proveedors.value = page.props.proveedors;
-                    Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -254,24 +123,112 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="flex justify-between items-center gap-4 mt-5 mb-5">
-                            <span>Total de proveedores: {{ Paginate.total }}</span>
-
-                            <div v-if="Paginate.last_page > 1" class="flex items-center gap-4">
-                                <SecondaryButton @click="changePage(Paginate.current_page - 1)"
-                                    :disabled="Paginate.current_page === 1">
-                                    Anterior
-                                </SecondaryButton>
-                                <span>Página {{ Paginate.current_page }} de {{ Paginate.last_page }}</span>
-                                <SecondaryButton @click="changePage(Paginate.current_page + 1)"
-                                    :disabled="Paginate.current_page === Paginate.last_page">
-                                    Siguiente
-                                </SecondaryButton>
-                            </div>
-                        </div>
+                       <!-- Componente de paginación -->
+                       <Pagination :paginate="Paginate" :paginatedDataKey="'proveedors'" @update:data="Proveedors = $event" />
                     </div>
                 </div>
             </div>
         </div>
     </AppLayout>
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref, computed } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import Pagination from '@/Components/Pagination.vue';
+    import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
+    
+    const Page = usePage();
+    const Paginate = ref(Page.props.proveedors);
+    const Proveedors = ref(Page.props.proveedors.data);
+    const ProveedorCategorias = ref(Page.props.proveedorcategorias);
+
+    // Campos del formulario (reactivos)
+    const proveedor_categoria = ref('');
+    const ruc_razonsocial = ref('');
+
+    console.log(ProveedorCategorias);
+
+    const tiposDocumento = ref([...categoriesStore.globals.tipo_comprobantes]);
+    const tiposSunat = ref([...categoriesStore.globals.tipo_sunat]);
+
+    const esCliente = ref([
+        { id: '1', nombre: 'CLIENTE' }, 
+        { id: '0', nombre: 'PROVEEDOR' }
+    ]);
+
+    const estadoActivo = ref([
+        { id: '1', nombre: 'ACTIVO' }, 
+        { id: '0', nombre: 'DESACTIVO' }
+    ]);
+
+    const documentosConTipoTexto = computed(() => {
+        return Proveedors.value.map((doc) => {
+            const tipoComprobante = tiposDocumento.value.find((tipoComprobante) => tipoComprobante.value == doc.tipo_comprobante);
+            const tipoSunat = tiposSunat.value.find((tipoSunat) => tipoSunat.value == doc.tipo_sunat);
+            const escliente = esCliente.value.find((escliente) => escliente.id == doc.escliente);
+            const estadoactivo = estadoActivo.value.find((estadoactivo) => estadoactivo.id == doc.estado_activo);
+            return {
+            ...doc,
+            tipo_documento_nombre: tipoComprobante ? tipoComprobante.label : 'Desconocido',
+            tipo_sunat_nombre: tipoSunat ? tipoSunat.label : 'Desconocido',
+            es_cliente: escliente ? escliente.nombre : 'Desconocido',
+            estado_activo: estadoactivo ? estadoactivo.nombre : 'Desconocido',
+            };
+        });
+    });
+
+    const handleSearch = async () => {
+        try {
+            // Datos a enviar en la petición
+            const parameters = {
+                proveedor_categoria: proveedor_categoria.value,
+                ruc_razonsocial: ruc_razonsocial.value,
+            };
+
+            // Petición POST usando axios
+            //const response = await axios.post(route('proveedor.indexProveedor'), parameters);
+            const response = await axios.get(route('proveedor'), {params: parameters});
+
+            // Manejo de la respuesta
+            if (response.status === 200) {
+                Proveedors.value = response.data.proveedors.data;  
+                Paginate.value = response.data.proveedors;
+            }
+        } catch (error) {
+            console.error('Error en la búsqueda:', error);
+            alert('Ocurrió un error al realizar la búsqueda. Por favor, intenta nuevamente.');
+        }
+    };
+
+    const handleCancel = () => {
+        window.location.href = route('proveedor');
+    };
+
+    const onDeleteConfirm = (proveedor) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${proveedor.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('proveedor.destroy', proveedor), {
+                onSuccess: (page) => {
+                    Proveedors.value = page.props.proveedors;
+                    Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+
+</script>

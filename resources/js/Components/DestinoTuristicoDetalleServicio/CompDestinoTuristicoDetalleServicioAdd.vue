@@ -10,7 +10,7 @@
         <label class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
         <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
           <option disabled value="">-- Selecciona una opción --</option>
-          <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
+          <option v-for="option in sProveedorCategorias" :key="option.value" :value="option.value">
           {{ option.label }}
           </option>
         </select>
@@ -59,7 +59,7 @@
             <td class="px-4 py-2 text-sm">
                 <select v-model="item.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
-                  <option v-for="option in Lista_proveedor_categorias" :key="option.value" :value="option.value">
+                  <option v-for="option in sProveedorCategorias" :key="option.value" :value="option.value">
                     {{ option.label }}
                   </option>
                 </select>
@@ -106,12 +106,10 @@
 import { ref, watch } from 'vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import { defineProps, defineEmits } from 'vue';
+import { useCategoriesStore } from '@/Stores/categories';
+const categoriesStore = useCategoriesStore();
 
-const props = defineProps({ 
-    Lista_proveedor_categorias: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
     Lista_proveedor: {
       type: Object,
       required: true,
@@ -125,6 +123,8 @@ const props = defineProps({
       required: true,
     },
   });
+
+  const sProveedorCategorias = ref([...categoriesStore.globals.proveedor_categories]);
 
   const emit = defineEmits(['close', 'update', 'actualizarTotal']); // Define el evento que vas a emitir
 
@@ -169,13 +169,13 @@ const props = defineProps({
             proveedor_categoria_id: '',
             proveedor_id: '',
             servicio_id: '',
-            itinerario_id: '',
+            itinerario_destino_id: '',
             observacion: '',
             monto: 0.00,            
         };
         calcularTotal();
     }
-
+    
     function closeModal() {
       emit('close');
   }

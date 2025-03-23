@@ -85,6 +85,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::get('/dashboard/proveedor', [ProveedorController::class, 'index'])->name('proveedor');
     Route::get('/dashboard/proveedor/create', [ProveedorController::class, 'create'])->name('proveedor.create');
+    Route::post('/dashboard/proveedor/find', [ProveedorController::class, 'find'])->name('proveedor.find');
     Route::get('/dashboard/proveedor/createProveedor', [ProveedorController::class, 'createProveedor'])->name('proveedor.createProveedor');
     Route::post('/dashboard/proveedor/indexProveedor', [ProveedorController::class, 'indexProveedor'])->name('proveedor.indexProveedor');
     Route::post('/dashboard/proveedor', [ProveedorController::class, 'store'])->name('proveedor.store');

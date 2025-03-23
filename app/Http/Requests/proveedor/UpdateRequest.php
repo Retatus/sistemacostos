@@ -37,6 +37,8 @@ class UpdateRequest extends FormRequest
             "correo" => 'required|min:3|max:100',
             "tipo_sunat" => 'required',
             "contacto" => 'required|min:3|max:50',
+            "editado" => 'required|in:1,0',
+            "escliente" => 'required|in:1,0',
             "estado_activo" => 'required|in:1,0',
             "proveedor_categoria_id" => 'required',
         ];
@@ -68,6 +70,10 @@ class UpdateRequest extends FormRequest
             'contacto.required' => 'El contacto es obligatorio',
             'contacto.min' => 'El contacto debe tener al menos 3 caracteres',
             'contacto.max' => 'El contacto no debe exceder 50 caracteres',
+            'editado.required' => 'El campo editado es obligatorio',
+            'editado.in' => 'El campo editado es obligatorio',
+            'escliente.required' => 'El campo es cliente es obligatorio',
+            'escliente.in' => 'El campo es cliente es obligatorio',
             'estado_activo.required' => 'El estado activo es obligatorio',
             'proveedor_categoria_id.required' => 'La categoría del proveedor es obligatoria',
         ];

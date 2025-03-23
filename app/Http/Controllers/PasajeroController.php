@@ -28,7 +28,7 @@ class PasajeroController extends Controller
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc')
         ->paginate(10);
-        return Inertia::render('Pasajero/Index', compact('pasajeros'));
+        return Inertia::render('Pasajero/Index', ['pasajeros' => $pasajeros]); //compact('pasajeros'));
         //return response()->json( ['pasajero' => $pasajero]);
     }
 

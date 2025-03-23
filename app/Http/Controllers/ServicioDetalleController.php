@@ -27,9 +27,8 @@ class ServicioDetalleController extends Controller
                 'distribucion_venta:id,nombre',
             ])
         ->orderBy('id', 'desc')
-        ->get();
-
-        return Inertia::render('ServicioDetalle/Index', compact('serviciodetalles'));
+        ->paginate(10); //->get();
+        return Inertia::render('ServicioDetalle/Index', ['serviciodetalles' => $serviciodetalles]); //compact('serviciodetalles'));
         //return response()->json( ['serviciodetalle' => $serviciodetalle]);
     }
 
