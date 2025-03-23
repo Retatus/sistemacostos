@@ -25,6 +25,7 @@
                                 <input v-model="personas.ruc" type="text" id="ruc"
                                 class="mt-1 w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el numero">
                                 <PrimaryButton type="button"
+                                    @click="findCliente"
                                     class="mt-1">
                                     Buscar
                                 </PrimaryButton>
@@ -78,6 +79,8 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Modal from '@/Components/Modal.vue';
 import { useCategoriesStore } from '@/Stores/categories';
+import { de } from 'date-fns/locale';
+import Swal from 'sweetalert2';
 const categoriesStore = useCategoriesStore();
 
 const props = defineProps({
@@ -99,9 +102,11 @@ const personas = ref({
     tipo_sunat: 1,
     proveedor_categoria_id: 0,//cliente
     escliente: 1,
+    editado: 0,
     estado_activo: 1,
 });
 
+const error = ref('');
 const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
 const tiposSunat = ref({ ...categoriesStore.globals.tipo_sunat });
 const emit = defineEmits(['close', 'submit']);
@@ -109,35 +114,44 @@ const emit = defineEmits(['close', 'submit']);
 function closeModal() {
     emit('close');
 }
-
-const Cliente = ref({
-    id: '',
-    numero: '',
-    nombre: '',
-});
 async function addCliente() {
     try {
         const response = await axios.post(`${route('proveedor.store')}`, personas.value);  
         if (response.status === 201) { 
-            Cliente.value.id = response.data.data.id;
-            Cliente.value.numero = response.data.data.ruc;
-            Cliente.value.nombre = response.data.data.razon_social;  
-            emit('submit', Cliente.value);
-            //props.isModalVisibleProveedor = false;
-            // Swal.fire({
-            //     title: 'Registro exitoso',
-            //     html: `Este elemento <strong>${personas.value.razon_social}</strong> agregado correctamente.`,
-            //     icon: 'success',
-            //     timer: 2000,
-            //     showConfirmButton: false,
-            // });             
+            personas.value = response.data.data;
+            emit('submit', personas.value);
         }else{
             //console.error('Error al agregar el elemento:', error);
             alert('Error al agregar el elemento:', response.data);
         }
+    } catch (err) {
+        console.log('Error al agregar el elemento:', err);
+        if (err.response.status === 422) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                html: `<strong>${err.response.data.message}</strong>`,
+                confirmButtonText: 'Aceptar',
+            });
+            emit('submit', personas.value);
+        } else {
+            error.value = err.response?.data?.message || 'Ocurrió un error';
+        }
+    }
+}
 
+async function findCliente() {
+    try {
+        const response = await axios.post(`${route('proveedor.find')}`, personas.value);
+        if (response.status === 200) {  
+            personas.value = response.data;
+        }else{
+            alert('Error al agregar el elemento:', response.data);
+        }
     } catch (err) {
         error.value = err.response?.data?.message || 'Ocurrió un error';
     }
 }
+
+
 </script>

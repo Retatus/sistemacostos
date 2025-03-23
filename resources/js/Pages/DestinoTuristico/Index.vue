@@ -1,42 +1,10 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
-
-    const page = usePage();
-    const DestinoTuristicos = ref(page.props.destinoturisticos);
-    
-    const onDeleteConfirm = (DestinoTuristico) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${DestinoTuristico.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('destino_turistico.destroy', DestinoTuristico), {
-                onSuccess: (page) => {
-                DestinoTuristicos.value = page.props.destinoturisticos;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight dark:text-gray-200">
                   DestinoTuristico
-              </h2>   
+              </h2>
               <Link :href="route('destino_turistico.create')" class="btn btn-primary dark:text-gray-200"> <i class="bi bi-plus"></i>
                   Agregar DestinoTuristico
               </Link>                    
@@ -127,9 +95,64 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- Componente de paginación -->
+                        <Pagination :paginate="Paginate" :paginatedDataKey="'destinoturisticos'" @update:data="DestinoTuristicos = $event" />
                     </div>                    
                 </div>                
             </div>
         </div>
     </AppLayout>  
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import Pagination from '@/Components/Pagination.vue';
+
+    const page = usePage();
+    const Paginate = ref(page.props.destinoturisticos);
+    const DestinoTuristicos = ref(page.props.destinoturisticos.data);
+
+    async function changePage(page) {
+        if(page > 0 && page <= Paginate.value.last_page){
+            // Incluye los filtros actuales en la solicitud            
+            const filters = {
+                page: page
+            };
+            // Envía la solicitud con los filtros y la página
+            router.get(window.location.pathname, filters, {
+                preserveScroll: true, // Mantiene la posición del scroll
+                preserveState: true,  // Mantiene los datos actuales en la vista
+                onSuccess: (page) => {
+                    Paginate.value = page.props.destinoturisticos; // Asegúrate de que los datos reactivos se actualicen
+                    DestinoTuristicos.value = page.props.destinoturisticos.data; // Asegúrate de que los datos reactivos se actualicen
+                }
+            });
+        }
+    }   
+    
+    const onDeleteConfirm = (DestinoTuristico) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${DestinoTuristico.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('destino_turistico.destroy', DestinoTuristico), {
+                onSuccess: (page) => {
+                DestinoTuristicos.value = page.props.destinoturisticos;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+</script>

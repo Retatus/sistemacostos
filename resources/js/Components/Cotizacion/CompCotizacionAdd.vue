@@ -4,12 +4,12 @@
             <div class="grid grid-cols-6 gap-6 w-full p-5">
                 <!-- Primera fila -->
                 <div hidden class="col-span-1">
-                    <label for="" class="block text-sm font-medium text-gray-700">Cliente Id</label>
+                    <label for="proveedor_id" class="block text-sm font-medium text-gray-700">Cliente Id</label>
                     <input v-model="Cotizacion.proveedor_id" type="text" id="proveedor_id"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente id">
                 </div>
                 <div class="col-span-1">
-                    <label for="" class="block text-sm font-medium text-gray-700">Cliente nro doc.</label>
+                    <label for="cliente_nro_doc" class="block text-sm font-medium text-gray-700">Cliente nro doc.</label>
                     <input type="text" id="cliente_nro_doc"
                         required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente nro doc.">
                 </div>
@@ -398,13 +398,12 @@ const listaServicioDetalle = ref([...Cotizacion.value.Servicios]);
 const destinoTuristicoDetalleServicio = ref([]);
 const minFechaFin = ref(Cotizacion.value.fecha_inicio);
 
-async function recuperarValorModal(valor) {
-    console.log('recuperarValorModal ', valor);
+async function recuperarValorModal(persona) {
     showModalProveedor.value = false;
-    Cotizacion.value.proveedor_id = valor.id;
-    Cotizacion.value.proveedor_razon_social = valor.nombre;
+    Cotizacion.value.proveedor_id = persona.id;
+    Cotizacion.value.proveedor_razon_social = persona.razon_social;
     const nroDoc = document.getElementById('cliente_nro_doc');
-    nroDoc.value = valor.numero;
+    nroDoc.value = persona.ruc;
 }
  
 async function ListaCategoriaProveedor() {

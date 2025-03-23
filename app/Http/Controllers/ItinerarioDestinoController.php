@@ -13,7 +13,7 @@ class ItinerarioDestinoController extends Controller
     public function index()
     {
         //$itinerariodestino = ItinerarioDestino::all();
-        $itinerariodestinos = ItinerarioDestino::orderBy('id', 'desc')->get();
+        $itinerariodestinos = ItinerarioDestino::orderBy('id', 'desc')->paginate(10); //->get();
         return Inertia::render('ItinerarioDestino/Index', compact('itinerariodestinos'));
         //return response()->json( ['itinerariodestino' => $itinerariodestino]);
     }

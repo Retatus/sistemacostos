@@ -128,6 +128,14 @@ class ProveedorController extends Controller
         return response()->json($proveedorList);
     }
 
+    public function find(Request $request)
+    {
+        $tipoDoc = $request->input('tipo_documento_id'); 
+        $ruc = $request->input('ruc') ?? ''; 
+        $proveedorList = Proveedor::findProveedor($tipoDoc, $ruc);
+        return response()->json($proveedorList);
+    }
+
     /**
      * Display the specified resource.
      */

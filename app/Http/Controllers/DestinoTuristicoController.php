@@ -28,9 +28,9 @@ class DestinoTuristicoController extends Controller
         $destinoturisticos = DestinoTuristico::with('pais:id,nombre')
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc')
-        ->get(); // Ordenar por ID descendente
+        ->paginate(10); //->get(); // Ordenar por ID descendente
         //dd($destinoturisticos);
-        return Inertia::render('DestinoTuristico/Index', compact('destinoturisticos'));
+        return Inertia::render('DestinoTuristico/Index', ['destinoturisticos' => $destinoturisticos]); // compact('destinoturisticos'));
         //return response()->json( ['destinoturistico' => $destinoturistico]);
     }
 

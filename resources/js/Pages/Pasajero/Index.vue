@@ -1,35 +1,3 @@
-<script setup>
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import {Link, usePage} from '@inertiajs/vue3';
-    import Swal from 'sweetalert2';
-    import { ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
-
-    const page = usePage();
-    const Pasajeros = ref(page.props.pasajeros.data);
-    
-    const onDeleteConfirm = (Pasajero) => {
-        Swal.fire({
-            title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${Pasajero.nombre}</strong> será eliminado permanentemente.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            focusCancel: true,
-        }).then((result) => {
-            if (result.isConfirmed) {
-            router.delete(route('pasajero.destroy', Pasajero), {
-                onSuccess: (page) => {
-                Pasajeros.value = page.props.pasajeros.data;
-                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
-                },
-            });
-            }
-        });
-    };
-</script>
-
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -162,9 +130,44 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- Componente de paginación -->
+                        <Pagination :paginate="Paginate" :paginatedDataKey="'pasajeros'" @update:data="Pasajeros = $event" />
                     </div>                    
                 </div>                
             </div>
         </div>
     </AppLayout>  
 </template>
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import {Link, usePage} from '@inertiajs/vue3';
+    import Swal from 'sweetalert2';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import Pagination from '@/Components/Pagination.vue';
+
+    const page = usePage();
+    const Paginate = ref(page.props.pasajeros);
+    const Pasajeros = ref(page.props.pasajeros.data);
+    
+    const onDeleteConfirm = (Pasajero) => {
+        Swal.fire({
+            title: '<strong>¿Estás seguro?</strong>',
+            html: `Este elemento <strong>${Pasajero.nombre}</strong> será eliminado permanentemente.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+            router.delete(route('pasajero.destroy', Pasajero), {
+                onSuccess: (page) => {
+                Pasajeros.value = page.props.pasajeros.data;
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
+                },
+            });
+            }
+        });
+    };
+</script>

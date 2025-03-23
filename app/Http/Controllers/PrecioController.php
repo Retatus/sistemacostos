@@ -23,9 +23,10 @@ class PrecioController extends Controller
                 'tipo_pasajero:id,nombre',
                 'servicio_clase:id,nombre',
             ])
-        ->orderBy('id', 'desc')->get();
+        ->orderBy('id', 'desc')
+        ->paginate(10); // ->get();
         //dd($precios);
-        return Inertia::render('Precio/Index', compact('precios'));
+        return Inertia::render('Precio/Index', ['precios' => $precios]); //compact('precios'));
         //return response()->json( ['precio' => $precio]);
     }
 
