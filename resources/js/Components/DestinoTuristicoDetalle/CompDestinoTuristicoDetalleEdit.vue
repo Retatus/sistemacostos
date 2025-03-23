@@ -61,10 +61,10 @@
   <Modal :show="isModalVisible" maxWidth="70" closeable @close="closeModal">
     <div class="p-4">
       <CompDestinoTuristicoDetalleServicio
-        :Lista_proveedor_categorias = "Lista_proveedor_categorias" 
         :Lista_proveedor = "Lista_proveedor"     
         :Lista_destino_turistico_detalle_servicio = Lista_destino_turistico_detalle[indice].destino_turistico_detalle_servicio
         :Lista_servicio="Lista_servicio"
+        @close="closeModal"
         @actualizarTotal="actualizarTotalNieto"
       />
       <button @click="closeModal" type="button" class="mt-4 btn btn-secondary">
@@ -84,10 +84,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  Lista_proveedor_categorias: {
-    type: Object,
-    required: true,
-  },  
   Lista_proveedor: {
     type: Object,
     required: true,
@@ -104,8 +100,6 @@ const props = defineProps({
 
 const indice = ref(0);
 const isModalVisible = ref(false);
- 
-console.log('aaaaaaaaaaaaaa assssssssssss', props.Lista_destino_turistico_detalle);
 
 function ItinerarioDescripcion(index) {
     const selectElement = event.target;
@@ -139,25 +133,5 @@ const actualizarTotalNieto = (nuevoTotal) => {
   // Emitir el total del Hijo al Padre
   emit("actualizarMontoPadre", totalCosto.value);
 };
-
-// onMounted(() => {
-//   CategoryListUpdate();
-// });
-
-// async function CategoryListUpdate() {      
-//     try {     
-//         const data = {
-//             proveedor_categoria_id: destinoTuristicoDetalleServicio.value.proveedor_categoria_id,
-//         }     
-//         const response = await axios.post(`${route('proveedor')}/proveedorList`, data);   
-//         if (response.status === 200) {
-//             console.log('Elemento agregado:', response.data);            
-//             props.Lista_proveedor_categorias.value = response.data;
-//         }   
-
-//     } catch (error) {
-//         console.error('Error al actualizar los datos:', error);
-//     }        
-// };
 
 </script>

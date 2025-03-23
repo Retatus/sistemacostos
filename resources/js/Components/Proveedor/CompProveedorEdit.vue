@@ -225,6 +225,7 @@
     async function submitProveedor() {
         try {
             console.log(proveedor.value);
+            proveedor.value.editado = 1;
             const response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
 
             if (response.status === 200) {

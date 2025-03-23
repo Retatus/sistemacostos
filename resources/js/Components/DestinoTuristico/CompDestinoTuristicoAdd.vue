@@ -52,7 +52,6 @@
                 <div class="col-span-3">
                     <DestinioTuristicoDetalle
                         :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
-                        :Lista_proveedor_categorias = "ProveedorCategorias" 
                         :Lista_itinerarios = "Itinerarios"
                         :Lista_proveedor = "Proveedores" 
                         :Lista_servicio="Servicios" 
@@ -100,18 +99,12 @@ import Swal from 'sweetalert2';
 import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
+import { useCategoriesStore } from '@/Stores/categories';
+const categoriesStore = useCategoriesStore();
 
 // Definir las props
 const props = defineProps({
-    Lista_paises: {
-        type: Object,
-        required: true,
-    },
     Lista_itinerarios: {
-        type: Object,
-        required: true,
-    },
-    Lista_proveedor_categorias: {
         type: Object,
         required: true,
     },
@@ -127,19 +120,13 @@ const props = defineProps({
 
 // Variables reactivas
 const error = ref('');
-const Pais = ref([...props.Lista_paises]);
+const Pais = ref([...categoriesStore.globals.pais]);
 const Itinerarios = ref([...props.Lista_itinerarios]);
-const ProveedorCategorias = ref([...props.Lista_proveedor_categorias]);
 const Proveedores = ref([...props.Lista_proveedor]);
 const Servicios = ref([...props.Lista_servicio]);
 
 // Timer para controlar el delay
 let emptyInputTimeout = null;
-
-const descuentoTipo = ref([
-    { id: '1', nombre: '%' },
-    { id: '0', nombre: 'MONTO' }
-]);
 
 const estadoActivo = ref([
     { id: '1', nombre: 'ACTIVO' },

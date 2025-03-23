@@ -27,7 +27,8 @@ class proveedor extends Model
     {
         return self::orderBy('id', 'desc')
             ->when($parametro, function ($query, $parametro) {
-                return $query->where('proveedor_categoria_id', $parametro);
+                return $query->where('proveedor_categoria_id', $parametro) 
+                ->where('estado_activo', 1);
             })
             ->get()
             ->map(function ($proveedor) {

@@ -39,17 +39,13 @@ class DestinoTuristicoController extends Controller
      */
     public function create()
     {
-        //return Inertia::render('DestinoTuristico/Create');
-        $formattedPaises = Pais::getFormattedForDropdown();
+        //return Inertia::render('DestinoTuristico/Create');        
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
-        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
-        [
-            'ListaProveedorCategorias' => $formattedCategorias,
+        [            
             'ListaProveedor' =>  $formattedProveedores,
-            'ListaPaises' => $formattedPaises,
             'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
         ]);
@@ -181,22 +177,13 @@ class DestinoTuristicoController extends Controller
     public function edit(DestinoTuristico $destinoTuristico)
     {        
         $destinoTuristico = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoTuristico->id);
-        // dd($destinoTuristico->toJson());
         
-        // if (!$destinoTuristico) {
-        //     return response()->json(['message' => 'Destino turístico no encontrado'], 404);
-        // }
-        // return response()->json($destinoTuristico);
-        $formattedPaises = Pais::getFormattedForDropdown();
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
-        $formattedCategorias = ProveedorCategoria::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/EditDestinoTuristico', 
         [
-            'ListaProveedorCategorias' => $formattedCategorias,
             'ListaProveedor' =>  $formattedProveedores,
-            'ListaPaises' => $formattedPaises,
             'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
             'DestinoTuristico' => $destinoTuristico
