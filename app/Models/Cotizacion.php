@@ -28,6 +28,11 @@ class Cotizacion extends Model
         return $this->belongsTo(Mercado::class, 'mercado_id', 'id');
     }
 
+    public function destino()
+    {
+        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
+    }
+
     public static function getFormattedForDropdown()
     {
         return self::orderBy('id', 'desc')

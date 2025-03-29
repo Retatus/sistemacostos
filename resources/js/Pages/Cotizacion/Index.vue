@@ -18,73 +18,82 @@
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         proveedor_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        file_nro
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        file_nombre
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        comprobante_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         fecha
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        nro_pasajeros
+                                        file_nro
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        nro_ninio
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        nro_adulto
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        nro_estudiante
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        idioma
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        mercado
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        destino_turistico_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        pais_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        fecha_inicio
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        fecha_fin
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        nro_dias
+                                        destino
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_cotizacion
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
+                                        estado_documentacion
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        estado_reserva
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        file_nombre
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        comprobante_id
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        nro_pasajeros
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        nro_ninio
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        nro_adulto
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        nro_estudiante
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        idioma
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        mercado
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        destino_turistico_id
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        pais_id
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        fecha_inicio
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        fecha_fin
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
+                                        nro_dias
+                                    </th> 
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         costo_parcial
                                     </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         descuento_estudiante
                                     </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         descuento_ninio
                                     </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         descuento_otro
                                     </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         costo_total
                                     </th> 
-                                    <th scope='col' className='px-6 py-3'>
+                                    <th hidden scope='col' className='px-6 py-3'>
                                         estado_activo
                                     </th> 
 
@@ -94,12 +103,47 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="cotizacion in cotizacions" className="bg-white border-b ">
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                <tr v-for="cotizacion in cotizacionesTexto" className="bg-white border-b ">
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.proveedor_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{cotizacion.fecha}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.file_nro}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{cotizacion.destino.nombre}}
+                                    </td>
+                                    <td scope="col">
+                                        <div :class="{
+                                            'p-2 font-medium rounded-full border-rounded text-gray-900 text-center': true,
+                                            'bg-yellow-400': cotizacion.estado_cotizacion == 0,
+                                            'bg-green-400': cotizacion.estado_cotizacion == 1,
+                                            'bg-red-400': cotizacion.estado_cotizacion == 2
+                                            }">
+                                            {{cotizacion.estado_cotizacion_text}}
+                                        </div>
+                                    </td>
+                                    <td scope="col" class="px-6 py-4 font-medium text-gray-900">
+                                        <div
+                                        :class="{
+                                                'p-2 font-medium rounded-full border-rounded text-gray-900 text-center': true,
+                                                'bg-green-400 text-gray-900': cotizacion.estado_documentacion == 1,
+                                                'bg-red-400 text-gray-900': cotizacion.estado_documentacion == 0
+                                            }">
+                                            {{ cotizacion.estado_documentacion_text }}
+                                        </div>
+                                    </td>
+                                    <td scope="col">
+                                        <div :class="{
+                                            'p-2 font-medium rounded-full border-rounded text-gray-900 text-center': true,
+                                            'bg-green-400 text-gray-900': cotizacion.estado_reserva == 1,
+                                            'bg-yellow-400 text-gray-900': cotizacion.estado_reserva == 0
+                                            }">
+                                            {{ cotizacion.estado_reserva_text }}
+                                        </div>
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.file_nombre}}
@@ -107,64 +151,58 @@
                                     <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.comprobante_id}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.tipo_comprobante.nombre}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.fecha}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.nro_pasajeros}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.nro_ninio}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.nro_adulto}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.nro_estudiante}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.idioma.nombre}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.mercado.nombre}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.destino_turistico_id}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.pais_id}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.fecha_inicio}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.fecha_fin}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.nro_dias}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacion.estado_cotizacion}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.costo_parcial}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.descuento_estudiante}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.descuento_ninio}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.descuento_otro}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.costo_total}}
                                     </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{cotizacion.estado_activo}}
                                     </td> 
 
@@ -197,7 +235,7 @@
     import AppLayout from '@/Layouts/AppLayout.vue';
     import {Link, usePage} from '@inertiajs/vue3';
     import Swal from 'sweetalert2';
-    import { ref } from 'vue';
+    import { ref , computed} from 'vue';
     import { router } from '@inertiajs/vue3';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -206,6 +244,36 @@
     const page = usePage();
     const Paginate = ref(page.props.cotizacions);
     const cotizacions = ref(page.props.cotizacions.data);
+
+    const estadoCotizacion = ref([
+        { id: '0', nombre: 'PENDIENTE' }, 
+        { id: '1', nombre: 'CONFIRMADA' },
+        { id: '2', nombre: 'ANULADA' },
+    ]);
+
+    const estadoDocumento = ref([
+        { id: '0', nombre: 'OBS' },
+        { id: '1', nombre: 'OK' }, 
+    ]);
+
+    const estadoReserva = ref([
+        { id: '0', nombre: 'WL' },
+        { id: '1', nombre: 'OK' }, 
+    ]);
+
+    const cotizacionesTexto = computed(() => {
+        return cotizacions.value.map((doc) => {
+            const estadocotizacion = estadoCotizacion.value.find((estadocotizacion) => estadocotizacion.id == doc.estado_cotizacion);
+            const estadodocumento = estadoDocumento.value.find((estadodocumento) => estadodocumento.id == doc.estado_documentacion);
+            const estadoreserva = estadoReserva.value.find((estadoreserva) => estadoreserva.id == doc.estado_reserva);
+            return {
+            ...doc,
+            estado_cotizacion_text: estadocotizacion ? estadocotizacion.nombre : 'Desconocido',
+            estado_documentacion_text: estadodocumento ? estadodocumento.nombre : 'Desconocido',
+            estado_reserva_text: estadoreserva ? estadoreserva.nombre : 'Desconocido',
+            };
+        });
+    });
     
     const onDeleteConfirm = (Cotizacion) => {
         Swal.fire({

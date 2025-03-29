@@ -33,6 +33,7 @@ class CotizacionController extends Controller
             'pais:id,nombre',
             'idioma:id,nombre',
             'mercado:id,nombre',
+            'destino:id,nombre',
         ])
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc')
