@@ -1,11 +1,12 @@
 <template>
   <div class="block text-sm font-medium text-gray-700">
     <label v-if="label" class="font-bold">{{ label }}</label>
-    <VueDatepicker 
+    <VueDatePicker 
       v-model="selectedDate"
-      :locale="locale"
+      :format-locale="es"
       :timezone="timeZone"
       :format="formatearFecha"
+      auto-apply
       @update:modelValue="emitirCambio"
       :class="'mt-1 w-full border-gray-300 rounded-md shadow-sm'"
     />
@@ -14,13 +15,13 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import VueDatepicker from "vue3-datepicker";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import '@vuepic/vue-datepicker/dist/main.css';
 import { es } from "date-fns/locale";
 import { format } from "date-fns"; // Importamos la función format de date-fns
 
 const selectedDate = ref(new Date());
 const timeZone = 'America/Lima'; // Zona horaria de Lima
-const locale = es; // Idioma español
 
 const props = defineProps({
   modelValue: [String, Date, null],
