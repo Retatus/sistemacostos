@@ -9,6 +9,8 @@ class Pasajero extends Model
 {
     use HasFactory;    
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = ['nombre', 'apellido_paterno', 'apellido_materno', 'documento_tipo_id', 'documento_numero', 'pais_id', 'documento_file', 'tipo_pasajero_id', 'clase_id', 'cotizacion_id', 'estado_activo'];
 
     public function tipo_docuemento()
@@ -34,6 +36,11 @@ class Pasajero extends Model
     public function cotizacion()
     {
         return $this->belongsTo(Cotizacion::class, 'cotizacion_id', 'id');
+    }
+
+    public function pasajeroServicios()
+    {
+        return $this->hasMany(PasajeroServicio::class, 'pasajero_id', 'id');
     }
 
     public static function getFormattedForDropdown()

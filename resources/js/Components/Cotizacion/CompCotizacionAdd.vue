@@ -486,7 +486,7 @@ const calcularDiferenciaDias = () => {
     console.log('calcularDiferenciaDias ', Cotizacion.value.fecha_inicio, Cotizacion.value.fecha_fin);
     const inicio = new Date(Cotizacion.value.fecha_inicio);
     const fin = new Date(Cotizacion.value.fecha_fin);
-    Cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24));
+    Cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
 };
 
 // Función para calcular el total de pasajeros

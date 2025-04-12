@@ -1,35 +1,34 @@
 <template>
     <AppLayout title="Dashboard">
         <template #header>
-                <div class="grid grid-cols-3 gap-4 w-full">
-                    <div class="col-span-1 flex justify-center items-center px-4">
-                        <h2 class="text-xl mr-2 font-semibold leading-tight text-gray-800">
-                            proveedor
-                        </h2>
-                        <Link :href="route('proveedor.create')"
-                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150 btn btn-primary px-4 mr-2">
-                            Nuevo
-                        </Link>
-                    </div>
-                    <div class="col-span-1 flex justify-between items-center px-4">
-                        <div class="flex w-full items-center gap-4">
-                            <select v-model="proveedor_categoria"
-                                class="text-xs border border-gray-300 rounded-md shadow-sm px-4 flex-1">
-                                <option value="">-- Selecciona una opción --</option>
-                                <option v-for="option in ProveedorCategorias" :key="option.value" :value="option.value">
-                                    {{ option.label }}
-                                </option>
-                            </select>
-                            <input v-model="ruc_razonsocial" type="text" placeholder="Buscar"
-                                class="text-xs border border-gray-300 rounded-md shadow-sm px-4 flex-1">
-                        </div>
-                    </div>
-                    <div class="col-span-1 flex justify-center items-right px-4"> 
-                        <PrimaryButton class="btn btn-primary px-4 mr-2" @click="handleSearch">Buscar</PrimaryButton>
-                        <SecondaryButton @click="handleCancel" class="mr-2">Cancelar</SecondaryButton>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                <div class="col-span-1 flex flex-col sm:flex-row justify-center items-center px-4 gap-2 sm:gap-0">
+                    <h2 class="text-xl sm:mr-2 font-semibold leading-tight text-gray-800">
+                        proveedor
+                    </h2>
+                    <Link :href="route('proveedor.create')"
+                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150 btn btn-primary sm:px-4 sm:mr-2 w-full sm:w-auto text-center">
+                        Nuevo
+                    </Link>
+                </div>
+                <div class="col-span-1 md:col-span-1 flex justify-between items-center px-4">
+                    <div class="flex flex-col sm:flex-row w-full items-center gap-2 sm:gap-4">
+                        <select v-model="proveedor_categoria"
+                            class="text-xs border border-gray-300 rounded-md shadow-sm px-4 w-full sm:flex-1">
+                            <option value=""> -- Selecciona -- </option>
+                            <option v-for="option in ProveedorCategorias" :key="option.value" :value="option.value">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                        <input v-model="ruc_razonsocial" type="text" placeholder="Buscar"
+                            class="text-xs border border-gray-300 rounded-md shadow-sm px-4 w-full sm:flex-1">
                     </div>
                 </div>
-                
+                <div class="col-span-1 flex flex-col sm:flex-row justify-center items-center sm:items-right px-4 gap-2 sm:gap-0"> 
+                    <PrimaryButton class="btn btn-primary px-4 sm:mr-2 w-full sm:w-auto text-center" @click="handleSearch">Buscar</PrimaryButton>
+                    <SecondaryButton @click="handleCancel" class="sm:mr-2 w-full sm:w-auto text-center">Cancelar</SecondaryButton>
+                </div>
+            </div>                
         </template>
 
         <div class="py-6">

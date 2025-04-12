@@ -29,12 +29,12 @@
     import FormularioCotizacion from '@/Components/Cotizacion/CompCotizacionAdd.vue';
 
     const props = defineProps({  
-        Correlativo: {
-            type: String,
-            required: true,
-        },
         ListaDestinosTuristicos: {
             type: Object,
+            required: true,
+        },
+        Correlativo: {
+            type: String,
             required: true,
         },
     })

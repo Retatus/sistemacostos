@@ -9,5 +9,17 @@ class PasajeroServicio extends Model
 {
     use HasFactory;    
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = ['pasajero_id', 'itinerario_servicio_id', 'estado_activo'];
+
+    public function pasajero()
+    {
+        return $this->belongsTo(Pasajero::class);
+    }
+
+    public function itinerarioServicio()
+    {
+        return $this->belongsTo(ItinerarioServicio::class, 'itinerario_servicio_id');
+    }
 }
