@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto">
-        <form @submit.prevent="submitDestinoTuristico">
+        <form @submit.prevent="submitCotizacion">
             <div class="grid grid-cols-6 gap-6 w-full p-5">
                 <!-- Primera fila -->
                 <div hidden class="col-span-1">
@@ -56,9 +56,7 @@
                     </select>
                 </div>
                 <div class="col-span-1 ">
-                    <label for="fecha" class=" text-sm font-medium text-gray-700">Fecha</label>
-                    <input v-model="Cotizacion.fecha" disabled type="text" id="fecha"
-                        class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese la Fecha">
+                    <Datepicker label="Fecha" v-model="fechaRegistro" :disabled="true" />
                 </div>
                 <div class="col-span-1">
                     <label for="nro_pasajeros" class="block text-sm font-medium text-gray-700">Nro de Pax</label>
@@ -112,7 +110,7 @@
                 <div class="col-span-1">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
                     <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="agregarDetallePasajero">
+                        @click="agregarDetalleDatosPasajero">
                         Datos del pax
                     </PrimaryButton>
                 </div>
@@ -127,10 +125,10 @@
                     </select>
                 </div>
                 <div class="col-span-1 ">
-                    <Datepicker label="Fecha Inicio" v-model="Cotizacion.fecha_inicio" />
+                    <Datepicker label="Fecha Inicio" v-model="fechaInicio" />
                 </div>
                 <div class="col-span-1">
-                    <Datepicker label="Fecha Fin" v-model="Cotizacion.fecha_fin" />
+                    <Datepicker label="Fecha Fin" v-model="fechaFin" :disabled="true" />
                 </div>
                 <div class="col-span-1">
                     <label for="nro_dias" class="block text-sm font-medium text-gray-700">Dias</label>
@@ -153,7 +151,7 @@
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
                         :Lista_Pasajeros = pasajeros                    
-                        v-model="contador" />
+                        v-model="contador"/>
                 </div>
             </div>
             <div class="grid grid-cols-6 gap-6 w-full p-5">
@@ -231,6 +229,7 @@ import ServicioDetalle from '@/Components/ServicioDetalle/CompServicioDetalleAdd
 import PasajeroModal from '@/Pages/Pasajero/CompModalPasajero.vue';
 import ClienteModal from '@/Components/Proveedor/CompModalProveedor.vue';
 import { useCategoriesStore } from '@/Stores/categories';
+import { validateNumberInput } from '@/Utils/validators';
 const categoriesStore = useCategoriesStore();
 
 // Definir las props
@@ -255,7 +254,7 @@ const error = ref('');
 const ultimaAccion = ref('');
 const showModal = ref(false);
 const showModalProveedor = ref(false);
-const DestinoTuristico = ref([...props.Lista_destinos_turistico]);
+const DestinoTuristico = props.Lista_destinos_turistico
 const Correlativo = ref(props.Correlativo);
 const fechaActual = ref(new Date().toISOString().slice(0, 10));
 
@@ -267,11 +266,6 @@ const EstadoCotizacion = ref([
 
 // Timer para controlar el delay
 let emptyInputTimeout = null;
-
-const estadoActivo = ref([
-    { id: '1', nombre: 'ACTIVO' },
-    { id: '0', nombre: 'DESACTIVO' }
-]);
 
 // Variables para el cotizacion y detalle temporal
 const Cotizacion = ref({
@@ -292,7 +286,9 @@ const Cotizacion = ref({
     fecha_inicio: fechaActual.value,
     fecha_fin: fechaActual.value,
     nro_dias: 1,
-    estado_cotizacion: '',
+    estado_cotizacion: 1,
+    estado_reserva: 0,
+    estado_documentacion: 0,
     costo_parcial: 0,
     descuento_estudiante: 0,
     descuento_ninio: 0,
@@ -305,7 +301,7 @@ const Cotizacion = ref({
     PasajeroServicio: [],
 });
 
-const pasajeroTemp = ref({
+const pasajero = ref({
     id: 0,
     nombre: '',    
     apellido_paterno: '',
@@ -322,26 +318,15 @@ const pasajeroTemp = ref({
     estado_activo: 1,
 });
 
-const pasajeroServicioTemp = ref({
-    id: 0,
-    pasajero_id: 0,    
-    servicio_id: 0,
-    estado_pasajero_servicio: 0,
-});
-
-//const ListaPasajerosTemp = reactive([{ id: 1, name: 'Juan' },{ id: 2, name: 'María' }]);
+const fechaRegistro = ref(new Date(Cotizacion.value.fecha));
+const fechaInicio = ref(new Date(Cotizacion.value.fecha_inicio));
+const fechaFin = ref(new Date(Cotizacion.value.fecha_fin));
 const ListaPasajerosTemp = reactive([...Cotizacion.value.Pasajeros]);
-// const ListaServiciosTemp = ([...Cotizacion.value.Servicios]);
-// const ListaServiciosTemp = [
-//     { id: 'A', name: 'Servicio A' },
-//     { id: 'B', name: 'Servicio B' }
-// ];
 
 // Observar cambios en el store
 watch(() => Cotizacion.value.Pasajeros, (newVal) => {
     console.log("nuevo pasajero ", newVal);
     ListaPasajerosTemp.splice(0, ListaPasajerosTemp.length, ...newVal);
-
 }, { deep: true });
 
 // Computed reactivo para que cambie cuando cotizacion.nro_pasajeros cambie
@@ -354,7 +339,6 @@ watch(() => Cotizacion.value.nro_pasajeros, (newValue) => {
   calcularVenta();
 });
 
-
 const ListaServicioPasajeroTemp = reactive([]);
 
 function agregarServicioPasajeroTemp() {    
@@ -363,21 +347,20 @@ function agregarServicioPasajeroTemp() {
     }
     const jsonServicio = destinoTuristicoDetalleServicio.value;
     jsonServicio.forEach((servicio) => {
-        console.log("dia ", servicio.nro_dia);
+        //console.log("dia ", servicio.nro_dia);
         const servicioXdia = {
             dia : servicio.nro_dia,
             detalle : []
         }
         ListaPasajerosTemp.forEach(pasajero => {
-            console.log("pasajero ", pasajero.nombre);
+            //console.log("pasajero ", pasajero.nombre);
             const pasajeroServicio = {    
                 pasajero,
                 servicio_detalle: []
             };
             servicio.destino_turistico_detalle_servicio.forEach((servicioDetalle) => { 
-                console.log("servicio ", servicioDetalle.observacion);
-                console.log("servicio ", servicioDetalle);
-
+                // console.log("servicio ", servicioDetalle.observacion);
+                // console.log("servicio ", servicioDetalle);
                 pasajeroServicio.servicio_detalle.push(servicioDetalle);                            
             });
             servicioXdia.detalle.push(pasajeroServicio);
@@ -388,13 +371,13 @@ function agregarServicioPasajeroTemp() {
     Cotizacion.value.PasajeroServicio = ListaServicioPasajeroTemp;
 }
 
-const numeroAdultos = ref(0);
-const numeroNinos = ref(0);
-const numeroEstudiantes = ref(0);
+const numeroAdultos = ref(Cotizacion.value.nro_adulto);
+const numeroNinos = ref(Cotizacion.value.nro_ninio);
+const numeroEstudiantes = ref(Cotizacion.value.nro_estudiante);
 
 const errorFecha = ref("");
 const pasajeros = ref([...Cotizacion.value.Pasajeros]);
-const listaServicioDetalle = ref([...Cotizacion.value.Servicios]);
+const listaServicioDetalle = ref([]);//     ref([...Cotizacion.value.Servicios]);
 const destinoTuristicoDetalleServicio = ref([]);
 const minFechaFin = ref(Cotizacion.value.fecha_inicio);
 
@@ -413,8 +396,11 @@ async function ListaCategoriaProveedor() {
         }     
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, data);  
         if (response.status === 200) {
-            console.log("se recupera desde controller", response.data); 
-            calcularTotalesPorCategoria(response.data);
+            Cotizacion.value.nro_dias = response.data.nro_dias;
+            const fechaInicio = new Date(Cotizacion.value.fecha_inicio);
+            fechaInicio.setDate(fechaInicio.getDate() + response.data.nro_dias);
+            Cotizacion.value.fecha_fin = fechaInicio.toISOString().split('T')[0];
+            calcularMontoTotalXCategoria(response.data);
             destinoTuristicoDetalleServicio.value = response.data.destino_turistico_detalle;
             agregarServicioPasajeroTemp();
             calcularVenta();
@@ -424,7 +410,7 @@ async function ListaCategoriaProveedor() {
     }        
 };
 
-function calcularTotalesPorCategoria(destino) {
+function calcularMontoTotalXCategoria(destino) {
     const resultado = {};
     destino.destino_turistico_detalle.forEach(detalle => {
         detalle.destino_turistico_detalle_servicio.forEach(servicio => {
@@ -489,19 +475,16 @@ const calcularDiferenciaDias = () => {
     Cotizacion.value.nro_dias = Math.round((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
 };
 
-// Función para calcular el total de pasajeros
 const recalcularTotalPasajeros = () => {
     numeroNinos.value = contarPasajerosPorTipo('1');
     numeroEstudiantes.value = contarPasajerosPorTipo('2');
     numeroAdultos.value = contarPasajerosPorTipo('3');
 };
 
-// Función para contar pasajeros por tipo
 const contarPasajerosPorTipo = (tipo) => {
     return pasajeros.value.filter((pasajero) => pasajero.tipo_pasajero_id === tipo).length || 0;
 };
 
-// Función para calcular el total de pasajeros
 const calcularTotalPasajeros = () => {
     Cotizacion.value.nro_ninio = numeroNinos.value;
     Cotizacion.value.nro_adulto = numeroAdultos.value;
@@ -521,13 +504,13 @@ const mostrarConsola = () => {
 // Función para calcular el monto de la venta
 const calcularVenta = () => {
     const sumaTotal = listaServicioDetalle.value.reduce((acc, item) => acc + (item.total_monto * Cotizacion.value.nro_pasajeros), 0);
-    const sumaDescuentos = Cotizacion.value.descuento_estudiante + Cotizacion.value.descuento_ninio + Cotizacion.value.descuento_otro;
+    const sumaDescuentos = Number(Cotizacion.value.descuento_estudiante) + Number(Cotizacion.value.descuento_ninio) + Number(Cotizacion.value.descuento_otro);
     Cotizacion.value.costo_parcial = sumaTotal;
     Cotizacion.value.costo_total = sumaTotal - sumaDescuentos;
 };
 
 const handleInput = (event, field) => {
-  const validatedValue = validateInput(event.target.value);
+  const validatedValue = validateNumberInput(event.target.value);
   Cotizacion.value[field] = Number(validatedValue);
 
   // Limpiar cualquier temporizador existente
@@ -547,27 +530,16 @@ const handleInput = (event, field) => {
   }
 };
 
-// Función para validar el input (solo números y un punto decimal permitido)
-const validateInput = (value) => {
-    const validValue = value.replace(/[^0-9.]/g, ""); // Remover caracteres no numéricos
-    // Permitir máximo un punto decimal
-    const decimalParts = validValue.split(".");
-    if (decimalParts.length > 2) {
-        return `${decimalParts[0]}.${decimalParts[1]}`;
-    }
-    return validValue;
-};
-
-function agregarDetallePasajero() {
+function agregarDetalleDatosPasajero() {
     pasajeros.value = Cotizacion.value.Pasajeros;
     showModal.value = true;
 }
 
 function agregarPasajero(tipoPasajero) {
-    pasajeroTemp.value.tipo_pasajero_id = tipoPasajero;
-    Cotizacion.value.Pasajeros.push({ ...pasajeroTemp.value });
-    pasajeroTemp.value = {
-        id: pasajeroTemp.value.tipo_pasajero_id.length,
+    pasajero.value.tipo_pasajero_id = tipoPasajero;
+    Cotizacion.value.Pasajeros.push({ ...pasajero.value });
+    pasajero.value = {
+        id: pasajero.value.tipo_pasajero_id.length,
         nombre: '',    
         apellido_paterno: '',
         apellido_materno: '',
@@ -589,7 +561,7 @@ const eliminarPasajero = (tipoPasajero) => {
     }
 }
 
-async function submitDestinoTuristico() {
+async function submitCotizacion() {
     try {
         Swal.fire({
             title: 'Cargando...',

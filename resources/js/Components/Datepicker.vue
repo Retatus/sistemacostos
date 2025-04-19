@@ -6,6 +6,8 @@
       :format-locale="es"
       :timezone="timeZone"
       :format="formatearFecha"
+      :disabled=disabled
+      :disabled-dates="desactivarFechas" 
       auto-apply
       @update:modelValue="emitirCambio"
       :class="'mt-1 w-full border-gray-300 rounded-md shadow-sm'"
@@ -20,28 +22,43 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { es } from "date-fns/locale";
 import { format } from "date-fns"; // Importamos la función format de date-fns
 
-const selectedDate = ref(new Date());
-const timeZone = 'America/Lima'; // Zona horaria de Lima
 
+
+// Props y valores iniciales
 const props = defineProps({
-  modelValue: [String, Date, null],
+  modelValue: [String, Date, null], // modelValue está vinculado a v-model
   label: String,
   format: {
     type: String,
-    default: "dd/MM/yyyy",
-  }
+    default: "dd-MM-yyyy",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+// Emisor para v-model
 const emit = defineEmits(["update:modelValue"]);
 
-// Función para formatear la fecha
+// Variables reactivas
+const selectedDate = ref(props.modelValue || new Date()); // Inicializar con modelValue
+const timeZone = "America/Lima";
+
+// Función para desactivar fechas menores a la actual
+const desactivarFechas = (date) => {
+  const hoy = new Date();
+  return date <= hoy; // Desactiva fechas menores a hoy
+};
+
+// Computed para formatear la fecha
 const formatearFecha = computed(() => {
   return selectedDate.value ? format(selectedDate.value, props.format) : "";
 });
 
-// Emitir cambios al padre
-const emitirCambio = () => {
-  emit("update:modelValue", selectedDate.value ? format(selectedDate.value, "yyyy-MM-dd") : null);
+// Emitir cambios al padre cuando cambie selectedDate
+const emitirCambio = (newValue) => {
+  selectedDate.value = newValue;
+  emit("update:modelValue", newValue);
 };
-
 </script>
