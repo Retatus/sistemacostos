@@ -112,7 +112,7 @@ const props = defineProps({
   function showModalDetalle(index) {
     indice.value = index;
     selectedValue_Categoria.value = props.Lista_servicio_detalle[index].categoria;
-    selectedLabel.value = categoriesStore.globals.proveedor_categories.find(option => option.value === selectedValue_Categoria.value).label;
+    selectedLabel.value = categoriesStore.globals.proveedor_categories.find(option => option.value == selectedValue_Categoria.value).label;
     isModalVisibleDetalle.value = true;
   }
 

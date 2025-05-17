@@ -9,9 +9,11 @@ class Cotizacion extends Model
 {
     use HasFactory;  
     
-    protected $hidden = ['created_at', 'updated_at'];
-
-    protected $fillable = ['proveedor_id', 'file_nro', 'file_nombre', 'comprobante_id', 'fecha', 'nro_pasajeros', 'nro_ninio', 'nro_adulto', 'nro_estudiante', 'idioma_id', 'mercado_id', 'destino_turistico_id', 'pais_id', 'fecha_inicio', 'fecha_fin', 'nro_dias', 'estado_cotizacion', 'costo_parcial', 'descuento_estudiante', 'descuento_ninio', 'descuento_otro', 'costo_total', 'estado_activo'];
+    protected $hidden = ['created_at', 'updated_at'];    
+    
+    protected $fillable = ['proveedor_id', 'file_nro', 'file_nombre', 'comprobante_id', 'fecha', 'nro_pasajeros', 'nro_ninio', 'nro_adulto', 'nro_estudiante', 'idioma_id', 'mercado_id', 'destino_turistico_id' , 'destino_turistico_detalle', 'pais_id', 'fecha_inicio', 'fecha_fin', 'nro_dias', 'estado_cotizacion', 'costo_parcial', 'descuento_estudiante', 'descuento_ninio', 'descuento_otro', 'costo_total', 'estado_activo'];
+    
+    protected $casts = ['destino_turistico_detalle' => 'array'];
 
     public function tipo_comprobante()
     {
