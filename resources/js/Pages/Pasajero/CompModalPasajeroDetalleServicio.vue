@@ -64,8 +64,7 @@
                 </div>
                 <!-- Footer -->
                 <div class="px-4 py-3 border-t flex justify-end space-x-2">
-                    <SecondaryButton @click="closeModal">Cerrar</SecondaryButton>
-                    <PrimaryButton type="submit">Agregar</PrimaryButton>
+                    <PrimaryButton @click="closeModal">Cerrar</PrimaryButton>
                 </div>
             </div>
         </template>

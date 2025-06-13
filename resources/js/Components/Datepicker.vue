@@ -2,11 +2,11 @@
   <div class="block text-sm font-medium text-gray-700">
     <label v-if="label" class="font-bold">{{ label }}</label>
     <VueDatePicker 
-      v-model="selectedDate"
+      :modelValue="selectedDate"
       :format-locale="es"
       :timezone="timeZone"
       :format="formatearFecha"
-      :disabled=disabled
+      :disabled="disabled"
       :disabled-dates="desactivarFechas" 
       auto-apply
       @update:modelValue="emitirCambio"
@@ -56,7 +56,7 @@ const formatearFecha = computed(() => {
   return selectedDate.value ? format(selectedDate.value, props.format) : "";
 });
 
-// Emitir cambios al padre cuando cambie selectedDate
+// Emitir cambios al padre cuando se seleccione una nueva fecha
 const emitirCambio = (newValue) => {
   selectedDate.value = newValue;
   emit("update:modelValue", newValue);
