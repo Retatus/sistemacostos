@@ -4,7 +4,6 @@
     <VueDatePicker 
       :modelValue="selectedDate"
       :format-locale="es"
-      :timezone="timeZone"
       :format="formatearFecha"
       :disabled="disabled"
       :disabled-dates="desactivarFechas" 
@@ -20,45 +19,34 @@ import { ref, computed } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import '@vuepic/vue-datepicker/dist/main.css';
 import { es } from "date-fns/locale";
-import { format } from "date-fns"; // Importamos la función format de date-fns
-
-
+import dayjs from "dayjs";
 
 // Props y valores iniciales
 const props = defineProps({
-  modelValue: [String, Date, null], // modelValue está vinculado a v-model
+  modelValue: [String, Date, null],
   label: String,
-  format: {
-    type: String,
-    default: "dd-MM-yyyy",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+  disabled: { type: Boolean, default: false },
 });
 
-// Emisor para v-model
 const emit = defineEmits(["update:modelValue"]);
 
 // Variables reactivas
-const selectedDate = ref(props.modelValue || new Date()); // Inicializar con modelValue
-const timeZone = "America/Lima";
+const selectedDate = ref(props.modelValue ? dayjs(props.modelValue).toDate() : new Date());
 
-// Función para desactivar fechas menores a la actual
+// Función para desactivar fechas menores a hoy
 const desactivarFechas = (date) => {
-  const hoy = new Date();
-  return date <= hoy; // Desactiva fechas menores a hoy
+  const hoy = dayjs().toDate();
+  return date <= hoy;
 };
 
-// Computed para formatear la fecha
+// Computed para formatear la fecha en dd-MM-yyyy
 const formatearFecha = computed(() => {
-  return selectedDate.value ? format(selectedDate.value, props.format) : "";
+  return selectedDate.value ? dayjs(selectedDate.value).format("DD-MM-YYYY") : "";
 });
 
-// Emitir cambios al padre cuando se seleccione una nueva fecha
+// Emitir cambios con formato correcto
 const emitirCambio = (newValue) => {
-  selectedDate.value = newValue;
-  emit("update:modelValue", newValue);
+  selectedDate.value = dayjs(newValue).toDate();
+  emit("update:modelValue", dayjs(newValue).format("YYYY-MM-DD"));
 };
 </script>
