@@ -20,6 +20,7 @@ class PrecioController extends Controller
         $precios = Precio::with(
             [
                 'servicio.servicio_detalle:id,descripcion',
+                'servicio.proveedor:id,razon_social',
                 'tipo_pasajero:id,nombre',
                 'servicio_clase:id,nombre',
             ])

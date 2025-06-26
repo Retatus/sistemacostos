@@ -53,6 +53,14 @@
     });
 
     const formFields = {   
+        servicio_id: { 
+            label: 'Servicio', 
+            type: 'select', 
+            options: [
+                { value: '', label: '--Seleccionar--' },
+                ... ListaServicios.value
+            ]
+        },
         anio: { type: 'text', placeholder: 'Ingrese la año', label: 'año' },
         moneda: { 
             label: 'Moneda',
@@ -69,14 +77,6 @@
             options: [
                 { value: '', label: '--Seleccionar--' },
                 ... props.tipopasajeros
-            ]
-        },
-        servicio_id: { 
-            label: 'Servicio', 
-            type: 'select', 
-            options: [
-                { value: '', label: '--Seleccionar--' },
-                ... ListaServicios.value
             ]
         },
         servicio_clase_id: {
