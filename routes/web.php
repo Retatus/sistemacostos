@@ -228,14 +228,17 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     // Route::delete('/dashboard/itinerario_destino/{itinerario_destino}/destroy', [PrecioController::class, 'destroy'])->name('itinerario_destino.destroy');
 
     Route::get('/dashboard/cotizacion', [CotizacionController::class, 'index'])->name('cotizacion');
+    Route::get('/dashboard/cotizacion/opindex', [CotizacionController::class, 'opindex'])->name('cotizacion.opindex');
     Route::get('/dashboard/cotizacion/create', [CotizacionController::class, 'create'])->name('cotizacion.create');
     Route::post('/dashboard/cotizacion', [CotizacionController::class, 'store'])->name('cotizacion.store');
     Route::get('/dashboard/cotizacion/{cotizacion}/edit', [CotizacionController::class, 'edit'])->name('cotizacion.edit');
+    Route::get('/dashboard/cotizacion/{cotizacion}/show', [CotizacionController::class, 'show'])->name('cotizacion.show');
     Route::patch('/dashboard/cotizacion/{cotizacion}/update', [CotizacionController::class, 'update'])->name('cotizacion.update');
     Route::delete('/dashboard/cotizacion/{cotizacion}/destroy', [CotizacionController::class, 'destroy'])->name('cotizacion.destroy');
 
     Route::get('/dashboard/pasajero', [PasajeroController::class, 'index'])->name('pasajero');
     Route::get('/dashboard/pasajero/create', [PasajeroController::class, 'create'])->name('pasajero.create');
+    Route::post('/dashboard/pasajero/find', [PasajeroController::class, 'find'])->name('pasajero.find');
     Route::post('/dashboard/pasajero', [PasajeroController::class, 'store'])->name('pasajero.store');
     Route::get('/dashboard/pasajero/{pasajero}/edit', [PasajeroController::class, 'edit'])->name('pasajero.edit');
     Route::post('/dashboard/pasajero/{pasajero}/update', [PasajeroController::class, 'update'])->name('pasajero.update');

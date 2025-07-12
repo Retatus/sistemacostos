@@ -112,6 +112,7 @@ const tiposSunat = ref({ ...categoriesStore.globals.tipo_sunat });
 const emit = defineEmits(['close', 'submit']);
 
 function closeModal() {
+    emit('submit', personas.value);
     emit('close');
 }
 async function addCliente() {
@@ -143,7 +144,22 @@ async function addCliente() {
 async function findCliente() {
     try {
         const response = await axios.post(`${route('proveedor.find')}`, personas.value);
-        if (response.status === 200) {  
+        if (response.status === 200) {
+            console.log('Respuesta del servidor:', response.data);
+            personas.value = response.data;
+            //emit('submit', personas.value);
+        }else{
+            alert('Error al agregar el elemento:', response.data);
+        }
+    } catch (err) {
+        error.value = err.response?.data?.message || 'Ocurrió un error';
+    }
+}
+
+async function findPasajero() {
+    try {
+        const response = await axios.post(`${route('pasajero.find')}`, personas.value);
+        if (response.status === 200) {
             personas.value = response.data;
         }else{
             alert('Error al agregar el elemento:', response.data);

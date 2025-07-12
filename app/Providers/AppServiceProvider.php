@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\ProveedorServicioService;
+use App\Services\CotizacionService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
                 $app->make('App\Http\Controllers\ServicioController'),
                 $app->make('App\Http\Controllers\PrecioController')
             );
+        });
+
+        $this->app->bind(CotizacionService::class, function ($app) {
+            return new CotizacionService();
         });
     }
 

@@ -42,16 +42,9 @@ class proveedor extends Model
     public static function findProveedor($tipoDoc, $ruc)
     {
         return self::where('tipo_documento_id', $tipoDoc)
-                      ->where('ruc', $ruc)
-                        ->where('estado_activo', 1)
-                      ->first();
-
-            // ->map(function ($proveedor) {
-            //     return [
-            //         'value' => $proveedor->id,
-            //         'label' => $proveedor->ruc . ' - ' . $proveedor->razon_social,
-            //     ];
-            // });
+                    ->where('ruc', $ruc)
+                    ->where('estado_activo', 1)
+                    ->first();
     }  
 
     public function desactivar()

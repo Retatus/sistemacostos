@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\CotizacionService;
 use App\Http\Requests\Cotizacion\StoreRequest;
 use App\Http\Requests\Cotizacion\UpdateRequest;
 use App\Http\Requests\Cotizacion\CotizacionRequest;
@@ -10,6 +11,7 @@ use App\Models\DestinoTuristico;
 use App\Models\Pais;
 use App\Models\Pasajero;
 use App\Models\PasajeroServicio;
+use App\Models\proveedor;
 use App\Models\ProveedorCategoria;
 use App\Models\ServicioClase;
 use App\Models\TipoComprobante;
@@ -19,8 +21,18 @@ use App\Models\TipoSunat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 class CotizacionController extends Controller
 {
+
+    protected $cotizacionService;
+
+    // Inyección de dependencias
+    public function __construct(CotizacionService $cotizacionService)
+    {
+        $this->cotizacionService = $cotizacionService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -33,6 +45,7 @@ class CotizacionController extends Controller
             'pais:id,nombre',
             'idioma:id,nombre',
             'mercado:id,nombre',
+            'destino:id,nombre',
         ])
         ->where('estado_activo', 1)
         ->orderBy('id', 'desc')
@@ -42,31 +55,55 @@ class CotizacionController extends Controller
         //return response()->json( ['cotizacion' => $cotizacion]);
     }
 
+    public function opindex(Request $request)
+    {
+        $fecha_inicio = $request->input('fecha_inicio') ?? ''; 
+        $fecha_fin = $request->input('fecha_fin') ?? ''; 
+        $file_pax = $request->input('nombre_nro_pax') ?? ''; 
+
+        $cotizacions = Cotizacion::with([
+            'tipo_comprobante:id,nombre',
+            'pais:id,nombre',
+            'idioma:id,nombre',
+            'mercado:id,nombre',
+            'destino:id,nombre',
+        ])
+        ->where('estado_activo', 1)
+        ->where('estado_cotizacion', 1)
+        // ->when(function($query) use ($fecha_inicio, $fecha_fin) {
+        //     if ($fecha_inicio && $fecha_fin) {
+        //         return$query->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
+        //     }
+        // }) // MEJORAR ESTA PARTE, POSTERIORMENTE      
+        ->when($file_pax, function ($query, $file_pax) {
+            $query->where(function ($q) use ($file_pax) {
+                $q->where('file_nro', 'LIKE', "%{$file_pax}%")
+                ->orWhere('file_nombre', 'LIKE', "%{$file_pax}%");
+            });
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(10);
+
+        if ($request->wantsJson()) {
+            // Respuesta para solicitudes AJAX (búsquedas)
+            return response()->json(['cotizacions' => $cotizacions]);
+        }
+
+        return Inertia::render('Cotizacion/OpIndex', ['cotizacions' => $cotizacions]);
+        //return response()->json( ['cotizacion' => $cotizacion]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $formattedTipoComprobante = TipoComprobante::getFormattedForDropdown();
-        $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
-        $formattedPaises = Pais::getFormattedForDropdown();
-        $formattedTipodocumento = TipoDocumento::getFormattedForDropdown();
-        $formattedTipoPasajero = TipoPasajero::getFormattedForDropdown();
-        $formattedTipoClase = ServicioClase::getFormattedForDropdown();
         $correlatico = Cotizacion::generarCorrelativo();
-        $formattedProveedorCategorias = ProveedorCategoria::getFormattedForDropdown();
-        $formattedTipoSunat = TipoSunat::getFormattedForDropdown();
+        $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
             'Correlativo' => $correlatico,
-            'ListaTipoComprobante' => $formattedTipoComprobante,
-            'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
-            'ListaPaises' => $formattedPaises,
-            'ListaTipoDocumento' => $formattedTipodocumento,
-            'ListaTipoPasajero' => $formattedTipoPasajero,
-            'ListaTipoClase' => $formattedTipoClase,
-            'ListaProveedorCategorias' => $formattedProveedorCategorias,
-            'ListaTipoSunat' => $formattedTipoSunat
+            'ListaDestinosTuristicos' => $formattedDestinosTuristicos
         ]);
     }
 
@@ -77,19 +114,34 @@ class CotizacionController extends Controller
     {
         return DB::transaction(function () use ($request) {
             $data = $request->all();
-            $dataCotizacion = $request->except(['Pasajeros','PasajeroServicio']);
+            //dd($data);
+            //dd(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            $dataCotizacion = $request->except(['Pasajeros']);
             $dataCotizacion['file_nro'] = Cotizacion::generarCorrelativo();
+            $dataCotizacion['fecha'] = Carbon::parse($dataCotizacion['fecha'])->format('Y-m-d');
+            $dataCotizacion['fecha_inicio'] = Carbon::parse($dataCotizacion['fecha_inicio'])->format('Y-m-d');
+            $dataCotizacion['fecha_fin'] = Carbon::parse($dataCotizacion['fecha_fin'])->format('Y-m-d');
+            Log::info('🟢 Iniciando inserción de cotización');
+            Log::debug('📥 Datos del request:', $data);
             $cotizacionResponse = Cotizacion::create($dataCotizacion);
+            Log::info('✅ Cotización insertada con ID: ' . $cotizacionResponse->id);
+            
 
-            $pasajero_servicios = $data['PasajeroServicio'] ?? [];
+            $pasajeros = $data['Pasajeros'] ?? [];
 
-            foreach ($pasajero_servicios as $pasajero_servicio) {                   // PasajeroServicio
+            $pasajeroCollection = collect($pasajeros);
+            
+            $pasajero_servicios = $data['destino_turistico_detalle'] ?? [];
+            
+            foreach ($pasajero_servicios as $pasajero_servicio) {                   // destino_turistico_detalle
 
-                $detalle = $pasajero_servicio['detalle'] ?? [];
-
-                foreach ($detalle as $servicio) {                                   // Detalle
-
-                    $pasajero = $servicio['pasajero'] ?? [];
+                $detalle = $pasajero_servicio['destino_turistico_detalle'] ?? [];
+                
+                foreach ($detalle as $servicio) {                                   // entidad Pasajero
+                    
+                    $pasajeroAuxiliar = $servicio['pasajero'] ?? [];
+                    $pasajeroTemp = $pasajeroAuxiliar['nombre'] ?? [];
+                    $pasajero = $pasajeroCollection->firstWhere('nombre', $pasajeroTemp ?? '') ?? [];
                     $pasajero['cotizacion_id'] = $cotizacionResponse->id;
 
                     // Verificar si existe un archivo 'documento_file' en el array $pasajero
@@ -100,14 +152,16 @@ class CotizacionController extends Controller
                     }
 
                     $pasajeroResponse = Pasajero::create($pasajero);
+                    Log::info('✅ Cotización insertada con ID: ' . $pasajeroResponse->id. ' para el pasajero: ' . $pasajeroResponse->nombre);
 
                     $pasajero_servicio_detalle = $servicio['servicio_detalle'] ?? [];
 
-                    foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // ServicioDetalle
+                    foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // entidad PasajeroServicio
                         $pasajerocotizacion['pasajero_id'] = $pasajeroResponse->id;
                         $pasajerocotizacion['itinerario_servicio_id'] = $servicio_detalle['id'];
                                           
                         $pasajero_servicio_response = PasajeroServicio::create($pasajerocotizacion);
+                        Log::info('✅ Cotización insertada con ID: ' . $pasajero_servicio_response->id. ' para el pasajero: ' . $pasajeroResponse->id. ' y el servicio: ' . $servicio_detalle['id']);
                     }
                 }
             }
@@ -128,7 +182,21 @@ class CotizacionController extends Controller
      */
     public function edit(Cotizacion $cotizacion)
     {
-        return Inertia::render('Cotizacion/Edit', compact('cotizacion'));
+        $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
+        $pasajero = Pasajero::where('cotizacion_id', $cotizacion->id)->get();
+        $detalle = $this->cotizacionService->getCotizacionWithItinerary($cotizacion->id);
+        $proveedor = proveedor::where('id', $cotizacion->proveedor_id)->get();
+        $cotizacion['cliente_nro_doc'] = $proveedor[0]['ruc'] ?? '';
+        $cotizacion['proveedor_razon_social'] = $proveedor[0]['razon_social'] ?? '';
+        
+        return Inertia::render('Cotizacion/EditCotizacion', 
+        [
+            'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
+            'Correlativo' => $cotizacion->file_nro,
+            'Cotizacion' => $cotizacion,
+            'Pasajeros' => $pasajero,
+            'Detalle' => $detalle,
+        ]); //compact('cotizacion'));
     }
 
     /**

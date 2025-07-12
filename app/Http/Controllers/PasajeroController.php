@@ -60,6 +60,14 @@ class PasajeroController extends Controller
         return to_route('pasajero');
     }
 
+    public function find(Request $request)
+    {
+        $tipoDoc = $request->input('tipo_documento_id'); 
+        $ruc = $request->input('ruc') ?? ''; 
+        $proveedorList = Pasajero::findPasajero($tipoDoc, $ruc);
+        return response()->json($proveedorList);
+    }
+
     /**
      * Display the specified resource.
      */

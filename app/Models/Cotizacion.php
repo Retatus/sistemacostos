@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cotizacion extends Model
 {
-    use HasFactory;    
-
-    protected $fillable = ['proveedor_id', 'file_nro', 'file_nombre', 'comprobante_id', 'fecha', 'nro_pasajeros', 'nro_ninio', 'nro_adulto', 'nro_estudiante', 'idioma_id', 'mercado_id', 'destino_turistico_id', 'pais_id', 'fecha_inicio', 'fecha_fin', 'nro_dias', 'estado_cotizacion', 'costo_parcial', 'descuento_estudiante', 'descuento_ninio', 'descuento_otro', 'costo_total', 'estado_activo'];
+    use HasFactory;  
+    
+    protected $hidden = ['created_at', 'updated_at'];    
+    
+    protected $fillable = ['proveedor_id', 'file_nro', 'file_nombre', 'comprobante_id', 'fecha', 'nro_pasajeros', 'nro_ninio', 'nro_adulto', 'nro_estudiante', 'idioma_id', 'mercado_id', 'destino_turistico_id' , 'destino_turistico_detalle', 'destino_turistico_detalle_monto_x_categoria', 'pais_id', 'fecha_inicio', 'fecha_fin', 'nro_dias', 'estado_cotizacion', 'costo_parcial', 'descuento_estudiante', 'descuento_ninio', 'descuento_otro', 'costo_total', 'estado_activo'];
+    
+    protected $casts = ['destino_turistico_detalle' => 'array', 'destino_turistico_detalle_monto_x_categoria' => 'array'];
 
     public function tipo_comprobante()
     {
@@ -26,6 +30,15 @@ class Cotizacion extends Model
     public function mercado()
     {
         return $this->belongsTo(Mercado::class, 'mercado_id', 'id');
+    }
+
+    public function destino()
+    {
+        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
+    }
+
+    public function Pasajeros() {
+        return $this->hasMany(Pasajero::class, 'cotizacion_id');
     }
 
     public static function getFormattedForDropdown()

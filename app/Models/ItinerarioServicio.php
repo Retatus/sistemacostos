@@ -13,6 +13,16 @@ class ItinerarioServicio extends Model
 
     protected $fillable = ['nro_orden', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'monto', 'estado_activo'];
 
+    public function pasajeroServicios()
+    {
+        return $this->hasMany(PasajeroServicio::class);
+    }
+    
+    public function itinerarioDestino()
+    {
+        return $this->belongsTo(ItinerarioDestino::class, 'itinerario_destino_id');
+    }
+
     public static function getFormattedForDropdown()
     {
         return self::orderBy('id', 'desc')

@@ -19,13 +19,16 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
+                                        Proveedor
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        servicio
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
                                         anio
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         moneda
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        monto
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         tipo_pasajero_id
@@ -34,7 +37,7 @@
                                         servicio_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        servicio
+                                        monto
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
@@ -47,13 +50,16 @@
                             <tbody>
                                 <tr v-for="precio in Precios" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.servicio.proveedor.razon_social}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.servicio.servicio_detalle.descripcion}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.anio}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.moneda}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{precio.monto}}
                                     </td> 
                                     <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.tipo_pasajero_id}}
@@ -66,10 +72,10 @@
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.servicio_clase.nombre}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{precio.servicio.servicio_detalle.descripcion}}
                                     </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.monto}}
+                                    </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.estado_activo}}
                                     </td> 
