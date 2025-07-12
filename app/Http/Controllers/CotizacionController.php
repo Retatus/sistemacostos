@@ -21,6 +21,8 @@ use App\Models\TipoSunat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 class CotizacionController extends Controller
 {
 
@@ -112,19 +114,34 @@ class CotizacionController extends Controller
     {
         return DB::transaction(function () use ($request) {
             $data = $request->all();
-            $dataCotizacion = $request->except(['Pasajeros','PasajeroServicio']);
+            //dd($data);
+            //dd(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            $dataCotizacion = $request->except(['Pasajeros']);
             $dataCotizacion['file_nro'] = Cotizacion::generarCorrelativo();
+            $dataCotizacion['fecha'] = Carbon::parse($dataCotizacion['fecha'])->format('Y-m-d');
+            $dataCotizacion['fecha_inicio'] = Carbon::parse($dataCotizacion['fecha_inicio'])->format('Y-m-d');
+            $dataCotizacion['fecha_fin'] = Carbon::parse($dataCotizacion['fecha_fin'])->format('Y-m-d');
+            Log::info('🟢 Iniciando inserción de cotización');
+            Log::debug('📥 Datos del request:', $data);
             $cotizacionResponse = Cotizacion::create($dataCotizacion);
+            Log::info('✅ Cotización insertada con ID: ' . $cotizacionResponse->id);
+            
 
-            $pasajero_servicios = $data['PasajeroServicio'] ?? [];
+            $pasajeros = $data['Pasajeros'] ?? [];
 
-            foreach ($pasajero_servicios as $pasajero_servicio) {                   // PasajeroServicio
+            $pasajeroCollection = collect($pasajeros);
+            
+            $pasajero_servicios = $data['destino_turistico_detalle'] ?? [];
+            
+            foreach ($pasajero_servicios as $pasajero_servicio) {                   // destino_turistico_detalle
 
-                $detalle = $pasajero_servicio['detalle'] ?? [];
-
-                foreach ($detalle as $servicio) {                                   // Detalle
-
-                    $pasajero = $servicio['pasajero'] ?? [];
+                $detalle = $pasajero_servicio['destino_turistico_detalle'] ?? [];
+                
+                foreach ($detalle as $servicio) {                                   // entidad Pasajero
+                    
+                    $pasajeroAuxiliar = $servicio['pasajero'] ?? [];
+                    $pasajeroTemp = $pasajeroAuxiliar['nombre'] ?? [];
+                    $pasajero = $pasajeroCollection->firstWhere('nombre', $pasajeroTemp ?? '') ?? [];
                     $pasajero['cotizacion_id'] = $cotizacionResponse->id;
 
                     // Verificar si existe un archivo 'documento_file' en el array $pasajero
@@ -135,14 +152,16 @@ class CotizacionController extends Controller
                     }
 
                     $pasajeroResponse = Pasajero::create($pasajero);
+                    Log::info('✅ Cotización insertada con ID: ' . $pasajeroResponse->id. ' para el pasajero: ' . $pasajeroResponse->nombre);
 
                     $pasajero_servicio_detalle = $servicio['servicio_detalle'] ?? [];
 
-                    foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // ServicioDetalle
+                    foreach ($pasajero_servicio_detalle as $servicio_detalle) {     // entidad PasajeroServicio
                         $pasajerocotizacion['pasajero_id'] = $pasajeroResponse->id;
                         $pasajerocotizacion['itinerario_servicio_id'] = $servicio_detalle['id'];
                                           
                         $pasajero_servicio_response = PasajeroServicio::create($pasajerocotizacion);
+                        Log::info('✅ Cotización insertada con ID: ' . $pasajero_servicio_response->id. ' para el pasajero: ' . $pasajeroResponse->id. ' y el servicio: ' . $servicio_detalle['id']);
                     }
                 }
             }

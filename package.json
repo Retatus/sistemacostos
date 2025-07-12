@@ -25,6 +25,7 @@
         "dayjs": "^1.11.13",
         "pinia": "^3.0.1",
         "pinia-plugin-persistedstate": "^4.2.0",
-        "sweetalert2": "^11.15.3"
+        "sweetalert2": "^11.15.3",
+        "uuid": "^11.1.0"
     }
 }

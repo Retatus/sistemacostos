@@ -54,4 +54,12 @@ class Pasajero extends Model
                 ];
             });
     }
+
+    public static function findPasajero($tipoDoc, $nroDoc)
+    {
+        return self::where('documento_tipo_id', $tipoDoc)
+                    ->where('documento_numero', $nroDoc)
+                    ->where('estado_activo', 1)
+                    ->first();
+    }  
 }

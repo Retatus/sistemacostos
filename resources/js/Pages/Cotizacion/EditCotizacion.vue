@@ -1,14 +1,14 @@
 <template>
     <AppLayout title="Dashboard">
         <template #header>
-          <div class="flex justify-between">
-              <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  Cotizacion
-              </h2>   
-              <Link :href="route('cotizacion')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Lista Cotizacion
-              </Link>                             
-          </div>    
+            <div class="flex justify-between">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                    Cotizacion
+                </h2>   
+                <Link :href="route('cotizacion')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                    Lista Cotizacion
+                </Link>                             
+            </div>    
         </template>
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">

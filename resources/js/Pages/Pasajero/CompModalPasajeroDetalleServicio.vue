@@ -15,56 +15,58 @@
                 </div>    
                 <!-- Body -->
                 <div class="overflow-x-auto p-5 border-b">
-                    <div v-for="diaData in data" :key="diaData.dia">
-                        <h2>Día {{ diaData.dia }}</h2>
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead className="text-xs text-gray-900 uppercase bg-gray-50">
-                                <tr class="bg-gray-100">
-                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Nombre</th>
-                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Pasajero</th>
-                                <th class="w-3/6 px-4 py-2 text-sm font-medium">Servicio</th>
-                                <th class="w-1/6 px-4 py-2 text-sm font-medium">Estatus</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="detalle in diaData.detalle" :key="detalle.pasajero.id" className="bg-white border-b text-gray-900">
-                                    <td class="px-4 py-2 text-sm">
-                                        <input v-model="detalle.pasajero.nombre" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                    </td>
-                                    <td class="px-4 py-2 text-sm">
-                                        <select v-model="detalle.pasajero.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option disabled value="">-- Selecciona una opción --</option>
-                                            <option v-for="option in TipoPasajero" :key="option.value"
-                                                :value="option.value">
-                                                {{ option.label }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td class="px-4 py-2 text-sm">
-                                        <select @change="handleSelectChange($event.target.value)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option disabled value="">-- Selecciona una opción --</option>
-                                            <option v-for="servicio in detalle.servicio_detalle.filter(s => s.proveedor_categoria_id == SelectValueCategoria)" 
-                                                    :key="servicio.id" :value="servicio.monto">
-                                                {{ servicio.observacion }} - ${{ servicio.monto }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td class="px-4 py-2 text-sm">
-                                        <select v-model="detalle.pasajero.clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option disabled value="">-- Selecciona una opción --</option>
-                                            <option v-for="option in Clase" :key="option.value" :value="option.value">
-                                                {{ option.label }}
-                                            </option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div v-for="(diaData, index) in data" :key="diaData.nro_dia" className="mb-6">
+                        <div v-if="diaData.destino_turistico_detalle[index].destino_turistico_detalle_servicio.filter(s => s.proveedor_categoria_id == props.SelectValueCategoria).length > 0" className="mb-4">
+                            <h2>Día {{ diaData.nro_dia }}</h2>
+                            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+                                    <tr class="bg-gray-100">
+                                    <th class="w-1/6 px-4 py-2 text-sm font-medium">Nombre</th>
+                                    <th class="w-1/6 px-4 py-2 text-sm font-medium">Pasajero</th>
+                                    <th class="w-3/6 px-4 py-2 text-sm font-medium">Servicio</th>
+                                    <th class="w-1/6 px-4 py-2 text-sm font-medium">Estatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="detalle in diaData.destino_turistico_detalle" :key="detalle.pasajero.id" className="bg-white border-b text-gray-900">
+                                        <td class="px-4 py-2 text-sm">
+                                            <input v-model="detalle.pasajero.nombre" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        </td>
+                                        <td class="px-4 py-2 text-sm">
+                                            <select v-model="detalle.pasajero.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                                <option disabled value="">-- Selecciona una opción --</option>
+                                                <option v-for="option in TipoPasajero" :key="option.value"
+                                                    :value="option.value">
+                                                    {{ option.label }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm">
+                                            <select v-model="detalle.servicio" @change="handleSelectChange($event.target.value)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                                <option disabled value="">-- Selecciona una opción --</option>
+                                                <option v-for="servicio in detalle.destino_turistico_detalle_servicio.filter(s => s.proveedor_categoria_id == SelectValueCategoria)" 
+                                                        :key="servicio.id" :value="servicio.monto">
+                                                    {{ servicio.observacion }} - ${{ servicio.monto }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td class="px-4 py-2 text-sm">
+                                            <select v-model="detalle.pasajero.clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                                <option disabled value="">-- Selecciona una opción --</option>
+                                                <option v-for="option in Clase" :key="option.value" :value="option.value">
+                                                    {{ option.label }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- Footer -->
                 <div class="px-4 py-3 border-t flex justify-end space-x-2">
-                    <PrimaryButton @click="closeModal">Cerrar</PrimaryButton>
+                    <PrimaryButton @click="closeModal" type="button">Cerrar</PrimaryButton>
                 </div>
             </div>
         </template>
