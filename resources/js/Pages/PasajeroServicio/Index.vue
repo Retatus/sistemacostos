@@ -5,8 +5,17 @@
     import { ref } from 'vue';
     import { router } from '@inertiajs/vue3';
 
+    // En tu script
+    import dayjs from 'dayjs'
+    import utc from 'dayjs/plugin/utc'
+    import timezone from 'dayjs/plugin/timezone'
+    dayjs.extend(utc)
+    dayjs.extend(timezone)
+
     const page = usePage();
     const PasajeroServicios = ref(page.props.pasajeroservicios);
+
+    
     
     const onDeleteConfirm = (PasajeroServicio) => {
         Swal.fire({
@@ -28,6 +37,20 @@
             }
         });
     };
+
+    import { computed } from 'vue';
+
+    // Computed property example for formatting created_at
+    const fechaFormateada = (fecha, timeZone = 'Europe/Madrid', format = 'YYYY-MM-DD HH:mm:ss') => {
+        return computed(() => 
+            dayjs.utc(fecha)
+                .tz(timeZone)
+                .format(format)
+        );
+    };
+
+
+
 </script>
 
 <template>
@@ -58,8 +81,13 @@
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
-                                    </th> 
-
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        Creado
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        Actualizado
+                                    </th>
                                     <th scope="col" className="px-6 py-3">
                                         Acciones
                                     </th>
@@ -75,8 +103,13 @@
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajeroservicio.estado_activo}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ fechaFormateada(pasajeroservicio.created_at).value }}
                                     </td> 
-
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ fechaFormateada(pasajeroservicio.updated_at).value }}
+                                    </td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
                                             <Link :href="route('pasajero_servicio.edit', pasajeroservicio)">
