@@ -74,11 +74,26 @@
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
-                                        pasajero_id
-                                    </th> 
+                                        hora
+                                    </th>
                                     <th scope='col' className='px-6 py-3'>
                                         itinerario_servicio_id
                                     </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        pasajero_id
+                                    </th> 
+                                    <th scope='col' className='px-6 py-3'>
+                                        observacion
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        moneda
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        monto
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        status
+                                    </th>
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
                                     </th>
@@ -96,11 +111,26 @@
                             <tbody>
                                 <tr v-for="pasajeroservicio in PasajeroServicios" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{pasajeroservicio.pasajero_id}}
-                                    </td> 
+                                        {{ pasajeroservicio.hora }}
+                                    </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajeroservicio.itinerario_servicio_id}}
                                     </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pasajeroservicio.pasajero_id}}
+                                    </td> 
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ pasajeroservicio.observacion }}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ pasajeroservicio.moneda }}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ pasajeroservicio.monto }}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{ pasajeroservicio.status }}
+                                    </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajeroservicio.estado_activo}}
                                     </td>

@@ -27,6 +27,7 @@ class ProveedorController extends Controller
         // Consulta principal
         $proveedors = Proveedor::with('categoria:id,nombre')
             ->where('estado_activo', 1)
+            ->where('escliente', 0)
             ->when($category, function ($query, $category) {
                 return $query->where('proveedor_categoria_id', $category);
             })

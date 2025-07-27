@@ -95,11 +95,10 @@ class PasajeroController extends Controller
      */
     public function update(Request $request, Pasajero $pasajero)
     {
-        $data = $request->all();
+        $data = $request->except('documento_file'); // Excluye la imagen a menos que se haya subido
 
-        $request->except('documento_file'); // Exceptua algun campo antes de ser insertado en la base de datos 
-
-        if ($request->hasFile('documento_file'));{
+        // Validar si se subió una nueva imagen
+        if ($request->hasFile('documento_file')){
             $file = $request->file('documento_file');
             $rutename = $file->store('documento_pasajero', ['disk' => 'public']);
             $data['documento_file'] = $rutename;
