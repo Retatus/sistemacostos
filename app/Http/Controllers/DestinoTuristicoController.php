@@ -156,10 +156,25 @@ class DestinoTuristicoController extends Controller
     {
         $data = $request->all();
         $destinoId = $data["destino_turistico_id"];
-        $destinoServicios = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoId);
-        //$destinoServicios->makeHidden(['created_at', 'updated_at', 'destino_turistico_detalle.created_at', 'destino_turistico_detalle.updated_at']); // Ocultar campos
+        $destinoServicios = DestinoTuristico::with([
+            'itinerarioDestinos' => function($query) {
+                $query->with([
+                    'itinerario',
+                    'itinerarioServicios' => function($query) {
+                        $query->with([
+                            'servicio' => function($query) {
+                                $query->with([
+                                    'precios',
+                                    'servicioDetalles'
+                                ]);
+                            },
+                            //'pasajeroServicios.pasajero' // Nueva relación añadida
+                        ]);
+                    }
+                ]);
+            }
+        ])->find($destinoId);
         // dd($destinoServicios->toJson());
-        // $destinoServicios = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoServicios->id);
         return response()->json($destinoServicios);
     }
 

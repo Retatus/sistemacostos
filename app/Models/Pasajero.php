@@ -13,6 +13,12 @@ class Pasajero extends Model
 
     protected $fillable = ['nombre', 'apellido_paterno', 'apellido_materno', 'documento_tipo_id', 'documento_numero', 'pais_id', 'documento_file', 'tipo_pasajero_id', 'clase_id', 'cotizacion_id', 'estado_activo'];
 
+    // App/Models/Pasajero.php
+    public function pasajeroServicios()
+    {
+        return $this->hasMany(PasajeroServicio::class);
+    }
+
     public function tipo_docuemento()
     {
         return $this->belongsTo(TipoDocumento::class, 'documento_tipo_id', 'id');
@@ -36,11 +42,6 @@ class Pasajero extends Model
     public function cotizacion()
     {
         return $this->belongsTo(Cotizacion::class, 'cotizacion_id', 'id');
-    }
-
-    public function pasajeroServicios()
-    {
-        return $this->hasMany(PasajeroServicio::class, 'pasajero_id', 'id');
     }
 
     public static function getFormattedForDropdown()
