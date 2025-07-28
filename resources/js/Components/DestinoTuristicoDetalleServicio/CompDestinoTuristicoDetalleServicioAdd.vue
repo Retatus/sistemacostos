@@ -138,7 +138,7 @@ const props = defineProps({
   const selectedValueServicioObservacion = ref("");
 
   const destinoTuristicoDetalleServicio = ref({
-    nro_orden: 1,
+    nro_orden: props.Lista_destino_turistico_detalle_servicio.length > 0 ? props.Lista_destino_turistico_detalle_servicio[props.Lista_destino_turistico_detalle_servicio.length - 1].nro_orden + 1 : 1,
     proveedor_categoria_id: '',
     proveedor_id: '',
     servicio_id: '',
