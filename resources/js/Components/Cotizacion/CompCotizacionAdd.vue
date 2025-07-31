@@ -168,7 +168,7 @@
                             <tbody>
                                 <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id" className="bg-white border-b text-gray-900">
                                     <td class="px-4 py-2 text-sm" hidden>
-                                        <input v-model="servicioDetalle.id" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="servicioDetalle.id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
                                     <td class="px-4 py-2 text-sm">
                                         <input v-model="servicioDetalle.hora" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
@@ -191,8 +191,8 @@
                                         </select>
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <textarea v-model="servicioDetalle.observacion" name="observacion" id="" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Observación del Servicio" rows="2" required>
+                                        <textarea v-model="servicioDetalle.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm"
+                                            placeholder="Observación del Servicio" rows="2">
                                         </textarea>
                                     </td>
                                     <td class="px-4 py-2 text-sm">
@@ -221,16 +221,16 @@
                                     </td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <button @click="agregarDetalle(dia.nro_dia)" type="button">
+                                            <button @click="agregarDetalle(dia.nro_dia, index)" type="button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
                                             </button>
-                                            <!-- <button @click="onDeleteConfirm(pasajero)">
+                                            <button @click="eliminarDetalle(dia.nro_dia, index)" type="button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                                 </svg>
-                                            </button> -->
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -446,10 +446,9 @@ async function recuperarValorModal(persona) {
     Cotizacion.cliente_nro_doc = persona.ruc;
 }
 
-function agregarDetalle(indice) {
-    console.log("agregarDetalle", indice);
+function agregarDetalle(indice, index) {
     const nuevoServicio = {
-        id: '',
+        id: null,
         nro_orden: '',
         hora: '18:00',
         servicio_id: '',
@@ -473,10 +472,9 @@ function agregarDetalle(indice) {
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
-        //serviciosPorDia.value[serviciosPorDia.value.length - 1].itinerario_servicios.push(nuevoServicio);
-        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.push(nuevoServicio);
+        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio) .push(nuevoServicio);
     } else {
-        // Si no hay días, crear uno nuevo
+        // Si no hay días, crear uno nuevo  
         serviciosPorDia.value.push({
             nro_dia: 1,
             itinerario_id: '',
@@ -487,6 +485,10 @@ function agregarDetalle(indice) {
             itinerario_servicios: [nuevoServicio]
         });
     }
+}
+
+function eliminarDetalle(indice, index) {
+    serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index), 1);
 }
  
 async function ListaCategoriaProveedor() {

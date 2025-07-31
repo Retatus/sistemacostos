@@ -77,6 +77,9 @@
                                         hora
                                     </th>
                                     <th scope='col' className='px-6 py-3'>
+                                        cotizacion_id
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
                                         itinerario_servicio_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -112,6 +115,9 @@
                                 <tr v-for="pasajeroservicio in PasajeroServicios" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{ pasajeroservicio.hora }}
+                                    </td>
+                                    <td>
+                                        {{ pasajeroservicio.cotizacion_id }}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajeroservicio.itinerario_servicio_id}}
