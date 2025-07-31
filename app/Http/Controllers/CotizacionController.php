@@ -165,8 +165,9 @@ class CotizacionController extends Controller
                     $pasajero_servicio = $servicio['pasajerosAsignados'] ?? [];
                     foreach ($pasajero_servicio as $pasajero_servicio) {
                             $pasajero_servicio_response = PasajeroServicio::create([
-                                'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_servicio['temp_id'])['id'],
-                                'itinerario_servicio_id' => $servicio['id'] ?? [],
+                                'cotizacion_id' => $cotizacionResponse->id,
+                                'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_servicio['temp_id'])['id'] ?? null,
+                                'itinerario_servicio_id' => $servicio['id'] ?? null,
                                 'hora' => $servicio['hora'] ?? '',
                                 'observacion' => $servicio['observacion'] ?? '',
                                 'moneda' => $servicio['moneda'] ?? '',
