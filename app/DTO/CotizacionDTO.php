@@ -3,6 +3,7 @@
 namespace App\DTO;
 
 use App\Models\Cotizacion;
+use App\Models\Pasajero;
 
 class CotizacionDTO
 {
@@ -36,6 +37,7 @@ class CotizacionDTO
         public array $destino_turistico_detalle = [],
         public array $destino_turistico_detalle_monto_x_categoria = [],
         public ?DestinoTuristicoDTO $destinos_turisticos = null,
+        public array $Pasajeros = []
     ) {}
 
     public static function createEmpty(): self
@@ -43,7 +45,7 @@ class CotizacionDTO
         return new self(
             id: 0,
             proveedor_id: 0,
-            file_nro: '',
+            file_nro: Cotizacion::generarCorrelativo(),
             file_nombre: '',
             comprobante_id: 0,
             fecha: now()->format('Y-m-d'),
@@ -69,7 +71,8 @@ class CotizacionDTO
             estado_activo: 1,
             destino_turistico_detalle: [],
             destino_turistico_detalle_monto_x_categoria: [],
-            destinos_turisticos: DestinoTuristicoDTO::createEmpty()
+            destinos_turisticos: DestinoTuristicoDTO::createEmpty(),
+            Pasajeros: []
         );
     }
 
@@ -106,7 +109,11 @@ class CotizacionDTO
             destino_turistico_detalle_monto_x_categoria: $data['destino_turistico_detalle_monto_x_categoria'] ?? [],
             destinos_turisticos: isset($data['destinos_turisticos']) 
                 ? DestinoTuristicoDTO::fromArray($data['destinos_turisticos']) 
-                : null
+                : null,
+            Pasajeros: array_map(
+                fn($pasajero) => PasajeroDTO::fromArray($pasajero),
+                $data['pasajeros'] ?? []
+            )
         );
     }
 }

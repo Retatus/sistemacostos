@@ -104,6 +104,7 @@ class CotizacionController extends Controller
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
+            'Cotizacion' => $cotizacion,
             'Correlativo' => $correlatico,
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos
         ]);
@@ -172,7 +173,7 @@ class CotizacionController extends Controller
                                 'observacion' => $servicio['observacion'] ?? '',
                                 'moneda' => $servicio['moneda'] ?? '',
                                 'monto' => $servicio['monto'] ?? 0,
-                                'estatus' => $servicio['status'] ?? '0', // PENDIENTE
+                                'estatus' => $servicio['estatus'] ?? '0', // PENDIENTE
                                 'estado_activo' => 1
                         ]);
                     }

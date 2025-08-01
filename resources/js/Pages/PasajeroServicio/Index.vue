@@ -135,7 +135,7 @@
                                         {{ pasajeroservicio.monto }}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{ pasajeroservicio.status }}
+                                        {{ pasajeroservicio.estatus }}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pasajeroservicio.estado_activo}}

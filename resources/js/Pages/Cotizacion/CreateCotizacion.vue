@@ -14,6 +14,7 @@
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <FormularioCotizacion  
+                        :Cotizacion="Cotizacion"
                         :Correlativo ="Correlativo"
                         :Lista_destinos_turistico="ListaDestinosTuristicos"
                     />
@@ -29,6 +30,10 @@
     import FormularioCotizacion from '@/Components/Cotizacion/CompCotizacionAdd.vue';
 
     const props = defineProps({  
+        Cotizacion : {
+            type: Object,
+            required: true,
+        },
         ListaDestinosTuristicos: {
             type: Object,
             required: true,

@@ -49,7 +49,7 @@
                     <label for="comprobante_id" class="block text-sm font-medium text-gray-700">Tipo comprobante</label>
                     <select v-model="Cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="comprobante_id">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in sTipoComprobante" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -80,7 +80,7 @@
                     <label for="idioma" class="block text-sm font-medium text-gray-700">Idioma</label>
                     <select v-model="Cotizacion.idioma_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="idioma">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in sIdioma" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -90,7 +90,7 @@
                     <label for="mercado" class="block text-sm font-medium text-gray-700">Mercado</label>
                     <select v-model="Cotizacion.mercado_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="mercado">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in sMercado" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -100,7 +100,7 @@
                     <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino Turistico</label>
                     <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -118,7 +118,7 @@
                     <label for="pais_id" class="block text-sm font-medium text-gray-700">Pais</label>
                     <select v-model="Cotizacion.pais_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
                         id="pais_id">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in sPais" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -140,7 +140,7 @@
                         Cotizacion</label>
                     <select v-model="Cotizacion.estado_cotizacion"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="estado_cotizacion">
-                        <option disabled value="">-- Selecciona una opción --</option>
+                        <option disabled value="0">-- Selecciona una opción --</option>
                         <option v-for="option in EstadoCotizacion" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
@@ -176,7 +176,7 @@
                                     </td>
                                     <!-- <td class="px-4 py-2 text-sm">
                                         <select v-model="servicioDetalle.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="option in sCategoriaProveedor" :key="option.value" :value="option.value">
                                                 {{ option.label }}
                                             </option>
@@ -184,7 +184,7 @@
                                     </td> -->
                                     <td class="px-4 py-2">
                                         <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option disabled value="">-- Selecciona una opción --</option>
+                                            <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="item in servicios" :key="item.value" :value="item.value">
                                                 {{ item.label }}
                                             </option>
@@ -212,7 +212,7 @@
                                         />
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <select v-model="servicioDetalle.status" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <select v-model="servicioDetalle.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option value="0">PENDIENTE</option>
                                             <option value="1">CONFIRMADA</option>
                                             <option value="2">CANCELADA</option>
@@ -237,7 +237,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <ServicioDetalle
+                    
+                    <ServicioDetalle v-if="listaServicioDetalle.length > 0"
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
                         :Lista_Pasajeros = Cotizacion.Pasajeros
@@ -292,7 +293,7 @@
             </div>
         </form>
     </div>
-    <PasajeroModal
+    <PasajeroModal v-if="Cotizacion.Pasajeros != null "
         :isModalVisible="showModal"
         :ListaPasajeros = Cotizacion.Pasajeros
         :errorMessage="error"
@@ -330,6 +331,10 @@ const categoriesStore = useCategoriesStore();
 
 // Definir las props
 const props = defineProps({
+    Cotizacion: {
+        type: Object,
+        required: true,
+    },
     Correlativo: {
         type: String,
         required: true,
@@ -386,8 +391,10 @@ const EstadoCotizacion = ref([
 let emptyInputTimeout = null;
 
 // Variables para el cotizacion y detalle temporal
-const Cotizacion = reactive(getCotizacionInicial());
-Cotizacion.file_nro = props.Correlativo;
+//const Cotizacion = reactive(getCotizacionInicial());
+const Cotizacion = props.Cotizacion; // || reactive(getCotizacionInicial());
+
+// Cotizacion.file_nro = props.Correlativo;
 Cotizacion.fecha = fechaActual.value;
 Cotizacion.fecha_inicio = fechaActual.value;
 Cotizacion.fecha_fin = fechaActual.value;
@@ -451,24 +458,24 @@ function agregarDetalle(indice, index) {
         id: null,
         nro_orden: '',
         hora: '18:00',
-        servicio_id: '',
-        itinerario_destino_id: '',
-        proveedor_categoria_id: '',
-        proveedor_id: '',
+        servicio_id: '0',
+        itinerario_destino_id: '0',
+        proveedor_categoria_id: '0',
+        proveedor_id: '0',
         observacion: 'INFORMACION EXTRA DE SERVICIO',
         monto: '',
         estado_activo: '1',
         servicio: {
             id: '',
-            proveedor_id: '',
-            servicio_detalle_id: '',
-            ubicacion_id: '',
+            proveedor_id: '0',
+            servicio_detalle_id: '0',
+            ubicacion_id: '0',
             estado_activo: '1',
             precios: []
         },
         moneda: 'USD',
         pasajerosAsignados: [],
-        status: '0' // PENDIENTE
+        estatus: '0' // PENDIENTE
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
@@ -507,7 +514,7 @@ async function ListaCategoriaProveedor() {
                     observacion: '',
                     moneda: 'USD',
                     pasajerosAsignados: [],
-                    status: '0', // PENDIENTE
+                    estatus: '0', // PENDIENTE
                 }))
             }));
             console.log("Servicios por dia", serviciosPorDia.value);
