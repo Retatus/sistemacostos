@@ -37,7 +37,7 @@ class CotizacionDTO
         public array $destino_turistico_detalle = [],
         public array $destino_turistico_detalle_monto_x_categoria = [],
         public ?DestinoTuristicoDTO $destinos_turisticos = null,
-        public array $Pasajeros = []
+        public array $pasajeros = []
     ) {}
 
     public static function createEmpty(): self
@@ -72,7 +72,7 @@ class CotizacionDTO
             destino_turistico_detalle: [],
             destino_turistico_detalle_monto_x_categoria: [],
             destinos_turisticos: DestinoTuristicoDTO::createEmpty(),
-            Pasajeros: []
+            pasajeros: []
         );
     }
 
@@ -110,7 +110,7 @@ class CotizacionDTO
             destinos_turisticos: isset($data['destinos_turisticos']) 
                 ? DestinoTuristicoDTO::fromArray($data['destinos_turisticos']) 
                 : null,
-            Pasajeros: array_map(
+            pasajeros: array_map(
                 fn($pasajero) => PasajeroDTO::fromArray($pasajero),
                 $data['pasajeros'] ?? []
             )

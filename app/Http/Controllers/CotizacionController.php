@@ -24,6 +24,7 @@ use Inertia\Inertia;
 use Carbon\Carbon;
 use App\DTO\CotizacionDTO;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 class CotizacionController extends Controller
 {
 
@@ -104,6 +105,7 @@ class CotizacionController extends Controller
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
+            'Accion' => 'create',
             'Cotizacion' => $cotizacion,
             'Correlativo' => $correlatico,
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos
@@ -118,7 +120,7 @@ class CotizacionController extends Controller
         $response = DB::transaction(function () use ($request) {
             $data = $request->all();
             //dd(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            $dataCotizacion = $request->except(['Pasajeros']);
+            $dataCotizacion = $request->except(['pasajeros']);
             $dataCotizacion['file_nro'] = Cotizacion::generarCorrelativo();
             $dataCotizacion['fecha'] = Carbon::parse($dataCotizacion['fecha'])->format('Y-m-d');
             $dataCotizacion['fecha_inicio'] = Carbon::parse($dataCotizacion['fecha_inicio'])->format('Y-m-d');
@@ -129,7 +131,7 @@ class CotizacionController extends Controller
             $cotizacionResponse = Cotizacion::create($dataCotizacion);
 
             // 2. Mapeo de IDs temporales a reales para pasajeros
-            $pasajeros = $data['Pasajeros'] ?? [];
+            $pasajeros = $data['pasajeros'] ?? [];
             $pasajerosMap = [];
 
             foreach ($pasajeros as $index => $pasajeroData) {
@@ -164,7 +166,10 @@ class CotizacionController extends Controller
                 foreach ($servicio_detalle as $servicio) {  
 
                     $pasajero_servicio = $servicio['pasajerosAsignados'] ?? [];
-                    foreach ($pasajero_servicio as $pasajero_servicio) {
+
+                    if (!empty($pasajero_servicio)) {
+                        foreach ($pasajero_servicio as $pasajero_servicio) {
+                            //Log::info('🟢 Iniciando inserción de pasajero_servicio. PasajerosMap: ' . json_encode($pasajerosMap) . ' | Pasajero temp_id: ' . $pasajero_servicio['temp_id']);
                             $pasajero_servicio_response = PasajeroServicio::create([
                                 'cotizacion_id' => $cotizacionResponse->id,
                                 'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_servicio['temp_id'])['id'] ?? null,
@@ -175,6 +180,20 @@ class CotizacionController extends Controller
                                 'monto' => $servicio['monto'] ?? 0,
                                 'estatus' => $servicio['estatus'] ?? '0', // PENDIENTE
                                 'estado_activo' => 1
+                            ]);                            
+                        }
+                    } else {
+                        //Log::info('🟢 Iniciando inserción de pasajero_servicio sin pasajero asignado');
+                        $pasajero_servicio_response = PasajeroServicio::create([
+                            'cotizacion_id' => $cotizacionResponse->id,
+                            'pasajero_id' => null, // No hay pasajero asignado
+                            'itinerario_servicio_id' => $servicio['id'] ?? null,
+                            'hora' => $servicio['hora'] ?? '',
+                            'observacion' => $servicio['observacion'] ?? '',
+                            'moneda' => $servicio['moneda'] ?? '',
+                            'monto' => $servicio['monto'] ?? 0,
+                            'estatus' => $servicio['estatus'] ?? '0', // PENDIENTE
+                            'estado_activo' => 1
                         ]);
                     }
                 }
@@ -206,10 +225,10 @@ class CotizacionController extends Controller
     public function edit(Cotizacion $cotizacion)
     {
         $cotizacion = Cotizacion::with([
-            'destinosTuristicos.itinerarioDestinos' => function($query) {
+            'destinosTuristicos.itinerarioDestinos' => function($query) use ($cotizacion) {
                 $query->with([
                     'itinerario',
-                    'itinerarioServicios' => function($query) {
+                    'itinerarioServicios' => function($query) use ($cotizacion) {
                         $query->with([
                             'servicio' => function($query) {
                                 $query->with([
@@ -217,54 +236,41 @@ class CotizacionController extends Controller
                                     'servicioDetalles'
                                 ]);
                             },
-                            'pasajeroServicios.pasajero' // Nueva relación añadida
+                            'pasajeroServicios' => function($query) use ($cotizacion) {
+                                $query->where('cotizacion_id', '=', $cotizacion->id);
+                            }
                         ]);
                     }
                 ]);
-            }
+            },
+            'pasajeros'
         ])->find($cotizacion->id);
 
-        // $cotizacion = Cotizacion::with([
-        //     'destinosTuristicos.itinerarioDestinos' => function($query) {
-        //         $query->with([
-        //             'itinerario',
-        //             'itinerarioServicios.servicio' => function($query) {
-        //                 $query->with([
-        //                     'precios',
-        //                     'servicioDetalles'
-        //                 ]);
-        //             }
-        //         ]);
-        //     }
-        // ])->find($cotizacion->id);
-
-        // $cotizacion = Cotizacion::with([
-        //     // 'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.itinerario',
-        //     // 'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.servicio.precios',
-        //     // 'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.servicio.servicioDetalles' // plural
-        //     'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.itinerario',
-        //     'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.servicio.precios',
-        //     'destino.destino_turistico_detalle.destino_turistico_detalle_servicio.servicio.servicioDetalles' // plural
-        // ])->find($cotizacion->id);
-
-        dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-
+        // Generar un UUID para cada pasajero (solo en la respuesta)
+        if ($cotizacion && $cotizacion->pasajeros) {
+            $cotizacion->pasajeros->transform(function($pasajero) {
+                $pasajero->temp_id = (string) Str::uuid();
+                return $pasajero;
+            });
+        }
+        //dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        //dd($cotizacion->toArray());
 
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
-        $pasajero = Pasajero::where('cotizacion_id', $cotizacion->id)->get();
-        $detalle = $this->cotizacionService->getCotizacionWithItinerary($cotizacion->id);
+        // $pasajero = Pasajero::where('cotizacion_id', $cotizacion->id)->get();
+        // $detalle = $this->cotizacionService->getCotizacionWithItinerary($cotizacion->id);
         $proveedor = proveedor::where('id', $cotizacion->proveedor_id)->get();
         $cotizacion['cliente_nro_doc'] = $proveedor[0]['ruc'] ?? '';
         $cotizacion['proveedor_razon_social'] = $proveedor[0]['razon_social'] ?? '';
         
-        return Inertia::render('Cotizacion/EditCotizacion', 
+        return Inertia::render('Cotizacion/CreateCotizacion', 
         [
+            'Accion' => 'edit',
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
             'Correlativo' => $cotizacion->file_nro,
             'Cotizacion' => $cotizacion,
-            'Pasajeros' => $pasajero,
-            'Detalle' => $detalle,
+            // 'Pasajeros' => $pasajero,
+            // 'Detalle' => $detalle,
         ]); //compact('cotizacion'));
     }
 
