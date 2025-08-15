@@ -149,12 +149,12 @@
                 <div class="col-span-6">
                     <div v-for="dia in serviciosPorDia" :key="dia.id" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2">
-                            <h3>Día {{ dia.nro_dia }}: {{ dia.nombre }}</h3>
+                            <h3>Día {{ dia.nro_dia }}: {{ dia.nombre }} {{ dia.id }}</h3>
                         </div>
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                                 <tr className="bg-white border-b text-gray-900">
-                                    <th class="w-1/12 px-4 py-2" hidden>ID</th>
+                                    <th hidden>ID</th>
                                     <th class="w-1/12 px-4 py-2">Hora</th>
                                     <!-- <th class="w-1/12 px-4 py-2">Categoria</th> -->
                                     <th class="w-2/12 px-4 py-2">Servicio</th>
@@ -162,7 +162,7 @@
                                     <th class="w-1/12 px-4 py-2">Moneda</th>
                                     <th class="w-1/12 px-4 py-2">Monto</th>
                                     <th class="w-3/12 px-4 py-2">Pasajeros Asignados</th>
-                                    <th colspan="2" class="w-1/12 px-4 py-2">status</th>
+                                    <th colspan="2" class="w-2/12 px-4 py-2">status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,7 +171,7 @@
                                         <input v-model="servicioDetalle.id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <input v-model="servicioDetalle.hora" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="servicioDetalle.pasajero_servicios.hora" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                         {{ servicioDetalle.nro_orden }}
                                     </td>
                                     <!-- <td class="px-4 py-2 text-sm">
@@ -183,36 +183,37 @@
                                         </select>
                                     </td> -->
                                     <td class="px-4 py-2">
-                                        <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm" @change="handleChange(dia.nro_dia, index)">
                                             <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="item in servicios" :key="item.value" :value="item.value">
                                                 {{ item.label }}
                                             </option>
+                                            <option value='__add_new__'>➕ Agregar nuevo...</option>
                                         </select>
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <textarea v-model="servicioDetalle.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm"
+                                        <textarea v-model="servicioDetalle.pasajero_servicios.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm"
                                             placeholder="Observación del Servicio" rows="2">
                                         </textarea>
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <select v-model="servicioDetalle.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <select v-model="servicioDetalle.pasajero_servicios.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option value="USD">DOLARES</option>
                                             <option value="PEN">SOLES</option>
                                         </select>
                                     </td>
                                      <td class="px-4 py-2 text-sm">
-                                        <input v-model="servicioDetalle.monto" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="servicioDetalle.pasajero_servicios.monto" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
                                     <td class="px-4 py-2 text-sm">
                                         <AsignarPasajerosServicio
                                             :pasajeros-disponibles="PasajerosReducido"
-                                            v-model="servicioDetalle.pasajerosAsignados"
-                                            :servicio="servicioDetalle"
+                                            v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
+                                            :servicio="servicioDetalle.pasajero_servicios"
                                         />
                                     </td>
                                     <td class="px-4 py-2 text-sm">
-                                        <select v-model="servicioDetalle.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <select v-model="servicioDetalle.pasajero_servicios.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option value="0">PENDIENTE</option>
                                             <option value="1">CONFIRMADA</option>
                                             <option value="2">CANCELADA</option>
@@ -221,7 +222,7 @@
                                     </td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <button @click="agregarDetalle(dia.nro_dia, index)" type="button">
+                                            <button @click="agregarDetalle(dia.nro_dia, index, dia.id)" type="button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
@@ -236,12 +237,16 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div v-if="showInput">
+                            <input v-model="newItem" placeholder="Nuevo ítem" />
+                            <button @click="addItem">Agregar</button>
+                        </div>
                     </div>
                     
-                    <ServicioDetalle v-if="listaServicioDetalle.length > 0"
+                    <ServicioDetalle v-if="listaServicioDetalle.length > 0 || listaServicioDetalle.length != null"
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
-                        :Lista_Pasajeros = Cotizacion.Pasajeros
+                        :Lista_Pasajeros = Cotizacion.pasajeros
                         v-model="contador"/>
                 </div>
             </div>
@@ -279,8 +284,8 @@
                 </div>
                 <div class="col-span-1">
                     <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                    <PrimaryButton type="submit" class="mt-2">
-                        Registrar
+                    <PrimaryButton type="submit" class="mt-2 uppercase bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" >
+                        {{ Accion }}
                     </PrimaryButton>
                     <button type="button" @click="mostrarConsola()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -293,9 +298,9 @@
             </div>
         </form>
     </div>
-    <PasajeroModal v-if="Cotizacion.Pasajeros != null "
+    <PasajeroModal v-if="Cotizacion.pasajeros != null "
         :isModalVisible="showModal"
-        :ListaPasajeros = Cotizacion.Pasajeros
+        :ListaPasajeros = Cotizacion.pasajeros
         :errorMessage="error"
         @close="showModal = false"
         @update= recalcularTotalPasajeros
@@ -331,12 +336,12 @@ const categoriesStore = useCategoriesStore();
 
 // Definir las props
 const props = defineProps({
-    Cotizacion: {
-        type: Object,
+    Accion: {
+        type: String,
         required: true,
     },
-    Correlativo: {
-        type: String,
+    Cotizacion: {
+        type: Object,
         required: true,
     },
     Lista_destinos_turistico: {
@@ -344,6 +349,9 @@ const props = defineProps({
         required: true,
     },
 });
+
+const esEdicion = computed(() => props.Accion === 'edit');
+
 
 const sTipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
 const sPais = ref([...categoriesStore.globals.pais]);
@@ -379,7 +387,6 @@ const DestinoTuristico = props.Lista_destinos_turistico
 const fechaActual = ref(new Date());
 const ListaServicioPasajeroTemp = reactive([]);
 const listaServicioDetalle = ref([]);
-const destinoTuristicoDetalleServicio = ref([]);
 
 const EstadoCotizacion = ref([
     { value: '0', label: 'PENDIENTE' },
@@ -394,19 +401,18 @@ let emptyInputTimeout = null;
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = props.Cotizacion; // || reactive(getCotizacionInicial());
 
-// Cotizacion.file_nro = props.Correlativo;
-Cotizacion.fecha = fechaActual.value;
-Cotizacion.fecha_inicio = fechaActual.value;
-Cotizacion.fecha_fin = fechaActual.value;
 
-//sconsole.log("Cotizacion inicial ", Cotizacion);
+
+// Cotizacion.file_nro = props.Correlativo;
+Cotizacion.fecha = esEdicion.value ? new Date(Cotizacion.fecha) : fechaActual.value;
+Cotizacion.fecha_inicio = esEdicion.value ? new Date(Cotizacion.fecha_inicio) : fechaActual.value;
+Cotizacion.fecha_fin = esEdicion.value ? new Date(Cotizacion.fecha_fin) : fechaActual.value;
 
 const pasajero = ref(getPersonaInicial());
 
 const errorFecha = ref("");
-
 const PasajerosReducido = computed(() =>
-  Cotizacion.Pasajeros.map(p => ({
+  Cotizacion.pasajeros.map(p => ({
     get id() { return p.id },
     set id(val) { p.id = val },
     get temp_id() { return p.temp_id },
@@ -418,17 +424,43 @@ const PasajerosReducido = computed(() =>
   }))
 )
 
+if (esEdicion.value) {
+    serviciosPorDia.value = Cotizacion.destinos_turisticos.itinerario_destinos;
+    listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
+    agregarServicioPasajeroTemp();
+    //calcularVenta();
+}
+
+
 // Observa cambios en `nro_pasajeros` y ejecuta `calcularVenta`
 watch(() => Cotizacion.nro_pasajeros, (newNroPasajeros) => {
   agregarServicioPasajeroTemp();
   calcularVenta();
 });
 
-function agregarServicioPasajeroTemp() {
-    //debugger
-    const jsonServicio = destinoTuristicoDetalleServicio.value;
+const showInput = ref(false)
+const newItem = ref('')
 
-    const nuevaLista = jsonServicio.map(servicio => {
+
+function handleChange(indice, index) {
+    const servicioDetalle = serviciosPorDia.value[indice - 1].itinerario_servicios[index];
+  if (servicioDetalle.servicio_id == '__add_new__') {
+    showInput.value = true
+    servicioDetalle.servicio_id = '0'
+  }
+}
+
+function addItem() {
+  if (newItem.value.trim()) {
+    items.value.push(newItem.value.trim())
+    newItem.value = ''
+    showInput.value = false
+  }
+}
+
+
+function agregarServicioPasajeroTemp() {
+    const nuevaLista = Cotizacion.destinos_turisticos.itinerario_destinos.map(servicio => {
         return {
             nro_dia: servicio.nro_dia,
             itinerario_destinos: PasajerosReducido.value.map(pasajero => ({
@@ -439,7 +471,31 @@ function agregarServicioPasajeroTemp() {
         };
     });
 
+    // Agregamos pasajero_servicios a cada itinerario_servicio
+    Cotizacion.destinos_turisticos.itinerario_destinos = Cotizacion.destinos_turisticos.itinerario_destinos.map(destino => ({
+        ...destino,
+        itinerario_servicios: destino.itinerario_servicios.map(servicio => ({
+            ...servicio,
+            pasajero_servicios: {
+                id: null,
+                cotizacion_id: Cotizacion.id,
+                itinerario_servicio_id: servicio.id,
+                hora: '17:00',
+                pasajerosAsignados: [],
+                observacion: '',
+                moneda: 'USD',
+                monto: '0.00',
+                estatus: '0', // PENDIENTE
+                estado_activo: '1'
+            },
+        }))
+    }));    
+
+    //console.log("agregarServicioPasajeroTemp despues de map", Cotizacion.destinos_turisticos.itinerario_destinos);
+
     ListaServicioPasajeroTemp.splice(0, ListaServicioPasajeroTemp.length, ...nuevaLista);
+    //console.log("ListaServicioPasajeroTemp", ListaServicioPasajeroTemp);
+    //Cotizacion.itinerario_servicios = ListaServicioPasajeroTemp;
 
     Cotizacion.destino_turistico_detalle = serviciosPorDia.value; // ListaServicioPasajeroTemp;
 }
@@ -453,18 +509,14 @@ async function recuperarValorModal(persona) {
     Cotizacion.cliente_nro_doc = persona.ruc;
 }
 
-function agregarDetalle(indice, index) {
+function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     const nuevoServicio = {
         id: null,
         nro_orden: '',
-        hora: '18:00',
         servicio_id: '0',
         itinerario_destino_id: '0',
         proveedor_categoria_id: '0',
         proveedor_id: '0',
-        observacion: 'INFORMACION EXTRA DE SERVICIO',
-        monto: '',
-        estado_activo: '1',
         servicio: {
             id: '',
             proveedor_id: '0',
@@ -473,9 +525,19 @@ function agregarDetalle(indice, index) {
             estado_activo: '1',
             precios: []
         },
-        moneda: 'USD',
-        pasajerosAsignados: [],
-        estatus: '0' // PENDIENTE
+        pasajero_servicios: {
+            id: null,
+            cotizacion_id: Cotizacion.id,
+            itinerario_servicio_id: '',
+            itinerario_destino_id: itinerarioDestinoId,
+            hora: '21:00',
+            pasajerosAsignados: [],
+            observacion: '',
+            moneda: 'USD',
+            monto: '0.00',
+            estatus: '0', // PENDIENTE
+            estado_activo: '1'
+        }
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
@@ -510,14 +572,22 @@ async function ListaCategoriaProveedor() {
                 ...dia,
                 itinerario_servicios: dia.itinerario_servicios.map(servicio => ({
                     ...servicio,
-                    hora:'00:00',
-                    observacion: '',
-                    moneda: 'USD',
-                    pasajerosAsignados: [],
-                    estatus: '0', // PENDIENTE
+                    pasajero_servicios: {
+                        id: null,
+                        cotizacion_id: Cotizacion.id,
+                        itinerario_servicio_id: servicio.id,
+                        itinerario_destino_id: dia.id,
+                        hora: '17:00',
+                        pasajerosAsignados: [],
+                        observacion: '',
+                        moneda: 'USD',
+                        monto: '0.00',
+                        estatus: '0', // PENDIENTE
+                        estado_activo: '1'
+                    },
                 }))
             }));
-            console.log("Servicios por dia", serviciosPorDia.value);
+            console.log("Servicios por dia actualizados ", serviciosPorDia.value);
             Cotizacion.nro_dias = response.data.nro_dias;
             const fechaInicio = new Date(Cotizacion.fecha_inicio);
             fechaInicio.setDate(fechaInicio.getDate() + response.data.nro_dias);
@@ -525,7 +595,7 @@ async function ListaCategoriaProveedor() {
             Cotizacion.fecha_fin = fechaFina; 
             
             listaServicioDetalle.value = calcularMontoTotalXCategoria(response.data);
-            destinoTuristicoDetalleServicio.value = response.data.itinerario_destinos;
+            Cotizacion.destinos_turisticos.itinerario_destinos = response.data.itinerario_destinos;
             agregarServicioPasajeroTemp();
             calcularVenta();
         }               
@@ -619,7 +689,7 @@ const recalcularTotalPasajeros = () => {
 };
 
 const contarPasajerosPorTipo = (tipo) => {
-    return Cotizacion.Pasajeros.filter((pasajero) => pasajero.tipo_pasajero_id === tipo).length || 0;
+    return Cotizacion.pasajeros.filter((pasajero) => pasajero.tipo_pasajero_id === tipo).length || 0;
 };
 
 // Observar cambios en los valores de adultos, niños y bebés
@@ -633,16 +703,16 @@ const contador = computed(() => Cotizacion.nro_pasajeros);
 function agregarPasajero(tipoPasajero) {
     const nuevo = getPersonaInicial();
     nuevo.tipo_pasajero_id = tipoPasajero;
-    nuevo.id = Cotizacion.Pasajeros.length + 1;
-    Cotizacion.Pasajeros.push(nuevo);
+    nuevo.id = Cotizacion.pasajeros.length + 1;
+    Cotizacion.pasajeros.push(nuevo);
 }
 
 const eliminarPasajero = (tipoPasajero) => {
-    const index = Cotizacion.Pasajeros.findIndex(
+    const index = Cotizacion.pasajeros.findIndex(
         (pasajero) => pasajero.tipo_pasajero_id === tipoPasajero
     );
     if (index >= 0) {
-        Cotizacion.Pasajeros.splice(index, 1);
+        Cotizacion.pasajeros.splice(index, 1);
     }
 }
 
@@ -652,7 +722,6 @@ const mostrarConsola = () => {
     console.log(Cotizacion);
     const jsonData = JSON.stringify(Cotizacion, null, 2);
     console.log("JSON Data:", jsonData);
-    console.log("PasajerosReducido ", PasajerosReducido.value);
 }
 
 // Función para calcular el monto de la venta

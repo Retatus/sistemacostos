@@ -16,7 +16,6 @@
                     <FormularioCotizacion  
                         :Accion="Accion"
                         :Cotizacion="Cotizacion"
-                        :Correlativo ="Correlativo"
                         :Lista_destinos_turistico="ListaDestinosTuristicos"
                     />
                 </div>
@@ -41,10 +40,6 @@
         },
         ListaDestinosTuristicos: {
             type: Object,
-            required: true,
-        },
-        Correlativo: {
-            type: String,
             required: true,
         },
     })

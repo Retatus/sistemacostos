@@ -11,7 +11,7 @@ class PasajeroServicio extends Model
 
     //protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['hora', 'pasajero_id', 'itinerario_servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus','estado_activo'];
+    protected $fillable = ['hora', 'itinerario_destino_id', 'pasajero_id', 'itinerario_servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus','estado_activo'];
 
     // App/Models/PasajeroServicio.php
     public function itinerarioServicio()

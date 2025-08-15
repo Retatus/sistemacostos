@@ -157,42 +157,46 @@ class CotizacionController extends Controller
                 // ✅ Actualizar el array original
                 $pasajeros[$index]['id'] = $pasajero->id;
             }
-            
+            //dd(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             // 3. Procesar días y servicios anidados
             $pasajero_servicios = $data['destino_turistico_detalle'] ?? [];
+            //dd($pasajero_servicios);
             foreach ($pasajero_servicios as $pasajero_servicio) {                   // destino_turistico_detalle
-
-                $servicio_detalle = $pasajero_servicio['itinerario_servicios'] ?? [];
-                foreach ($servicio_detalle as $servicio) {  
-
-                    $pasajero_servicio = $servicio['pasajerosAsignados'] ?? [];
-
-                    if (!empty($pasajero_servicio)) {
-                        foreach ($pasajero_servicio as $pasajero_servicio) {
-                            //Log::info('🟢 Iniciando inserción de pasajero_servicio. PasajerosMap: ' . json_encode($pasajerosMap) . ' | Pasajero temp_id: ' . $pasajero_servicio['temp_id']);
+                $itinerario_servicios = $pasajero_servicio['itinerario_servicios'] ?? [];
+                foreach ($itinerario_servicios as $index => $servicio) {  
+                    $pasajero_servicio = $servicio['pasajero_servicios'] ?? [];
+                    // Verificar si hay pasajeros asignados
+                    $pasajero_asignados = $pasajero_servicio['pasajerosAsignados'] ?? [];
+                    if (!empty($pasajero_asignados)) {
+                        foreach ($pasajero_asignados as $pasajero_asignado) {
+                            //Log::info('🟢 Iniciando inserción de pasajero_servicio. PasajerosMap: ' . json_encode($pasajerosMap) . ' | Pasajero temp_id: ' . $pasajero_asignado['temp_id']. ' moneda '. $pasajero_servicio['moneda']);
                             $pasajero_servicio_response = PasajeroServicio::create([
+                                'nro_orden' => $index + 1, // Asignar el número de orden basado en el índice del servicio
                                 'cotizacion_id' => $cotizacionResponse->id,
-                                'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_servicio['temp_id'])['id'] ?? null,
-                                'itinerario_servicio_id' => $servicio['id'] ?? null,
-                                'hora' => $servicio['hora'] ?? '',
-                                'observacion' => $servicio['observacion'] ?? '',
-                                'moneda' => $servicio['moneda'] ?? '',
-                                'monto' => $servicio['monto'] ?? 0,
-                                'estatus' => $servicio['estatus'] ?? '0', // PENDIENTE
+                                'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_asignado['temp_id'])['id'] ?? null,
+                                'itinerario_servicio_id' => $pasajero_servicio['itinerario_servicio_id'] ?? null,
+                                'hora' => $pasajero_servicio['hora'] ?? '',
+                                'itinerario_destino_id' => $pasajero_servicio['itinerario_destino_id'] ?? 0,
+                                'observacion' => $pasajero_servicio['observacion'] ?? '',
+                                'moneda' => $pasajero_servicio['moneda'] ?? '',
+                                'monto' => $pasajero_servicio['monto'] ?? 0,
+                                'estatus' => $pasajero_servicio['estatus'] ?? '0', // PENDIENTE
                                 'estado_activo' => 1
                             ]);                            
                         }
                     } else {
                         //Log::info('🟢 Iniciando inserción de pasajero_servicio sin pasajero asignado');
                         $pasajero_servicio_response = PasajeroServicio::create([
+                            'nro_orden' => $index + 1, // Asignar el número de orden basado en el índice del servicio
                             'cotizacion_id' => $cotizacionResponse->id,
                             'pasajero_id' => null, // No hay pasajero asignado
-                            'itinerario_servicio_id' => $servicio['id'] ?? null,
-                            'hora' => $servicio['hora'] ?? '',
-                            'observacion' => $servicio['observacion'] ?? '',
-                            'moneda' => $servicio['moneda'] ?? '',
-                            'monto' => $servicio['monto'] ?? 0,
-                            'estatus' => $servicio['estatus'] ?? '0', // PENDIENTE
+                            'itinerario_servicio_id' => $servicio['itinerario_servicio_id'] ?? null,
+                            'hora' => $pasajero_servicio['hora'] ?? '',
+                            'itinerario_destino_id' => $pasajero_servicio['itinerario_destino_id'] ?? 0,
+                            'observacion' => $pasajero_servicio['observacion'] ?? '',
+                            'moneda' => $pasajero_servicio['moneda'] ?? '',
+                            'monto' => $pasajero_servicio['monto'] ?? 0,
+                            'estatus' => $pasajero_servicio['estatus'] ?? '0', // PENDIENTE
                             'estado_activo' => 1
                         ]);
                     }
@@ -231,13 +235,14 @@ class CotizacionController extends Controller
                     'itinerarioServicios' => function($query) use ($cotizacion) {
                         $query->with([
                             'servicio' => function($query) {
-                                $query->with([
-                                    'precios',
-                                    'servicioDetalles'
-                                ]);
+                            $query->with([
+                                'precios',
+                                'servicioDetalles'
+                            ]);
                             },
                             'pasajeroServicios' => function($query) use ($cotizacion) {
-                                $query->where('cotizacion_id', '=', $cotizacion->id);
+                                $query->select('id', 'nro_orden', 'hora', 'itinerario_destino_id', 'pasajero_id', 'itinerario_servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus', 'estado_activo')
+                                ->where('cotizacion_id', $cotizacion->id);
                             }
                         ]);
                     }
@@ -253,7 +258,56 @@ class CotizacionController extends Controller
                 return $pasajero;
             });
         }
-        //dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        // dd($cotizacion->destinosTuristicos->itinerarioDestinos->toArray());
+
+        // dd($cotizacion->destinosTuristicos->itinerarioDestinos->toJson());
+
+        foreach ($cotizacion->destinosTuristicos->itinerarioDestinos as $itinerarioDestino) {
+
+            foreach ($itinerarioDestino->itinerarioServicios as $itinerarioServicio) {
+
+                $pasajeroServicios = $itinerarioServicio->pasajeroServicios;
+
+                if ($pasajeroServicios->isEmpty()) {
+                    continue; // saltar si no hay registros
+                }
+
+                // 🔹 Paso 1: Datos base desde el primer registro
+                $base = [
+                    "cotizacion_id" => $pasajeroServicios[0]->cotizacion_id,
+                    "itinerario_destino_id" => $pasajeroServicios[0]->itinerario_destino_id,
+                    "itinerario_servicio_id" => $pasajeroServicios[0]->itinerario_servicio_id,
+                    "hora" => $pasajeroServicios[0]->hora,
+                    "observacion" => $pasajeroServicios[0]->observacion, // puedes cambiar lógica
+                    "moneda" => $pasajeroServicios[0]->moneda,
+                    "monto" => (string) collect($pasajeroServicios)->sum('monto'), // suma montos
+                    "estatus" => (string) $pasajeroServicios[0]->estatus,
+                    "estado_activo" => (string) $pasajeroServicios[0]->estado_activo,
+                ];
+
+                // 🔹 Paso 2: Lista de pasajeros asignados
+                $base["pasajerosAsignados"] = collect($pasajeroServicios)->map(function ($item) use ($cotizacion) {
+                    $pasajero = $cotizacion->pasajeros->firstWhere('id', $item->pasajero_id);
+
+                    return [
+                        "id" => (string) $item->pasajero_id,
+                        "temp_id" => $pasajero->temp_id, //(string) Str::uuid(),
+                        "pasajero_id" => $pasajero->id,
+                        "nombre" => $pasajero?->nombre ?? '',
+                        "tipo_pasajero_id" => (string) ($pasajero?->tipo_pasajero_id ?? '3')
+                    ];
+                })->toArray();
+
+                // ✅ Reemplazar solo la relación pasajeroServicios de este servicio
+                $itinerarioServicio->setRelation('pasajeroServicios', collect($base));
+            }
+        }
+        //dd($cotizacion->destinosTuristicos->itinerarioDestinos->toJson());
+        
+        //dd($iterarioDestino->toArray());
+        // dd($cotizacion0->destinosTuristicos->itinerarioDestinos->toArray());
+        
+        // dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         //dd($cotizacion->toArray());
 
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
@@ -263,11 +317,11 @@ class CotizacionController extends Controller
         $cotizacion['cliente_nro_doc'] = $proveedor[0]['ruc'] ?? '';
         $cotizacion['proveedor_razon_social'] = $proveedor[0]['razon_social'] ?? '';
         
+        //dd($cotizacion->toArray());
         return Inertia::render('Cotizacion/CreateCotizacion', 
         [
             'Accion' => 'edit',
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
-            'Correlativo' => $cotizacion->file_nro,
             'Cotizacion' => $cotizacion,
             // 'Pasajeros' => $pasajero,
             // 'Detalle' => $detalle,
