@@ -15,6 +15,12 @@ class Cotizacion extends Model
     
     protected $casts = ['destino_turistico_detalle' => 'array', 'destino_turistico_detalle_monto_x_categoria' => 'array'];
 
+    // App/Models/Cotizacion.php
+    public function destinosTuristicos()
+    {
+        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
+    }
+
     public function tipo_comprobante()
     {
         return $this->belongsTo(TipoComprobante::class, 'comprobante_id', 'id');
@@ -37,7 +43,7 @@ class Cotizacion extends Model
         return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
     }
 
-    public function Pasajeros() {
+    public function pasajeros() {
         return $this->hasMany(Pasajero::class, 'cotizacion_id');
     }
 

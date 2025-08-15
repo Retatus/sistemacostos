@@ -58,9 +58,9 @@ const assignedPasajerosList = ref([...props.modelValue]);
 
 // Computada para filtrar los pasajeros disponibles que aún no están asignados
 const availablePasajeros = computed(() => {
-  const assignedIds = new Set(assignedPasajerosList.value.map(p => p.id || p.temp_id));
+  const assignedIds = new Set(assignedPasajerosList.value.map(p => String(p.id || p.temp_id)));
   return props.pasajerosDisponibles.filter(
-    (pasajero) => !assignedIds.has(pasajero.id || pasajero.temp_id)
+    (pasajero) => !assignedIds.has(String(pasajero.id || pasajero.temp_id))
   );
 });
 
