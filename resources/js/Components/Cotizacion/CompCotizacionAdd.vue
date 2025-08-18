@@ -161,8 +161,10 @@
                                     <th class="w-2/12 px-4 py-2">Observación</th>
                                     <th class="w-1/12 px-4 py-2">Moneda</th>
                                     <th class="w-1/12 px-4 py-2">Monto</th>
-                                    <th class="w-3/12 px-4 py-2">Pasajeros Asignados</th>
-                                    <th colspan="2" class="w-2/12 px-4 py-2">status</th>
+                                    <th class="w-1/12 px-4 py-2">Cantidad</th>
+                                    <th class="w-1/12 px-4 py-2">Subtotal</th>
+                                    <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
+                                    <th colspan="2" class="w-1/12 px-4 py-2">status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -172,7 +174,7 @@
                                     </td>
                                     <td class="px-4 py-2 text-sm">
                                         <input v-model="servicioDetalle.pasajero_servicios.hora" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                        {{ servicioDetalle.nro_orden }}
+                                        <!-- {{ servicioDetalle.nro_orden }} -->
                                     </td>
                                     <!-- <td class="px-4 py-2 text-sm">
                                         <select v-model="servicioDetalle.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -198,12 +200,30 @@
                                     </td>
                                     <td class="px-4 py-2 text-sm">
                                         <select v-model="servicioDetalle.pasajero_servicios.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
-                                            <option value="USD">DOLARES</option>
-                                            <option value="PEN">SOLES</option>
+                                            <option value="USD">USD</option>
+                                            <option value="PEN">PEN</option>
                                         </select>
                                     </td>
-                                     <td class="px-4 py-2 text-sm">
-                                        <input v-model="servicioDetalle.pasajero_servicios.monto" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                    <td class="px-4 py-2 text-sm">
+                                        <input 
+                                            type="text"
+                                            v-model="servicioDetalle.pasajero_servicios.monto"
+                                            @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
+                                            @blur="formatMonto(dia.id, servicioDetalle.id)"
+                                            class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
+                                            min="1"
+                                            @change="calcularSubtotal(dia.id, servicioDetalle.id)"
+                                            class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right"
+                                        />
+                                    </td>
+                                    <td class="subtotal ">
+                                        {{ calcularSubtotalDisplay(dia.id, servicioDetalle.id) }}
                                     </td>
                                     <td class="px-4 py-2 text-sm">
                                         <AsignarPasajerosServicio
@@ -242,7 +262,17 @@
                             <button @click="addItem">Agregar</button>
                         </div>
                     </div>
-                    
+
+                    <div class="totales-section">
+                        <h3>Totales por Moneda</h3>
+                        <ul>
+                            <li v-for="(total, moneda) in totalesPorMoneda" :key="moneda">
+                            {{ moneda }}: {{ total.toFixed(2) }}
+                            </li>
+                        </ul>
+                        <p>Total General: {{ calcularTotalGeneral.toFixed(2) }}</p>
+                    </div>
+
                     <ServicioDetalle v-if="listaServicioDetalle.length > 0 || listaServicioDetalle.length != null"
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
@@ -371,7 +401,8 @@ const axiosServicios = async () => {
     }
 }
 
-const serviciosPorDia = ref({});
+//const serviciosPorDia = ref({});
+const serviciosPorDia = ref([])
 
 onMounted(() => {
   axiosServicios();
@@ -399,7 +430,7 @@ let emptyInputTimeout = null;
 
 // Variables para el cotizacion y detalle temporal
 //const Cotizacion = reactive(getCotizacionInicial());
-const Cotizacion = props.Cotizacion; // || reactive(getCotizacionInicial());
+const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
 
 
 
@@ -442,8 +473,8 @@ const showInput = ref(false)
 const newItem = ref('')
 
 
-function handleChange(indice, index) {
-    const servicioDetalle = serviciosPorDia.value[indice - 1].itinerario_servicios[index];
+function handleChange(indiceDia, indiceServicio) {
+    const servicioDetalle = serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio];
   if (servicioDetalle.servicio_id == '__add_new__') {
     showInput.value = true
     servicioDetalle.servicio_id = '0'
@@ -470,32 +501,9 @@ function agregarServicioPasajeroTemp() {
             }))
         };
     });
-
-    // Agregamos pasajero_servicios a cada itinerario_servicio
-    Cotizacion.destinos_turisticos.itinerario_destinos = Cotizacion.destinos_turisticos.itinerario_destinos.map(destino => ({
-        ...destino,
-        itinerario_servicios: destino.itinerario_servicios.map(servicio => ({
-            ...servicio,
-            pasajero_servicios: {
-                id: null,
-                cotizacion_id: Cotizacion.id,
-                itinerario_servicio_id: servicio.id,
-                hora: '17:00',
-                pasajerosAsignados: [],
-                observacion: '',
-                moneda: 'USD',
-                monto: '0.00',
-                estatus: '0', // PENDIENTE
-                estado_activo: '1'
-            },
-        }))
-    }));    
-
-    //console.log("agregarServicioPasajeroTemp despues de map", Cotizacion.destinos_turisticos.itinerario_destinos);
+  
 
     ListaServicioPasajeroTemp.splice(0, ListaServicioPasajeroTemp.length, ...nuevaLista);
-    //console.log("ListaServicioPasajeroTemp", ListaServicioPasajeroTemp);
-    //Cotizacion.itinerario_servicios = ListaServicioPasajeroTemp;
 
     Cotizacion.destino_turistico_detalle = serviciosPorDia.value; // ListaServicioPasajeroTemp;
 }
@@ -509,7 +517,75 @@ async function recuperarValorModal(persona) {
     Cotizacion.cliente_nro_doc = persona.ruc;
 }
 
+// Métodos para manejar montos (igual que antes)
+const handleMontoInput = (event, diaId, servicioId) => {
+  const dia = serviciosPorDia.value.find(d => d.id === diaId)
+  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  
+  if (servicio) {
+    let value = event.target.value.replace(/[^0-9.]/g, '')
+    const parts = value.split('.')
+    if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('')
+    if (parts.length === 2) value = parts[0] + '.' + parts[1].slice(0, 2)
+    
+    servicio.pasajero_servicios.monto = value
+    calcularSubtotal(diaId, servicioId)
+  }
+}
+
+const formatMonto = (diaId, servicioId) => {
+  const dia = serviciosPorDia.value.find(d => d.id === diaId)
+  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  
+  if (servicio) {
+    let monto = parseFloat(servicio.pasajero_servicios.monto) || 0
+    servicio.pasajero_servicios.monto = monto.toFixed(2)
+    calcularSubtotal(diaId, servicioId)
+  }
+}
+
+// Calcular subtotal cuando cambia monto o cantidad
+const calcularSubtotal = (diaId, servicioId) => {
+  const dia = serviciosPorDia.value.find(d => d.id === diaId)
+  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  
+  if (servicio) {
+    const monto = parseFloat(servicio.pasajero_servicios.monto) || 0
+    const cantidad = servicio.pasajero_servicios.cantidad_pasajeros || 1
+    servicio.pasajero_servicios.subtotal = monto * cantidad
+  }
+}
+
+// Mostrar subtotal formateado
+const calcularSubtotalDisplay = (diaId, servicioId) => {
+  const dia = serviciosPorDia.value.find(d => d.id === diaId)
+  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  return servicio ? (servicio.pasajero_servicios.subtotal || 0).toFixed(2) : '0.00'
+}
+
+// Computed: Totales por moneda (ahora usa subtotal)
+const totalesPorMoneda = computed(() => {
+  const resultado = {}
+  
+  serviciosPorDia.value.forEach(dia => {
+    dia.itinerario_servicios.forEach(servicio => {
+      const moneda = servicio.pasajero_servicios.moneda
+      const subtotal = parseFloat(servicio.pasajero_servicios.subtotal) || 0
+      
+      resultado[moneda] = (resultado[moneda] || 0) + subtotal
+    })
+  })
+  
+  return resultado
+})
+
+// Computed: Total general (suma de todos los subtotales)
+const calcularTotalGeneral = computed(() => {
+  return Object.values(totalesPorMoneda.value).reduce((sum, total) => sum + total, 0)
+})
+
 function agregarDetalle(indice, index, itinerarioDestinoId = null) {
+    debugger;
     const nuevoServicio = {
         id: null,
         nro_orden: '',
@@ -534,14 +610,16 @@ function agregarDetalle(indice, index, itinerarioDestinoId = null) {
             pasajerosAsignados: [],
             observacion: '',
             moneda: 'USD',
-            monto: '0.00',
+            monto: 0,
+            cantidad_pasajeros: 1,
+            subtotal: 0,
             estatus: '0', // PENDIENTE
             estado_activo: '1'
         }
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
-        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio) .push(nuevoServicio);
+        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio).push(nuevoServicio);
     } else {
         // Si no hay días, crear uno nuevo  
         serviciosPorDia.value.push({
@@ -568,26 +646,31 @@ async function ListaCategoriaProveedor() {
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, {destino_turistico_id: Cotizacion.destino_turistico_id});  
         if (response.status === 200) {
             console.log("Lista de servicios por dia", response.data);
-            serviciosPorDia.value = response.data.itinerario_destinos.map(dia => ({
+            const servicioAxios = response.data.itinerario_destinos.map(dia => ({
                 ...dia,
-                itinerario_servicios: dia.itinerario_servicios.map(servicio => ({
-                    ...servicio,
+                itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => ({
+                    ...itinerarioServicios,
                     pasajero_servicios: {
                         id: null,
                         cotizacion_id: Cotizacion.id,
-                        itinerario_servicio_id: servicio.id,
+                        itinerario_servicio_id: itinerarioServicios.id,
                         itinerario_destino_id: dia.id,
-                        hora: '17:00',
+                        hora: '09:00',
                         pasajerosAsignados: [],
                         observacion: '',
-                        moneda: 'USD',
-                        monto: '0.00',
+                        moneda: itinerarioServicios.servicio.precios[0].moneda == "DOLARES" ? 'USD' : 'PEN',
+                        monto: itinerarioServicios.servicio.precios[0].monto,
+                        cantidad_pasajeros: 1,
+                        subtotal: 0,
                         estatus: '0', // PENDIENTE
                         estado_activo: '1'
                     },
                 }))
             }));
             console.log("Servicios por dia actualizados ", serviciosPorDia.value);
+
+            serviciosPorDia.value = reactive(servicioAxios);
+
             Cotizacion.nro_dias = response.data.nro_dias;
             const fechaInicio = new Date(Cotizacion.fecha_inicio);
             fechaInicio.setDate(fechaInicio.getDate() + response.data.nro_dias);
@@ -787,5 +870,38 @@ async function submitCotizacion() {
 </script>
 
 <style scoped>
+    .monto-input, .pasajeros-input {
+  width: 80px;
+  padding: 5px;
+  text-align: right;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
 
+.subtotal {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 15px;
+}
+
+.totales-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.totales-section h3 {
+  margin-top: 0;
+}
+
+.totales-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.totales-section li {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
 </style>
