@@ -16,7 +16,7 @@ class Pasajero extends Model
     // App/Models/Pasajero.php
     public function pasajeroServicios()
     {
-        return $this->hasMany(PasajeroServicio::class);
+        return $this->hasMany(PasajeroServicio::class, 'cotizacion_id', 'cotizacion_id');
     }
 
     public function tipo_docuemento()

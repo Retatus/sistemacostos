@@ -65,7 +65,9 @@
                                 <td class="px-4 py-2 text-sm">
                                     <div v-if="item.temp_file_preview" class="text-sm text-gray-500">
                                         <img v-if="item.documento_file.type !== 'application/pdf'" :src="item.temp_file_preview" class="h-20 w-20 object-cover mt-2" />
-                                        <embed v-else :src="item.temp_file_preview" type="application/pdf" width="150px" height="100px" />
+                                    </div>
+                                    <div v-else class="text-sm text-gray-500">
+                                        <img v-if="item.documento_file" :src="`/storage/${item.documento_file}`" class="h-20 w-20 object-cover mt-2">
                                     </div>
                                 </td>
                                 <td class="px-4 py-2 text-sm">

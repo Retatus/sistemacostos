@@ -13,22 +13,23 @@ class ItinerarioDestino extends Model
 
     protected $fillable = ['nro_dia', 'itinerario_id', 'destino_turistico_id', 'nombre', 'descripcion', 'observacion', 'estado_activo'];
 
-    public function destinoTuristico()
+    // App/Models/ItinerarioDestino.php
+    public function itinerario()
     {
-        return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id');
+        return $this->belongsTo(Itinerario::class);
     }
-  
-    public function destino_turistico_detalle_servicio()
+
+    public function itinerarioServicios()
     {
         return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
     }
 
-    public function itinerario()
+    public function destinoTuristico()
     {
-        return $this->belongsTo(Itinerario::class, 'itinerario_id');
+        return $this->belongsTo(DestinoTuristico::class);
     }
-
-    public function itinerarioServicios()
+  
+    public function destino_turistico_detalle_servicio()
     {
         return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
     }

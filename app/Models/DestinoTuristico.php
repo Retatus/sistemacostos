@@ -12,7 +12,18 @@ class DestinoTuristico extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = ['nombre', 'descripcion', 'pais_id', 'nro_dias', 'costo_total', 'margen', 'ganancia', 'venta', 'estado_activo'];
+
+    // App/Models/DestinoTuristico.php
+    public function itinerarioDestinos()
+    {
+        return $this->hasMany(ItinerarioDestino::class);
+    }
     
+    public function cotizacion()
+    {
+        return $this->belongsTo(Cotizacion::class);
+    }
+
     public function pais()
     {
         return $this->belongsTo(Pais::class, 'pais_id', 'id');

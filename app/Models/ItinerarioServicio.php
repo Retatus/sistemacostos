@@ -11,17 +11,43 @@ class ItinerarioServicio extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['nro_orden', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'monto', 'estado_activo'];
+    protected $fillable = ['nro_orden', 'hora', 'itinerario_servicio_id', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'monto', 'estado_activo'];
+
+    // App/Models/ItinerarioServicio.php
+    public function servicio()
+    {
+        return $this->belongsTo(Servicio::class);
+    }
+
+    public function itinerarioDestino()
+    {
+        return $this->belongsTo(ItinerarioDestino::class, 'itinerario_destino_id');
+    }
+
+    // public function pasajeroServicios()
+    // {
+    //     return $this->hasMany(
+    //         PasajeroServicio::class, 
+    //         'itinerario_destino_id', 
+    //         'itinerario_destino_id'
+    //     ); //->whereColumn('pasajero_servicios.nro_orden', 'itinerario_servicios.nro_orden');
+    //         //->groupby('nro_orden');
+    // }
 
     public function pasajeroServicios()
     {
         return $this->hasMany(PasajeroServicio::class);
     }
     
-    public function itinerarioDestino()
-    {
-        return $this->belongsTo(ItinerarioDestino::class, 'itinerario_destino_id');
-    }
+    // public function itinerarioDestino()
+    // {
+    //     return $this->belongsTo(ItinerarioDestino::class, 'itinerario_destino_id');
+    // }
+
+    // public function servicio()
+    // {
+    //     return $this->belongsTo(ItinerarioDestino::class, 'servicio_id');
+    // }
 
     public static function getFormattedForDropdown()
     {

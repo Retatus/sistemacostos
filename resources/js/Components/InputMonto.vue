@@ -5,9 +5,8 @@
     v-model="displayValue"
     @input="handleInput"
     @blur="formatValue"
-    @focus="selectAll"
-    placeholder="00.00"
-    :class="{ 'error': error }"
+    @focus="handleFocus"
+    placeholder="0.00"
   />
 </template>
 
@@ -16,12 +15,8 @@ import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    type: [Number, String], // Acepta ambos tipos
+    type: [Number, String],
     default: 0
-  },
-  error: {
-    type: Boolean,
-    default: false
   }
 })
 
@@ -29,63 +24,76 @@ const emit = defineEmits(['update:modelValue'])
 
 const inputRef = ref(null)
 const displayValue = ref('')
-
-// Convertir el valor inicial
-const parseInitialValue = (value) => {
-  if (typeof value === 'string') {
-    return parseFloat(value) || 0
-  }
-  return value
-}
+const lastPosition = ref(0)
 
 // Métodos
 const handleInput = (event) => {
-  let value = event.target.value.replace(/[^0-9.]/g, '')
-  const decimalParts = value.split('.')
+  const { value, selectionStart } = event.target
+  let newValue = value.replace(/[^0-9.]/g, '')
   
-  if (decimalParts.length > 2) {
-    value = decimalParts[0] + '.' + decimalParts.slice(1).join('')
+  // Manejar múltiples puntos decimales
+  const parts = newValue.split('.')
+  if (parts.length > 2) {
+    newValue = parts[0] + '.' + parts.slice(1).join('')
   }
   
-  if (decimalParts.length === 2) {
-    value = decimalParts[0] + '.' + decimalParts[1].slice(0, 2)
+  // Limitar decimales a 2
+  if (parts.length === 2) {
+    newValue = parts[0] + '.' + parts[1].slice(0, 2)
   }
   
-  displayValue.value = value
-  // Emitir el valor como string (opcional, puedes emitir como número)
-  emit('update:modelValue', value)
+  // Guardar posición del cursor antes de actualizar
+  lastPosition.value = selectionStart
+  
+  displayValue.value = newValue
+  emitValue(newValue)
+  
+  // Restaurar posición del cursor después de la actualización
+  nextTick(() => {
+    inputRef.value.setSelectionRange(lastPosition.value, lastPosition.value)
+  })
+}
+
+const handleFocus = (event) => {
+  // Seleccionar todo al hacer focus o colocar cursor donde se hizo click
+  if (event.target.value === '0.00') {
+    event.target.select()
+  } else {
+    const clickPosition = event.target.selectionStart
+    lastPosition.value = clickPosition
+  }
 }
 
 const formatValue = () => {
-  if (!displayValue.value) {
-    displayValue.value = '00.00'
-    emit('update:modelValue', 0)
+  if (!displayValue.value || displayValue.value === '.') {
+    displayValue.value = '0.00'
+    emitValue(0)
     return
   }
   
-  const numericValue = parseFloat(displayValue.value) || 0
-  displayValue.value = numberToFormat(numericValue)
-  emit('update:modelValue', numericValue) // Emitir como número
+  let numericValue = parseFloat(displayValue.value)
+  if (isNaN(numericValue)) {
+    numericValue = 0
+  }
+  
+  displayValue.value = numericValue.toFixed(2)
+  emitValue(numericValue)
 }
 
-const numberToFormat = (num) => {
-  return num.toFixed(2).padStart(5, '0')
-}
-
-const selectAll = () => {
-  inputRef.value.select()
+const emitValue = (value) => {
+  const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value
+  emit('update:modelValue', numericValue)
 }
 
 // Watchers
 watch(() => props.modelValue, (newVal) => {
   const numericValue = typeof newVal === 'string' ? parseFloat(newVal) || 0 : newVal
-  displayValue.value = numberToFormat(numericValue)
+  displayValue.value = numericValue.toFixed(2)
 }, { immediate: true })
 
 // Inicialización
 onMounted(() => {
-  const initialValue = parseInitialValue(props.modelValue)
-  displayValue.value = numberToFormat(initialValue)
+  formatValue()
 })
 </script>
 
@@ -96,13 +104,8 @@ input {
   border-radius: 4px;
   font-size: 16px;
   text-align: right;
-  width: 100px;
+  width: 120px;
   transition: border-color 0.3s;
-}
-
-input.error {
-  border-color: #ff4444;
-  background-color: #ffeeee;
 }
 
 input:focus {

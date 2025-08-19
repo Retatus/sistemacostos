@@ -26,6 +26,10 @@ class ServicioDetalle extends Model
             });
     }  
 
+    public function servicio() {
+        return $this->belongsTo(Servicio::class, 'servicio_detalle_id', 'id');
+    }
+
     public function proveedor_categoria()
     {
         return $this->belongsTo(ProveedorCategoria::class, 'proveedor_categoria_id', 'id');
