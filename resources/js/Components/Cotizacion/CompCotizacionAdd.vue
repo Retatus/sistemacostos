@@ -164,19 +164,19 @@
                                     <th class="w-1/12 px-4 py-2">Cantidad</th>
                                     <th class="w-1/12 px-4 py-2">Subtotal</th>
                                     <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
-                                    <th colspan="2" class="w-1/12 px-4 py-2">status</th>
+                                    <th colspan="2" class="w-1/12 px-4 py-2 text-center">status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id" className="bg-white border-b text-gray-900">
-                                    <td class="px-4 py-2 text-sm" hidden>
+                                    <td class="px-2 py-1 text-sm" hidden>
                                         <input v-model="servicioDetalle.id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
-                                        <input v-model="servicioDetalle.pasajero_servicios.hora" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                    <td class="px-2 py-1 text-sm">
+                                        <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
                                         <!-- {{ servicioDetalle.nro_orden }} -->
                                     </td>
-                                    <!-- <td class="px-4 py-2 text-sm">
+                                    <!-- <td class="px-2 py-1 text-sm">
                                         <select v-model="servicioDetalle.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="option in sCategoriaProveedor" :key="option.value" :value="option.value">
@@ -184,7 +184,7 @@
                                             </option>
                                         </select>
                                     </td> -->
-                                    <td class="px-4 py-2">
+                                    <td class="px-2 py-1 text-sm">
                                         <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm" @change="handleChange(dia.nro_dia, index)">
                                             <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="item in servicios" :key="item.value" :value="item.value">
@@ -193,18 +193,18 @@
                                             <option value='__add_new__'>➕ Agregar nuevo...</option>
                                         </select>
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
+                                    <td class="px-2 py-1 text-sm">
                                         <textarea v-model="servicioDetalle.pasajero_servicios.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm"
                                             placeholder="Observación del Servicio" rows="2">
                                         </textarea>
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
+                                    <td class="px-2 py-1 text-sm">
                                         <select v-model="servicioDetalle.pasajero_servicios.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option value="USD">USD</option>
                                             <option value="PEN">PEN</option>
                                         </select>
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
+                                    <td class="px-2 py-1 text-sm">
                                         <input 
                                             type="text"
                                             v-model="servicioDetalle.pasajero_servicios.monto"
@@ -213,7 +213,7 @@
                                             class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right"
                                         />
                                     </td>
-                                    <td>
+                                    <td class="px-2 py-1 text-sm">
                                         <input
                                             type="number"
                                             v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
@@ -225,14 +225,14 @@
                                     <td class="subtotal ">
                                         {{ calcularSubtotalDisplay(dia.id, servicioDetalle.id) }}
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
+                                    <td class="px-2 py-1 text-sm">
                                         <AsignarPasajerosServicio
                                             :pasajeros-disponibles="PasajerosReducido"
                                             v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
                                             :servicio="servicioDetalle.pasajero_servicios"
                                         />
                                     </td>
-                                    <td class="px-4 py-2 text-sm">
+                                    <td class="px-2 py-1 text-sm">
                                         <select v-model="servicioDetalle.pasajero_servicios.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option value="0">PENDIENTE</option>
                                             <option value="1">CONFIRMADA</option>
@@ -240,7 +240,7 @@
                                             <option value="3">XPASAJERO</option>
                                         </select>
                                     </td>
-                                    <td scope="col" className="px-6 py-4 font-medium text-gray-900">
+                                    <td scope="col" className="px-2 py-1 font-medium text-gray-900">
                                         <div class="flex space-x-2">
                                             <button @click="agregarDetalle(dia.nro_dia, index, dia.id)" type="button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -360,6 +360,8 @@ import { useCategoriesStore } from '@/Stores/categories';
 import { validateNumberInput } from '@/Utils/validators';
 import calcularDiferenciaDias from '@/Utils/calculos';
 import AsignarPasajerosServicio from '@/Components/AsignarPasajerosServicio.vue';
+import InputHora from "@/Components/InputHora.vue";
+
 import { de, te } from 'date-fns/locale';
 
 const categoriesStore = useCategoriesStore();
@@ -382,6 +384,7 @@ const props = defineProps({
 
 const esEdicion = computed(() => props.Accion === 'edit');
 
+// const esHoraValida = ref(true);
 
 const sTipoComprobante = ref([...categoriesStore.globals.tipo_comprobantes]);
 const sPais = ref([...categoriesStore.globals.pais]);
@@ -870,13 +873,13 @@ async function submitCotizacion() {
 </script>
 
 <style scoped>
-    .monto-input, .pasajeros-input {
-  width: 80px;
-  padding: 5px;
-  text-align: right;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
+    /* .monto-input, .pasajeros-input {
+        width: 80px;
+        padding: 5px;
+        text-align: right;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    } */
 
 .subtotal {
   font-weight: bold;
