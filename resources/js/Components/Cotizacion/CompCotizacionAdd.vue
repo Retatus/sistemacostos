@@ -160,23 +160,23 @@
                                     <th class="w-2/12 px-4 py-2">Servicio</th>
                                     <th class="w-2/12 px-4 py-2">Observación</th>
                                     <th class="w-1/12 px-4 py-2">Moneda</th>
-                                    <th class="w-1/12 px-4 py-2">Monto</th>
-                                    <th class="w-1/12 px-4 py-2">Cantidad</th>
-                                    <th class="w-1/12 px-4 py-2">Subtotal</th>
+                                    <th colspan="3" class="w-2/12 px-4 py-2 text-center">Monto / Cant. / Subtotal</th>
+                                    <!-- <th class="w-1/12 px-4 py-2">Cantidad</th>
+                                    <th class="w-1/12 px-4 py-2">Subtotal</th> -->
                                     <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
-                                    <th colspan="2" class="w-1/12 px-4 py-2 text-center">status</th>
+                                    <th colspan="2" class="w-2/12 px-4 py-2 text-center">status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id" className="bg-white border-b text-gray-900">
-                                    <td class="px-2 py-1 text-sm" hidden>
+                                    <td class="px-2 py-1" hidden>
                                         <input v-model="servicioDetalle.id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
-                                    <td class="px-2 py-1 text-sm">
+                                    <td class="px-2 py-1">
                                         <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
                                         <!-- {{ servicioDetalle.nro_orden }} -->
                                     </td>
-                                    <!-- <td class="px-2 py-1 text-sm">
+                                    <!-- <td class="px-2 py-1">
                                         <select v-model="servicioDetalle.proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                                             <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="option in sCategoriaProveedor" :key="option.value" :value="option.value">
@@ -184,8 +184,8 @@
                                             </option>
                                         </select>
                                     </td> -->
-                                    <td class="px-2 py-1 text-sm">
-                                        <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm" @change="handleChange(dia.nro_dia, index)">
+                                    <td class="px-2 py-1">
+                                        <select v-model="servicioDetalle.servicio_id"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs" @change="handleChange(dia.nro_dia, index)">
                                             <option disabled value="0">-- Selecciona una opción --</option>
                                             <option v-for="item in servicios" :key="item.value" :value="item.value">
                                                 {{ item.label }}
@@ -193,33 +193,33 @@
                                             <option value='__add_new__'>➕ Agregar nuevo...</option>
                                         </select>
                                     </td>
-                                    <td class="px-2 py-1 text-sm">
-                                        <textarea v-model="servicioDetalle.pasajero_servicios.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm"
+                                    <td class="px-2 py-1">
+                                        <textarea v-model="servicioDetalle.pasajero_servicios.observacion" name="observacion" class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm text-sm"
                                             placeholder="Observación del Servicio" rows="2">
                                         </textarea>
                                     </td>
-                                    <td class="px-2 py-1 text-sm">
-                                        <select v-model="servicioDetalle.pasajero_servicios.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                    <td class="px-2 py-1">
+                                        <select v-model="servicioDetalle.pasajero_servicios.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-sm">
                                             <option value="USD">USD</option>
                                             <option value="PEN">PEN</option>
                                         </select>
                                     </td>
-                                    <td class="px-2 py-1 text-sm">
+                                    <td class="px-2 py-1">
                                         <input 
                                             type="text"
                                             v-model="servicioDetalle.pasajero_servicios.monto"
                                             @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
                                             @blur="formatMonto(dia.id, servicioDetalle.id)"
-                                            class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right"
+                                            class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-sm"
                                         />
                                     </td>
-                                    <td class="px-2 py-1 text-sm">
+                                    <td class="px-2 py-1">
                                         <input
                                             type="number"
                                             v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
                                             min="1"
                                             @change="calcularSubtotal(dia.id, servicioDetalle.id)"
-                                            class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right"
+                                            class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-sm"
                                         />
                                     </td>
                                     <td class="subtotal ">
@@ -233,7 +233,7 @@
                                         />
                                     </td>
                                     <td class="px-2 py-1 text-sm">
-                                        <select v-model="servicioDetalle.pasajero_servicios.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        <select v-model="servicioDetalle.pasajero_servicios.estatus" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
                                             <option value="0">PENDIENTE</option>
                                             <option value="1">CONFIRMADA</option>
                                             <option value="2">CANCELADA</option>
@@ -520,6 +520,8 @@ async function recuperarValorModal(persona) {
     Cotizacion.cliente_nro_doc = persona.ruc;
 }
 
+//#region SECCION CALCULAR SUBTOTAL Y TOTAL DE LA NUEVA LOGICA DE SERVICIOS POR DIA
+
 // Métodos para manejar montos (igual que antes)
 const handleMontoInput = (event, diaId, servicioId) => {
   const dia = serviciosPorDia.value.find(d => d.id === diaId)
@@ -586,6 +588,8 @@ const totalesPorMoneda = computed(() => {
 const calcularTotalGeneral = computed(() => {
   return Object.values(totalesPorMoneda.value).reduce((sum, total) => sum + total, 0)
 })
+
+// #endregion SECCION CALCULAR SUBTOTAL Y TOTAL DE LA NUEVA LOGICA DE SERVICIOS POR DIA
 
 function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     debugger;
@@ -664,7 +668,7 @@ async function ListaCategoriaProveedor() {
                         moneda: itinerarioServicios.servicio.precios[0].moneda == "DOLARES" ? 'USD' : 'PEN',
                         monto: itinerarioServicios.servicio.precios[0].monto,
                         cantidad_pasajeros: 1,
-                        subtotal: 0,
+                        subtotal: itinerarioServicios.servicio.precios[0].monto * 1,
                         estatus: '0', // PENDIENTE
                         estado_activo: '1'
                     },

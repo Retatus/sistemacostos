@@ -1,7 +1,7 @@
 <template>
   <div class="pasajero-servicio-selector">
     <div class="select-container">
-      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-sm">
         <option value="" disabled selected>Selecciona un pasajero</option>
         <option
           v-for="pasajero in availablePasajeros"

@@ -1,7 +1,7 @@
 <!-- TimeInput.vue -->
 <template>
   <input
-    class="time-input mt-1 w-full border-gray-300 rounded-md shadow-sm"
+    class="time-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-sm"
     :class="{ valid: isValid, invalid: showInvalid }"
     type="text"
     :value="inputValue"
