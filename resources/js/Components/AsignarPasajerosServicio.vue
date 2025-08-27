@@ -1,7 +1,7 @@
 <template>
   <div class="pasajero-servicio-selector">
     <div class="select-container">
-      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-sm">
+      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
         <option value="" disabled selected>Selecciona un pasajero</option>
         <option
           v-for="pasajero in availablePasajeros"
@@ -14,7 +14,7 @@
     </div>
 
     <div class="assigned-pasajeros-list">
-      <ul v-if="assignedPasajerosList.length" class="lista-horizontal">
+      <ul v-if="assignedPasajerosList.length" class="lista-horizontal text-xs">
         <li v-for="pasajero in assignedPasajerosList" :key="pasajero.id || pasajero.temp_id">
           {{ pasajero.nombre }}
           <button @click="removePasajeroFromService(pasajero.id || pasajero.temp_id)">
