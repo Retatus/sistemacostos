@@ -11,9 +11,20 @@ class PasajeroServicio extends Model
 
     //protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['nro_orden', 'hora', 'itinerario_destino_id', 'pasajero_id', 'itinerario_servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus','estado_activo'];
+    protected $fillable = ['id','nro_orden', 'hora',  'pasajero_id', 'itinerario_servicio_id', 'servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus','estado_activo'];
 
     // App/Models/PasajeroServicio.php
+    public function servicio()
+    {
+        return $this->belongsTo(Servicio::class)->withDefault();
+    }
+
+    // En PasajeroServicio.php
+    public function scopePorCotizacion($query, $cotizacionId)
+    {
+        return $query->where('cotizacion_id', $cotizacionId);
+    }
+
     public function itinerarioServicio()
     {
         return $this->belongsTo(ItinerarioServicio::class);

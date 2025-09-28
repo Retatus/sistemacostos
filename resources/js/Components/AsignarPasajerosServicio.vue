@@ -15,7 +15,7 @@
 
     <div class="assigned-pasajeros-list">
       <ul v-if="assignedPasajerosList.length" class="lista-horizontal text-xs">
-        <li v-for="pasajero in assignedPasajerosList" :key="pasajero.id || pasajero.temp_id">
+        <li v-for="pasajero in assignedPasajerosList.filter(p => p !== null)" :key="pasajero.id || pasajero.temp_id">
           {{ pasajero.nombre }}
           <button @click="removePasajeroFromService(pasajero.id || pasajero.temp_id)">
             &times;
@@ -58,7 +58,7 @@ const assignedPasajerosList = ref([...props.modelValue]);
 
 // Computada para filtrar los pasajeros disponibles que aún no están asignados
 const availablePasajeros = computed(() => {
-  const assignedIds = new Set(assignedPasajerosList.value.map(p => String(p.id || p.temp_id)));
+  const assignedIds = new Set(assignedPasajerosList.value.filter(p => p != null).map(p => String(p.id || p.temp_id)));
   return props.pasajerosDisponibles.filter(
     (pasajero) => !assignedIds.has(String(pasajero.id || pasajero.temp_id))
   );

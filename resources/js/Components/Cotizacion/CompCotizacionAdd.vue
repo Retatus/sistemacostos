@@ -147,9 +147,15 @@
                     </select>
                 </div>                
                 <div class="col-span-6">
-                    <div v-for="dia in serviciosPorDia" :key="dia.id" class="day-group">
+                    <!-- <ul>
+                        <li v-for="(item, index) in serviciosPorDia" :key="index">
+                            {{ item.nombre }} - {{ item.descripcion }} - {{ item.precio }} - {{ item.moneda }} - {{ item.subtotal }}
+                        </li>
+                    </ul> -->
+                    <div v-for="(dia, index) in serviciosPorDia" :key="index" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2">
-                            <h3>Día {{ dia.nro_dia }}: {{ dia.nombre }} {{ dia.id }}</h3>
+                            <h3>Día {{dia.nro_dia}} {{ dia.nombre  }}: {{ dia.descripcion }} {{ dia.id }}</h3>
+                            <!-- {{ serviciosPorDia }} -->
                         </div>
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-900 uppercase bg-gray-50">
@@ -168,9 +174,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id" className="bg-white border-b text-gray-900">
+                                <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="index" className="bg-white border-b text-gray-900">
                                     <td class="px-1 py-1" hidden>
-                                        <input v-model="servicioDetalle.id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="servicioDetalle.itinerario_servicio_id" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                     </td>
                                     <!-- <td class="px-1 py-1">
                                     </td> -->
@@ -418,12 +424,10 @@ const axiosServicios = async () => {
     }
 }
 
-//const serviciosPorDia = ref({});
 const serviciosPorDia = ref([])
 
 onMounted(() => {
   axiosServicios();
-  //ListaCategoriaProveedor();
 })
 
 // Variables reactivas
@@ -473,7 +477,7 @@ const PasajerosReducido = computed(() =>
 )
 
 if (esEdicion.value) {
-    serviciosPorDia.value = Cotizacion.destinos_turisticos.itinerario_destinos;
+    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados;
     listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
     agregarServicioPasajeroTemp();
     //calcularVenta();
@@ -577,23 +581,23 @@ const calcularSubtotal = (diaId, servicioId) => {
 
 // Mostrar subtotal formateado
 const calcularSubtotalDisplay = (diaId, servicioId) => {
-  const dia = serviciosPorDia.value.find(d => d.id === diaId)
-  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
-  return servicio ? (servicio.pasajero_servicios.subtotal || 0).toFixed(2) : '0.00'
+//   const dia = serviciosPorDia.value.find(d => d.id === diaId)
+//   const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  return 0 // servicio ? (servicio.pasajero_servicios.subtotal || 0).toFixed(2) : '0.00'
 }
 
 // Computed: Totales por moneda (ahora usa subtotal)
 const totalesPorMoneda = computed(() => {
   const resultado = {}
   
-  serviciosPorDia.value.forEach(dia => {
-    dia.itinerario_servicios.forEach(servicio => {
-      const moneda = servicio.pasajero_servicios.moneda
-      const subtotal = parseFloat(servicio.pasajero_servicios.subtotal) || 0
+//   serviciosPorDia.value.forEach(dia => {
+//     dia.itinerario_servicios.forEach(servicio => {
+//       const moneda = servicio.pasajero_servicios.moneda
+//       const subtotal = parseFloat(servicio.pasajero_servicios.subtotal) || 0
       
-      resultado[moneda] = (resultado[moneda] || 0) + subtotal
-    })
-  })
+//       resultado[moneda] = (resultado[moneda] || 0) + subtotal
+//     })
+//   })
   
   return resultado
 })
@@ -688,8 +692,7 @@ async function ListaCategoriaProveedor() {
                     },
                 }))
             }));
-            console.log("Servicios por dia actualizados ", serviciosPorDia.value);
-
+            
             serviciosPorDia.value = reactive(servicioAxios);
 
             Cotizacion.nro_dias = response.data.nro_dias;

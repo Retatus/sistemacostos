@@ -8,6 +8,7 @@ use App\Http\Requests\Cotizacion\CotizacionRequest;
 use App\Models\Cotizacion;
 use App\Models\Destino;
 use App\Models\DestinoTuristico;
+use App\Models\ItinerarioServicio;
 use App\Models\Pais;
 use App\Models\Pasajero;
 use App\Models\PasajeroServicio;
@@ -239,18 +240,47 @@ class CotizacionController extends Controller
                                 'precios',
                                 'servicioDetalles'
                             ]);
-                            },
-                            'pasajeroServicios' => function($query) use ($cotizacion) {
-                                $query->select('id', 'nro_orden', 'hora', 'itinerario_destino_id', 'pasajero_id', 'itinerario_servicio_id', 'cotizacion_id', 'observacion', 'moneda', 'monto', 'estatus', 'estado_activo')
-                                ->where('cotizacion_id', $cotizacion->id);
                             }
                         ]);
                     }
                 ]);
             },
-            'pasajeros'
+            'pasajeros' => function($query) use ($cotizacion) {
+                $query->where('cotizacion_id', $cotizacion->id);
+            },
+            'pasajerosServicios' => function($query) use ($cotizacion) {
+                $query->where('cotizacion_id', $cotizacion->id);
+            }
         ])->find($cotizacion->id);
 
+        $coleccionServiciosNoRelacionados = collect(PasajeroServicio::whereNull('itinerario_servicio_id')
+        ->where('cotizacion_id', $cotizacion->id)
+        ->get());
+
+        // MAPEAR LOS SERVICIOS QUE NO TIENEN RELACION CON ITINERARIO_SERVICIO  
+        $mapServiciosNoRelacionados = $coleccionServiciosNoRelacionados->map(function($pasajero_servicio) {
+            return [
+                'id' => $pasajero_servicio['itinerario_servicio_id'] ?? null,
+                'nro_dia' => $pasajero_servicio['nro_dia'] ?? 0,
+                'nro_orden' => $pasajero_servicio['nro_orden'] ?? 1,
+                'hora' => $pasajero_servicio['hora'] ?? '',
+                'servicio_id' => $pasajero_servicio['servicio_id'] ?? null,
+                'itinerario_destino_id' => null,
+                'proveedor_categoria_id' => null,
+                'proveedor_id' => null,
+                'observacion' => $pasajero_servicio['observacion'] ?? '',
+                'monto' => $pasajero_servicio['monto'] ?? 0,
+                'estado_activo' => 1,
+                'pasajeroServicios' => [
+                    $pasajero_servicio
+                ]
+            ];
+        });
+
+        $mergeTemporal = $this->mergeServicios($cotizacion->destinosTuristicos->itinerarioDestinos, $mapServiciosNoRelacionados); 
+
+        $cotizacion->destinosTuristicos->itinerarioDestinos = $mergeTemporal;
+        
         // Generar un UUID para cada pasajero (solo en la respuesta)
         if ($cotizacion && $cotizacion->pasajeros) {
             $cotizacion->pasajeros->transform(function($pasajero) {
@@ -258,56 +288,94 @@ class CotizacionController extends Controller
                 return $pasajero;
             });
         }
-        // dd($cotizacion->destinosTuristicos->itinerarioDestinos->toArray());
 
-        // dd($cotizacion->destinosTuristicos->itinerarioDestinos->toJson());
+        $servicios = collect($cotizacion->pasajerosServicios);
+        //dd($servicios->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        //dd(json_encode($servicios, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
-        foreach ($cotizacion->destinosTuristicos->itinerarioDestinos as $itinerarioDestino) {
 
-            foreach ($itinerarioDestino->itinerarioServicios as $itinerarioServicio) {
-
-                $pasajeroServicios = $itinerarioServicio->pasajeroServicios;
-
-                if ($pasajeroServicios->isEmpty()) {
-                    continue; // saltar si no hay registros
-                }
-
-                // 🔹 Paso 1: Datos base desde el primer registro
-                $base = [
-                    "cotizacion_id" => $pasajeroServicios[0]->cotizacion_id,
-                    "itinerario_destino_id" => $pasajeroServicios[0]->itinerario_destino_id,
-                    "itinerario_servicio_id" => $pasajeroServicios[0]->itinerario_servicio_id,
-                    "hora" => $pasajeroServicios[0]->hora,
-                    "observacion" => $pasajeroServicios[0]->observacion, // puedes cambiar lógica
-                    "moneda" => $pasajeroServicios[0]->moneda,
-                    "monto" => (string) collect($pasajeroServicios)->sum('monto'), // suma montos
-                    "estatus" => (string) $pasajeroServicios[0]->estatus,
-                    "estado_activo" => (string) $pasajeroServicios[0]->estado_activo,
+        $agrupado = $servicios->groupBy('nro_dia')->map(function ($itemsPorDia) use ($cotizacion) {
+                return [
+                    'nro_dia' => $itemsPorDia->first()->nro_dia ?? 0,
+                    'nro_orden' => $itemsPorDia->first()->nro_orden ?? 1,
+                    'hora' => 'tatusssssssssssssssss',
+                    'nombre' => $cotizacion->destinosTuristicos->itinerarioDestinos->where('nro_dia', $itemsPorDia->first()->nro_dia)->first()->itinerario->nombre ?? '',
+                    'descripcion' => $cotizacion->destinosTuristicos->itinerarioDestinos->where('nro_dia', $itemsPorDia->first()->nro_dia)->first()->itinerario->descripcion ?? '',
+                    'observacion' => $cotizacion->destinosTuristicos->itinerarioDestinos->where('nro_dia', $itemsPorDia->first()->nro_dia)->first()->itinerario->observacion ?? '',
+                    'itinerario_servicios' => $itemsPorDia->groupBy('itinerario_servicio_id')->map(function ($ps) use ($cotizacion) {
+                        // Factor común de los campos (tomando el primero)
+                        $base = [
+                            "cotizacion_id" => $ps[0]->cotizacion_id ?? null,
+                            "nro_dia" => $ps[0]->nro_dia,
+                            "nro_orden" => $ps[0]->nro_orden,
+                            "hora" => $ps[0]->hora,
+                            "itinerario_servicio_id" => $ps[0]->itinerario_servicio_id,
+                            "servicio_id" => $ps[0]->servicio_id,
+                            "observacion" => $ps[0]->observacion,
+                            "moneda" => $ps[0]->moneda,
+                            "monto" => (string) collect($ps)->sum('monto'),
+                            "estatus" => (string) $ps[0]->estatus,
+                            "estado_activo" => (string) $ps[0]->estado_activo,
+                            "pasajero_servicios" => [
+                                "cotizacion_id" => $ps[0]->cotizacion_id ?? null,
+                                "itinerario_servicio_id" => $ps[0]->itinerario_servicio_id,
+                                "itinerario_destino_id" => 0,
+                                "hora" => $ps[0]->hora,
+                                "observacion" => $ps[0]->observacion,
+                                "moneda" => $ps[0]->moneda,
+                                "monto" => (string) collect($ps)->sum('monto'),
+                                "cantidad_pasajeros" => (string) collect($ps)->count(),
+                                "subtotal" => (string) collect($ps)->sum('monto'),
+                                "estatus" => (string) $ps[0]->estatus,
+                                "estado_activo" => (string) $ps[0]->estado_activo,
+                                "servicio" => [
+                                    "id" => (string) $ps[0]->servicio_id,
+                                    "proveedor_id" => (string) ($ps[0]->servicio->proveedor_id ?? ''),
+                                    "precios" => [
+                                        "id" => (string) ($ps[0]->servicio->precios->first()->id ?? ''),
+                                        "moneda" => (string) ($ps[0]->servicio->precios->first()->moneda ?? ''),
+                                        "anio" => (string) ($ps[0]->servicio->precios->first()->anio ?? ''),
+                                        "monto" => (string) ($ps[0]->servicio->precios->first()->monto ?? '0'),
+                                        "tipo_pasajero_id" => (string) ($ps[0]->servicio->precios->first()->tipo_pasajero_id ?? '3'),
+                                        "servicio_id" => (string) ($ps[0]->servicio->precios->first()->servicio_id ?? ''),
+                                        "servicio_clase_id" => (string) ($ps[0]->servicio->precios->first()->servicio_clase_id ?? ''),
+                                        "estado_activo" => (string) ($ps[0]->servicio->precios->first()->estado_activo ?? '1')
+                                    ],
+                                    "servicio_detalles" => null
+                                ],
+                                "pasajerosAsignados" => 
+                                    collect($ps)->map(function ($item) use ($cotizacion) {
+                                        $pasajero = $cotizacion->pasajeros->firstWhere('id', $item->pasajero_id);
+                                        if ($pasajero) {
+                                            return [
+                                                "id" => (string) $item->pasajero_id,
+                                                "temp_id" => isset($pasajero->temp_id) ? $pasajero->temp_id : '',
+                                                "pasajero_id" => $pasajero->id ?? '',
+                                                "nombre" => $pasajero?->nombre ?? '',
+                                                "tipo_pasajero_id" => (string) ($pasajero?->tipo_pasajero_id ?? '3')
+                                            ];
+                                        }else{
+                                            return null; // O manejar de otra forma si no se encuentra el pasajero
+                                        }
+                                    })->toArray()                            
+                            ]
+                        ];
+                        return $base;
+                    })->values()
                 ];
+            })->values();
 
-                // 🔹 Paso 2: Lista de pasajeros asignados
-                $base["pasajerosAsignados"] = collect($pasajeroServicios)->map(function ($item) use ($cotizacion) {
-                    $pasajero = $cotizacion->pasajeros->firstWhere('id', $item->pasajero_id);
+        //dd($agrupado->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);            
+        //dd(json_encode($agrupado, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
-                    return [
-                        "id" => (string) $item->pasajero_id,
-                        "temp_id" => $pasajero->temp_id, //(string) Str::uuid(),
-                        "pasajero_id" => $pasajero->id,
-                        "nombre" => $pasajero?->nombre ?? '',
-                        "tipo_pasajero_id" => (string) ($pasajero?->tipo_pasajero_id ?? '3')
-                    ];
-                })->toArray();
-
-                // ✅ Reemplazar solo la relación pasajeroServicios de este servicio
-                $itinerarioServicio->setRelation('pasajeroServicios', collect($base));
-            }
-        }
+        $cotizacion['pasajeros_servicios_agrupados'] = $agrupado;
+        
         //dd($cotizacion->destinosTuristicos->itinerarioDestinos->toJson());
         
         //dd($iterarioDestino->toArray());
         // dd($cotizacion0->destinosTuristicos->itinerarioDestinos->toArray());
         
-        // dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        //dd($cotizacion->toJson(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         //dd($cotizacion->toArray());
 
         $formattedDestinosTuristicos = DestinoTuristico::getFormattedForDropdown();
@@ -326,6 +394,41 @@ class CotizacionController extends Controller
             // 'Pasajeros' => $pasajero,
             // 'Detalle' => $detalle,
         ]); //compact('cotizacion'));
+    }
+
+    public function mergeServicios($itinerarios, $serviciosAdicionales)
+    {
+        return $itinerarios->map(function ($itinerario) use ($serviciosAdicionales) {
+            // Trabajar directamente con el objeto
+            $itinerarioServicios = collect($itinerario->itinerarioServicios);
+
+            $adicionalesDelDia = $serviciosAdicionales->filter(function ($item) use ($itinerario) {
+                return isset($item['pasajeroServicios'][0]['nro_dia']) &&
+                    $item['pasajeroServicios'][0]['nro_dia'] == $itinerario->nro_dia;
+            });
+
+            foreach ($adicionalesDelDia as $adicional) {
+                $nuevoServicio = new ItinerarioServicio(); // Usa tu modelo real
+                
+                $nuevoServicio->id = null;
+                $nuevoServicio->nro_orden = $adicional['nro_orden'];
+                $nuevoServicio->servicio_id = null;
+                $nuevoServicio->itinerario_destino_id = $itinerario->id;
+                $nuevoServicio->proveedor_categoria_id = null;
+                $nuevoServicio->proveedor_id = null;
+                $nuevoServicio->observacion = $adicional['observacion'];
+                $nuevoServicio->setRelation('pasajeroServicios', $adicional['pasajeroServicios']);
+
+                $itinerarioServicios->push($nuevoServicio);
+            }
+
+            // Reemplazar la relación con la colección modificada
+            $itinerario->itinerarioServicios = $itinerarioServicios
+                ->sortBy('nro_orden')
+                ->values();
+
+            return $itinerario;
+        });
     }
 
     /**

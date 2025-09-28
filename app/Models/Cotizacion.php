@@ -16,6 +16,11 @@ class Cotizacion extends Model
     protected $casts = ['destino_turistico_detalle' => 'array', 'destino_turistico_detalle_monto_x_categoria' => 'array'];
 
     // App/Models/Cotizacion.php
+    public function pasajerosServicios()
+    {
+        return $this->hasMany(PasajeroServicio::class, 'cotizacion_id');
+    }
+
     public function destinosTuristicos()
     {
         return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
