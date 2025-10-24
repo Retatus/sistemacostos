@@ -18,6 +18,23 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            //  maxWidth: {
+            //     '8xl': '1400px', // defines un nuevo tamaño
+            // },
+            // screens: {
+            //     '3xl': '1600px',
+            // },
+        },
+        container: {
+            center: true,
+            padding: '1rem',
+            screens: {
+                sm: '600px',
+                md: '728px',
+                lg: '984px',
+                xl: '1300px',   // ← aquí cambias el max-width
+                '2xl': '1800px' // puedes agregar más
+            },
         },
     },
 

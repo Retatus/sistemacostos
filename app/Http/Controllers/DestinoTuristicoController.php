@@ -165,7 +165,14 @@ class DestinoTuristicoController extends Controller
                             'servicio' => function($query) {
                                 $query->with([
                                     'precios',
-                                    'servicioDetalles'
+                                    'servicioDetalles' => function($query) {
+                                        $query->select('id', 'descripcion', 'proveedor_categoria_id') // Incluye la clave foránea
+                                            ->with([
+                                                'proveedor_categoria' => function($query) {
+                                                    $query->select('id', 'nombre'); // Solo los campos necesarios
+                                                }
+                                            ]);
+                                    },
                                 ]);
                             },
                             //'pasajeroServicios.pasajero' // Nueva relación añadida

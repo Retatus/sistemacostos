@@ -147,11 +147,6 @@
                     </select>
                 </div>                
                 <div class="col-span-6">
-                    <!-- <ul>
-                        <li v-for="(item, index) in serviciosPorDia" :key="index">
-                            {{ item.nombre }} - {{ item.descripcion }} - {{ item.precio }} - {{ item.moneda }} - {{ item.subtotal }}
-                        </li>
-                    </ul> -->
                     <div v-for="(dia, index) in serviciosPorDia" :key="index" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2">
                             <h3>Día {{dia.nro_dia}} {{ dia.nombre  }}: {{ dia.descripcion }} {{ dia.id }}</h3>
@@ -400,6 +395,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    ListaCategorias: {
+        type: Object,
+        required: true,
+    }
 });
 
 const esEdicion = computed(() => props.Accion === 'edit');
@@ -436,6 +435,7 @@ const ultimaAccion = ref('');
 const showModal = ref(false);
 const showModalProveedor = ref(false);
 const DestinoTuristico = props.Lista_destinos_turistico
+//const sCategoriaProveedor = props.ListaCategorias
 const fechaActual = ref(new Date());
 const ListaServicioPasajeroTemp = reactive([]);
 const listaServicioDetalle = ref([]);
@@ -452,6 +452,10 @@ let emptyInputTimeout = null;
 // Variables para el cotizacion y detalle temporal
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
+
+// console.log('Cotizacion:', Cotizacion);
+console.log('pasajeros_servicios_agrupados:', Cotizacion.pasajeros_servicios_agrupados);
+console.log('pasajeros_servicios_agrupados1:', Cotizacion.pasajeros_servicios_agrupados1);
 
 
 
@@ -477,7 +481,8 @@ const PasajerosReducido = computed(() =>
 )
 
 if (esEdicion.value) {
-    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados;
+    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados1;
+    //console.log('serviciosPorDia.value edit', serviciosPorDia.value);
     listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
     agregarServicioPasajeroTemp();
     //calcularVenta();
@@ -581,23 +586,23 @@ const calcularSubtotal = (diaId, servicioId) => {
 
 // Mostrar subtotal formateado
 const calcularSubtotalDisplay = (diaId, servicioId) => {
-//   const dia = serviciosPorDia.value.find(d => d.id === diaId)
-//   const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
-  return 0 // servicio ? (servicio.pasajero_servicios.subtotal || 0).toFixed(2) : '0.00'
+  const dia = serviciosPorDia.value.find(d => d.id === diaId)
+  const servicio = dia?.itinerario_servicios.find(s => s.id === servicioId)
+  return servicio ? (servicio.pasajero_servicios.subtotal || 0).toFixed(2) : '0.00'
 }
 
 // Computed: Totales por moneda (ahora usa subtotal)
 const totalesPorMoneda = computed(() => {
   const resultado = {}
   
-//   serviciosPorDia.value.forEach(dia => {
-//     dia.itinerario_servicios.forEach(servicio => {
-//       const moneda = servicio.pasajero_servicios.moneda
-//       const subtotal = parseFloat(servicio.pasajero_servicios.subtotal) || 0
+  serviciosPorDia.value.forEach(dia => {
+    dia.itinerario_servicios.forEach(servicio => {
+      const moneda = servicio.pasajero_servicios.moneda
+      const subtotal = parseFloat(servicio.pasajero_servicios.subtotal) || 0
       
-//       resultado[moneda] = (resultado[moneda] || 0) + subtotal
-//     })
-//   })
+      resultado[moneda] = (resultado[moneda] || 0) + subtotal
+    })
+  })
   
   return resultado
 })
