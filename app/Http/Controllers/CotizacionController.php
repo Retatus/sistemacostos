@@ -164,6 +164,7 @@ class CotizacionController extends Controller
             //dd($pasajero_servicios);
             foreach ($pasajero_servicios as $pasajero_servicio) {                   // destino_turistico_detalle
                 $itinerario_servicios = $pasajero_servicio['itinerario_servicios'] ?? [];
+                $nro_dia = $pasajero_servicio['nro_dia'] ?? 1;
                 foreach ($itinerario_servicios as $index => $servicio) {  
                     $pasajero_servicio = $servicio['pasajero_servicios'] ?? [];
                     // Verificar si hay pasajeros asignados
@@ -172,10 +173,12 @@ class CotizacionController extends Controller
                         foreach ($pasajero_asignados as $pasajero_asignado) {
                             //Log::info('🟢 Iniciando inserción de pasajero_servicio. PasajerosMap: ' . json_encode($pasajerosMap) . ' | Pasajero temp_id: ' . $pasajero_asignado['temp_id']. ' moneda '. $pasajero_servicio['moneda']);
                             $pasajero_servicio_response = PasajeroServicio::create([
+                                'nro_dia' => $nro_dia,
                                 'nro_orden' => $index + 1, // Asignar el número de orden basado en el índice del servicio
                                 'cotizacion_id' => $cotizacionResponse->id,
                                 'pasajero_id' => collect($pasajerosMap)->firstWhere('temp_id', $pasajero_asignado['temp_id'])['id'] ?? null,
                                 'itinerario_servicio_id' => $pasajero_servicio['itinerario_servicio_id'] ?? null,
+                                'servicio_id' => $pasajero_servicio['servicio_id'] ?? null,
                                 'hora' => $pasajero_servicio['hora'] ?? '',
                                 'itinerario_destino_id' => $pasajero_servicio['itinerario_destino_id'] ?? 0,
                                 'observacion' => $pasajero_servicio['observacion'] ?? '',
@@ -188,10 +191,12 @@ class CotizacionController extends Controller
                     } else {
                         //Log::info('🟢 Iniciando inserción de pasajero_servicio sin pasajero asignado');
                         $pasajero_servicio_response = PasajeroServicio::create([
+                            'nro_dia' => $nro_dia,
                             'nro_orden' => $index + 1, // Asignar el número de orden basado en el índice del servicio
                             'cotizacion_id' => $cotizacionResponse->id,
                             'pasajero_id' => null, // No hay pasajero asignado
                             'itinerario_servicio_id' => $servicio['itinerario_servicio_id'] ?? null,
+                            'servicio_id' => $servicio['servicio_id'] ?? null,
                             'hora' => $pasajero_servicio['hora'] ?? '',
                             'itinerario_destino_id' => $pasajero_servicio['itinerario_destino_id'] ?? 0,
                             'observacion' => $pasajero_servicio['observacion'] ?? '',
