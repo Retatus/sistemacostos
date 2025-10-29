@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use App\DTO\CotizacionDTO;
+use App\Models\Servicio;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 class CotizacionController extends Controller
@@ -109,7 +110,8 @@ class CotizacionController extends Controller
             'Accion' => 'create',
             'Cotizacion' => $cotizacion,
             'Correlativo' => $correlatico,
-            'ListaDestinosTuristicos' => $formattedDestinosTuristicos
+            'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
+            'ListaServicios' => Servicio::getFormattedForDropdown(),
         ]);
     }
 
@@ -424,7 +426,8 @@ class CotizacionController extends Controller
         [
             'Accion' => 'edit',
             'ListaDestinosTuristicos' => $formattedDestinosTuristicos,
-            'ListaCategorias' => $formatterCategorias,
+            'ListaCategorias' => ProveedorCategoria::getFormattedForDropdown(),
+            'ListaServicios' => Servicio::getFormattedForDropdown(),
             'Cotizacion' => $cotizacion,
             // 'Pasajeros' => $pasajero,
             // 'Detalle' => $detalle,

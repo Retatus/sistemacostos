@@ -18,6 +18,7 @@
                         :Cotizacion="Cotizacion"
                         :Lista_destinos_turistico="ListaDestinosTuristicos"
                         :ListaCategorias="ListaCategorias"
+                        :ListaServicios="ListaServicios"
                     />
                 </div>
             </div>
@@ -44,6 +45,10 @@
             required: true,
         },
         ListaCategorias: {
+            type: Object,
+            required: false,
+        },
+        ListaServicios: {
             type: Object,
             required: false,
         },
