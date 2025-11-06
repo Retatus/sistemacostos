@@ -162,7 +162,7 @@
                 <div class="col-span-6">
                     <div v-for="(dia, index) in serviciosPorDia" :key="index" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
-                            <h3>Día {{ dia.nro_dia }} {{ dia.nombre }}: {{ dia.descripcion }} {{ dia.id }} {{ dia.isVisible }}</h3>
+                            <h3>Día {{ dia.nro_dia }} {{ dia.nombre }}: {{ dia.descripcion }} {{ dia.id }}</h3>
                             <!-- {{ serviciosPorDia }} flex justify-between items-center gap-4 mt-5 mb-5 px-5 -->
                             <span @click="toggleTable(index)" class="text-sm justify-end cursor-pointer">
                                 <i>
@@ -177,144 +177,146 @@
                                 </i> 
                             </span>
                         </div>
-                        <table v-show = "dia.isVisible" className="w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead className="text-xs text-gray-900 uppercase bg-gray-50">
-                                <tr className="bg-white border-b text-gray-900">
-                                    <th hidden>ID</th>
-                                    <!-- <th class="w-1/12 px-4 py-2">Hora</th> -->
-                                    <!-- <th class="w-1/12 px-4 py-2">Categoria</th> -->
-                                    <th class="w-3/12 px-4 py-2">Hora / Categoria / Servicio</th>
-                                    <th class="w-2/12 px-4 py-2">Observación</th>
-                                    <!-- <th class="w-1/12 px-4 py-2">Moneda</th> -->
-                                    <th class="w-2/12 px-4 py-2 text-center">Moneda / Monto / Cant. / Subtotal</th>
-                                    <!-- <th class="w-1/12 px-4 py-2">Cantidad</th>
-                                    <th class="w-1/12 px-4 py-2">Subtotal</th> -->
-                                    <th class="w-2/12 px-4 py-2">Pasajeros Asignados
-                                        <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
-                                            type="button">
-                                            {{ index }}
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                        </button>   
-                                    </th>
-                                    <th class="w-1/12 px-4 py-2 text-center">status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="index"
-                                    className="bg-white border-b text-gray-900">
-                                    <td class="px-1 py-1" hidden>
-                                        <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
-                                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                    </td>
-                                    <!-- <td class="px-1 py-1">
-                                    </td> -->
-                                    <!-- {{ servicioDetalle.nro_orden }} -->
-                                    <td class="px-1 py-1">
-                                        <div class="flex space-x-2">
-                                            <div class="w-2/12">
-                                                <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
+                        <Transition name="fade-slide">
+                            <table v-show = "dia.isVisible" className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+                                    <tr className="bg-white border-b text-gray-900">
+                                        <th hidden>ID</th>
+                                        <!-- <th class="w-1/12 px-4 py-2">Hora</th> -->
+                                        <!-- <th class="w-1/12 px-4 py-2">Categoria</th> -->
+                                        <th class="w-3/12 px-4 py-2">Hora / Categoria / Servicio</th>
+                                        <th class="w-2/12 px-4 py-2">Observación</th>
+                                        <!-- <th class="w-1/12 px-4 py-2">Moneda</th> -->
+                                        <th class="w-2/12 px-4 py-2 text-center">Moneda / Monto / Cant. / Subtotal</th>
+                                        <!-- <th class="w-1/12 px-4 py-2">Cantidad</th>
+                                        <th class="w-1/12 px-4 py-2">Subtotal</th> -->
+                                        <th class="w-2/12 px-4 py-2">Pasajeros Asignados
+                                            <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
+                                                type="button">
+                                                {{ index }}
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </button>   
+                                        </th>
+                                        <th class="w-1/12 px-4 py-2 text-center">status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="index"
+                                        className="bg-white border-b text-gray-900">
+                                        <td class="px-1 py-1" hidden>
+                                            <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
+                                                class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        </td>
+                                        <!-- <td class="px-1 py-1">
+                                        </td> -->
+                                        <!-- {{ servicioDetalle.nro_orden }} -->
+                                        <td class="px-1 py-1">
+                                            <div class="flex space-x-2">
+                                                <div class="w-2/12">
+                                                    <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
+                                                </div>
+                                                <div class="w-3/12">
+                                                    <select v-model="servicioDetalle.proveedor_categoria_id"
+                                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
+                                                        <option disabled value="0">-- Selecciona una opción --</option>
+                                                        <option v-for="option in sCategoriaProveedor" :key="option.value"
+                                                            :value="option.value">
+                                                            {{ option.label }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="w-7/12">
+                                                    <select v-model="servicioDetalle.servicio_id"
+                                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs"
+                                                        @change="handleChange(dia.nro_dia, index)">
+                                                        <option disabled value="0">-- Selecciona una opción --</option>
+                                                        <option v-for="item in servicios" :key="item.value"
+                                                            :value="item.value">
+                                                            {{ item.label }}
+                                                        </option>
+                                                        <option value='__add_new__'>➕ Agregar nuevo...</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="w-3/12">
-                                                <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
-                                                    <option disabled value="0">-- Selecciona una opción --</option>
-                                                    <option v-for="option in sCategoriaProveedor" :key="option.value"
-                                                        :value="option.value">
-                                                        {{ option.label }}
-                                                    </option>
+                                        </td>
+                                        <td class="px-1 py-1">
+                                            <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
+                                                name="observacion"
+                                                class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm text-sm"
+                                                placeholder="Observación del Servicio" rows="2">
+                                            </textarea>
+                                        </td>
+                                        <td class="px-1 py-1">
+                                            <div class="flex space-x-1 justify-between">
+                                                <select v-model="servicioDetalle.pasajero_servicios.moneda"
+                                                    class="mt-1 w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
+                                                    <option value="USD">USD</option>
+                                                    <option value="PEN">PEN</option>
                                                 </select>
+                                                <div class="flex space-x-1 w-4/6">
+                                                    <input type="text" v-model="servicioDetalle.pasajero_servicios.monto"
+                                                        @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
+                                                        @blur="formatMonto(dia.id, servicioDetalle.id)"
+                                                        class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                    <input type="number"
+                                                        v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
+                                                        min="1" @input="calcularSubtotal(dia.id, servicioDetalle.id)"
+                                                        class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                    <input type="text"
+                                                        :value="calcularSubtotalDisplay(dia.id, servicioDetalle.id)"
+                                                        readonly disabled="true"
+                                                        class="subtotal-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                </div>
                                             </div>
-                                            <div class="w-7/12">
-                                                <select v-model="servicioDetalle.servicio_id"
-                                                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs"
-                                                    @change="handleChange(dia.nro_dia, index)">
-                                                    <option disabled value="0">-- Selecciona una opción --</option>
-                                                    <option v-for="item in servicios" :key="item.value"
-                                                        :value="item.value">
-                                                        {{ item.label }}
-                                                    </option>
-                                                    <option value='__add_new__'>➕ Agregar nuevo...</option>
-                                                </select>
+                                        </td>
+                                        <td class="px-1 py-1 text-sm">
+                                            <AsignarPasajerosServicio :pasajeros-disponibles="PasajerosReducido"
+                                                v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
+                                                :servicio="servicioDetalle.pasajero_servicios" />
+                                        </td>
+                                        <td class="px-1 py-1 text-sm">
+                                            <div class="flex space-x-2">
+                                                <div class="w-2/3">
+                                                    <select v-model="servicioDetalle.pasajero_servicios.estatus"
+                                                        class="border-gray-300 rounded-md shadow-sm text-xs">
+                                                        <option value="0">PENDIENTE</option>
+                                                        <option value="1">CONFIRMADA</option>
+                                                        <option value="2">CANCELADA</option>
+                                                        <option value="3">XPASAJERO</option>
+                                                    </select>
+                                                </div>
+                                                <div class="w-1/3 flex justify-between">
+                                                    <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
+                                                        type="button">
+                                                        {{ index }}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                            class="size-6">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                        </svg>
+                                                    </button>
+                                                    <button @click="eliminarDetalle(dia.nro_dia, index)" type="button">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <!-- </td>
+                                        <td scope="col" className="px-1 py-1 font-medium text-gray-900"> -->
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-1 py-1">
-                                        <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
-                                            name="observacion"
-                                            class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm text-sm"
-                                            placeholder="Observación del Servicio" rows="2">
-                                        </textarea>
-                                    </td>
-                                    <td class="px-1 py-1">
-                                        <div class="flex space-x-1 justify-between">
-                                            <select v-model="servicioDetalle.pasajero_servicios.moneda"
-                                                class="mt-1 w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
-                                                <option value="USD">USD</option>
-                                                <option value="PEN">PEN</option>
-                                            </select>
-                                            <div class="flex space-x-1 w-4/6">
-                                                <input type="text" v-model="servicioDetalle.pasajero_servicios.monto"
-                                                    @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
-                                                    @blur="formatMonto(dia.id, servicioDetalle.id)"
-                                                    class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                                <input type="number"
-                                                    v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
-                                                    min="1" @input="calcularSubtotal(dia.id, servicioDetalle.id)"
-                                                    class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                                <input type="text"
-                                                    :value="calcularSubtotalDisplay(dia.id, servicioDetalle.id)"
-                                                    readonly disabled="true"
-                                                    class="subtotal-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-1 py-1 text-sm">
-                                        <AsignarPasajerosServicio :pasajeros-disponibles="PasajerosReducido"
-                                            v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
-                                            :servicio="servicioDetalle.pasajero_servicios" />
-                                    </td>
-                                    <td class="px-1 py-1 text-sm">
-                                        <div class="flex space-x-2">
-                                            <div class="w-2/3">
-                                                <select v-model="servicioDetalle.pasajero_servicios.estatus"
-                                                    class="border-gray-300 rounded-md shadow-sm text-xs">
-                                                    <option value="0">PENDIENTE</option>
-                                                    <option value="1">CONFIRMADA</option>
-                                                    <option value="2">CANCELADA</option>
-                                                    <option value="3">XPASAJERO</option>
-                                                </select>
-                                            </div>
-                                            <div class="w-1/3 flex justify-between">
-                                                <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
-                                                    type="button">
-                                                    {{ index }}
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                </button>
-                                                <button @click="eliminarDetalle(dia.nro_dia, index)" type="button">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <!-- </td>
-                                    <td scope="col" className="px-1 py-1 font-medium text-gray-900"> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </Transition>
                     </div>
 
                     <div class="totales-section">
@@ -522,6 +524,9 @@ const PasajerosReducido = computed(() =>
 
 if (esEdicion.value) {
     serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados1;
+    serviciosPorDia.value.forEach(dia => {
+        dia.isVisible = true; // Inicialmente todas las tablas visibles
+    });
     //console.log('serviciosPorDia.value edit', serviciosPorDia.value);
     listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
     agregarServicioPasajeroTemp();
@@ -973,5 +978,26 @@ async function submitCotizacion() {
 .totales-section li {
     margin-bottom: 5px;
     font-weight: bold;
+}
+
+/*efecto de transición para la tabla */
+.fade-slide-enter-active, .fade-slide-leave-active {
+    transition: all 0.5s ease;
+}
+.fade-slide-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.fade-slide-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-slide-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 </style>
