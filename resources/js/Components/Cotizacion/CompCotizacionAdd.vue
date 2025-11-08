@@ -206,9 +206,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="index"
+                                    <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id"
                                         className="bg-white border-b text-gray-900">
-                                        <td class="px-1 py-1" hidden>
+                                        <td class="px-1 py-1" >
+                                            {{ servicioDetalle.id }} 44
                                             <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
                                                 class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
                                         </td>
@@ -662,7 +663,7 @@ const calcularTotalGeneral = computed(() => {
 function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     debugger;
     const nuevoServicio = {
-        id: null,
+        id: crypto.randomUUID(),
         nro_orden: '',
         servicio_id: '0',
         itinerario_destino_id: '0',
@@ -694,7 +695,7 @@ function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
-        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio).push(nuevoServicio);
+        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio);
     } else {
         // Si no hay días, crear uno nuevo  
         serviciosPorDia.value.push({
