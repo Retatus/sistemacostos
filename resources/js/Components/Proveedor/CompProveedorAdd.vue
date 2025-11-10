@@ -58,7 +58,7 @@
                     </option>
                 </select>
             </div>  
-            <div class="col-span-1 ">
+            <div class="col-span-1 " hidden>
                 <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
                 <div class="flex items-center space-x-2">
                     <select v-model="proveedor.estado_activo" id="estado_activo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
@@ -67,13 +67,17 @@
                         {{ option.nombre }}
                         </option>
                     </select>
-                    <PrimaryButton 
-                        type="button"
-                        class="mt-2 ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="agregarDetalle">
-                        Agregar
-                    </PrimaryButton>
                 </div>
+            </div>
+            <div class=" col-span-3 bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
+                <h3>Agregar Servicio</h3>
+                <span @click="agregarDetalle(index)" class="text-sm justify-end cursor-pointer">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>                    
+                    </i> 
+                </span>
             </div>              
         </div>
         <Servicio

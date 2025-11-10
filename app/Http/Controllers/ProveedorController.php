@@ -24,10 +24,11 @@ class ProveedorController extends Controller
         // Parámetros de búsqueda
         $category = $request->input('proveedor_categoria') ?? ''; 
         $ruc_name = $request->input('ruc_razonsocial') ?? ''; 
+        $esCliente = $category == 0 ? 1 : 0; 
         // Consulta principal
         $proveedors = Proveedor::with('categoria:id,nombre')
             ->where('estado_activo', 1)
-            ->where('escliente', 0)
+            ->where('escliente', $esCliente)
             ->when($category, function ($query, $category) {
                 return $query->where('proveedor_categoria_id', $category);
             })
