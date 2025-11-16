@@ -20,7 +20,7 @@
                                 {{ option.label }}
                             </option>
                         </select>
-                        <input v-model="ruc_razonsocial" type="text" placeholder="Buscar"
+                        <input v-model="ruc_razonsocial" type="search" placeholder="Buscar"
                             class="text-xs border border-gray-300 rounded-md shadow-sm px-4 w-full sm:flex-1">
                     </div>
                 </div>

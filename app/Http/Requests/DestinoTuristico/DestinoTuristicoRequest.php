@@ -29,7 +29,7 @@ class DestinoTuristicoRequest extends FormRequest
             'destino_turistico_detalle' => 'required|array|min:1',
             'destino_turistico_detalle.*.nro_dia' => 'required|integer|min:1',
             'destino_turistico_detalle.*.itinerario_id' => 'required|integer|exists:itinerarios,id',
-            'destino_turistico_detalle.*.nombre' => 'nullable|string|max:45',
+            'destino_turistico_detalle.*.nombre' => 'nullable|string|max:100',
             'destino_turistico_detalle.*.descripcion' => 'nullable|string|max:1000',
             'destino_turistico_detalle.*.estado_activo' => 'required|boolean',
             'destino_turistico_detalle.*.destino_turistico_id' => 'nullable|integer|exists:destino_turisticos,id',

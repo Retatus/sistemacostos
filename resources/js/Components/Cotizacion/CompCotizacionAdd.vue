@@ -162,7 +162,7 @@
                 <div class="col-span-6">
                     <div v-for="(dia, index) in serviciosPorDia" :key="index" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
-                            <h3>Día {{ dia.nro_dia }} {{ dia.nombre }}: {{ dia.descripcion }} {{ dia.id }}</h3>
+                            <h3>Día {{ dia.nro_dia }}: {{ dia.nombre }}</h3>
                             <!-- {{ serviciosPorDia }} flex justify-between items-center gap-4 mt-5 mb-5 px-5 -->
                             <span @click="toggleTable(index)" class="text-sm justify-end cursor-pointer">
                                 <i>
@@ -178,7 +178,7 @@
                             </span>
                         </div>
                         <Transition name="fade-slide">
-                            <table v-show = "dia.isVisible" className="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <table v-show = "dia.isVisible" className="w-full text-xs text-left rtl:text-right text-gray-500">
                                 <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                                     <tr className="bg-white border-b text-gray-900">
                                         <th hidden>ID</th>
@@ -190,40 +190,38 @@
                                         <th class="w-2/12 px-4 py-2 text-center">Moneda / Monto / Cant. / Subtotal</th>
                                         <!-- <th class="w-1/12 px-4 py-2">Cantidad</th>
                                         <th class="w-1/12 px-4 py-2">Subtotal</th> -->
-                                        <th class="w-2/12 px-4 py-2">Pasajeros Asignados
-                                            <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
+                                        <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
+                                        <th class="w-1/12 px-4 py-2 text-center">status
+                                             <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
                                                 type="button">
-                                                {{ index }}
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
-                                            </button>   
+                                            </button>
                                         </th>
-                                        <th class="w-1/12 px-4 py-2 text-center">status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id"
                                         className="bg-white border-b text-gray-900">
-                                        <td class="px-1 py-1" >
-                                            {{ servicioDetalle.id }} 44
+                                        <td class="px-1" hidden>
                                             <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
-                                                class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                                class="w-full border-gray-300 rounded-md shadow-sm" />
                                         </td>
-                                        <!-- <td class="px-1 py-1">
+                                        <!-- <td class="px-1 ">
                                         </td> -->
                                         <!-- {{ servicioDetalle.nro_orden }} -->
-                                        <td class="px-1 py-1">
-                                            <div class="flex space-x-2">
+                                        <td class="px-1">
+                                            <div class="flex space-x-1">
                                                 <div class="w-2/12">
                                                     <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
                                                 </div>
                                                 <div class="w-3/12">
                                                     <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
+                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                                                         <option disabled value="0">-- Selecciona una opción --</option>
                                                         <option v-for="option in sCategoriaProveedor" :key="option.value"
                                                             :value="option.value">
@@ -233,7 +231,7 @@
                                                 </div>
                                                 <div class="w-7/12">
                                                     <select v-model="servicioDetalle.servicio_id"
-                                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs"
+                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs"
                                                         @change="handleChange(dia.nro_dia, index)">
                                                         <option disabled value="0">-- Selecciona una opción --</option>
                                                         <option v-for="item in servicios" :key="item.value"
@@ -245,17 +243,19 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-1 py-1">
-                                            <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
-                                                name="observacion"
-                                                class="mt-1 w-full border-gray-300 text-pink-900 italic text rounded-md shadow-sm text-sm"
-                                                placeholder="Observación del Servicio" rows="2">
-                                            </textarea>
+                                        <td class="px-1">
+                                            <div class="flex space-x-1">
+                                                <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
+                                                    name="observacion"
+                                                    class="w-full border-gray-300 rounded-md shadow-sm text-xs text-pink-900 italic"
+                                                    placeholder="Observación del Servicio" rows="1">
+                                                </textarea>
+                                            </div>                                            
                                         </td>
-                                        <td class="px-1 py-1">
+                                        <td class="px-1">
                                             <div class="flex space-x-1 justify-between">
                                                 <select v-model="servicioDetalle.pasajero_servicios.moneda"
-                                                    class="mt-1 w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
+                                                    class="w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
                                                     <option value="USD">USD</option>
                                                     <option value="PEN">PEN</option>
                                                 </select>
@@ -263,25 +263,25 @@
                                                     <input type="text" v-model="servicioDetalle.pasajero_servicios.monto"
                                                         @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
                                                         @blur="formatMonto(dia.id, servicioDetalle.id)"
-                                                        class="monto-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                        class="monto-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
                                                     <input type="number"
                                                         v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
                                                         min="1" @input="calcularSubtotal(dia.id, servicioDetalle.id)"
-                                                        class="pasajeros-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                        class="pasajeros-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
                                                     <input type="text"
                                                         :value="calcularSubtotalDisplay(dia.id, servicioDetalle.id)"
                                                         readonly disabled="true"
-                                                        class="subtotal-input mt-1 w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
+                                                        class="subtotal-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-1 py-1 text-sm">
+                                        <td class="px-1">
                                             <AsignarPasajerosServicio :pasajeros-disponibles="PasajerosReducido"
                                                 v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
                                                 :servicio="servicioDetalle.pasajero_servicios" />
                                         </td>
-                                        <td class="px-1 py-1 text-sm">
-                                            <div class="flex space-x-2">
+                                        <td class="px-1">
+                                            <div class="flex space-x-1">
                                                 <div class="w-2/3">
                                                     <select v-model="servicioDetalle.pasajero_servicios.estatus"
                                                         class="border-gray-300 rounded-md shadow-sm text-xs">
@@ -294,7 +294,6 @@
                                                 <div class="w-1/3 flex justify-between">
                                                     <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
                                                         type="button">
-                                                        {{ index }}
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                             class="size-6">
@@ -311,7 +310,7 @@
                                                     </button>
                                                 </div>
                                                 <!-- </td>
-                                        <td scope="col" className="px-1 py-1 font-medium text-gray-900"> -->
+                                        <td scope="col" className="px-1  font-medium text-gray-900"> -->
                                             </div>
                                         </td>
                                     </tr>
