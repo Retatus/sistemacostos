@@ -1,7 +1,7 @@
 <template>
-  <div class="pasajero-servicio-selector">
-    <div class="select-container">
-      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
+  <div class="pasajero-servicio-selector flex space-x-1">
+    <div class="select-container w-1/2">
+      <select v-model="selectedPasajeroId" @change="addPasajeroToService" class="w-full border-gray-300 rounded-md shadow-sm text-xs">
         <option value="" disabled selected>Selecciona un pasajero</option>
         <option
           v-for="pasajero in availablePasajeros"
@@ -13,22 +13,28 @@
       </select>
     </div>
 
-    <div class="assigned-pasajeros-list">
-      <ul v-if="assignedPasajerosList.length" class="lista-horizontal text-xs">
-        <li v-for="pasajero in assignedPasajerosList.filter(p => p !== null)" :key="pasajero.id || pasajero.temp_id">
+    <div class="assigned-pasajeros-list" v-if="assignedPasajerosList.length <= 2">
+      <ul class="lista-horizontal text-xs">
+        <li v-for="pasajero in assignedPasajerosList.filter(p => p !== null)" :key="pasajero.id || pasajero?.temp_id">
           {{ pasajero.nombre }}
           <button @click="removePasajeroFromService(pasajero.id || pasajero.temp_id)">
             &times;
           </button>
         </li>
       </ul>
-      <p v-else class="no-pasajeros">No hay pasajeros asignados a este servicio.</p>
+    </div>
+    <div v-else>
+      <CustomSelect
+        :assignedPasajerosList="assignedPasajerosList"
+        @remove="removePasajeroFromService"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, defineProps, defineEmits } from 'vue';
+import CustomSelect from '@/Components/CustomSelect.vue';
 
 const props = defineProps({
   pasajerosDisponibles: {
@@ -117,15 +123,6 @@ watch(availablePasajeros, () => {
   text-align: center;
 }
 
-/* .pasajero-servicio-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  
-  padding: 15px;
-  border-radius: 8px;
-  
-} */
 
 .select-container select {
   width: 100%;
@@ -134,48 +131,10 @@ watch(availablePasajeros, () => {
   border: 1px solid #ccc;
 }
 
-/* .assigned-pasajeros-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.assigned-pasajeros-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px dashed #ddd;
-}
-
-.assigned-pasajeros-list li:last-child {
-  border-bottom: none;
-} */
-
-/* .assigned-pasajeros-list button {
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1em;
-  line-height: 1;
-  padding: 0;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.assigned-pasajeros-list button:hover {
-  background-color: #cc0000;
-} */
-
 .no-pasajeros {
   font-style: italic;
   color: #888;
+  font-size: 0.7rem;
   text-align: center;
 }
 </style>

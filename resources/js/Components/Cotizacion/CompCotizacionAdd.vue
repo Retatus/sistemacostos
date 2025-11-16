@@ -160,25 +160,43 @@
                     </select>
                 </div>
                 <div class="col-span-6">
-                    <div v-for="(dia, index) in serviciosPorDia" :key="index" class="day-group">
-                        <div class="day-header bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
-                            <h3>Día {{ dia.nro_dia }}: {{ dia.nombre }}</h3>
+                    <div v-for="(dia, indexItinerario) in serviciosPorDia" :key="indexItinerario" class="day-group">
+                        <div class="day-header bg-black  text-slate-300 p-1 rounded mb-2 flex justify-between items-center">
+                            <h3>Día {{ dia.nro_dia }}: {{ indexItinerario }} {{ dia.nombre }}</h3>
                             <!-- {{ serviciosPorDia }} flex justify-between items-center gap-4 mt-5 mb-5 px-5 -->
-                            <span @click="toggleTable(index)" class="text-sm justify-end cursor-pointer">
-                                <i>
-                                    <svg v-if="dia.isVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg> 
-                                    <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                            
+                            <div class="w-1/3 flex justify-end items-center gap-2">
+                                <span @click="toggleTable(indexItinerario)" class="text-sm justify-end cursor-pointer">
+                                    <i>
+                                        <svg v-if="dia.isVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg> 
+                                        <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                        </svg>
+                                    </i> 
+                                </span>
+                                <button @click=""
+                                    type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
-
-                                </i> 
-                            </span>
+                                </button>
+                                <button @click="eliminarItinerario(indexItinerario)" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <Transition name="fade-slide">
-                            <table v-show = "dia.isVisible" className="w-full text-xs text-left rtl:text-right text-gray-500">
+                            <table v-show = "dia.isVisible" className="excel-table w-full text-xs text-left rtl:text-right text-gray-500 mb-2">
                                 <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                                     <tr className="bg-white border-b text-gray-900">
                                         <th hidden>ID</th>
@@ -192,7 +210,7 @@
                                         <th class="w-1/12 px-4 py-2">Subtotal</th> -->
                                         <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
                                         <th class="w-1/12 px-4 py-2 text-center">status
-                                             <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
+                                             <!-- <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
                                                 type="button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -200,7 +218,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
-                                            </button>
+                                            </button> -->
                                         </th>
                                     </tr>
                                 </thead>
@@ -284,7 +302,14 @@
                                             <div class="flex space-x-1">
                                                 <div class="w-2/3">
                                                     <select v-model="servicioDetalle.pasajero_servicios.estatus"
-                                                        class="border-gray-300 rounded-md shadow-sm text-xs">
+                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs"
+                                                        :class="{
+                                                            'p-2 font-medium rounded-full border-rounded text-gray-900 text-left': true,
+                                                            'bg-yellow-400': servicioDetalle.pasajero_servicios.estatus == 0,
+                                                            'bg-green-400': servicioDetalle.pasajero_servicios.estatus == 1,
+                                                            'bg-red-400': servicioDetalle.pasajero_servicios.estatus == 2 || servicioDetalle.pasajero_servicios.estatus == 3,
+                                                        }"
+                                                        >
                                                         <option value="0">PENDIENTE</option>
                                                         <option value="1">CONFIRMADA</option>
                                                         <option value="2">CANCELADA</option>
@@ -659,7 +684,7 @@ const calcularTotalGeneral = computed(() => {
 
 // #endregion SECCION CALCULAR SUBTOTAL Y TOTAL DE LA NUEVA LOGICA DE SERVICIOS POR DIA
 
-function agregarDetalle(indice, index, itinerarioDestinoId = null) {
+function agregarDetalle(indiceItinerario, indiceServicio, itinerarioDestinoId = null) {
     debugger;
     const nuevoServicio = {
         id: crypto.randomUUID(),
@@ -694,7 +719,7 @@ function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     };
     // Agregar el nuevo servicio al último día de serviciosPorDia
     if (serviciosPorDia.value.length > 0) {
-        serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index) + 1, 0, nuevoServicio);
+        serviciosPorDia.value[Number(indiceItinerario) - 1].itinerario_servicios.splice(Number(indiceServicio) + 1, 0, nuevoServicio);
     } else {
         // Si no hay días, crear uno nuevo  
         serviciosPorDia.value.push({
@@ -709,8 +734,12 @@ function agregarDetalle(indice, index, itinerarioDestinoId = null) {
     }
 }
 
-function eliminarDetalle(indice, index) {
-    serviciosPorDia.value[Number(indice) - 1].itinerario_servicios.splice(Number(index), 1);
+function eliminarDetalle(indiceItinerario, indiceServicio) {
+    serviciosPorDia.value[Number(indiceItinerario) - 1].itinerario_servicios.splice(Number(indiceServicio), 1);    
+}
+
+function eliminarItinerario(indiceItinerario) {
+    serviciosPorDia.value.splice(Number(indiceItinerario), 1);
 }
 
 async function ListaCategoriaProveedor() {
@@ -999,5 +1028,57 @@ async function submitCotizacion() {
 .fade-slide-leave-to {
     opacity: 0;
     transform: translateY(-10px);
+}
+</style>
+
+<style>
+.text-excel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.5rem;
+    line-height: 0.5rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+/* Estilo general de la tabla */
+.excel-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10px;
+}
+
+/* Bordes tipo Excel */
+.excel-table th,
+.excel-table td {
+  border: 1px solid #d0d7de;
+  padding: 1px;
+  text-align: left;
+  min-width: 100px;
+}
+
+/* Encabezado con fondo gris claro */
+.excel-table th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Filas alternas */
+.excel-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Hover para simular selección */
+.excel-table tr:hover td {
+  background-color: #dbeeff;
+  cursor: pointer;
+}
+
+/* Celda activa (opcional si usas JS para seleccionarla) */
+.excel-table td.active {
+  background-color: #cce5ff;
+  outline: 2px solid #3399ff;
 }
 </style>
