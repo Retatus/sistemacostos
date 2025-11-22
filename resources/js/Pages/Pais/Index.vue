@@ -7,6 +7,90 @@
 
     const page = usePage();
     const Paiss = ref(page.props.paiss);
+
+    //#region Computed Properties
+    import CategoryModal from "@/Components/Modal/FormModalCategory.vue";
+    // Estado para abrir/cerrar modal
+    const showModalCategory = ref(false);
+    // Modo (create/edit)
+    const modalMode = ref("create");
+    // Datos iniciales (para edición)
+    const initialValues = ref({});
+
+    // Campos dinámicos
+    const categoryFields = [
+        { name: "id", label: "ID", type: "text", placeholder: "ID de la categoría" },
+        { name: "nombre", label: "Nombre", type: "text", placeholder: "Nombre de la categoría" },
+        // { name: "descripcion", label: "Descripción", type: "textarea", placeholder: "Describe la categoría" },
+        // { name: "prioridad", label: "Prioridad", type: "number", placeholder: "Nivel de prioridad" },
+        // { name: "tipo", label: "Tipo", type: "select", options: ["General", "Especial", "Temporal"] },
+        { name: "estado_activo", label: "Estado activo",
+            type: 'select', 
+            options: [
+                { value: '1', label: 'Activo' }, 
+                { value: '0', label: 'Desactivo' }
+            ]
+        }
+    ];
+
+    const openCreate = () => {
+        modalMode.value = "create";
+        initialValues.value = {}; // limpio
+        showModalCategory.value = true
+    };
+
+    const openEdit = (data) => {
+        console.log("Datos de la categoría:", data);
+        modalMode.value = "edit";
+        // Ejemplo: valores actuales de la categoría
+        initialValues.value = data; // ["Categoría A", "Descripción existente", 2, "Especial"];data.id;
+        console.log("Initial Values:", initialValues.value);
+        showModalCategory.value = true;
+    };
+
+    async function handleSave(data) {
+        console.log("Datos guardados:", data);
+        showModalCategory.value = false;        
+        const response = await axios.post(`${route('pais.store')}`, data); 
+        debugger;  
+        if (response.status === 200) {
+            console.log('Elemento agregado:', response.data.response);            
+            //ListaServicioDetalle.value = response.data;
+        }   
+    };
+
+    async function handleUpdate(data) {
+        console.log("Datos a actualizar:", data);
+        showModalCategory.value = false;
+        const response = await axios.patch(route('pais.update', data), data);
+        debugger;
+        if (response.status === 200) {
+            console.log('Elemento actualizado:', response.data);            
+            //ListaServicioDetalle.value = response.data;
+        }        
+    };
+
+    const saveUpdate = async (data, callback) => {
+        try {
+            debugger;
+            if (modalMode.value === 'create') {
+                // Lógica para crear un nuevo registro
+                await handleSave(data);
+                callback("Registro guardado correctamente ✔️");
+                // Ejemplo: await axios.post('/mi-endpoint', data);
+            } else if (modalMode.value === 'edit') {
+                // Lógica para actualizar un registro existente
+                await handleUpdate(data);
+                callback("Registro actualizado correctamente ✔️");
+                // Ejemplo: await axios.put(`/mi-endpoint/${data.id}`, data);
+            }
+            //const resp = await axios.post('/mi-endpoint', data);
+        } catch (err) {
+            callback("Hubo un error al guardar ❌");
+        }
+    };
+
+    //#endregion Computed Properties
     
     const onDeleteConfirm = (Pais) => {
         Swal.fire({
@@ -40,6 +124,9 @@
               <Link :href="route('pais.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
                   Agregar Pais
               </Link>                    
+                <button @click="openCreate">
+                    Agregar Pais
+                </button>  
           </div>    
         </template>
 
@@ -53,7 +140,9 @@
                                     <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
-
+                                    <th scope='col' className='px-6 py-3'>
+                                        estado activo
+                                    </th>
                                     <th scope="col" className="px-6 py-3">
                                         Acciones
                                     </th>
@@ -64,7 +153,9 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{pais.nombre}}
                                     </td> 
-
+                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{pais.estado_activo == 1 ? 'ACTIVO' : 'DESACTIVO'}}
+                                    </td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
                                             <Link :href="route('pais.edit', pais)">
@@ -72,6 +163,11 @@
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                 </svg>
                                             </Link>
+                                            <button @click="openEdit(pais)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                </svg>
+                                            </button>
                                             <button @click="onDeleteConfirm(pais)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -86,5 +182,14 @@
                 </div>                
             </div>
         </div>
+        <!-- Instancia del modal -->
+        <CategoryModal
+            :isOpen="showModalCategory"
+            :fields="categoryFields"
+            :initialValues="initialValues"
+            :mode="modalMode"
+            @close=" showModalCategory = false"
+            @saveupdate="modalMode === 'create' ? handleSave($event) : handleUpdate($event)"
+        />
     </AppLayout>  
 </template>
