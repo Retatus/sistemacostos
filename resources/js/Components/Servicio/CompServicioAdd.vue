@@ -9,22 +9,22 @@
             <th class="w-7/24 px-4 py-2 text-sm font-medium">Servicio detalle</th>
             <th class="w-4/24 px-4 py-2 text-sm font-medium">Ubicacion</th>
             <th class="w-2/24 px-4 py-2 text-sm font-medium">Tipo pasajero</th>
-            <th class="w-2/24  px-4 py-2 text-sm font-medium">Acciones</th>
+            <th class="w-2/24 px-4 py-2 text-sm font-medium">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in Servicio" :key="index" className="bg-white border-b text-gray-900">
             <td class="px-4 py-2 text-sm">
-                <input v-model="item.monto" type="number" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                <input v-model="item.precios[0].monto" type="number" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <select v-model="item.precios[0].moneda" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option value="DOLARES">DOLARES</option>
                   <option value="SOLES">SOLES</option>
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <select v-model="item.precios[0].servicio_clase_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
                   <option v-for="option in ListaClases" :key="option.value" :value="option.value">
                     {{ option.label }}
@@ -48,7 +48,7 @@
                 </select>
             </td>
             <td class="px-4 py-2 text-sm">
-                <select v-model="item.tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <select v-model="item.precios[0].tipo_pasajero_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                   <option disabled value="">-- Selecciona una opción --</option>
                   <option v-for="option in ListaTipoPasajeros" :key="option.value" :value="option.value">
                     {{ option.label }}

@@ -4,7 +4,15 @@
     import AppLayout from '@/Layouts/AppLayout.vue';
     import FormularioProveedorAdd from '@/Components/Proveedor/CompProveedorAdd.vue';
 
-    const props = defineProps({ 
+    const props = defineProps({
+        Accion: {
+            type: String,
+            required: true,
+        },
+        Proveedor: {
+            type: Object, 
+            required: true
+        },
         ListaServicioDetalle: {
             type: Object, 
             required: true
@@ -28,6 +36,8 @@
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <FormularioProveedorAdd
+                        :Accion="Accion"
+                        :Proveedor="Proveedor"
                         :ListaServicioDetalle="ListaServicioDetalle"
                     />
                 </div>

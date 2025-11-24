@@ -92,6 +92,7 @@ class ProveedorController extends Controller
         
         return Inertia::render('proveedor/CreateProveedor', 
         [
+            'Accion' => 'create',
             'ListaServicioDetalle' => $formattedServicioDetalle
         ]); //compact('proveedorcategorias'));
     }
@@ -154,8 +155,9 @@ class ProveedorController extends Controller
       //$servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
         $proveedor = proveedor::with('servicios.precios')->find($proveedor->id);
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown($parametro = null);
-        return Inertia::render('proveedor/EditProveedor',
+        return Inertia::render('proveedor/CreateProveedor',
         [
+            'Accion' => 'edit',
             'Proveedor' => $proveedor,
             'ListaServicioDetalle' => $formattedServicioDetalle
         ]); //compact('proveedorcategorias'));

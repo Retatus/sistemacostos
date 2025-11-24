@@ -6,8 +6,8 @@
             <div class="col-span-1 ">
                 <label for="ruc" class=" text-sm font-medium text-gray-700">RUC</label>
                 <div class="flex items-center space-x-2">
-                    <input v-model="proveedor.ruc" type="text" id="ruc" class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el RUC">
-                    <button @click.prevent="showModal">Agregar</button>            
+                    <input v-model="proveedor.ruc" type="text" id="ruc" class="mt-1 w-full border-gray-300 rounded-md shadow-sm disabled:bg-gray-100 disabled:text-gray-500" :disabled="esEdicion" placeholder="Ingrese el RUC">
+                    <button @click.prevent="showModal = true">Agregar</button>            
                 </div>
             </div>
             <div class="col-span-2 ">
@@ -46,22 +46,25 @@
                 </select>  
             </div>
             <div class="col-span-1">
-                <label for="contacto" class="block text-sm font-medium text-gray-700">Contacto</label>
-                <input v-model="proveedor.contacto" type="text" id="contacto" required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Contacto">
-            </div>
-            <div class="col-span-1">
-                <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>           
-                <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                <label for="proveedor_categoria_id" class="block text-sm font-medium text-gray-700">Proveedor Categoria</label>         
+                <select v-model="proveedor.proveedor_categoria_id" @change="CategoryListUpdate" id="proveedor_categoria_id" 
+                class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                     <option disabled value="">-- Selecciona una opción --</option>
                     <option v-for="option in sListaProveedorCategorias" :key="option.value" :value="option.value">
                     {{ option.label }}
                     </option>
                 </select>
-            </div>  
-            <div class="col-span-1 " hidden>
-                <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
-                <div class="flex items-center space-x-2">
-                    <select v-model="proveedor.estado_activo" id="estado_activo" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+            </div>
+
+            <div class="col-span-1 flex items-center space-x-2">
+                <div class="w-full">
+                    <label for="contacto" class="block text-sm font-medium text-gray-700">Contacto</label>
+                    <input v-model="proveedor.contacto" type="text" id="contacto" required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Contacto">
+                </div>            
+                <div :class="['w-full', { hidden: !esEdicion }]">
+                    <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
+                    <select v-model="proveedor.estado_activo" id="estado_activo" 
+                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                         <option disabled value="">-- Selecciona una opción --</option>
                         <option v-for="option in estadoActivo" :key="option.id" :value="option.id">
                         {{ option.nombre }}
@@ -81,18 +84,18 @@
             </div>              
         </div>
         <Servicio
-            :Servicio="proveedor.detalles"
+            :Servicio="proveedor.servicios"
             :ListaServicioDetalle="ListaServicioDetalle"
         />
 
         <!-- Botón para agregar el ítem -->  
-        <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+        <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">{{Accion}}</PrimaryButton>
       </form>
     </div>
 </template>
   
 <script setup>
-    import { ref } from 'vue';
+    import { ref, toRaw , computed } from 'vue';
     import axios from 'axios';
     import Swal from 'sweetalert2';
     import Servicio from '../Servicio/CompServicioAdd.vue';
@@ -100,14 +103,24 @@
     import InputError from '@/Components/InputError.vue';
     import { useCategoriesStore } from '@/Stores/categories';
     const categoriesStore = useCategoriesStore();
-    
+
     // Definir las props
     const props = defineProps({
+        Accion: {
+            type: String,
+            required: true,
+        },
+        Proveedor: {
+            type: Object, 
+            default: () => ({})
+        },
         ListaServicioDetalle: {
             type: Object,
             required: true,
         }
     });
+
+    const esEdicion = computed(() => props.Accion === 'edit');
     
     const estadoActivo = ref([
         { id: '1', nombre: 'ACTIVO' }, 
@@ -121,36 +134,52 @@
     const sListaProveedorCategorias = ref({ ...categoriesStore.globals.proveedor_categories });
     const sListaTipoComprobantes = ref({ ...categoriesStore.globals.tipo_comprobantes });
     const sListaTipoSunats = ref({ ...categoriesStore.globals.tipo_sunat });
-    
+   
+    const proveedor = ref({});    
+   
     // Variables para el proveedor y detalle temporal
-    const proveedor = ref({
-        ruc: '',
-        razon_social: '',
-        direccion: '',
-        tipo_comprobante: 2,//factura
-        correo: '',
-        tipo_sunat: '',
-        contacto: '',
-        escliente: 0,
-        editado: 0,
-        estado_activo: 1,
-        tipo_documento_id: 1,
-        proveedor_categoria_id: '',
-        
-        detalles: [],
-    });
-    
-    const detalleTemporal = ref({
-        monto: '',
+    //proveedor.value = props.Proveedor;
+    if (esEdicion.value) {        
+        proveedor.value = { ...props.Proveedor };
+    } else {
+        proveedor.value = {
+            ruc: '',
+            razon_social: '',
+            direccion: '',
+            tipo_comprobante: 2,//factura
+            correo: '',
+            tipo_sunat: '',
+            contacto: '',
+            escliente: 0,
+            editado: 0,
+            estado_activo: 1,
+            tipo_documento_id: 1,
+            proveedor_categoria_id: '',
+            
+            servicios: [],
+        };
+    }
+
+    const precio = ref({
+        id: '',
+        anio: "2025",
+        monto: '66',
         moneda: 'DOLARES',
-        proveedor_categoria_id: '',
-        servicio_clase_id: '',
-        ubicacion_id: '',
         tipo_pasajero_id: '',
-        servicio_detalle_id: '',
-        estado_activo: 1,
+        servicio_id: '',
+        servicio_clase_id: '',
+        estado_activo: 1
     });
 
+    const servicios = ref({
+        id: '',
+        proveedor_id: '',
+        servicio_detalle_id: '',
+        ubicacion_id: '',
+        estado_activo: 1,
+        precios: [precio.value],
+    });
+    
     async function CategoryListUpdate() {
         try {     
             const data = {
@@ -167,30 +196,51 @@
         }        
     };
     
-    function updateDetalles(nuevosDetalles) {
-        // detalleTemporal.value = nuevosDetalles;
-    }
+    // function updateDetalles(nuevosDetalles) {
+    //     console.log("QUE FUE     ", nuevosDetalles);
+    //     //detalleTemporal.value = nuevosDetalles;
+    // }
     
     function agregarDetalle() {
-        // Agrega el detalle temporal a la lista de detalles
-        proveedor.value.detalles.push({ ...detalleTemporal.value });
-        // Limpia el detalle temporal
-        detalleTemporal.value = {
+        // Agregar copia plana del servicio
+        proveedor.value.servicios.push({ 
+            ...toRaw(servicios.value), 
+            precios: [ { ...toRaw(precio.value) } ] 
+        });
+
+        // Reiniciar precio y servicio
+        precio.value = {
+            id: '',
+            anio: "2025",
             monto: '',
             moneda: 'DOLARES',
-            proveedor_categoria_id: '',
-            servicio_clase_id: '',
-            ubicacion_id: '',
             tipo_pasajero_id: '',
+            servicio_id: '',
+            servicio_clase_id: '',
+            estado_activo: 1
+        };
+
+        servicios.value = {
+            id: '',
+            proveedor_id: '',
             servicio_detalle_id: '',
+            ubicacion_id: '',
             estado_activo: 1,
+            precios: [ { ...precio.value } ]
         };
     }
+
   
     async function submitProveedor() {
         try {
-            console.log(proveedor.value);
-            const response = await axios.post(route('proveedor_servicio.store'), proveedor.value);
+            let response;
+            if (!esEdicion.value) {
+                proveedor.value.editado = 0;
+                response = await axios.post(route('proveedor_servicio.store'), proveedor.value);
+            }else {
+                proveedor.value.editado = 1;
+                response = await axios.patch(route('proveedor_servicio.update', { proveedor_servicio: proveedor.value.id }), proveedor.value);
+            }
 
             if (response.status === 200) {
                 Swal.fire({
@@ -205,7 +255,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: `Error al agregar el elemento. ${response.data.message}`,
+                    text: `Error al ${props.Accion} el elemento. ${response.data.message}`,
                     confirmButtonText: 'Aceptar',
                 });
             }
