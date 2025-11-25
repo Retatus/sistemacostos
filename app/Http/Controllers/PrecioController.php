@@ -127,6 +127,21 @@ class PrecioController extends Controller
         return Inertia::render('Precio/Edit', compact('precio'));
     }
 
+     /**
+     * Update the specified resource in storage.
+     */
+    public function updateEstado($id)
+    {
+        try {
+            // Encuentra el servicio por su ID
+            Precio::where('servicio_id', $id)->update(['estado_activo' => 0]);
+    
+            return response()->json(['message' => 'Servicio desactivado con éxito.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al desactivar el servicio: ' . $e->getMessage()], 500);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      */

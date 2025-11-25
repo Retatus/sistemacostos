@@ -150,7 +150,12 @@ class ProveedorServicioService
     {
     try {
         return DB::transaction(function () use ($request) {
+            // Llamar al método `update` del controlador de proveedor para desactivar proveedor anterior
             $proveedorResponseUpdate = $this->proveedorController->updateEstado($request->id);
+
+            // Llamar al método `update` del controlador de servicio para desactivar servicios anteriores
+            $servicioResponseUpdate = $this->servicioController->updateEstado($request->id);
+
             // **Validar e insertar el proveedor**
             // Validar los datos del proveedor usando las reglas de ProveedorStoreRequest
             $proveedorData = $request->except(['servicios']);
@@ -209,6 +214,9 @@ class ProveedorServicioService
                     );
                 }
 
+                // Llamar al método `updateEstado` del controlador de precio para desactivar precios anteriores
+                $precioResponseUpdate = $this->precioController->updateEstado($servicioData['precios'][0]['servicio_id']);
+                
                 $servicioId = json_decode($servicioResponse->getContent())->data->id;
 
                 $precioData = $servicioData['precios'][0];

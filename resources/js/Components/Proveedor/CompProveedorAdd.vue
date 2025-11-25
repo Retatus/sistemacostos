@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto">
       <form @submit.prevent="submitProveedor">
-        <div class="grid grid-cols-3 gap-4 w-full p-5">
+        <div class="grid grid-cols-3 gap-4 w-full px-5">
             <!-- Primera fila -->
             <div class="col-span-1 ">
                 <label for="ruc" class=" text-sm font-medium text-gray-700">RUC</label>

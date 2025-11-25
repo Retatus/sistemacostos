@@ -1,0 +1,50 @@
+
+.text-excel {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.5rem;
+  line-height: 0.5rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+/* Estilo general de la tabla */
+.excel-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10px;
+}
+
+/* Bordes tipo Excel */
+.excel-table th,
+.excel-table td {
+  border: 1px solid #d0d7de;
+  padding: 1px;
+  text-align: left;
+  min-width: 100px;
+}
+
+/* Encabezado con fondo gris claro */
+.excel-table th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Filas alternas */
+.excel-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Hover para simular selección */
+.excel-table tr:hover td {
+  background-color: #dbeeff;
+  cursor: pointer;
+}
+
+/* Celda activa (opcional si usas JS para seleccionarla) */
+.excel-table td.active {
+  background-color: #cce5ff;
+  outline: 2px solid #3399ff;
+}
