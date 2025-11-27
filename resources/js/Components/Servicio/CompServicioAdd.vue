@@ -15,7 +15,10 @@
         <tbody>
           <tr v-for="(item, index) in Servicio" :key="index" className="bg-white border-b text-gray-900">
             <td class="px-1">
-                <input v-model="item.precios[0].monto" type="number" required="true" class="w-full border-gray-300 rounded-md shadow-sm text-xs text-end" />
+                <input type="text" v-model="item.precios[0].monto"
+                @input="handleMontoInput($event, index)"
+                @blur="formatMonto(index)"
+                class="monto-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
             </td>
             <td class="px-1">
                 <select v-model="item.precios[0].moneda" class="w-full border-gray-300 rounded-md shadow-sm text-xs">
@@ -101,7 +104,20 @@
       props.Servicio.splice(index, 1);
       emit('update', props.Servicio);
     }   
-      
+
+  // Métodos para manejar montos (igual que antes)
+  const handleMontoInput = (event, indexServicio) => {
+      let value = event.target.value.replace(/[^0-9.]/g, '')
+      const parts = value.split('.')
+      if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('')
+      if (parts.length === 2) value = parts[0] + '.' + parts[1].slice(0, 2)
+      props.Servicio[indexServicio].precios[0].monto = value
+  }
+
+  const formatMonto = (indexServicio) => {
+      let monto = parseFloat(props.Servicio[indexServicio].precios[0].monto) || 0
+      props.Servicio[indexServicio].precios[0].monto = monto.toFixed(2)
+  }      
 </script>
 
 
