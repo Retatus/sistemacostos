@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto">
         <form @submit.prevent="submitDestinoTuristico">
-            <div class="grid grid-cols-3 gap-4 w-full p-5">
+            <div class="grid grid-cols-3 gap-4 w-full px-5">
                 <!-- Primera fila -->
                 <div class="col-span-1 ">
                     <label for="nombre" class=" text-sm font-medium text-gray-700">Nombre</label>
@@ -30,7 +30,6 @@
                     <input v-model="destinoTuristico.nro_dias" type="text" id="nro_dias" disabled
                         class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Programa">
                 </div>
-
                 <div class="col-span-1 ">
                     <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
                     <div class="flex items-center space-x-2">
@@ -41,23 +40,25 @@
                                 {{ option.nombre }}
                             </option>
                         </select>
-                        <PrimaryButton type="button"
-                            class="mt-1"
-                            @click="agregarDetalle">
-                            Agregar
-                        </PrimaryButton>
                     </div>
                 </div>
-
-                <div class="col-span-3">
-                    <DestinioTuristicoDetalle
-                        :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
-                        :Lista_itinerarios = "Itinerarios"
-                        :Lista_proveedor = "Proveedores" 
-                        :Lista_servicio="Servicios" 
-                        @actualizarMontoPadre="actualizarTotalHijo" />
+                <div class=" col-span-3 bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
+                    <h3>Agregar Servicio</h3>
+                    <span @click="agregarDetalle()" class="text-sm justify-end cursor-pointer">
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>                    
+                        </i> 
+                    </span>
                 </div>
             </div>
+            <DestinioTuristicoDetalle
+                :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
+                :Lista_itinerarios = "Itinerarios"
+                :Lista_proveedor = "Proveedores" 
+                :Lista_servicio="Servicios" 
+                @actualizarMontoPadre="actualizarTotalHijo" />
             <div class="grid grid-cols-4 gap-4 w-full p-5">
                 <!-- Tercera fila -->
                 <div class="col-span-1">
@@ -81,8 +82,9 @@
                         class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Venta">
                 </div>
             </div>
+
             <!-- Botón para agregar el ítem -->
-            <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">Registrar</PrimaryButton>
+            <PrimaryButton type="submit" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded">{{Accion}}</PrimaryButton>
             <button type ="button" @click="mostrarConsola()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -93,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, toRaw, computed } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
@@ -104,6 +106,14 @@ const categoriesStore = useCategoriesStore();
 
 // Definir las props
 const props = defineProps({
+    Accion: {
+        type: String,
+        required: true,
+    },
+    DestinoTuristico: {
+        type: Object, 
+        default: () => ({})
+    },
     Lista_itinerarios: {
         type: Object,
         required: true,
@@ -128,25 +138,35 @@ const Servicios = ref([...props.Lista_servicio]);
 // Timer para controlar el delay
 let emptyInputTimeout = null;
 
+const esEdicion = computed(() => props.Accion === 'edit');
+
 const estadoActivo = ref([
     { id: '1', nombre: 'ACTIVO' },
     { id: '0', nombre: 'DESACTIVO' }
 ]);
 
+const destinoTuristico = ref({});    
+   
 // Variables para el destinoTuristico y detalle temporal
-const destinoTuristico = ref({
-    nombre: '',
-    descripcion: '',
-    pais_id: '',
-    nro_dias: 0,
-    costo_total: 0.00,
-    margen: 10,
-    ganancia: 0.00,
-    venta: 0.00,
-    estado_activo: 1,
+//destinoTuristico.value = props.Proveedor;
+if (esEdicion.value) {        
+    destinoTuristico.value = {...props.DestinoTuristico };
+} else {
+    // Variables para el destinoTuristico y detalle temporal
+    destinoTuristico.value = {
+        nombre: '',
+        descripcion: '',
+        pais_id: '',
+        nro_dias: 0,
+        costo_total: 0.00,
+        margen: 10,
+        ganancia: 0.00,
+        venta: 0.00,
+        estado_activo: 1,
 
-    destino_turistico_detalle: [],
-});
+        destino_turistico_detalle: [],
+    };
+}
 
 const destinoTuristicoDetalle = ref({
     nro_dia: 1,
@@ -224,7 +244,10 @@ const actualizarTotalHijo = () => {
 };
 
 function agregarDetalle() {
-    destinoTuristico.value.destino_turistico_detalle.push({ ...destinoTuristicoDetalle.value });
+    destinoTuristico.value.destino_turistico_detalle.push({ 
+        ...toRaw(destinoTuristicoDetalle.value),
+    });
+
     destinoTuristicoDetalle.value = {
         nro_dia: destinoTuristico.value.destino_turistico_detalle.length + 1,
         itinerario_id: '',
@@ -241,7 +264,15 @@ function agregarDetalle() {
 
 async function submitDestinoTuristico() {
     try {
-        const response = await axios.post(route('destino_turistico.store'), destinoTuristico.value);
+        let response;
+        if (!esEdicion.value) {
+            //destinoTuristico.value.editado = 0;
+            response = await axios.post(route('destino_turistico.store'), destinoTuristico.value);
+        }else {
+            //destinoTuristico.value.editado = 1;
+            //response = await axios.patch(route('destino_turistico.update', { proveedor_servicio: proveedor.value.id }), destinoTuristico.value);
+            response = await axios.post(route('destino_turistico.store'), destinoTuristico.value);
+        }
 
         if (response.status === 200) {
             Swal.fire({
@@ -256,7 +287,7 @@ async function submitDestinoTuristico() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: `Error al agregar el elemento. ${response.data.message}`,
+                text: `Error al ${props.Accion} el elemento. ${response.data.message}`,
                 confirmButtonText: 'Aceptar',
             });
         }

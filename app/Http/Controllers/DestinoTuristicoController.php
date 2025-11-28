@@ -44,7 +44,8 @@ class DestinoTuristicoController extends Controller
         $formattedProveedores = proveedor::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
         return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
-        [            
+        [
+            'Accion' => 'create',
             'ListaProveedor' =>  $formattedProveedores,
             'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
@@ -203,8 +204,9 @@ class DestinoTuristicoController extends Controller
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();
-        return Inertia::render('DestinoTuristico/EditDestinoTuristico', 
+        return Inertia::render('DestinoTuristico/CreateDestinoTuristico', 
         [
+            'Accion' => 'edit',
             'ListaProveedor' =>  $formattedProveedores,
             'ListaItinerarios' => $formattedItinerarios,
             'ListaServicio' => $formattedServicio,
