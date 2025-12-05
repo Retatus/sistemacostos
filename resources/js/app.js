@@ -6,7 +6,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
-
+import ChkEditor from '@/Components/ChkEditor.vue'
 // Importar Pinia y el plugin de persistencia
 import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
@@ -27,6 +27,7 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) })
             .use(plugin) // Usar el plugin de Inertia
             .use(ZiggyVue) // Usar Ziggy
+            .component('ChkEditor', ChkEditor) // Registrar el componente Editor globalmente
             .use(pinia); // Usar Pinia
 
         // Inicializar el store de categorías

@@ -10,9 +10,10 @@
                 </div>
                 <div class="col-span-2 ">
                     <label for="descripcion" class=" text-sm font-medium text-gray-700">Descripcion</label>
-                    <textarea v-model="destinoTuristico.descripcion" type="textarea" id="descripcion" required="true"
+                    <ChkEditor v-model="destinoTuristico.descripcion" width="100%" height="250px" />
+                    <!-- <textarea v-model="destinoTuristico.descripcion" type="textarea" id="descripcion" required="true"
                         class="mt-1   w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Ingrese la Descripcion"></textarea>
+                        placeholder="Ingrese la Descripcion"></textarea> -->
                 </div>
 
                 <!-- Segunda fila -->
@@ -99,6 +100,7 @@ import Swal from 'sweetalert2';
 import DestinioTuristicoDetalle from '@/Components/DestinoTuristicoDetalle/CompDestinoTuristicoDetalleAdd.vue';
 import PrimaryButton from '../PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
+import ChkEditor from '@/Components/ChkEditor.vue'
 import { useCategoriesStore } from '@/Stores/categories';
 const categoriesStore = useCategoriesStore();
 

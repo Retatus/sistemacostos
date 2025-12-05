@@ -54,7 +54,7 @@
                                         {{destinoturistico.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{destinoturistico.descripcion}}
+                                        <ChkEditor v-model="destinoturistico.descripcion" width="100%" height="250px" />
                                     </td> 
                                     <td hidden scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{destinoturistico.pais_id}}
@@ -112,6 +112,7 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import Pagination from '@/Components/Pagination.vue';
+    import ChkEditor from '@/Components/ChkEditor.vue'
 
     const page = usePage();
     const Paginate = ref(page.props.destinoturisticos);

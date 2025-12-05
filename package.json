@@ -20,6 +20,7 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "41.0.0",
         "@vuepic/vue-datepicker": "^11.0.2",
         "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
