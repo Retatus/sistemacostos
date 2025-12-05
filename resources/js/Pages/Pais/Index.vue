@@ -154,7 +154,7 @@
                                         {{pais.nombre}}
                                     </td> 
                                      <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{pais.estado_activo == 1 ? 'ACTIVO' : 'DESACTIVO'}}
+                                        {{pais.estado_activo == 1 ? 'ACTIVO' : 'INACTIVO'}}
                                     </td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">

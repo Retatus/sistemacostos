@@ -57,7 +57,7 @@
                                         {{servicio.ubicacion.nombre}}
                                     </td>                                     
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{servicio.estado_activo}}
+                                        {{servicio.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
                                     <td class="px-4 py-2 text-sm hover:text-blue-700">
                                         <Link :href="route('servicio.edit', servicio)">

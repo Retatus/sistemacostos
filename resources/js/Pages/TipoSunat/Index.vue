@@ -68,7 +68,7 @@
                                         {{tiposunat.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tiposunat.estado_activo}}
+                                        {{tiposunat.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

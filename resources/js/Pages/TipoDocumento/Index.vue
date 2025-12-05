@@ -68,7 +68,7 @@
                                         {{tipodocumento.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipodocumento.estado_activo}}
+                                        {{tipodocumento.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

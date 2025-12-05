@@ -48,7 +48,7 @@
                                         {{itinerario.duracion}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{itinerario.estado_activo}}
+                                        {{itinerario.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

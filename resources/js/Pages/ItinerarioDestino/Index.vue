@@ -66,7 +66,7 @@
                                         {{itinerariodestino.observacion}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{itinerariodestino.estado_activo}}
+                                        {{itinerariodestino.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

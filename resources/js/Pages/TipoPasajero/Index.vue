@@ -68,7 +68,7 @@
                                         {{tipopasajero.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{tipopasajero.estado_activo}}
+                                        {{tipopasajero.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

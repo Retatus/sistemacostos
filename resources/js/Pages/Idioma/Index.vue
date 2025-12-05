@@ -50,7 +50,7 @@
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                                                        <th scope='col' className='px-6 py-3'>
+                                    <th scope='col' className='px-6 py-3'>
                                         nombre
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
@@ -64,11 +64,11 @@
                             </thead>
                             <tbody>
                                 <tr v-for="idioma in Idiomas" className="bg-white border-b ">
-                                                                        <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{idioma.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{idioma.estado_activo}}
+                                        {{idioma.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">

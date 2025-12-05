@@ -68,7 +68,7 @@
                                         {{proveedorcategoria.nombre}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{proveedorcategoria.estado_activo}}
+                                        {{proveedorcategoria.estado_activo ? 'ACTIVO' : 'INACTIVO'}}
                                     </td>                                    
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
