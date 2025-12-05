@@ -1,37 +1,37 @@
 <template>
-  <div class="overflow-x-auto py-0 pt-5">    
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-      <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+  <div class="overflow-x-auto py-0 px-5">
+      <table className="excel-table w-full text-xs text-left rtl:text-right text-gray-500">
+        <thead className="text-xs text-gray-900 uppercase bg-gray-50">
         <tr class="bg-gray-100">
-          <th class="w-1/12 px-4 py-2 text-sm font-medium">Nro dias</th>
-          <th class="w-3/12 px-4 py-2 text-sm font-medium">Nombre</th>
-          <th class="w-5/12 px-4 py-2 text-sm font-medium">Descripcion</th>
-          <th class="w-1/12 px-4 py-2 text-sm font-medium">Observacion</th>
-          <th class="w-1/12 px-4 py-2 text-sm font-medium">Servicio</th>
-          <th class="w-1/12 px-4 py-2 text-sm font-medium">Acciones</th>
+          <th class="w-1/12 px-4 py-2">Nro dias</th>
+          <th class="w-3/12 px-4 py-2">Nombre</th>
+          <th class="w-5/12 px-4 py-2">Descripcion</th>
+          <th class="w-1/12 px-4 py-2">Observacion</th>
+          <th class="w-1/12 px-4 py-2">Servicio</th>
+          <th class="w-1/12 px-4 py-2">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in Lista_destino_turistico_detalle" :key="index"
           className="bg-white border-b text-gray-900">
-          <td class="px-4 py-2 text-sm">
-            <label class="block text-sm font-medium text-gray-700">Dia {{ index + 1 }}:</label>
+          <td class="px-1 ">
+            <label class="mx-2 block text-xs font-medium text-gray-700">Dia {{ index + 1 }}:</label>
           </td>
-          <td class="px-4 py-2 text-sm">
-            <select v-model="item.itinerario_id" @change="ItinerarioDescripcion(index)" class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+          <td class="px-1">
+            <select v-model="item.itinerario_id" @change="ItinerarioDescripcion(index)" class="w-full border-gray-300 rounded-md shadow-sm text-xs">
               <option disabled value="">-- Selecciona una opción --</option>
               <option v-for="option in Lista_itinerarios" :key="option.value" :value="option.value" :data-info="option.descripcion">
                 {{ option.label }}
               </option>
             </select>
           </td>
-          <td class="px-4 py-2 text-sm">
-            <textarea v-model="item.descripcion" name="descripcion" rows="2" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
+          <td class="px-1">
+            <textarea v-model="item.descripcion" name="descripcion" rows="2" class="w-full border-gray-300 rounded-md shadow-sm text-xs"></textarea>
           </td>
-          <td class="px-4 py-2 text-sm text-center hover:text-green-700">
-            <textarea v-model="item.observacion" name="observacion" rows="2" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"></textarea>
+          <td class="px-1 text-center hover:text-green-700">
+            <textarea v-model="item.observacion" name="observacion" rows="2" class="w-full border-gray-300 rounded-md shadow-sm text-xs"></textarea>
           </td>
-          <td class="px-4 py-2 text-sm text-center hover:text-green-700">
+          <td class="px-1 text-center hover:text-green-700">
             <button type="button" @click="showModal(index)">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
@@ -41,10 +41,10 @@
             </button>
             {{ item.destino_turistico_detalle_servicio.length }}
           </td>
-          <td hidden class="px-4 py-2 text-sm">
-            <input v-model="item.estado_valido" type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+          <td hidden class="px-1">
+            <input v-model="item.estado_valido" type="text" class="w-full border-gray-300 rounded-md shadow-sm text-xs"/>
           </td>
-          <td class="px-4 py-2 text-sm hover:text-red-700 text-center">
+          <td class="px-1 hover:text-red-700 text-center">
             <button type="button" @click="removeItem(index)">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
@@ -75,6 +75,9 @@ import { ref, computed, toRefs, onMounted } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServicio/CompDestinoTuristicoDetalleServicioAdd.vue';
 import { defineProps, defineEmits } from 'vue';
+
+// resources/js/app.js o main.js
+import '../../../css/excelTable.css';
 
 const props = defineProps({
   Lista_itinerarios: {

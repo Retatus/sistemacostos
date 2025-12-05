@@ -95,7 +95,7 @@
 </template>
   
 <script setup>
-    import { ref, toRaw , computed } from 'vue';
+    import { ref, toRaw, computed } from 'vue';
     import axios from 'axios';
     import Swal from 'sweetalert2';
     import Servicio from '../Servicio/CompServicioAdd.vue';
@@ -118,14 +118,7 @@
             type: Object,
             required: true,
         }
-    });
-
-    const esEdicion = computed(() => props.Accion === 'edit');
-    
-    const estadoActivo = ref([
-        { id: '1', nombre: 'ACTIVO' }, 
-        { id: '0', nombre: 'DESACTIVO' }
-    ]);
+    });    
     
     // Variables reactivas
     const showModal = ref(false);
@@ -134,6 +127,13 @@
     const sListaProveedorCategorias = ref({ ...categoriesStore.globals.proveedor_categories });
     const sListaTipoComprobantes = ref({ ...categoriesStore.globals.tipo_comprobantes });
     const sListaTipoSunats = ref({ ...categoriesStore.globals.tipo_sunat });
+
+    const esEdicion = computed(() => props.Accion === 'edit');
+    
+    const estadoActivo = ref([
+        { id: '1', nombre: 'ACTIVO' }, 
+        { id: '0', nombre: 'DESACTIVO' }
+    ]);
    
     const proveedor = ref({});    
    

@@ -5,6 +5,14 @@
     import CompDestinoTuristicoAdd from '@/Components/DestinoTuristico/CompDestinoTuristicoAdd.vue';
 
     const props = defineProps({
+        Accion: {
+            type: String,
+            required: true,
+        },
+        DestinoTuristico: {
+            type: Object, 
+            default: () => ({})
+        },
         ListaItinerarios: {
             type: Object, 
             required: true
@@ -35,7 +43,9 @@
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
                 <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <CompDestinoTuristicoAdd 
+                    <CompDestinoTuristicoAdd
+                        :Accion="Accion"
+                        :DestinoTuristico="DestinoTuristico"
                         :Lista_itinerarios="ListaItinerarios" 
                         :Lista_proveedor="ListaProveedor"
                         :Lista_servicio="ListaServicio"       
