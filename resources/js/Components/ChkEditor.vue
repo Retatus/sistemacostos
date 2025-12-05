@@ -44,11 +44,11 @@ onMounted(() => {
       toolbar: [
         'heading',        // Encabezados
         '|',
-        'bold', 'italic', 'underline', 'strikethrough', // Estilos básicos
+        'bold', 'italic', // 'underline', 'strikethrough', // Estilos básicos
         '|',
         'link', 'blockQuote', // Enlaces y citas
         '|',
-        'bulletedList', 'numberedList', 'todoList', // Listas
+        'bulletedList', 'numberedList', // 'todoList', // Listas
         '|',
         'insertTable', 'imageUpload', // Tablas e imágenes
         '|',

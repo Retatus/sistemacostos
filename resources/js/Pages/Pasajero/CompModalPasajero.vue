@@ -8,40 +8,40 @@
                 </div>
                 <!-- Body -->
                 <div class="overflow-x-auto p-5 border-b">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                    <table className="excel-table w-full text-xs text-left rtl:text-right text-gray-500">
                         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
                             <tr class="bg-gray-100">
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nombre</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_paterno</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">apellido_materno</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Doc</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Nro Doc</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Pais</th>
-                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Preview</th>
-                                <th class="w-3/13 px-4 py-2 text-sm font-medium">Adjunto</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Tipo Pax</th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Clase </th>
-                                <th class="w-1/13 px-4 py-2 text-sm font-medium">Acciones </th>
+                                <th class="w-1/13 px-4 py-2">Nombre</th>
+                                <th class="w-1/13 px-4 py-2">apellido_paterno</th>
+                                <th class="w-1/13 px-4 py-2">apellido_materno</th>
+                                <th class="w-1/13 px-4 py-2">Tipo Doc</th>
+                                <th class="w-1/13 px-4 py-2">Nro Doc</th>
+                                <th class="w-1/13 px-4 py-2">Pais</th>
+                                <th class="w-3/13 px-4 py-2">Preview</th>
+                                <th class="w-3/13 px-4 py-2">Adjunto</th>
+                                <th class="w-1/13 px-4 py-2">Tipo Pax</th>
+                                <th class="w-1/13 px-4 py-2">Clase </th>
+                                <th class="w-1/13 px-4 py-2">Acciones </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in ListaPasajeros" :key="index"
                                 className="bg-white border-b text-gray-900">
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <input v-model="item.nombre" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <input v-model="item.apellido_paterno" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <input v-model="item.apellido_materno" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <select v-model="item.documento_tipo_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                                         <option disabled value="">-- Selecciona una opción --</option>
                                         <option v-for="option in TipoDocumento" :key="option.value"
                                             :value="option.value">
@@ -49,33 +49,33 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <input v-model="item.documento_numero" type="text" required="true"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <select v-model="item.pais_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                                         <option disabled value="">-- Selecciona una opción --</option>
                                         <option v-for="option in Pais" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
                                 </td>
-                                <td class="px-4 py-2 text-sm">
-                                    <div v-if="item.temp_file_preview" class="text-sm text-gray-500">
+                                <td class="px-1">
+                                    <div v-if="item.temp_file_preview" class="text-xs text-gray-500">
                                         <img v-if="item.documento_file.type !== 'application/pdf'" :src="item.temp_file_preview" class="h-20 w-20 object-cover mt-2" />
                                     </div>
-                                    <div v-else class="text-sm text-gray-500">
+                                    <div v-else class="text-xs text-gray-500">
                                         <img v-if="item.documento_file" :src="`/storage/${item.documento_file}`" class="h-20 w-20 object-cover mt-2">
                                     </div>
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <input type="file" hidden :id="'fileInput-' + index" @change="handleFileChange($event, index)" />
                                     <!-- Botón personalizado -->
                                     <div class="flex items-center space-x-2">
-                                        <input v-model="item.documento_file" type="text" hidden required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
-                                        <input v-model="item.temp_file_name" type="text" required="true" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                                        <input v-model="item.documento_file" type="text" hidden required="true" class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
+                                        <input v-model="item.temp_file_name" type="text" required="true" class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
                                         <label :for="'fileInput-' + index" class="custom-file-label">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -84,25 +84,25 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <select v-model="item.tipo_pasajero_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                                         <option disabled value="">-- Selecciona una opción --</option>
                                         <option v-for="option in TipoPasajero" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
                                 </td>
-                                <td class="px-4 py-2 text-sm">
+                                <td class="px-1">
                                     <select v-model="item.clase_id"
-                                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                                         <option disabled value="">-- Selecciona una opción --</option>
                                         <option v-for="option in TipoClase" :key="option.value" :value="option.value">
                                             {{ option.label }}
                                         </option>
                                     </select>
                                 </td>
-                                <td class="px-4 py-2 text-sm hover:text-red-700 text-center">
+                                <td class="px-1 hover:text-red-700 text-center">
                                     <button type="button" @click="removeItem(index)">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -120,15 +120,15 @@
                     <div class="grid grid-cols-4 gap-4 w-full p-5">
                         <div class="col-span-1">
                             <label class="block text-sm font-medium text-gray-700">Numero de pasajeros</label> 
-                            <input type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" :value='ListaPasajeros.length'/>  
+                            <input type="text" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs" :value='ListaPasajeros.length'/>  
                         </div>
                         <div class="col-span-1">
                             <label for = "adjuntoGeneral" class="block text-sm font-medium text-gray-700">Adjunto Doc.</label>    
-                            <input type="file" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="adjuntoGeneral"/> 
+                            <input type="file" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs" id="adjuntoGeneral"/> 
                         </div>
                         <div class="col-span-1">
                             <label class="block text-sm font-medium text-gray-700">Documentacion</label> 
-                            <select class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
+                            <select class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
                                 <!-- <option disabled value="">-- Selecciona una opción --</option> -->
                                 <option v-for="option in EstadoDocumentacion" :key="option.value" :value="option.value">
                                     {{ option.label }}

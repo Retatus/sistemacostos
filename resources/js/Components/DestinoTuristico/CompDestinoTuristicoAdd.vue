@@ -1,59 +1,71 @@
 <template>
     <div class="container mx-auto">
         <form @submit.prevent="submitDestinoTuristico">
-            <div class="grid grid-cols-3 gap-4 w-full px-5">
-                <!-- Primera fila -->
-                <div class="col-span-1 ">
-                    <label for="nombre" class=" text-sm font-medium text-gray-700">Nombre</label>
-                    <input v-model="destinoTuristico.nombre" type="text" id="nombre"
-                        class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Programa">
-                </div>
-                <div class="col-span-2 ">
-                    <label for="descripcion" class=" text-sm font-medium text-gray-700">Descripcion</label>
-                    <ChkEditor v-model="destinoTuristico.descripcion" width="100%" height="250px" />
-                    <!-- <textarea v-model="destinoTuristico.descripcion" type="textarea" id="descripcion" required="true"
-                        class="mt-1   w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Ingrese la Descripcion"></textarea> -->
-                </div>
+            <div class="grid grid-cols-3 gap-3 w-full px-5">
+                <!-- Columna izquierda (col-span-1) -->
+                <div class="col-span-1 flex flex-col space-y-4">
+                    <!-- Nombre -->
+                    <div>
+                        <label for="nombre" class="text-sm font-medium text-gray-700">Nombre</label>
+                        <input v-model="destinoTuristico.nombre" type="text" id="nombre"
+                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                            placeholder="Ingrese el Programa">
+                    </div>
 
-                <!-- Segunda fila -->
-                <div class="col-span-1">
-                    <label for="pais_id" class="block text-sm font-medium text-gray-700">Pais</label>
-                    <select v-model="destinoTuristico.pais_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="pais_id">
-                        <option disabled value="">-- Selecciona una opción --</option>
-                        <option v-for="option in Pais" :key="option.value" :value="option.value">
+                    <!-- País -->
+                    <div>
+                        <label for="pais_id" class="block text-sm font-medium text-gray-700">País</label>
+                        <select v-model="destinoTuristico.pais_id"
+                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="pais_id">
+                            <option disabled value="">-- Selecciona una opción --</option>
+                            <option v-for="option in Pais" :key="option.value" :value="option.value">
                             {{ option.label }}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-span-1">
-                    <label for="nro_dias" class="block text-sm font-medium text-gray-700">Nro dias</label>
-                    <input v-model="destinoTuristico.nro_dias" type="text" id="nro_dias" disabled
-                        class="mt-1   w-full border-gray-300 rounded-md shadow-sm" placeholder="Ingrese el Programa">
-                </div>
-                <div class="col-span-1 ">
-                    <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
-                    <div class="flex items-center space-x-2">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Nro días -->
+                    <div>
+                        <label for="nro_dias" class="block text-sm font-medium text-gray-700">Nro días</label>
+                        <input v-model="destinoTuristico.nro_dias" type="text" id="nro_dias" disabled
+                            class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
+                            placeholder="Ingrese el Programa">
+                    </div>
+
+                    <!-- Estado activo -->
+                    <div :class="['w-full', { hidden: !esEdicion }]">
+                        <label for="estado_activo" class="block text-sm font-medium text-gray-700">Estado Activo</label>
                         <select v-model="destinoTuristico.estado_activo" id="estado_activo"
                             class="mt-1 w-full border-gray-300 rounded-md shadow-sm">
                             <option disabled value="">-- Selecciona una opción --</option>
                             <option v-for="option in estadoActivo" :key="option.id" :value="option.id">
-                                {{ option.nombre }}
+                            {{ option.nombre }}
                             </option>
                         </select>
                     </div>
                 </div>
-                <div class=" col-span-3 bg-black  text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
+
+                <!-- Columna derecha (col-span-3) -->
+                <div class="col-span-3">
+                    <label for="descripcion" class="text-sm font-medium text-gray-700">Descripción</label>
+                    <ChkEditor v-model="destinoTuristico.descripcion" width="100%" height="250px" />
+                </div>
+
+                <!-- Fila completa para agregar servicio -->
+                <div class="col-span-4 bg-black text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
                     <h3>Agregar Servicio</h3>
                     <span @click="agregarDetalle()" class="text-sm justify-end cursor-pointer">
-                        <i>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>                    
-                        </i> 
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </i>
                     </span>
                 </div>
             </div>
+
             <DestinioTuristicoDetalle
                 :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
                 :Lista_itinerarios = "Itinerarios"

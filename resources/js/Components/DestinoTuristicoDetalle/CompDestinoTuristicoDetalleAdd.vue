@@ -14,7 +14,7 @@
       <tbody>
         <tr v-for="(item, index) in Lista_destino_turistico_detalle" :key="index"
           className="bg-white border-b text-gray-900">
-          <td class="px-1 ">
+          <td class="px-1">
             <label class="mx-2 block text-xs font-medium text-gray-700">Dia {{ index + 1 }}:</label>
           </td>
           <td class="px-1">
