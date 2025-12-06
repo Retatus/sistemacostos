@@ -67,6 +67,7 @@ class Servicio extends Model
                 return [
                     'value' => $servicio->servicio_id,
                     'label' => $servicio->descripcion . ' [' . $servicio->tipo_pasajero_nombre . ']' . ' [' . $servicio->moneda . ' | ' . $servicio->monto . ']',
+                    'moneda' => $servicio->moneda,
                     'monto' => $servicio->monto
                 ];
             });

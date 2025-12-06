@@ -7,7 +7,7 @@
   <div class="overflow-x-auto py-0">
     <div class="grid grid-cols-8 gap-4 w-full p-5">
       <div class="col-span-1">
-        <label class="block text-xs font-medium text-gray-700">Proveedor Categoria</label>           
+        <label class="block text-xs font-medium text-gray-700">Proveedor Categoria</label>
         <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
           <option disabled value="">-- Selecciona una opción --</option>
           <option v-for="option in sProveedorCategorias" :key="option.value" :value="option.value">
@@ -16,7 +16,7 @@
         </select>
       </div>
       <div class="col-span-2">
-        <label class="block text-xs font-medium text-gray-700">Proveedor</label>           
+        <label class="block text-xs font-medium text-gray-700">Proveedor</label>
         <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
           <option disabled value="">-- Selecciona una opción --</option>
           <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
@@ -25,23 +25,23 @@
         </select>
       </div>
       <div class="col-span-4 ">
-        <label class="block text-xs font-medium text-gray-700">Servicio detalle</label>           
+        <label class="block text-xs font-medium text-gray-700">Servicio detalle</label>
         <select v-model="selectedValueServicio" @change="ServicioMonto" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
             <option disabled value="">-- Selecciona una opción --</option>
-            <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-info="option.monto">
+            <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-moneda="option.moneda" :data-monto="option.monto">
             {{ option.label }}
             </option>
         </select>
       </div>
       <div class="col-span-1">
         <label class="block text-xs font-medium text-gray-700">&nbsp;</label>
-        <PrimaryButton 
+        <PrimaryButton
           type="button"
           class="mt-1"
           @click="agregarDestinoTuristicoDetalleServicio">
           Agregar
         </PrimaryButton>
-      </div>            
+      </div>
     </div>
     <div class="px-4 py-3">
       <table className="excel-table w-full text-sm text-left rtl:text-right text-gray-500">
@@ -81,7 +81,12 @@
                 </select>
             </td>
             <td class="px-1">
-                <input v-model="item.monto" @input="calcularTotal" type="text" required="true" class="w-full border-gray-300 rounded-md shadow-sm text-xs" />
+              <div class="relative mt-1">
+                <!-- Input alineado a la derecha -->
+                <input v-model="item.monto" @input="calcularTotal" type="text" required class="w-full border-gray-300 rounded-md shadow-sm text-xs text-right"/>
+                <!-- Span alineado a la izquierda -->
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-xs">{{ item.moneda }}</span>
+              </div>
             </td>
             <td class="px-1 hover:text-red-700 text-center">
               <button type ="button" @click="removeItem(index)">
@@ -134,6 +139,7 @@ const props = defineProps({
   const selectedValueCategoria = ref("");
   const selectedValueProveedor = ref("");
   const selectedValueServicio = ref("");
+  const selectedValueServicioMoneda = ref("");
   const selectedValueServicioMonto = ref("");
   const selectedValueServicioObservacion = ref("");
 
@@ -144,91 +150,92 @@ const props = defineProps({
     servicio_id: '',
     itinerario_destino_id: '',
     observacion: '',
+    moneda: '',
     monto: 0.00,
   });
 
   // Sincronizar los valores individuales con el objeto principal
-  watch([selectedValueCategoria, selectedValueProveedor, selectedValueServicio, selectedValueServicioMonto, selectedValueServicioObservacion], 
-    ([categoriaTemp, proveedorTemp, servicioTemp, costoTemp, observacionTemp]) => {
+  watch([selectedValueCategoria, selectedValueProveedor, selectedValueServicio, selectedValueServicioMoneda, selectedValueServicioMonto, selectedValueServicioObservacion],
+    ([categoriaTemp, proveedorTemp, servicioTemp, monedaTemp, costoTemp, observacionTemp]) => {
       destinoTuristicoDetalleServicio.value.proveedor_categoria_id = categoriaTemp;
       destinoTuristicoDetalleServicio.value.proveedor_id = proveedorTemp;
       destinoTuristicoDetalleServicio.value.servicio_id = servicioTemp;
+      destinoTuristicoDetalleServicio.value.moneda = monedaTemp;
       destinoTuristicoDetalleServicio.value.monto = costoTemp;
       destinoTuristicoDetalleServicio.value.observacion = observacionTemp;
     }
-  );   
-  
-    function agregarDestinoTuristicoDetalleServicio() { 
-      props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
-        // Reiniciar los valores individuales y el objeto
-        // selectedValueCategoria.value = '';
-        // selectedValueProveedor.value = '';
-        // selectedValueServicio.value = '';
-        destinoTuristicoDetalleServicio.value = {
-            nro_orden: destinoTuristicoDetalleServicio.value.nro_orden + 1,
-            proveedor_categoria_id: '',
-            proveedor_id: '',
-            servicio_id: '',
-            itinerario_destino_id: '',
-            observacion: '',
-            monto: 0.00,            
-        };
-        calcularTotal();
-    }
-    
-    function closeModal() {
+  );
+
+  function agregarDestinoTuristicoDetalleServicio() {
+    props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
+      // Reiniciar los valores individuales y el objeto
+      // selectedValueCategoria.value = '';
+      // selectedValueProveedor.value = '';
+      // selectedValueServicio.value = '';
+    // destinoTuristicoDetalleServicio.value = {
+    //     nro_orden: destinoTuristicoDetalleServicio.value.nro_orden + 1,
+    //     proveedor_categoria_id: '',
+    //     proveedor_id: '',
+    //     servicio_id: '',
+    //     itinerario_destino_id: '',
+    //     observacion: '',
+    //     moneda: '',
+    //     monto: 0.00,
+    // };
+    calcularTotal();
+  }
+
+  function closeModal() {
       emit('close');
   }
 
-    const removeItem = (index) => {
-      props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
-      emit('update', props.Lista_destino_turistico_detalle_servicio);
-      calcularTotal();
-    }
+  const removeItem = (index) => {
+    props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
+    emit('update', props.Lista_destino_turistico_detalle_servicio);
+    calcularTotal();
+  }
 
-    function ServicioMonto() {
-      const selectElement = event.target;
-      const selectedOption = selectElement.options[selectElement.selectedIndex];
-      const monto = selectedOption.getAttribute('data-info');
-      selectedValueServicioMonto.value = monto; 
-      selectedValueServicioObservacion.value = selectElement.options[selectElement.selectedIndex].label;  
+  function ServicioMonto() {
+    const selectElement = event.target;
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const moneda = selectedOption.getAttribute('data-moneda');
+    const monto = selectedOption.getAttribute('data-monto');
+    selectedValueServicioMoneda.value = moneda;
+    selectedValueServicioMonto.value = monto;
+    selectedValueServicioObservacion.value = selectElement.options[selectElement.selectedIndex].label;
   };
 
-    const calcularTotal = () => {
-      const total = props.Lista_destino_turistico_detalle_servicio.reduce((
-        suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.monto || 0), 0 );
-      emit("actualizarTotal", total); // Emitir el total al componente Hijo
-    };
-    async function ListaCategoriaProveedor() {
-        try {     
-            const data = {
-                proveedor_categoria_id: destinoTuristicoDetalleServicio.value.proveedor_categoria_id,
-            }     
-            const response = await axios.post(`${route('proveedor')}/proveedorList`, data);   
-            if (response.status === 200) {
-                //console.log('Listado de categorias:', response.data);            
-                ListaProveedorXCategoria.value = response.data;
-            }               
-        } catch (error) {
-            console.error('Error al actualizar los datos:', error);
-        }        
-    };
+  const calcularTotal = () => {
+    const total = props.Lista_destino_turistico_detalle_servicio.reduce((
+      suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.monto || 0), 0 );
+    emit("actualizarTotal", total); // Emitir el total al componente Hijo
+  };
+  async function ListaCategoriaProveedor() {
+      try {
+          const data = {
+              proveedor_categoria_id: destinoTuristicoDetalleServicio.value.proveedor_categoria_id,
+          }
+          const response = await axios.post(`${route('proveedor')}/proveedorList`, data);
+          if (response.status === 200) {
+              ListaProveedorXCategoria.value = response.data;
+          }
+      } catch (error) {
+          console.error('Error al actualizar los datos:', error);
+      }
+  };
 
-    async function ListaProveedorServicio() {
-        try {     
-            const data = {
-              proveedor_id: destinoTuristicoDetalleServicio.value.proveedor_id,
-            }     
-            const response = await axios.post(`${route('servicio')}/servicioList`, data);   
-            if (response.status === 200) {
-                //console.log('Listado de servicios:', response.data);            
-                ListaServiciosXProveedor.value = response.data;
-            }               
-        } catch (error) {
-            console.error('Error al actualizar los datos:', error);
-        }        
-    };      
+  async function ListaProveedorServicio() {
+      try {
+          const data = {
+            proveedor_id: destinoTuristicoDetalleServicio.value.proveedor_id,
+          }
+          const response = await axios.post(`${route('servicio')}/servicioList`, data);
+          if (response.status === 200) {
+              //console.log('Listado de servicios:', response.data);
+              ListaServiciosXProveedor.value = response.data;
+          }
+      } catch (error) {
+          console.error('Error al actualizar los datos:', error);
+      }
+  };
 </script>
-
-
-  
