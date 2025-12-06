@@ -22,8 +22,8 @@
             </td>
             <td class="px-1">
                 <select v-model="item.precios[0].moneda" class="w-full border-gray-300 rounded-md shadow-sm text-xs">
-                  <option value="DOLARES">DOLARES</option>
-                  <option value="SOLES">SOLES</option>
+                  <option value="USD">USD</option>
+                  <option value="PEN">PEN</option>
                 </select>
             </td>
             <td class="px-1">

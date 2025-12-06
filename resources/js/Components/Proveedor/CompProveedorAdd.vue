@@ -132,7 +132,7 @@
     
     const estadoActivo = ref([
         { id: '1', nombre: 'ACTIVO' }, 
-        { id: '0', nombre: 'DESACTIVO' }
+        { id: '0', nombre: 'INACTIVO' }
     ]);
    
     const proveedor = ref({});    
@@ -164,7 +164,7 @@
         id: '',
         anio: "2025",
         monto: '66',
-        moneda: 'DOLARES',
+        moneda: 'USD',
         tipo_pasajero_id: '',
         servicio_id: '',
         servicio_clase_id: '',
@@ -213,7 +213,7 @@
             id: '',
             anio: "2025",
             monto: '',
-            moneda: 'DOLARES',
+            moneda: 'USD',
             tipo_pasajero_id: '',
             servicio_id: '',
             servicio_clase_id: '',

@@ -36,7 +36,7 @@
 
     const form = useForm({
         anio: "",
-        moneda: "DOLARES",
+        moneda: "USD",
         monto: "",
         tipo_pasajero_id: "",
         servicio_id: "",
@@ -58,8 +58,8 @@
             label: 'Moneda',
             type: 'select', 
             options: [
-                { value: 'DOLARES', label: 'DOLARES' },
-                { value: 'SOLES', label: 'SOLES' }, 
+                { value: 'USD', label: 'USD' },
+                { value: 'PEN', label: 'PEN' }, 
             ],             
         },
         monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },

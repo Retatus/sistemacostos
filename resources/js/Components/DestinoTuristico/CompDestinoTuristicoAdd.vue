@@ -53,7 +53,7 @@
 
                 <!-- Fila completa para agregar servicio -->
                 <div class="col-span-4 bg-black text-slate-300 p-2 rounded mb-2 flex justify-between items-center">
-                    <h3>Agregar Servicio</h3>
+                    <h3>Agregar Itinerario</h3>
                     <span @click="agregarDetalle()" class="text-sm justify-end cursor-pointer">
                     <i>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
