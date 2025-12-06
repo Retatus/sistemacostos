@@ -83,9 +83,10 @@
             <td class="px-1">
               <div class="relative mt-1">
                 <!-- Input alineado a la derecha -->
-                <input v-model="item.monto" @input="calcularTotal" type="text" required class="w-full border-gray-300 rounded-md shadow-sm text-xs text-right"/>
+                <input v-model="item.monto" @input="calcularTotal" type="text" required class="w-full border-gray-300 text-black font-bold rounded-md shadow-sm text-xs text-right"/>
                 <!-- Span alineado a la izquierda -->
-                <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-xs">{{ item.moneda }}</span>
+                <span :class="{ 'text-right text-green-500': item.moneda === 'USD', 'text-left text-blue-500': item.moneda === 'PEN' }" 
+                class="absolute inset-y-0 left-0 flex items-center pl-2 text-xs">{{ item.moneda }}</span>
               </div>
             </td>
             <td class="px-1 hover:text-red-700 text-center">

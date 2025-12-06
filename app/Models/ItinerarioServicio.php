@@ -11,7 +11,7 @@ class ItinerarioServicio extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['nro_orden', 'hora', 'itinerario_servicio_id', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'monto', 'estado_activo'];
+    protected $fillable = ['nro_orden', 'hora', 'itinerario_servicio_id', 'servicio_id', 'itinerario_destino_id', 'proveedor_categoria_id', 'proveedor_id', 'observacion', 'moneda', 'monto', 'estado_activo'];
 
     // App/Models/ItinerarioServicio.php
     public function servicio()
