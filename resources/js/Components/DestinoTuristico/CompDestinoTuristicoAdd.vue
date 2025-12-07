@@ -71,7 +71,8 @@
                 :Lista_itinerarios = "Itinerarios"
                 :Lista_proveedor = "Proveedores" 
                 :Lista_servicio="Servicios" 
-                @actualizarMontoPadre="actualizarTotalHijo" />
+                @actualizarMontoPadre="actualizarTotalHijo"
+            />
             <div class="grid grid-cols-4 gap-4 w-full p-5">
                 <!-- Tercera fila -->
                 <div class="col-span-1">

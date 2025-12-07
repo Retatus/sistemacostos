@@ -106,12 +106,11 @@
                     </select>
                 </div>
                 <div class="col-span-4 ">
-                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino
-                        Turistico</label>
+                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino Turistico</label>
                     <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
                         class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
                         <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
+                        <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value" :class="{ 'text-blue': option.value === 'PEN', 'text-green': option.value === 'USD' }">
                             {{ option.label }}
                         </option>
                     </select>
@@ -224,7 +223,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id"
-                                        className="bg-white border-b text-gray-900">
+                                        className="bg-white border-b text-gray-900 font-semibold">
                                         <td class="px-1" hidden>
                                             <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
                                                 class="w-full border-gray-300 rounded-md shadow-sm" />
@@ -271,11 +270,11 @@
                                             </div>                                            
                                         </td>
                                         <td class="px-1">
-                                            <div class="flex space-x-1 justify-between">
+                                            <div class="flex space-x-1 justify-between" :class="{'text-green-600' : servicioDetalle.pasajero_servicios.moneda === 'USD', 'text-blue-600' : servicioDetalle.pasajero_servicios.moneda === 'PEN'}">
                                                 <select v-model="servicioDetalle.pasajero_servicios.moneda"
                                                     class="w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
-                                                    <option value="USD">USD</option>
-                                                    <option value="PEN">PEN</option>
+                                                    <option value="USD" class="bg-blue-600 text-white hover:bg-white hover:text-blue-700">USD</option>
+                                                    <option value="PEN" class="bg-green-600 text-white hover:bg-white hover:text-green-700">PEN</option>
                                                 </select>
                                                 <div class="flex space-x-1 w-4/6">
                                                     <input type="text" v-model="servicioDetalle.pasajero_servicios.monto"
@@ -306,14 +305,14 @@
                                                         :class="{
                                                             'p-2 font-medium rounded-full border-rounded text-gray-900 text-left': true,
                                                             'bg-yellow-400': servicioDetalle.pasajero_servicios.estatus == 0,
-                                                            'bg-green-400': servicioDetalle.pasajero_servicios.estatus == 1,
+                                                            'bg-green-500': servicioDetalle.pasajero_servicios.estatus == 1,
                                                             'bg-red-400': servicioDetalle.pasajero_servicios.estatus == 2 || servicioDetalle.pasajero_servicios.estatus == 3,
                                                         }"
                                                         >
-                                                        <option value="0">PENDIENTE</option>
-                                                        <option value="1">CONFIRMADA</option>
-                                                        <option value="2">CANCELADA</option>
-                                                        <option value="3">XPASAJERO</option>
+                                                        <option value="0" class="bg-yellow-600 text-white">PENDIENTE</option>
+                                                        <option value="1" class="bg-green-600 text-white">CONFIRMADA</option>
+                                                        <option value="2" class="bg-red-600 text-white">CANCELADA</option>
+                                                        <option value="3" class="bg-red-600 text-white">XPASAJERO</option>
                                                     </select>
                                                 </div>
                                                 <div class="w-1/3 flex justify-between">
@@ -343,22 +342,22 @@
                             </table>
                         </Transition>
                     </div>
-
-                    <div class="totales-section">
-                        <h3>Totales por Moneda</h3>
-                        <ul>
-                            <li v-for="(total, moneda) in totalesPorMoneda" :key="moneda">
-                                {{ moneda }}: {{ total.toFixed(2) }}
-                            </li>
-                        </ul>
-                        <p>Total General: {{ calcularTotalGeneral.toFixed(2) }}</p>
+                    <div class="grid grid-cols-2 gap-2 w-full p-0">
+                        <div class="text-sm font-semibold mb-2">
+                        </div>
+                        <div class="overflow-x-auto">
+                            <CotizacionTotales
+                                :totalesPorMoneda="{ USD: totalesPorMoneda['USD'], PEN: totalesPorMoneda['PEN'] }"
+                                :calcularTotalGeneral="calcularTotalGeneral"
+                            />
+                        </div>
                     </div>
-
-                    <ServicioDetalle v-if="listaServicioDetalle.length > 0 || listaServicioDetalle.length != null"
+                    <!-- <ServicioDetalle v-if="listaServicioDetalle.length > 0 || listaServicioDetalle.length != null"
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
                         :Lista_Pasajeros = Cotizacion.pasajeros
-                        v-model="contador"/>
+                        v-model="contador"
+                    /> -->
                 </div>
             </div>
             <div class="grid grid-cols-6 gap-6 w-full p-5">
@@ -435,6 +434,7 @@ import { validateNumberInput } from '@/Utils/validators';
 import calcularDiferenciaDias from '@/Utils/calculos';
 import AsignarPasajerosServicio from '@/Components/AsignarPasajerosServicio.vue';
 import InputHora from "@/Components/InputHora.vue";
+import CotizacionTotales from '@/Components/Cotizacion/CompCotizacionTotales.vue';
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
@@ -764,7 +764,7 @@ async function ListaCategoriaProveedor() {
                         hora: '09:00',
                         pasajerosAsignados: [],
                         observacion: '',
-                        moneda: itinerarioServicios.servicio.precios[0].moneda == "DOLARES" ? 'USD' : 'PEN',
+                        moneda: itinerarioServicios.servicio.precios[0].moneda,
                         monto: itinerarioServicios.servicio.precios[0].monto,
                         cantidad_pasajeros: 1,
                         subtotal: itinerarioServicios.servicio.precios[0].monto * 1,
@@ -975,41 +975,6 @@ async function submitCotizacion() {
 </script>
 
 <style scoped>
-/* .monto-input, .pasajeros-input {
-        width: 80px;
-        padding: 5px;
-        text-align: right;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    } */
-
-.subtotal {
-    font-weight: bold;
-    text-align: right;
-    padding-right: 15px;
-}
-
-.totales-section {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-}
-
-.totales-section h3 {
-    margin-top: 0;
-}
-
-.totales-section ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.totales-section li {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
 /*efecto de transición para la tabla */
 .fade-slide-enter-active, .fade-slide-leave-active {
     transition: all 0.5s ease;

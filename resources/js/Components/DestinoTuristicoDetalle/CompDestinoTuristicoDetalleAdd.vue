@@ -34,7 +34,7 @@
           <td class="px-1 hover:text-green-700">
             <div class="flex items-center justify-center mt-1">
               <!-- span alineado a la izquierda -->
-              <span class="pl-2 text-xs">{{ item.destino_turistico_detalle_servicio.length }}</span>
+              <span class="pl-2 text-xs font-semibold text-red-950">{{ item.destino_turistico_detalle_servicio.length }}</span>
               <!-- buton alineado a la derecha -->
               <button type="button" @click="showModal(index)" class="px-2 py-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
