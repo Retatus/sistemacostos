@@ -159,13 +159,13 @@
                     </select>
                 </div>
                 <div class="col-span-6">
-                    <div v-for="(dia, indexItinerario) in serviciosPorDia" :key="indexItinerario" class="day-group">
+                    <div v-for="(dia, indexDia) in serviciosPorDia" :key="indexDia" class="day-group">
                         <div class="day-header bg-black  text-slate-300 p-1 rounded mb-2 flex justify-between items-center">
-                            <h3>Día {{ dia.nro_dia }}: {{ indexItinerario }} {{ dia.nombre }}</h3>
+                            <h3>Día {{ dia.nro_dia }}: {{ indexDia }} {{ dia.nombre }}</h3>
                             <!-- {{ serviciosPorDia }} flex justify-between items-center gap-4 mt-5 mb-5 px-5 -->
                             
                             <div class="w-1/3 flex justify-end items-center gap-2">
-                                <span @click="toggleTable(indexItinerario)" class="text-sm justify-end cursor-pointer">
+                                <span @click="toggleTable(indexDia)" class="text-sm justify-end cursor-pointer">
                                     <i>
                                         <svg v-if="dia.isVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -185,7 +185,7 @@
                                             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
                                 </button>
-                                <button @click="eliminarItinerario(indexItinerario)" type="button">
+                                <button @click="eliminarItinerario(indexDia)" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -222,7 +222,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(servicioDetalle, index) in dia.itinerario_servicios" :key="servicioDetalle.id"
+                                    <tr v-for="(servicioDetalle, indexItinerario) in dia.itinerario_servicios" :key="servicioDetalle.id"
                                         className="bg-white border-b text-gray-900 font-semibold">
                                         <td class="px-1" hidden>
                                             <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
@@ -249,7 +249,7 @@
                                                 <div class="w-7/12">
                                                     <select v-model="servicioDetalle.servicio_id"
                                                         class="w-full border-gray-300 rounded-md shadow-sm text-xs"
-                                                        @change="handleChange(dia.nro_dia, index)">
+                                                        @change="handleChange(dia.nro_dia, indexItinerario)">
                                                         <option disabled value="0">-- Selecciona una opción --</option>
                                                         <option v-for="item in servicios" :key="item.value"
                                                             :value="item.value">
@@ -298,9 +298,10 @@
                                                 :servicio="servicioDetalle.pasajero_servicios" />
                                         </td>
                                         <td class="px-1">
+                                            <!-- {{ dia.nro_dia }} - {{ indexItinerario }} - {{ servicioDetalle.pasajero_servicios.nro_orden }} -->
                                             <div class="flex space-x-1">
-                                                <div class="w-2/3">
-                                                    <select v-model="servicioDetalle.pasajero_servicios.estatus"
+                                                <div class="w-2/3 flex justify-between">
+                                                    <select v-model="servicioDetalle.pasajero_servicios.estatus" aria-readonly="true"
                                                         class="w-full border-gray-300 rounded-md shadow-sm text-xs"
                                                         :class="{
                                                             'p-2 font-medium rounded-full border-rounded text-gray-900 text-left': true,
@@ -316,7 +317,13 @@
                                                     </select>
                                                 </div>
                                                 <div class="w-1/3 flex justify-between">
-                                                    <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
+                                                    <button @click="changedEstatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
+                                                        type="button">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
+                                                    </button>
+                                                    <button @click="agregarDetalle(dia.nro_dia, indexItinerario, dia.id)"
                                                         type="button">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -325,7 +332,7 @@
                                                                 d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                         </svg>
                                                     </button>
-                                                    <button @click="eliminarDetalle(dia.nro_dia, index)" type="button">
+                                                    <button @click="eliminarDetalle(dia.nro_dia, indexItinerario)" type="button">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -345,7 +352,7 @@
                     <div class="grid grid-cols-2 gap-2 w-full p-0">
                         <div class="text-sm font-semibold mb-2">
                         </div>
-                        <div class="overflow-x-auto">
+                        <div v-if="Object.keys(totalesPorMoneda).length > 0" class="overflow-x-auto">
                             <CotizacionTotales
                                 :totalesPorMoneda="{ USD: totalesPorMoneda['USD'], PEN: totalesPorMoneda['PEN'] }"
                                 :calcularTotalGeneral="calcularTotalGeneral"
@@ -414,10 +421,17 @@
         :errorMessage="error" @close="showModal = false" @update=recalcularTotalPasajeros />
     <ClienteModal :isModalVisibleProveedor="showModalProveedor" :errorMessage="error"
         @close="showModalProveedor = false" @submit="recuperarValorModal" />
+    <CategoryModal v-if ="showModalStatus"
+        :nroDia = "indiceStatusDia"
+        :pasajeroServicio="initialValues"
+        :mode="modalModeStatus"
+        @close=" showModalStatus = false"
+        @update:pasajeroServicio="updateServicio"        
+    />
 </template>
 
 <script setup>
-import { ref, watch, reactive, computed, onMounted } from 'vue';
+import { ref, watch, reactive, computed, onMounted, toRef } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ContadorInput from '@/ComponentModal/ContadorInput.vue';
@@ -435,6 +449,9 @@ import calcularDiferenciaDias from '@/Utils/calculos';
 import AsignarPasajerosServicio from '@/Components/AsignarPasajerosServicio.vue';
 import InputHora from "@/Components/InputHora.vue";
 import CotizacionTotales from '@/Components/Cotizacion/CompCotizacionTotales.vue';
+//#region Computed Properties
+import CategoryModal from "@/Components/Cotizacion/CompModalStatus.vue";
+import { generateFieldsFromObject } from '@/Utils/objectToFiels';
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
@@ -685,8 +702,38 @@ const calcularTotalGeneral = computed(() => {
 
 // #endregion SECCION CALCULAR SUBTOTAL Y TOTAL DE LA NUEVA LOGICA DE SERVICIOS POR DIA
 
-function agregarDetalle(indiceItinerario, indiceServicio, itinerarioDestinoId = null) {
+// #region SECCION DE MANIPULACION DE STATUS
+const modalModeStatus = ref('create'); // 'create' o 'edit'
+const showModalStatus = ref(false);
+const initialValues = reactive({});
+const indiceStatusDia = ref(0);
+
+const changedEstatus = (indexDia, servicio) => {
+    Object.assign(initialValues, servicio);
+    indiceStatusDia.value = indexDia;
+    modalModeStatus.value = "edit";
+    showModalStatus.value = true;
+};
+
+function updateServicio(newServicio) {
+  Object.assign(initialValues, newServicio)
+  const indiceServicio = initialValues.nro_orden - 1;
+  serviciosPorDia.value[indiceStatusDia.value - 1].itinerario_servicios[indiceServicio].pasajero_servicios = initialValues;
+}
+
+async function handleUpdateStatus(data) {
+    showModalStatus.value = false;
+    const response = await axios.patch(route('pasajero_servicios.update', data), data);
     debugger;
+    if (response.status === 200) {
+        console.log('Elemento actualizado:', response.data);            
+        //ListaServicioDetalle.value = response.data;
+    }        
+};
+
+// #endregion SECCION DE MANIPULACION DE STATUS
+
+function agregarDetalle(indiceItinerario, indiceServicio, itinerarioDestinoId = null) {
     const nuevoServicio = {
         id: crypto.randomUUID(),
         nro_orden: '',

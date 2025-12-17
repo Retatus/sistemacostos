@@ -454,6 +454,7 @@ class CotizacionController extends Controller
                                 'cotizacion_id' => $cotizacionId,
                                 'itinerario_servicio_id' => $grupo['id'] ?? null,
                                 'itinerario_destino_id' => $grupo['itinerario_destino_id'] ?? null,
+                                'nro_orden' => $pasajero['nro_orden'] ?? null,
                                 'hora' => $pasajero['hora'] ?? '00:00',
                                 'observacion' => $pasajero['observacion'] ?? '',
                                 'moneda' => $pasajero['moneda'] ?? 'USD',

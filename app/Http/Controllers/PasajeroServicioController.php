@@ -76,8 +76,21 @@ class PasajeroServicioController extends Controller
     public function update(Request $request, PasajeroServicio $pasajeroServicio)
     {
         $data = $request->all();
-        $pasajeroServicio->update($data);
-        return Inertia::render('PasajeroServicio/Edit', compact('pasajeroServicio'));
+        $valor1 = $data['cotizacion_id'];
+        $valor2 = $data['nro_dia'];
+        $valor3 = $data['nro_orden'];
+        $nuevoValor = $data['observacion'];
+        $otroValor = $data['estatus'];
+        
+        PasajeroServicio::where('cotizacion_id', $valor1)
+        ->where('nro_dia', $valor2)
+        ->where('nro_orden', $valor3)
+        ->update([
+            'observacion' => $nuevoValor,
+            'estatus' => $otroValor,
+        ]);
+        // Devolver redirect con mensaje flash
+        return redirect()->back()->with('message', 'Guardado correctamente.');
     }
 
     /**
