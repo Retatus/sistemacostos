@@ -82,15 +82,28 @@ class PasajeroServicioController extends Controller
         $nuevoValor = $data['observacion'];
         $otroValor = $data['estatus'];
         
-        PasajeroServicio::where('cotizacion_id', $valor1)
+        $updated = PasajeroServicio::where('cotizacion_id', $valor1)
         ->where('nro_dia', $valor2)
         ->where('nro_orden', $valor3)
         ->update([
             'observacion' => $nuevoValor,
             'estatus' => $otroValor,
         ]);
+
         // Devolver redirect con mensaje flash
-        return redirect()->back()->with('message', 'Guardado correctamente.');
+        // return redirect()->back()->with('message', 'Guardado correctamente.');
+
+        if ($updated) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro actualizado correctamente.'
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo actualizar el registro.'
+            ], 500);
+        }
     }
 
     /**

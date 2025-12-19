@@ -317,7 +317,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="w-1/3 flex justify-between">
-                                                    <button @click="changedEstatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
+                                                    <button @click="openModalStatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
                                                         type="button">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -421,12 +421,14 @@
         :errorMessage="error" @close="showModal = false" @update=recalcularTotalPasajeros />
     <ClienteModal :isModalVisibleProveedor="showModalProveedor" :errorMessage="error"
         @close="showModalProveedor = false" @submit="recuperarValorModal" />
-    <CategoryModal v-if ="showModalStatus"
-        :nroDia = "indiceStatusDia"
-        :pasajeroServicio="initialValues"
+    <StatusModal 
+        v-if ="showModalStatus"
+        :id = "idServicioSeleccionado"
+        :nroDia ="indiceStatusDia"
+        :servicio="servicioSeleccionado"
         :mode="modalModeStatus"
-        @close=" showModalStatus = false"
-        @update:pasajeroServicio="updateServicio"        
+        @cerrar=" showModalStatus = false"
+        @guardar="updateServicio"     
     />
 </template>
 
@@ -450,7 +452,7 @@ import AsignarPasajerosServicio from '@/Components/AsignarPasajerosServicio.vue'
 import InputHora from "@/Components/InputHora.vue";
 import CotizacionTotales from '@/Components/Cotizacion/CompCotizacionTotales.vue';
 //#region Computed Properties
-import CategoryModal from "@/Components/Cotizacion/CompModalStatus.vue";
+import StatusModal from "@/Components/Cotizacion/CompModalStatus.vue";
 import { generateFieldsFromObject } from '@/Utils/objectToFiels';
 
 // resources/js/app.js o main.js
@@ -705,31 +707,22 @@ const calcularTotalGeneral = computed(() => {
 // #region SECCION DE MANIPULACION DE STATUS
 const modalModeStatus = ref('create'); // 'create' o 'edit'
 const showModalStatus = ref(false);
-const initialValues = reactive({});
+const idServicioSeleccionado = ref(0);
+const servicioSeleccionado = ref(null);
 const indiceStatusDia = ref(0);
 
-const changedEstatus = (indexDia, servicio) => {
-    Object.assign(initialValues, servicio);
+const openModalStatus = (indexDia, servicio) => {
+
+    idServicioSeleccionado.value = `${indexDia}${servicio.nro_orden}`;
+    servicioSeleccionado.value = servicio;
     indiceStatusDia.value = indexDia;
     modalModeStatus.value = "edit";
     showModalStatus.value = true;
 };
 
-function updateServicio(newServicio) {
-  Object.assign(initialValues, newServicio)
-  const indiceServicio = initialValues.nro_orden - 1;
-  serviciosPorDia.value[indiceStatusDia.value - 1].itinerario_servicios[indiceServicio].pasajero_servicios = initialValues;
-}
-
-async function handleUpdateStatus(data) {
+function updateServicio(newServicio) {    
     showModalStatus.value = false;
-    const response = await axios.patch(route('pasajero_servicios.update', data), data);
-    debugger;
-    if (response.status === 200) {
-        console.log('Elemento actualizado:', response.data);            
-        //ListaServicioDetalle.value = response.data;
-    }        
-};
+}
 
 // #endregion SECCION DE MANIPULACION DE STATUS
 
