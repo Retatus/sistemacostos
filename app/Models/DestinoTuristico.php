@@ -29,9 +29,10 @@ class DestinoTuristico extends Model
         return $this->belongsTo(Pais::class, 'pais_id', 'id');
     }
 
-    public function destino_turistico_detalle() {
-        return $this->hasMany(ItinerarioDestino::class, 'destino_turistico_id');
-    }
+    // eliminar
+    // public function destino_turistico_detalle() {
+    //     return $this->hasMany(ItinerarioDestino::class, 'destino_turistico_id');
+    // }
     
     public static function getFormattedForDropdown()
     {

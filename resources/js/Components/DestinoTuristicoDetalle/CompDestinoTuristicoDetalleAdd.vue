@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in Lista_destino_turistico_detalle" :key="index"
+        <tr v-for="(item, index) in itinerarioServicios" :key="index"
           className="bg-white border-b text-gray-900">
           <td class="px-1">
             <label class="mx-2 block text-xs font-medium text-gray-700">Dia {{ index + 1 }}:</label>
@@ -34,7 +34,7 @@
           <td class="px-1 hover:text-green-700">
             <div class="flex items-center justify-center mt-1">
               <!-- span alineado a la izquierda -->
-              <span class="pl-2 text-xs font-semibold text-red-950">{{ item.destino_turistico_detalle_servicio.length }}</span>
+              <span class="pl-2 text-xs font-semibold text-red-950">{{ item.itinerario_servicios.length }}</span>
               <!-- buton alineado a la derecha -->
               <button type="button" @click="showModal(index)" class="px-2 py-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -66,7 +66,7 @@
     <div class="p-4">
       <CompDestinoTuristicoDetalleServicio 
         :Lista_proveedor = "Lista_proveedor"     
-        :Lista_destino_turistico_detalle_servicio = Lista_destino_turistico_detalle[indice].destino_turistico_detalle_servicio
+        :itinerarioServicios = itinerarioServicios[indice].itinerario_servicios
         :Lista_servicio="Lista_servicio"
         @close="closeModal"
         @actualizarTotal="actualizarTotalNieto"
@@ -96,7 +96,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  Lista_destino_turistico_detalle: {
+  itinerarioServicios: {
     type: Array,
     required: true,
   },
@@ -110,8 +110,8 @@ function ItinerarioDescripcion(index) {
     const selectedOption = selectElement.options[selectElement.selectedIndex];
     const descripcion = selectedOption.getAttribute('data-info');
     const nombre = selectElement.options[selectElement.selectedIndex].label;
-    props.Lista_destino_turistico_detalle[index].descripcion = descripcion;   
-    props.Lista_destino_turistico_detalle[index].nombre = nombre;     
+    props.itinerarioServicios[index].descripcion = descripcion;   
+    props.itinerarioServicios[index].nombre = nombre;     
 };
 
 function showModal(index) {
@@ -126,8 +126,8 @@ function closeModal() {
 const emit = defineEmits(['update', 'actualizarMontoPadre']);
 
 const removeItem = (index) => {
-  props.Lista_destino_turistico_detalle.splice(index, 1);
-  emit('update', props.Lista_destino_turistico_detalle);
+  props.itinerarioServicios.splice(index, 1);
+  emit('update', props.itinerarioServicios);
   actualizarTotalNieto();
 }
 

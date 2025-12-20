@@ -67,7 +67,7 @@
             </div>
 
             <DestinioTuristicoDetalle
-                :Lista_destino_turistico_detalle = "destinoTuristico.destino_turistico_detalle"
+                :itinerarioServicios = "destinoTuristico.itinerario_destinos"
                 :Lista_itinerarios = "Itinerarios"
                 :Lista_proveedor = "Proveedores" 
                 :Lista_servicio="Servicios" 
@@ -179,7 +179,7 @@ if (esEdicion.value) {
         venta: 0.00,
         estado_activo: 1,
 
-        destino_turistico_detalle: [],
+        itinerario_destinos: [],
     };
 }
 
@@ -191,7 +191,7 @@ const destinoTuristicoDetalle = ref({
     estado_activo: 1,
     destino_turistico_id: '',
 
-    destino_turistico_detalle_servicio: [],
+    itinerario_servicios: [],
 });
 
 const mostrarConsola = () => {
@@ -245,36 +245,36 @@ const handleInput = (event) => {
 
 // Función para actualizar el total general del Padre
 const actualizarTotalHijo = () => {
-    destinoTuristico.value.costo_total = destinoTuristico.value.destino_turistico_detalle.reduce((suma, detalle) => {
+    destinoTuristico.value.costo_total = destinoTuristico.value.itinerario_destinos.reduce((suma, detalle) => {
         return (
             suma +
-            detalle.destino_turistico_detalle_servicio.reduce(
+            detalle.itinerario_servicios.reduce(
                 (sumaServicios, servicio) => sumaServicios + parseFloat(servicio.monto || 0),
                 0
             )
         );
     }, 0);
-    destinoTuristico.value.nro_dias = destinoTuristico.value.destino_turistico_detalle.length;
+    destinoTuristico.value.nro_dias = destinoTuristico.value.itinerario_destinos.length;
     calcularVenta();
 };
 
 function agregarDetalle() {
-    destinoTuristico.value.destino_turistico_detalle.push({ 
+    destinoTuristico.value.itinerario_destinos.push({ 
         ...toRaw(destinoTuristicoDetalle.value),
     });
 
     destinoTuristicoDetalle.value = {
-        nro_dia: destinoTuristico.value.destino_turistico_detalle.length + 1,
+        nro_dia: destinoTuristico.value.itinerario_destinos.length + 1,
         itinerario_id: '',
         nombre: '',
         observacion: '',
         estado_activo: 1,
         destino_turistico_id: '',
 
-        destino_turistico_detalle_servicio: [],
+        itinerario_servicios: [],
     };
 
-    destinoTuristico.value.nro_dias = destinoTuristico.value.destino_turistico_detalle.length;
+    destinoTuristico.value.nro_dias = destinoTuristico.value.itinerario_destinos.length;
 }
 
 async function submitDestinoTuristico() {

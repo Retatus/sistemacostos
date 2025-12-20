@@ -57,16 +57,9 @@ class DestinoTuristicoController extends Controller
      */
     public function store(DestinoTuristicoRequest $request)
     {
-        // $data = $request->all(); 
-        $destino_turistico = $request->except(['destino_turistico_detalle']);
-        $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
-        //dd($destino_turistico_detalle, $destino_turistico);
-        // DestinoTuristico::create($destino_turistico);
-        // return to_route('destino_turistico');
-        
         return DB::transaction(function () use ($request) {
             // SECCION DESTINO TURISTICO
-            $destinoTuristico = $request->except(['destino_turistico_detalle', 'destino_turistico_detalle_servicio']);
+            $destinoTuristico = $request->except(['itinerario_destinos', 'itinerario_servicios']);
 
             if (array_key_exists('id', $destinoTuristico)) {
                 //dd("entro", $destinoTuristico['id']);
@@ -84,9 +77,9 @@ class DestinoTuristicoController extends Controller
             $destinoTuristicoId = $destinoTuriaticoResponse->id;
 
             // SECCION ITINERARIO DESTINO
-            $destino_turistico_detalle = $request->get('destino_turistico_detalle', []);
+            $itinerario_destinos = $request->get('itinerario_destinos', []);
 
-            foreach ($destino_turistico_detalle as $itinerarioDestinoData) {
+            foreach ($itinerario_destinos as $itinerarioDestinoData) {
                 // Añadir `destino_turistico_id` al itinerarioDestino
                 $itinerarioDestinoData['destino_turistico_id'] = $destinoTuristicoId;
                 
@@ -100,10 +93,11 @@ class DestinoTuristicoController extends Controller
 
                 // SECCION ITINERARIO SERVICIO
                 $itinerarioId = $itinerarioDestinoId->id;
-                $destino_turistico_detalle_servicio = $itinerarioDestinoData['destino_turistico_detalle_servicio'] ?? [];
+                $itinerario_servicios = $itinerarioDestinoData['itinerario_servicios'] ?? [];
 
-                foreach ($destino_turistico_detalle_servicio as $itinerarioServicioData) {
+                foreach ($itinerario_servicios as $itinerarioServicioData) {
                     $itinerarioServicioData['itinerario_destino_id'] = $itinerarioId;
+                    $itinerarioServicioData['nro_dia'] = $itinerarioDestinoData['nro_dia'];
                     $itinerarioServicioId = ItinerarioServicio::create($itinerarioServicioData);
                     // $itinerarioServicioResponse = $this->itinerario_servicio->store($itinerarioServicioData);
 
@@ -119,31 +113,6 @@ class DestinoTuristicoController extends Controller
                 'message' => 'Destino turistico y Destino servicios creados correctamente',
             ];
         });
-
-
-        // try {
-        //     // Extraer datos del modelo principal
-        //     $destinoTuristico = $request->except(['destino_turistico_detalle', 'destino_turistico_detalle_servicio']);
-        
-        //     // Crear el registro principal
-        //     $destinoTuriaticoResponse = DestinoTuristico::create($destinoTuristico);
-        
-        //     // Aquí puedes acceder al ID del registro creado, por ejemplo:
-        //     $id = $destinoTuriaticoResponse->id;
-        
-        //     // Retornar una respuesta exitosa
-        //     return response()->json([
-        //         'message' => 'Destino Turístico creado con éxito id: ' . $id,
-        //         'data' => $destinoTuriaticoResponse,
-        //     ], 201);
-        
-        // } catch (\Exception $e) {
-        //     // Manejar cualquier error
-        //     return response()->json([
-        //         'message' => 'Error al insertar destino turístico',
-        //         'error' => $e->getMessage(),
-        //     ], 500);
-        // }
     }
 
     public function DestinoCategories(Request $request)
@@ -199,8 +168,9 @@ class DestinoTuristicoController extends Controller
      */
     public function edit(DestinoTuristico $destinoTuristico)
     {        
-        $destinoTuristico = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoTuristico->id);
-        
+        //$destinoTuristico = DestinoTuristico::with('destino_turistico_detalle.destino_turistico_detalle_servicio')->find($destinoTuristico->id);
+        $destinoTuristico = DestinoTuristico::with('itinerarioDestinos.itinerarioServicios')->find($destinoTuristico->id);
+        //dd(json_encode($destinoTuristico, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $formattedItinerarios = Itinerario::getFormattedForDropdown();
         $formattedProveedores = proveedor::getFormattedForDropdown();
         $formattedServicio = Servicio::getFormattedForDropdown();

@@ -55,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in Lista_destino_turistico_detalle_servicio" :key="index" className="bg-white border-b text-gray-900">
+          <tr v-for="(item, index) in itinerarioServicios" :key="index" className="bg-white border-b text-gray-900">
             <td class="px-1">
                 <select v-model="item.proveedor_categoria_id" class="w-full border-gray-300 rounded-md shadow-sm text-xs">
                   <option disabled value="">-- Selecciona una opción --</option>
@@ -124,7 +124,7 @@ const props = defineProps({
       type: Object,
       required: true,
     },
-    Lista_destino_turistico_detalle_servicio: {
+    itinerarioServicios: {
       type: Array,
       required: true,
     },
@@ -145,7 +145,7 @@ const props = defineProps({
   const selectedValueServicioObservacion = ref("");
 
   const destinoTuristicoDetalleServicio = ref({
-    nro_orden: props.Lista_destino_turistico_detalle_servicio.length > 0 ? props.Lista_destino_turistico_detalle_servicio[props.Lista_destino_turistico_detalle_servicio.length - 1].nro_orden + 1 : 1,
+    nro_orden: props.itinerarioServicios.length > 0 ? props.itinerarioServicios[props.itinerarioServicios.length - 1].nro_orden + 1 : 1,
     proveedor_categoria_id: '',
     proveedor_id: '',
     servicio_id: '',
@@ -168,7 +168,7 @@ const props = defineProps({
   );
 
   function agregarDestinoTuristicoDetalleServicio() {
-    props.Lista_destino_turistico_detalle_servicio.push({ ...destinoTuristicoDetalleServicio.value });
+    props.itinerarioServicios.push({ ...destinoTuristicoDetalleServicio.value });
       // Reiniciar los valores individuales y el objeto
       // selectedValueCategoria.value = '';
       // selectedValueProveedor.value = '';
@@ -191,8 +191,8 @@ const props = defineProps({
   }
 
   const removeItem = (index) => {
-    props.Lista_destino_turistico_detalle_servicio.splice(index, 1);
-    emit('update', props.Lista_destino_turistico_detalle_servicio);
+    props.itinerarioServicios.splice(index, 1);
+    emit('update', props.itinerarioServicios);
     calcularTotal();
   }
 
@@ -207,7 +207,7 @@ const props = defineProps({
   };
 
   const calcularTotal = () => {
-    const total = props.Lista_destino_turistico_detalle_servicio.reduce((
+    const total = props.itinerarioServicios.reduce((
       suma, destinoTuristicoDetalleServicio) => suma + parseFloat(destinoTuristicoDetalleServicio.monto || 0), 0 );
     emit("actualizarTotal", total); // Emitir el total al componente Hijo
   };
