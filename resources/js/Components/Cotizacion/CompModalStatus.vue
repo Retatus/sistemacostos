@@ -82,23 +82,31 @@
   )
 
   async function updateStatus() {
-    const res = await axios.patch(route('pasajero_servicio.update', props.id), // id del recurso
-      {
-        nro_dia: props.nroDia,
-        cotizacion_id: props.servicio.cotizacion_id,
-        nro_orden: props.servicio.nro_orden,
-        observacion: form.observacion,
-        estatus: form.estatus
-      }
-    )
-    responseMessage.value = res.data.message ?? 'Guardado correctamente.'
-    setTimeout(() => {
-      responseMessage.value = ''
-      // mutamos el objeto original (reactivo)
-      props.servicio.estatus = form.estatus
-      props.servicio.observacion = form.observacion
+    if (props.mode === 'create') {
+        props.servicio.estatus = form.estatus
+        props.servicio.observacion = form.observacion
 
-      emit('guardar', props.servicio)
-    }, 1000)
+        emit('guardar', props.servicio)
+      return;
+    }else {    
+      const res = await axios.patch(route('pasajero_servicio.update', props.id), // id del recurso
+        {
+          nro_dia: props.nroDia,
+          cotizacion_id: props.servicio.cotizacion_id,
+          nro_orden: props.servicio.nro_orden,
+          observacion: form.observacion,
+          estatus: form.estatus
+        }
+      )
+      responseMessage.value = res.data.message ?? 'Guardado correctamente.'
+      setTimeout(() => {
+        responseMessage.value = ''
+        // mutamos el objeto original (reactivo)
+        props.servicio.estatus = form.estatus
+        props.servicio.observacion = form.observacion
+
+        emit('guardar', props.servicio)
+      }, 1000)
+    }
   }
 </script>

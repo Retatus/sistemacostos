@@ -17,7 +17,7 @@
                         :Accion="Accion"
                         :Cotizacion="Cotizacion"
                         :Lista_destinos_turistico="ListaDestinosTuristicos"
-                        :ListaCategorias="ListaCategorias"
+                        
                         :ListaServicios="ListaServicios"
                     />
                 </div>
