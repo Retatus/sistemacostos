@@ -22,6 +22,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "temp_id" => 'required|min:8|max:8',
             "nombre" => 'required|min:3|max:25',
             "apellido_paterno" => 'required|min:3|max:25',
             "apellido_materno" => 'required|min:3|max:25',
@@ -33,7 +34,6 @@ class StoreRequest extends FormRequest
             "clase_id" => 'required',
             "cotizacion_id" => 'required',
             "estado_activo" => 'required',
-
         ];
     }
 }

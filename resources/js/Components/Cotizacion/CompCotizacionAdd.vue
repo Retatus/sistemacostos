@@ -452,6 +452,7 @@ import CotizacionTotales from '@/Components/Cotizacion/CompCotizacionTotales.vue
 //#region Computed Properties
 import StatusModal from "@/Components/Cotizacion/CompModalStatus.vue";
 import { generateFieldsFromObject } from '@/Utils/objectToFiels';
+import { auditoriaSimple } from '@/Utils/JsonDiffDetector';
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
@@ -537,11 +538,7 @@ let emptyInputTimeout = null;
 // Variables para el cotizacion y detalle temporal
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
-
-// console.log('Cotizacion:', Cotizacion);
-console.log('pasajeros_servicios_agrupados:', Cotizacion.pasajeros_servicios_agrupados);
-console.log('pasajeros_servicios_agrupados1:', Cotizacion.pasajeros_servicios_agrupados1);
-
+const cotizacionOriginal = ref(null);
 
 
 // Cotizacion.file_nro = props.Correlativo;
@@ -566,7 +563,10 @@ const PasajerosReducido = computed(() =>
 )
 
 if (esEdicion.value) {
-    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados1;
+    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados;
+    // snapshot profundo (NO reactivo)
+    cotizacionOriginal.value = { ...Cotizacion };
+
     serviciosPorDia.value.forEach(dia => {
         dia.isVisible = true; // Inicialmente todas las tablas visibles
     });
@@ -726,7 +726,7 @@ function updateServicio(newServicio) {
 
 function agregarDetalle(indiceItinerario, indiceServicio, itinerarioDestinoId = null) {
     const nuevoServicio = {
-        id: crypto.randomUUID(),
+        id: crypto.randomUUID().replace(/-/g, '').substring(0, 8),
         nro_orden: '',
         servicio_id: '0',
         itinerario_destino_id: '0',
@@ -948,6 +948,9 @@ const mostrarConsola = () => {
     console.log(Cotizacion);
     const jsonData = JSON.stringify(Cotizacion, null, 2);
     console.log("JSON Data:", jsonData);
+
+    let cambios = auditoriaSimple(cotizacionOriginal.value, Cotizacion);
+    console.log('cambios', cambios);
 }
 
 // Función para calcular el monto de la venta

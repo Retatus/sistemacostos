@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function getPersonaInicial() {
   return {
     id: 1,
-    temp_id: uuidv4(),
+    temp_id: uuidv4().replace(/-/g, '').substring(0, 8),
     nombre: obtenerPasajeroAleatorio().nombres,
     apellido_paterno: obtenerPasajeroAleatorio().apellido_paterno,
     apellido_materno: obtenerPasajeroAleatorio().apellido_materno,

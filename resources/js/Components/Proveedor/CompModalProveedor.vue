@@ -9,9 +9,16 @@
                 <!-- Body -->
                  <div class="overflow-x-auto py-0">
                     <div class="text-center">
-                        <p v-if="responseMessage" class="alert alert-success text-sm text-green-600">
-                            {{ responseMessage }}
-                        </p>
+                        <Transition
+                            enter-active-class="transition ease-in-out"
+                            enter-from-class="opacity-0"
+                            leave-active-class="transition ease-in-out"
+                            leave-to-class="opacity-0">
+                            <p  v-if="responseMessage"
+                                class="text-sm text-red-600">
+                                {{ responseMessage }}
+                            </p>
+                        </Transition>
                     </div>                    
                     <form @submit.prevent="addCliente">
                         <div class="grid grid-cols-6 gap-4 w-full p-5">
@@ -156,7 +163,10 @@ async function findCliente() {
             responseMessage.value = '';
         }else{
             responseMessage.value = 'Proveedor no encontrado';
-            personas.tipo_documento_id = '';
+            personas.value.razon_social = '';
+            personas.value.direccion = '';
+            personas.value.contacto = '';
+            personas.value.correo = '';
         }
     } catch (err) {
         error.value = err.response?.data?.message || 'Ocurrió un error';

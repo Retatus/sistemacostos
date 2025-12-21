@@ -11,7 +11,7 @@ class Pasajero extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['nombre', 'apellido_paterno', 'apellido_materno', 'documento_tipo_id', 'documento_numero', 'pais_id', 'documento_file', 'tipo_pasajero_id', 'clase_id', 'cotizacion_id', 'estado_activo'];
+    protected $fillable = ['temp_id', 'nombre', 'apellido_paterno', 'apellido_materno', 'documento_tipo_id', 'documento_numero', 'pais_id', 'documento_file', 'tipo_pasajero_id', 'clase_id', 'cotizacion_id', 'estado_activo'];
 
     // App/Models/Pasajero.php
     public function pasajeroServicios()
