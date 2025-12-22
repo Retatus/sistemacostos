@@ -162,7 +162,7 @@ async function findCliente() {
             personas.value = response.data;
             responseMessage.value = '';
         }else{
-            responseMessage.value = 'Proveedor no encontrado';
+            responseMessage.value = 'Cliente no encontrado';
             personas.value.razon_social = '';
             personas.value.direccion = '';
             personas.value.contacto = '';

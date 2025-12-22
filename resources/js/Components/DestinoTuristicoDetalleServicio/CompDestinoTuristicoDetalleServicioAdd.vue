@@ -4,46 +4,81 @@
       <h2 class="text-lg font-semibold text-gray-700">Agregar servicio</h2>
   </div>
   <!-- Body -->
-  <div class="overflow-x-auto py-0">
-    <div class="grid grid-cols-8 gap-4 w-full p-5">
-      <div class="col-span-1">
-        <label class="block text-xs font-medium text-gray-700">Proveedor Categoria</label>
-        <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
-          <option disabled value="">-- Selecciona una opción --</option>
-          <option v-for="option in sProveedorCategorias" :key="option.value" :value="option.value">
-          {{ option.label }}
-          </option>
-        </select>
+  <div class="w-full p-5 space-y-4">
+    <!-- GRID SUPERIOR -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <!-- Columna izquierda (1/3 en desktop) -->
+      <div class="bg-red-500 p-2">
+        <div class="mb-2 bg-red-300 h-20">
+          <label class="block text-xs font-medium text-gray-700">Proveedor Categoria</label>
+            <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
+              <option disabled value="">-- Selecciona una opción --</option>
+              <option v-for="option in sProveedorCategorias" :key="option.value" :value="option.value">
+              {{ option.label }}
+              </option>
+            </select>
+        </div>
+        <div class="bg-red-300 h-20">
+          <label class="block text-xs font-medium text-gray-700">Proveedor</label>
+            <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
+              <option disabled value="">-- Selecciona una opción --</option>
+              <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
+              {{ option.label }}
+              </option>
+            </select>
+        </div>        
       </div>
-      <div class="col-span-2">
-        <label class="block text-xs font-medium text-gray-700">Proveedor</label>
-        <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
-          <option disabled value="">-- Selecciona una opción --</option>
-          <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
-          {{ option.label }}
-          </option>
-        </select>
-      </div>
-      <div class="col-span-4 ">
-        <label class="block text-xs font-medium text-gray-700">Servicio detalle</label>
-        <select v-model="selectedValueServicio" @change="ServicioMonto" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
-            <option disabled value="">-- Selecciona una opción --</option>
-            <option v-for="option in ListaServiciosXProveedor" :key="option.value" :value="option.value" :data-moneda="option.moneda" :data-monto="option.monto">
-            {{ option.label }}
-            </option>
-        </select>
-      </div>
-      <div class="col-span-1">
-        <label class="block text-xs font-medium text-gray-700">&nbsp;</label>
-        <PrimaryButton
-          type="button"
-          class="mt-1"
-          @click="agregarDestinoTuristicoDetalleServicio">
-          Agregar
-        </PrimaryButton>
+
+      <!-- Columna derecha (2/3 en desktop) -->
+      <div class="md:col-span-2 bg-blue-500 p-2 h-64 overflow-auto">
+        <div class="bg-blue-300 h-20">
+          <table class="excel-table w-full text-sm text-left rtl:text-right text-gray-500s">
+            <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+              <tr class="bg-gray-100">
+                <th class="px-4 py-2">Nro</th>
+                <th hidden class="px-4 py-2">Id</th>
+                <th class="px-4 py-2">Nombre</th>
+                <th class="px-4 py-2">Moneda</th>
+                <th class="px-4 py-2">Monnto</th>
+                <th class="px-4 py-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in ListaServiciosXProveedor" :key="item.value" class="text-xs">
+                <td>
+                  {{ index }}
+                </td>
+                <td hidden>
+                  {{ item.value }}
+                </td>
+                <td>
+                  {{ item.label }}
+                </td>                
+                <td>
+                  {{ item.moneda }}
+                </td>
+                <td>
+                  {{ item.monto }}
+                </td>
+                <td>
+                  <button @click="seleccionarServicio(item)"
+                    type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>              
+          </table>
+        </div>
       </div>
     </div>
-    <div class="px-4 py-3">
+    <!-- DIV INFERIOR (100% ancho, altura fija) -->
+    <div class="w-full bg-green-500 p-2 h-60 overflow-auto">
       <table className="excel-table w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
           <tr class="bg-gray-100">
@@ -167,25 +202,6 @@ const props = defineProps({
     }
   );
 
-  function agregarDestinoTuristicoDetalleServicio() {
-    props.itinerarioServicios.push({ ...destinoTuristicoDetalleServicio.value });
-      // Reiniciar los valores individuales y el objeto
-      // selectedValueCategoria.value = '';
-      // selectedValueProveedor.value = '';
-      // selectedValueServicio.value = '';
-    // destinoTuristicoDetalleServicio.value = {
-    //     nro_orden: destinoTuristicoDetalleServicio.value.nro_orden + 1,
-    //     proveedor_categoria_id: '',
-    //     proveedor_id: '',
-    //     servicio_id: '',
-    //     itinerario_destino_id: '',
-    //     observacion: '',
-    //     moneda: '',
-    //     monto: 0.00,
-    // };
-    calcularTotal();
-  }
-
   function closeModal() {
       emit('close');
   }
@@ -196,14 +212,17 @@ const props = defineProps({
     calcularTotal();
   }
 
-  function ServicioMonto() {
-    const selectElement = event.target;
-    const selectedOption = selectElement.options[selectElement.selectedIndex];
-    const moneda = selectedOption.getAttribute('data-moneda');
-    const monto = selectedOption.getAttribute('data-monto');
-    selectedValueServicioMoneda.value = moneda;
-    selectedValueServicioMonto.value = monto;
-    selectedValueServicioObservacion.value = selectElement.options[selectElement.selectedIndex].label;
+  function seleccionarServicio(item) {
+    console.log('Servicio seleccionado:', item);
+    props.itinerarioServicios.push({
+      proveedor_categoria_id: selectedValueCategoria.value,
+      proveedor_id: selectedValueProveedor.value,
+      servicio_id: item.value,
+      observacion: item.label,
+      moneda: item.moneda,
+      monto: item.monto,
+    });
+    calcularTotal();
   };
 
   const calcularTotal = () => {
