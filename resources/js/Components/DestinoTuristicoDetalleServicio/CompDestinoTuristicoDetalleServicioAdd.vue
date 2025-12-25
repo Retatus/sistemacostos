@@ -8,8 +8,8 @@
     <!-- GRID SUPERIOR -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <!-- Columna izquierda (1/3 en desktop) -->
-      <div class="bg-red-500 p-2">
-        <div class="mb-2 bg-red-300 h-20">
+      <div class="bg-gray-50 p-2">
+        <div class="mb-2 h-15">
           <label class="block text-xs font-medium text-gray-700">Proveedor Categoria</label>
             <select v-model="selectedValueCategoria" @change="ListaCategoriaProveedor" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
               <option disabled value="">-- Selecciona una opción --</option>
@@ -18,20 +18,42 @@
               </option>
             </select>
         </div>
-        <div class="bg-red-300 h-20">
-          <label class="block text-xs font-medium text-gray-700">Proveedor</label>
-            <select v-model="selectedValueProveedor" @change="ListaProveedorServicio" class="mt-1 w-full border-gray-300 rounded-md shadow-sm text-xs">
-              <option disabled value="">-- Selecciona una opción --</option>
-              <option v-for="option in ListaProveedorXCategoria" :key="option.value" :value="option.value">
-              {{ option.label }}
-              </option>
-            </select>
+        <div class="h-30 overflow-auto">
+          <label class="mb-1 block text-xs font-medium text-gray-700">Proveedor</label>
+          <table class="excel-table w-full text-sm text-left rtl:text-right text-gray-500s">
+            <thead className="text-xs text-gray-900 uppercase bg-gray-50">
+              <tr class="bg-gray-100">
+                <th class="w-5/6 px-4 py-2">Nombre</th>
+                <th class="w-1/6 px-4 py-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(item, index) in ListaProveedorXCategoria" :key="item.value">
+                <td>
+                  {{ item.label }}
+                </td>
+                <td class="px-1">
+                  <button @click="serviciosXProveedor(item)"
+                    type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>              
+          </table>       
         </div>        
       </div>
 
       <!-- Columna derecha (2/3 en desktop) -->
-      <div class="md:col-span-2 bg-blue-500 p-2 h-64 overflow-auto">
-        <div class="bg-blue-300 h-20">
+      <div class="md:col-span-2 p-2 bg-gray-50 h-64 overflow-auto">
+        <div class="h-20">
+          <label class="mb-1 block text-xs font-medium text-gray-700">Servicio detalle</label>
           <table class="excel-table w-full text-sm text-left rtl:text-right text-gray-500s">
             <thead className="text-xs text-gray-900 uppercase bg-gray-50">
               <tr class="bg-gray-100">
@@ -39,7 +61,7 @@
                 <th hidden class="px-4 py-2">Id</th>
                 <th class="px-4 py-2">Nombre</th>
                 <th class="px-4 py-2">Moneda</th>
-                <th class="px-4 py-2">Monnto</th>
+                <th class="px-4 py-2">Monto</th>
                 <th class="px-4 py-2">Acciones</th>
               </tr>
             </thead>
@@ -78,7 +100,7 @@
       </div>
     </div>
     <!-- DIV INFERIOR (100% ancho, altura fija) -->
-    <div class="w-full bg-green-500 p-2 h-60 overflow-auto">
+    <div class="w-full p-2 h-60 overflow-auto">
       <table className="excel-table w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-900 uppercase bg-gray-50">
           <tr class="bg-gray-100">
@@ -258,4 +280,17 @@ const props = defineProps({
           console.error('Error al actualizar los datos:', error);
       }
   };
+
+  async function serviciosXProveedor(item) {
+    selectedValueProveedor.value = item.value;
+    try {
+          const response = await axios.post(`${route('servicio')}/servicioList`, { proveedor_id: item.value });
+          if (response.status === 200) {
+              ListaServiciosXProveedor.value = response.data;
+          }
+      } catch (error) {
+          console.error('Error al actualizar los datos:', error);
+      }
+  }
+
 </script>
