@@ -37,6 +37,10 @@
     const form = useForm({
         anio: "",
         moneda: "USD",
+        tipo_costo: "UNITARIO",
+        pax_min: 1,
+        pax_max: 99,
+        capacidad_pax: 1,
         monto: "",
         tipo_pasajero_id: "",
         servicio_id: "",
@@ -62,6 +66,18 @@
                 { value: 'PEN', label: 'PEN' }, 
             ],             
         },
+        tipo_costo: {
+            label: 'Tipo Costo',
+            type: 'select', 
+            options: [
+                { value: 'UNITARIO', label: 'Unitario' },
+                { value: 'GRUPAL', label: 'Grupal' }, 
+                { value: 'HABITACION', label: 'Habitacion' }, 
+            ],             
+        },
+        pax_min: { type: 'number', placeholder: 'Ingrese pax min', label: 'pax min' },
+        pax_max: { type: 'number', placeholder: 'Ingrese pax max', label: 'pax max' },
+        capacidad_pax: { type: 'number', placeholder: 'Ingrese capacidad pax', label: 'capacidad pax' },     
         monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },
         tipo_pasajero_id: { 
             label: 'Tipo Pasajero', 

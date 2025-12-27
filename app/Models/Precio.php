@@ -12,7 +12,7 @@ class Precio extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $fillable = ['anio', 'moneda', 'monto', 'tipo_pasajero_id', 'servicio_id', 'servicio_clase_id', 'estado_activo'];
+    protected $fillable = ['anio', 'moneda', 'tipo_costo', 'pax_min', 'pax_max', 'capacidad_pax', 'monto', 'tipo_pasajero_id', 'servicio_id', 'servicio_clase_id', 'estado_activo'];
 
     public function servicio()
     {

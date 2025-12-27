@@ -163,12 +163,16 @@
 
     const precio = ref({
         id: '',
-        anio: "2025",
-        monto: '66',
-        moneda: 'USD',
-        tipo_pasajero_id: '',
         servicio_id: '',
-        servicio_clase_id: '',
+        servicio_clase_id: '2', //DEFAULT TURISTA
+        tipo_pasajero_id: '3', //DEFAULT ADULTO
+        anio: new Date().getFullYear().toString(),
+        tipo_costo: 'UNITARIO',
+        pax_min: 1,
+        pax_max: 90,
+        capacidad_pax: 1,        
+        moneda: 'USD',
+        monto: 0.00,
         estado_activo: 1
     });
 
@@ -210,25 +214,25 @@
         });
 
         // Reiniciar precio y servicio
-        precio.value = {
-            id: '',
-            anio: "2025",
-            monto: '',
-            moneda: 'USD',
-            tipo_pasajero_id: '',
-            servicio_id: '',
-            servicio_clase_id: '',
-            estado_activo: 1
-        };
+        // precio.value = {
+        //     id: '',
+        //     servicio_id: '',
+        //     servicio_clase_id: '',
+        //     tipo_pasajero_id: '',
+        //     anio: new Date().getFullYear().toString(),
+        //     monto: '',
+        //     moneda: 'USD',
+        //     estado_activo: 1
+        // };
 
-        servicios.value = {
-            id: '',
-            proveedor_id: '',
-            servicio_detalle_id: '',
-            ubicacion_id: '',
-            estado_activo: 1,
-            precios: [ { ...precio.value } ]
-        };
+        // servicios.value = {
+        //     id: '',
+        //     proveedor_id: '',
+        //     servicio_detalle_id: '',
+        //     ubicacion_id: '',
+        //     estado_activo: 1,
+        //     precios: [ { ...precio.value } ]
+        // };
     }
 
   
