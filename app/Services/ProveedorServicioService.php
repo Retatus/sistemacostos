@@ -13,6 +13,7 @@ use App\Http\Requests\Precio\UpdateRequest as PrecioUpdateRequest;
 use App\Exceptions\CustomValidationException;
 use App\Http\Controllers\PrecioController;
 use App\Models\proveedor;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -94,35 +95,39 @@ class ProveedorServicioService
                             "Respuesta: " . $servicioResponse->getContent()
                         );
                     }
-
+                    
+                    // Llamar al método `store` del controlador de precio
                     $servicioId = json_decode($servicioResponse->getContent())->data->id;
 
-                    $precioData = $servicioData['precios'][0];
-                    $precioData['anio'] = date('Y');
-                    $precioData['servicio_id'] = $servicioId;
+                    foreach ($servicioData['precios'] as $precioData) {
+                        $precioData['servicio_id'] = $servicioId;
+                        Log::info('Datos de precio a validar: ' . json_encode($precioData));
 
-                    $validatorPrecio = Validator::make(
-                        $precioData,
-                        (new PrecioStoreRequest())->rules(),
-                        (new PrecioStoreRequest())->messages()
-                    );
+                        $validatorPrecio = Validator::make(
+                            $precioData,
+                            (new PrecioStoreRequest())->rules(),
+                            (new PrecioStoreRequest())->messages()
+                        );
 
-                    if ($validatorPrecio->fails()) {
-                        throw new \Illuminate\Validation\ValidationException($validatorPrecio);
-                        //throw new CustomValidationException($validatorPrecio, $proveedorId);
-                    }
+                        if ($validatorPrecio->fails()) {
+                            throw new \Illuminate\Validation\ValidationException($validatorPrecio);
+                            //throw new CustomValidationException($validatorPrecio, $proveedorId);
+                        }
 
-                    $precioResponse = $this->precioController->store(new PrecioStoreRequest($validatorPrecio->validated()));
-
-                    if ($precioResponse->getStatusCode() !== 201) {
-                        throw new \Exception('Error al insertar precio');
+                        $precioResponse = $this->precioController->store(new PrecioStoreRequest($validatorPrecio->validated()));
+                        Log::info(json_encode($validatorPrecio));
+                        Log::info('Respuesta de precio: ' . $precioResponse->getContent());
+                        
+                        if ($precioResponse->getStatusCode() !== 201) {
+                            throw new \Exception('Error al insertar precio');
+                        }
                     }
                 }
 
                 return [
                     'proveedor' => $proveedorResponse,           
                     'servicio' => $servicioResponse,
-                    'precio' => $precioResponse,
+                    //'precio' => $precioResponse,
                     'message' => 'Proveedor y servicios creados correctamente',
                 ];
             });

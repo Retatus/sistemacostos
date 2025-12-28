@@ -205,46 +205,58 @@
   }
 
   const ajustarCampos = (index) => {
-  const item = props.Servicio[index];
-  
-  // Al cambiar el tipo de costo, reseteamos a una sola tarifa por defecto
-  // a menos que sea GRUPAL, donde permitimos múltiples.
-  if (item.precios[0].tipo_costo === 'UNITARIO') {
-    item.precios = [item.precios[0]]; // Nos quedamos con uno
-    item.precios[0].pax_min = 1;
-    item.precios[0].pax_max = 99;
-    item.precios[0].capacidad_pax = 1;
-    item.precios[0].tipo_costo = 'UNITARIO';
-  } 
-  else if (item.precios[0].tipo_costo === 'HABITACION') {
-    item.precios = [item.precios[0]];
-    item.precios[0].pax_min = 1;
-    item.precios[0].pax_max = 99;
-    item.precios[0].capacidad_pax = 2; // Default Doble
-    item.precios[0].tipo_costo = 'HABITACION';
-  }
-  else if (item.precios[0].tipo_costo === 'GRUPAL') {
-      item.precios[0].tipo_costo = 'GRUPAL';
-      item.precios[0].pax_min = 1;
-      item.precios[0].pax_max = 2;
-      item.precios[0].capacidad_pax = 2; 
-    // Mantenemos lo que tenga, permitiendo agregar más con addRango
-  }
-};
+    const item = props.Servicio[index];
+    const primerPrecio = item.precios[0];
+    // 1. VINCULACIÓN REACTIVA (Solo si no está definida)
+    Object.defineProperty(primerPrecio, "servicio_id", { get() { return item.servicio_detalle_id; } });
+
+    // 2. LÓGICA DE NEGOCIO SEGÚN TIPO DE COSTO
+    const tipoCosto = primerPrecio.tipo_costo;
+
+    // Al cambiar el tipo de costo, reseteamos a una sola tarifa por defecto
+    // a menos que sea GRUPAL, donde permitimos múltiples.
+    if (tipoCosto === 'UNITARIO') {
+      // Reducimos el array a 1 solo elemento sin romper la reactividad del objeto
+        if (item.precios.length > 1) item.precios.splice(1); 
+      primerPrecio.pax_min = 1;
+      primerPrecio.pax_max = 99;
+      primerPrecio.capacidad_pax = 1;
+      primerPrecio.tipo_costo = 'UNITARIO';
+    } 
+    else if (tipoCosto === 'HABITACION') {
+      // Reducimos el array a 1 solo elemento sin romper la reactividad del objeto
+      if (item.precios.length > 1) item.precios.splice(1); 
+      primerPrecio.pax_min = 1;
+      primerPrecio.pax_max = 99;
+      primerPrecio.capacidad_pax = 2; // Default Doble
+      primerPrecio.tipo_costo = 'HABITACION';
+    }
+    else if (tipoCosto === 'GRUPAL') {
+      primerPrecio.pax_min = 1;
+      primerPrecio.pax_max = 2;
+      primerPrecio.capacidad_pax = primerPrecio.pax_max;
+      primerPrecio.tipo_costo = 'GRUPAL';
+    }
+  };
 
 const addRango = (index) => {
   const item = props.Servicio[index];
   const lastP = item.precios[item.precios.length - 1];
   
   item.precios.push({
-    servicio_clase_id: lastP.servicio_clase_id,
-    tipo_pasajero_id: lastP.tipo_pasajero_id,
+    id: null,
+    // VINCULACIÓN DIRECTA: Vue detectará el cambio en el item padre
+    get servicio_id() { return item.servicio_detalle_id; },
+    get servicio_clase_id() { return lastP.servicio_clase_id; },
+    get tipo_pasajero_id() { return lastP.tipo_pasajero_id; },
+    anio: lastP.anio,
     tipo_costo: 'GRUPAL',
     pax_min: parseInt(lastP.pax_max) + 1 || 1,
     pax_max: parseInt(lastP.pax_max) + 5 || 5,
     capacidad_pax: parseInt(lastP.pax_max) + 5 || 5,
     moneda: lastP.moneda,
-    monto: 0
+    monto: 0,
+    estado_activo: 1
   });
 };
 
