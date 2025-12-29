@@ -28,6 +28,7 @@ use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoPasajeroController;
 use App\Http\Controllers\TipoSunatController;
 use App\Http\Controllers\UbicacionController;
+use App\Http\Controllers\TipoHabitacionController;
 use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
 use Illuminate\Support\Facades\Route;
@@ -266,4 +267,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/pasajero_servicio/{pasajero_servicio}/edit', [PasajeroServicioController::class, 'edit'])->name('pasajero_servicio.edit');
     Route::patch('/dashboard/pasajero_servicio/{pasajero_servicio}/update', [PasajeroServicioController::class, 'update'])->name('pasajero_servicio.update');
     Route::delete('/dashboard/pasajero_servicio/{pasajero_servicio}/destroy', [PasajeroServicioController::class, 'destroy'])->name('pasajero_servicio.destroy');
+
+    Route::get('/dashboard/tipo_habitacion', [TipoHabitacionController::class, 'index'])->name('tipo_habitacion');
+    Route::get('/dashboard/tipo_habitacion/create', [TipoHabitacionController::class, 'create'])->name('tipo_habitacion.create');
+    Route::post('/dashboard/tipo_habitacion', [TipoHabitacionController::class, 'store'])->name('tipo_habitacion.store');
+    Route::get('/dashboard/tipo_habitacion/{tipo_habitacion}/edit', [TipoHabitacionController::class, 'edit'])->name('tipo_habitacion.edit');
+    Route::patch('/dashboard/tipo_habitacion/{tipo_habitacion}/update', [TipoHabitacionController::class, 'update'])->name('tipo_habitacion.update');
+    Route::delete('/dashboard/tipo_habitacion/{tipo_habitacion}/destroy', [TipoHabitacionController::class, 'destroy'])->name('tipo_habitacion.destroy');
 });
