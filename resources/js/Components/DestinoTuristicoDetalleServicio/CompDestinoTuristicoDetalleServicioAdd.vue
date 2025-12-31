@@ -237,12 +237,15 @@ const props = defineProps({
   function seleccionarServicio(item) {
     console.log('Servicio seleccionado:', item);
     props.itinerarioServicios.push({
+      id: null,
+      nro_orden: props.itinerarioServicios.length + 1,
       proveedor_categoria_id: selectedValueCategoria.value,
       proveedor_id: selectedValueProveedor.value,
       servicio_id: item.value,
       observacion: item.label,
       moneda: item.moneda,
       monto: item.monto,
+      estado_activo: 1,
     });
     calcularTotal();
   };
