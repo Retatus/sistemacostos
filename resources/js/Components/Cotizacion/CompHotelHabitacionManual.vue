@@ -1,3 +1,100 @@
+<template>
+  <div class="text-sm leading-tight rounded p-3 bg-red-300/10 border border-red-300">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-1 text-xs">
+      <span class="font-semibold text-gray-700">
+        Distribución habitaciones
+      </span>
+
+      <button type="button" @click="restaurar" class="text-gray-500 hover:text-gray-800 text-xs"
+        title="Restaurar sugerencia automática">
+        🔄 Restaurar
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-100 text-[10px] uppercase tracking-wide text-gray-600">
+          <th class="px-1 py-1 text-left">Tipo</th>
+          <th class="px-1 py-1 text-center">Cap</th>
+          <th class="px-1 py-1 text-right">Precio</th>
+          <th class="px-1 py-1 text-center">Cant</th>
+          <th class="px-1 py-1 text-right">Subtotal</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="h in seleccion" :key="h.tipo" class="border-b hover:bg-gray-50">
+          <td class="px-1 py-1 capitalize text-xs text-gray-600">
+            {{ h.tipo }}
+          </td>
+
+          <td class="px-1 py-1 text-center text-xs text-gray-600">
+            {{ h.capacidad }}
+          </td>
+
+          <td class="px-1 py-1 text-xs text-gray-600 text-right">
+            {{ h.moneda }} {{ h.precio.toFixed(2) }}
+          </td>
+
+          <td class="px-1 py-1 text-center">
+            <div class="inline-flex items-center gap-1 text-xs text-gray-600">
+              <button type="button" @click="disminuir(h)" class="w-5 h-5 rounded text-xs hover:bg-red-100">
+                -
+              </button>
+
+              <span class="w-4 text-center">
+                {{ h.cantidad }}
+              </span>
+
+              <button type="button" @click="aumentar(h)" class="w-5 h-5 rounded text-xs hover:bg-red-100">
+                +
+              </button>
+            </div>
+          </td>
+
+          <td class="px-1 py-1 text-right font-semibold">
+            {{ h.moneda }} {{ (h.precio * h.cantidad).toFixed(2) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Alerta -->
+    <div v-if="faltaCapacidad"
+      class="mt-1 px-2 py-1 text-[11px] bg-yellow-100 border border-yellow-300 text-yellow-800 rounded">
+      ⚠ Capacidad {{ capacidadTotal }} / {{ pasajeros }} pasajeros
+    </div>
+
+    <!-- Resumen -->
+    <div class="grid grid-cols-3 gap-2 mt-2 pt-1 border-t border-dashed text-[11px]">
+      <div class="flex flex-col">
+        <span class="text-gray-500">Habitaciones</span>
+        <span class="font-semibold text-gray-800">
+          {{ cantidadHabitaciones }}
+        </span>
+      </div>
+
+      <div class="flex flex-col text-center">
+        <span class="text-gray-500">Total</span>
+        <span class="font-semibold text-gray-800">
+          S/ {{ subtotal.toFixed(2) }}
+        </span>
+      </div>
+
+      <div class="flex flex-col text-right">
+        <span class="text-gray-500">Unit / pax</span>
+        <span class="font-semibold text-gray-800">
+          S/ {{ costoUnitario.toFixed(2) }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</template>
+
 <script setup>
 import { ref, computed, watch } from 'vue'
 import '../../../css/excelTable.css';
@@ -37,6 +134,7 @@ function calcularDistribucionAutomatica() {
       resultado.push({
         tipo: hab.tipo,
         capacidad: hab.capacidad,
+        moneda: hab.moneda,
         precio: hab.precio,
         cantidad
       })
@@ -49,6 +147,7 @@ function calcularDistribucionAutomatica() {
     resultado.push({
       tipo: menor.tipo,
       capacidad: menor.capacidad,
+      moneda: menor.moneda,
       precio: menor.precio,
       cantidad: 1
     })
@@ -112,199 +211,3 @@ watch(
   { immediate: true }
 )
 </script>
-
-<template>
-  <div class="hotel-habitaciones bg-green-300 border-green-600 p-2 rounded-md"  >
-
-    <div class="hh-header">
-      <span class="hh-title">Distribución habitaciones</span>
-      <button
-        type="button"
-        class="hh-reset"
-        @click="restaurar"
-        title="Restaurar sugerencia automática"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-        </svg>
-
-      </button>
-    </div>
-
-    <table class="tabla-habitaciones">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th class="center">Cap.</th>
-          <th class="right">Precio</th>
-          <th class="center">Cant.</th>
-          <th class="right">Subtotal</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="h in seleccion" :key="h.tipo">
-          <td class="tipo">{{ h.tipo }}</td>
-          <td class="center">{{ h.capacidad }}</td>
-
-          <td class="right">
-            S/ {{ h.precio.toFixed(2) }}
-          </td>
-
-          <td class="center">
-            <div class="qty-control">
-              <button type="button" @click="disminuir(h)">−</button>
-              <span>{{ h.cantidad }}</span>
-              <button type="button" @click="aumentar(h)">+</button>
-            </div>
-          </td>
-
-          <td class="right strong">
-            S/ {{ (h.precio * h.cantidad).toFixed(2) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div v-if="faltaCapacidad" class="alerta">
-      ⚠ Capacidad {{ capacidadTotal }} / {{ pasajeros }} pasajeros
-    </div>
-
-    <div class="resumen">
-      <div>
-        <span>Habitaciones</span>
-        <strong>{{ cantidadHabitaciones }}</strong>
-      </div>
-      <div>
-        <span>Total</span>
-        <strong>S/ {{ subtotal.toFixed(2) }}</strong>
-      </div>
-      <div>
-        <span>Unitario / pax</span>
-        <strong>S/ {{ costoUnitario.toFixed(2) }}</strong>
-      </div>
-    </div>
-
-  </div>
-</template>
-
-
-<style scoped>
-.hotel-habitaciones {
-  font-size: 0.85rem;
-  line-height: 1.2;
-}
-
-.hh-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.hh-title {
-  font-weight: 600;
-  color: #333;
-}
-
-.hh-reset {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.hh-reset:hover {
-  color: #000;
-}
-
-.tabla-habitaciones {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tabla-habitaciones th {
-  background: #f5f6f7;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  padding: 6px;
-  border-bottom: 1px solid #ddd;
-}
-
-.tabla-habitaciones td {
-  padding: 6px;
-  border-bottom: 1px solid #eee;
-}
-
-.tabla-habitaciones tr:hover {
-  background: #fafafa;
-}
-
-.center {
-  text-align: center;
-}
-
-.right {
-  text-align: right;
-}
-
-.strong {
-  font-weight: 600;
-}
-
-.tipo {
-  text-transform: capitalize;
-}
-
-.qty-control {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.qty-control button {
-  width: 22px;
-  height: 22px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.qty-control button:hover {
-  background: #f0f0f0;
-}
-
-.alerta {
-  margin-top: 6px;
-  padding: 6px 8px;
-  background: #fff3cd;
-  border: 1px solid #ffeeba;
-  font-size: 0.75rem;
-  color: #856404;
-}
-
-.resumen {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-top: 8px;
-  padding-top: 6px;
-  border-top: 1px dashed #ccc;
-}
-
-.resumen div {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.75rem;
-  color: #555;
-}
-
-.resumen strong {
-  font-size: 0.85rem;
-  color: #000;
-}
-
-</style>

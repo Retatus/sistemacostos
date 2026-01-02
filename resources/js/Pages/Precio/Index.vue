@@ -35,7 +35,22 @@
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         servicio_id
-                                    </th> 
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        tipo_habitacion
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        pax_min
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        pax_max
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        capacidad    
+                                    </th>
+                                    <th scope='col' className='px-6 py-3'>
+                                        tipo_costo    
+                                    </th>
                                     <th scope='col' className='px-6 py-3'>
                                         monto
                                     </th> 
@@ -72,6 +87,21 @@
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.servicio_clase.nombre}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.tipo_habitacion}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.pax_min}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.pax_max}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.capacidad_pax}}
+                                    </td>
+                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
+                                        {{precio.tipo_costo}}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.monto}}

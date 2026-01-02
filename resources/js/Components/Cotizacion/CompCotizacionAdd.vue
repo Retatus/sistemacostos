@@ -1,362 +1,635 @@
 <template>
-    <div class="container mx-auto">
-        <form @submit.prevent="submitCotizacion" class="py-5 space-y-3">
-            <div class="grid grid-cols-6 gap-6 w-full p-5">
-                <!-- Primera fila -->
-                <div hidden class="col-span-1">
-                    <label for="proveedor_id" class="block text-sm font-medium text-gray-700">Cliente Id</label>
-                    <input v-model="Cotizacion.proveedor_id" type="text" id="proveedor_id" name="proveedor_id"
-                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Cliente id">
+    <div class="container mx-auto px-2">
+    <form @submit.prevent="submitCotizacion" class="py-6 space-y-6">       
+        <!-- TARJETA 2: INFORMACIÓN DE CLIENTE, Y DATOS DE LA COTIZACIÓN -->
+         <div class="grid md:grid-cols-1 xl:grid-cols-2 gap-6">
+            <!-- Columna Izquierda -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                    <i class="text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                    </i>
+                    Datos del Cliente
+                </h3> 
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <div hidden class="md:col-span-3 lg:col-span-2">
+                        <label for="cliente_nro_doc" class="block text-sm font-medium text-gray-700 mb-1">
+                            <span class="text-red-500">*</span> Cliente Id
+                        </label>
+                        <input v-model="Cotizacion.cliente_nro_doc" type="text" id="cliente_nro_doc" 
+                            required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="Ej: 12345678">
+                    </div>
+                    <!-- Documento del Cliente -->
+                    <div class="md:col-span-3 lg:col-span-2">
+                        <label for="cliente_nro_doc" class="block text-sm font-medium text-gray-700 mb-1">
+                            <span class="text-red-500">*</span> Documento
+                        </label>
+                        <input v-model="Cotizacion.cliente_nro_doc" type="text" id="cliente_nro_doc" 
+                            required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="Ej: 12345678">
+                    </div>
+                    
+                    <!-- Nombre del Cliente -->
+                    <div class="md:col-span-6 lg:col-span-7">
+                        <label for="proveedor_razon_social" class="block text-sm font-medium text-gray-700 mb-1">
+                            <span class="text-red-500">*</span> Nombre del Cliente
+                        </label>
+                        <input v-model="Cotizacion.proveedor_razon_social" type="text" 
+                            id="proveedor_razon_social" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="Nombre completo o razón social">
+                    </div>
+                    
+                    <!-- Botón Nuevo -->
+                    <div class="md:col-span-3 lg:col-span-3 flex items-end">
+                        <button type="button" @click="showModalProveedor = true"
+                                class="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                            </svg>
+                            Nuevo
+                        </button>
+                    </div>
                 </div>
-                <div class="col-span-1">
-                    <label for="cliente_nro_doc" class="block text-sm font-medium text-gray-700">Cliente nro
-                        doc.</label>
-                    <input v-model="Cotizacion.cliente_nro_doc" type="text" id="cliente_nro_doc" name="cliente_nro_doc"
-                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Cliente nro doc.">
+            </div>
+            
+            <!-- Columna Derecha -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                    <i class="text-green-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                        </svg>
+                    </i>
+                    Datos de la Cotización
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <!-- Número de File -->
+                    <div class="md:col-span-3 lg:col-span-2">
+                        <label for="file_nro" class="block text-sm font-medium text-gray-700 mb-1">
+                            N° File
+                        </label>
+                        <input v-model="Cotizacion.file_nro" type="text" id="file_nro" disabled
+                            class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg cursor-not-allowed"
+                            placeholder="Auto-generado">
+                    </div>
+                    
+                    <!-- Nombre de File -->
+                    <div class="md:col-span-6 lg:col-span-5">
+                        <label for="file_nombre" class="block text-sm font-medium text-gray-700 mb-1">
+                            <span class="text-red-500">*</span> Nombre del File
+                        </label>
+                        <input v-model="Cotizacion.file_nombre" type="text" id="file_nombre" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="Ej: Tour Cusco 2024">
+                    </div>
+                    
+                    <!-- Estado de Cotización -->
+                    <div class="md:col-span-3 lg:col-span-5">
+                        <label for="estado_cotizacion" class="block text-sm font-medium text-gray-700 mb-1">
+                            Estado de Cotización
+                        </label>
+                        <select v-model="Cotizacion.estado_cotizacion"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium">
+                            <option disabled value="0">Seleccionar estado...</option>
+                            <option v-for="option in EstadoCotizacion" :key="option.value" :value="option.value"
+                                    :class="{
+                                        'text-yellow-600': option.value === 'pendiente',
+                                        'text-green-600': option.value === 'confirmada',
+                                        'text-red-600': option.value === 'cancelada'
+                                    }">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-span-4">
-                    <label for="proveedor_razon_social" class="block text-sm font-medium text-gray-700">Cliente
-                        nombre</label>
-                    <input v-model="Cotizacion.proveedor_razon_social" type="text" id="proveedor_razon_social"
-                        name="proveedor_razon_social" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Cliente nombre">
+            </div>
+        </div>
+
+        <!-- TARJETA 3: INFORMACIÓN GENERAL -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Columna Izquierda -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                    <i class="text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                        </svg>
+                    </i>
+                    Información general
+                </h3>                    
+                
+                <div class="space-y-4">
+                    <!-- Fila 1: Comprobante y Fecha -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="comprobante_id" class="block text-sm font-medium text-gray-700 mb-1">
+                                Tipo Comprobante
+                            </label>
+                            <select v-model="Cotizacion.comprobante_id" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <option disabled value="0">Seleccionar...</option>
+                                <option v-for="option in sTipoComprobante" :key="option.value" :value="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <Datepicker label="Fecha" :modelValue="Cotizacion.fecha"
+                                @update:modelValue="Cotizacion.fecha = $event" :disabled="true"/>
+                        </div>
+                    </div>
+                    
+                    <!-- Fila 2: Idiomas y Mercado -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="idioma" class="block text-sm font-medium text-gray-700 mb-1">
+                                Idioma
+                            </label>
+                            <select v-model="Cotizacion.idioma_id" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <option disabled value="0">Seleccionar...</option>
+                                <option v-for="option in sIdioma" :key="option.value" :value="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="mercado" class="block text-sm font-medium text-gray-700 mb-1">
+                                Mercado
+                            </label>
+                            <select v-model="Cotizacion.mercado_id" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <option disabled value="0">Seleccionar...</option>
+                                <option v-for="option in sMercado" :key="option.value" :value="option.value">
+                                    {{ option.label }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-span-1 ">
-                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                    <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="showModalProveedor = true">
-                        Nuevo
-                    </PrimaryButton>
+            </div>
+            
+            <!-- Columna Derecha -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-calculator text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                        </i>
+                        Pasajeros
+                    </h3>
+                    
+                    <button v-if="Cotizacion.nro_pasajeros > 0" type="button" @click="agregarDetalleDatosPasajero"
+                            class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                        <i class="fas fa-user-plus">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                            </svg>
+                        </i>
+                        Datos del Pasajero
+                    </button>
+                </div>              
+                
+                <div class="space-y-4">
+                    <!-- Total Pasajeros -->
+                    <div>
+                        <h3 for="nro_pasajeros" class="block text-sm font-medium text-gray-700 mb-1">
+                            Total de Pasajeros
+                        </h3>
+                        <div class="relative">
+                            <input v-model="Cotizacion.nro_pasajeros" type="text" id="nro_pasajeros" readonly
+                                   class="w-full px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg font-semibold text-blue-700 text-center">
+                            <div class="absolute right-3 top-2">
+                                <i class="fas fa-users text-blue-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contadores -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                <i class="text-yellow-500 mr-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                    </svg>
+                                </i>
+                                Niños
+                            </label>
+                            <ContadorInput v-model="Cotizacion.nro_ninio" id="nro_ninio" 
+                                placeholder="0" :required="true"
+                                @accion-realizada="manejarAccion"
+                                class="[&_button]:bg-yellow-100 [&_button]:text-yellow-700 [&_input]:bg-yellow-50" />
+                        </div>
+                        
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                <i class="text-green-500 mr-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                    </svg>
+                                </i>
+                                Adultos
+                            </label>
+                            <ContadorInput v-model="Cotizacion.nro_adulto" id="nro_adulto"
+                                placeholder="0" :required="true"
+                                @accion-realizada="manejarAccion"
+                                class="[&_button]:bg-green-100 [&_button]:text-green-700 [&_input]:bg-green-50" />
+                        </div>
+                        
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                <i class="text-purple-500 mr-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                    </svg>
+                                </i>
+                                Estudiantes
+                            </label>
+                            <ContadorInput v-model="Cotizacion.nro_estudiante" id="nro_estudiante"
+                                placeholder="0" :required="true"
+                                @accion-realizada="manejarAccion"
+                                class="[&_button]:bg-purple-100 [&_button]:text-purple-700 [&_input]:bg-purple-50" />
+                        </div>
+                    </div>
                 </div>
-                <!-- Segunda fila -->
-                <div class="col-span-1">
-                    <label for="file_nro" class="block text-sm font-medium text-gray-700">Nro file</label>
-                    <input v-model="Cotizacion.file_nro" disabled type="text" id="file_nro" required="true"
-                        neme="file_nro" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Nro file">
-                </div>
-                <div class="col-span-4">
-                    <label for="file_nombre" class="block text-sm font-medium text-gray-700">Nombre de file</label>
-                    <input v-model="Cotizacion.file_nombre" type="text" id="file_nombre" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Nombre de file">
-                </div>
-                <div class="col-span-1 ">
-                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                    <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="">
-                        Nuevo
-                    </PrimaryButton>
-                </div>
-                <!-- Tercera fila -->
-                <div class="col-span-1">
-                    <label for="comprobante_id" class="block text-sm font-medium text-gray-700">Tipo comprobante</label>
-                    <select v-model="Cotizacion.comprobante_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
-                        id="comprobante_id">
-                        <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in sTipoComprobante" :key="option.value" :value="option.value">
-                            {{ option.label }}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-span-1 ">
-                    <Datepicker label="Fecha" :modelValue="Cotizacion.fecha"
-                        @update:modelValue="Cotizacion.fecha = $event" :disabled="true" />
-                </div>
-                <div class="col-span-1">
-                    <label for="nro_pasajeros" class="block text-sm font-medium text-gray-700">Nro de Pax</label>
-                    <input v-model="Cotizacion.nro_pasajeros" type="text" id="nro_pasajeros" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Nro de Pax" readonly>
-                </div>
-                <div class="col-span-1">
-                    <label for="nro_ninio" class="block text-sm font-medium text-gray-700">Niño</label>
-                    <ContadorInput v-model="Cotizacion.nro_ninio" id="nro_ninio" placeholder="0" :required="true"
-                        @accion-realizada="manejarAccion" />
-                </div>
-                <div class="col-span-1">
-                    <label for="nro_adulto" class="block text-sm font-medium text-gray-700">Adulto</label>
-                    <ContadorInput v-model="Cotizacion.nro_adulto" id="nro_adulto" placeholder="0" :required="true"
-                        @accion-realizada="manejarAccion" />
-                </div>
-                <div class="col-span-1">
-                    <label for="nro_estudiante" class="block text-sm font-medium text-gray-700">Estudiante</label>
-                    <ContadorInput v-model="Cotizacion.nro_estudiante" id="nro_estudiante" placeholder="0"
-                        :required="true" @accion-realizada="manejarAccion" />
-                </div>
-                <!-- Cuarta fila -->
-                <div class="col-span-1">
-                    <label for="idioma" class="block text-sm font-medium text-gray-700">Idioma</label>
-                    <select v-model="Cotizacion.idioma_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
-                        id="idioma">
-                        <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in sIdioma" :key="option.value" :value="option.value">
-                            {{ option.label }}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-span-1">
-                    <label for="mercado" class="block text-sm font-medium text-gray-700">Mercado</label>
-                    <select v-model="Cotizacion.mercado_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
-                        id="mercado">
-                        <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in sMercado" :key="option.value" :value="option.value">
-                            {{ option.label }}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-span-4 ">
-                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700">Destino Turistico</label>
+            </div>
+        </div>
+
+        <!-- TARJETA 4: DESTINO Y FECHAS -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                <i class="text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" />
+                    </svg>
+                </i>
+                Destino
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <!-- Destino Turístico -->
+                <div class="md:col-span-8">
+                    <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700 mb-1">
+                        Destino Turístico
+                    </label>
                     <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
-                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="destino_turistico_id">
-                        <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value" :class="{ 'text-blue': option.value === 'PEN', 'text-green': option.value === 'USD' }">
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                        <option disabled value="0">Seleccionar destino...</option>
+                        <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
-                <!-- Quinta fila -->
-                <div class="col-span-1">
-                    <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                    <PrimaryButton type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="agregarDetalleDatosPasajero">
-                        Datos del pax
-                    </PrimaryButton>
-                </div>
-                <div class="col-span-1 ">
-                    <label for="pais_id" class="block text-sm font-medium text-gray-700">Pais</label>
-                    <select v-model="Cotizacion.pais_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm"
-                        id="pais_id">
-                        <option disabled value="0">-- Selecciona una opción --</option>
+                
+                <!-- País -->
+                <div class="md:col-span-4">
+                    <label for="pais_id" class="block text-sm font-medium text-gray-700 mb-1">
+                        País
+                    </label>
+                    <select v-model="Cotizacion.pais_id" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                        <option disabled value="0">Seleccionar...</option>
                         <option v-for="option in sPais" :key="option.value" :value="option.value">
                             {{ option.label }}
                         </option>
                     </select>
                 </div>
-                <div class="col-span-1 ">
-                    <Datepicker label="Fecha Inicio" :modelValue="Cotizacion.fecha_inicio"
-                        @update:modelValue="Cotizacion.fecha_inicio = $event" @fecha-cambiada="manejarCambioFecha"
-                        :emitirEventoCambio="true" />
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                <i class="text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                </i>
+                Fechas
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <!-- Fechas -->
+                <div class="md:col-span-5">
+                    <Datepicker label="Inicio" :modelValue="Cotizacion.fecha_inicio"
+                        @update:modelValue="Cotizacion.fecha_inicio = $event"
+                        @fecha-cambiada="manejarCambioFecha"
+                        :emitirEventoCambio="true"/>
                 </div>
-                <div class="col-span-1">
-                    <Datepicker label="Fecha Fin" :modelValue="Cotizacion.fecha_fin"
-                        @update:modelValue="Cotizacion.fecha_fin = $event" :disabled="true" />
+                
+                <div class="md:col-span-5">
+                    <Datepicker label="Fin" :modelValue="Cotizacion.fecha_fin"
+                        @update:modelValue="Cotizacion.fecha_fin = $event" :disabled="true"/>
                 </div>
-                <div class="col-span-1">
-                    <label for="nro_dias" class="block text-sm font-medium text-gray-700">Dias</label>
-                    <input disabled v-model="Cotizacion.nro_dias" type="text" id="nro_dias" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Dias">
+                
+                <div class="md:col-span-2">
+                    <label for="nro_dias" class="block text-sm font-medium text-gray-700 mb-1">
+                        Días
+                    </label>
+                    <input disabled v-model="Cotizacion.nro_dias" type="text" id="nro_dias"
+                            class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-center font-semibold"
+                            placeholder="0">
                 </div>
-                <div class="col-span-1">
-                    <label for="estado_cotizacion" class="block text-sm font-medium text-gray-700">Estado
-                        Cotizacion</label>
-                    <select v-model="Cotizacion.estado_cotizacion"
-                        class="mt-1 w-full border-gray-300 rounded-md shadow-sm" id="estado_cotizacion">
-                        <option disabled value="0">-- Selecciona una opción --</option>
-                        <option v-for="option in EstadoCotizacion" :key="option.value" :value="option.value">
-                            {{ option.label }}
-                        </option>
-                    </select>
+            </div>
+        </div>
+        </div>
+        
+        
+        <!-- TARJETA 5: DETALLE DE SERVICIOS -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+                <i class="text-purple-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                    </svg>
+                </i>
+                Detalle de Servicios
+            </h3>
+            
+            <div v-for="(dia, indexDia) in serviciosPorDia" :key="indexDia" class="day-group mb-6">
+            <!-- HEADER DEL DÍA -->
+            <div class="day-header bg-gradient-to-r from-teal-600 to-teal-700 text-white bg p-3 rounded-lg mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-md">
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold truncate">Día {{ dia.nro_dia }}: {{ dia.nombre }}</h3>
                 </div>
-                <div class="col-span-6">
-                    <div v-for="(dia, indexDia) in serviciosPorDia" :key="indexDia" class="day-group">
-                        <div class="day-header bg-black  text-slate-300 p-1 rounded mb-2 flex justify-between items-center">
-                            <h3>Día {{ dia.nro_dia }}: {{ indexDia }} {{ dia.nombre }}</h3>
-                            <!-- {{ serviciosPorDia }} flex justify-between items-center gap-4 mt-5 mb-5 px-5 -->
-                            
-                            <div class="w-1/3 flex justify-end items-center gap-2">
-                                <span @click="toggleTable(indexDia)" class="text-sm justify-end cursor-pointer">
-                                    <i>
-                                        <svg v-if="dia.isVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg> 
-                                        <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                                        </svg>
-                                    </i> 
-                                </span>
-                                <button @click=""
-                                    type="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                        class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                                <button @click="eliminarItinerario(indexDia)" type="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <Transition name="fade-slide">
-                            <table v-show = "dia.isVisible" className="excel-table w-full text-xs text-left rtl:text-right text-gray-500 mb-2">
-                                <thead className="text-xs text-gray-900 uppercase bg-gray-50">
-                                    <tr className="bg-white border-b text-gray-900">
-                                        <th hidden>ID</th>
-                                        <!-- <th class="w-1/12 px-4 py-2">Hora</th> -->
-                                        <!-- <th class="w-1/12 px-4 py-2">Categoria</th> -->
-                                        <th class="w-3/12 px-4 py-2">Hora / Categoria / Servicio</th>
-                                        <th class="w-2/12 px-4 py-2">Observación</th>
-                                        <!-- <th class="w-1/12 px-4 py-2">Moneda</th> -->
-                                        <th class="w-2/12 px-4 py-2 text-center">Moneda / Monto / Cant. / Subtotal</th>
-                                        <!-- <th class="w-1/12 px-4 py-2">Cantidad</th>
-                                        <th class="w-1/12 px-4 py-2">Subtotal</th> -->
-                                        <th class="w-2/12 px-4 py-2">Pasajeros Asignados</th>
-                                        <th class="w-1/12 px-4 py-2 text-center">status
-                                             <!-- <button @click="agregarDetalle(dia.nro_dia, index, dia.id)"
-                                                type="button">
+                
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+                    <button type="button" @click="toggleTable(indexDia)" 
+                        class="px-3 py-1.5 bg-orange-400 hover:bg-orange-700 text-white text-sm rounded-lg transition-colors flex items-center gap-1">
+                        <svg v-if="dia.isVisible" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg> 
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        </svg>
+                    </button>
+                    
+                    <button type="button" @click="" 
+                            class="px-3 py-1.5 bg-green-400 hover:bg-green-700 text-white text-sm rounded-lg transition-colors flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </button>
+                    
+                    <button type="button" @click="eliminarItinerario(indexDia)"
+                            class="px-3 py-1.5 bg-red-400 hover:bg-red-700 text-white text-sm rounded-lg transition-colors flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLA RESPONSIVE -->
+            <Transition name="fade-slide">
+                <div v-show="dia.isVisible" class="overflow-x-auto rounded-lg border border-gray-300 shadow-sm">
+                    <table class="min-w-full divide-y divide-gray-300 text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <!-- COLUMNA 1: Hora + Categoría + Servicio (Agrupado) -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-3/12">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Detalles del Servicio</span>
+                                        <span class="text-xs font-normal text-gray-500">Hora / Categoría / Servicio</span>
+                                    </div>
+                                </th>
+                                
+                                <!-- COLUMNA 2: Observación -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-3/12">
+                                    Observación
+                                </th>
+                                
+                                <!-- COLUMNA 3: Financiero (Agrupado) -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Detalles Financieros</span>
+                                        <span class="text-xs font-normal text-gray-500">Moneda / Monto / Cant. / Subtotal</span>
+                                    </div>
+                                </th>
+                                
+                                <!-- COLUMNA 4: Pasajeros -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
+                                    Pasajeros Asignados
+                                </th>
+                                
+                                <!-- COLUMNA 5: Estado y Acciones -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Estado</span>
+                                        <span class="text-xs font-normal text-gray-500">y acciones</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr v-for="(servicioDetalle, indexItinerario) in dia.itinerario_servicios" 
+                                :key="servicioDetalle.id"
+                                class="hover:bg-gray-50 transition-colors">
+                                
+                                <!-- CELDA 1: Detalles del Servicio -->
+                                <td class="px-4 py-3 border-r border-gray-300">
+                                    <div class="flex flex-col gap-2">
+                                        <!-- Hora -->
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-gray-500 w-10">Hora:</span>
+                                            <InputHora v-model="servicioDetalle.pasajero_servicios.hora" 
+                                                    class="flex-1 text-sm" />
+                                        </div>
+                                        
+                                        <!-- Categoría -->
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-gray-500 w-10">Cat:</span>
+                                            <select v-model="servicioDetalle.proveedor_categoria_id"
+                                                    class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <option disabled value="0">Seleccionar categoría</option>
+                                                <option v-for="option in sCategoriaProveedor" 
+                                                        :key="option.value"
+                                                        :value="option.value">
+                                                    {{ option.label }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Servicio -->
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-gray-500 w-10">Serv:</span>
+                                            <select v-model="servicioDetalle.servicio_id"
+                                                    class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                    @change="handleChange(dia.nro_dia, indexItinerario)">
+                                                <option disabled value="0">Seleccionar servicio</option>
+                                                <option v-for="item in servicios" 
+                                                        :key="item.value"
+                                                        :value="item.value">
+                                                    {{ item.label }}
+                                                </option>
+                                                <option value='__add_new__' class="text-green-600 font-medium">
+                                                    ➕ Agregar nuevo servicio
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- CELDA 2: Observación -->
+                                <td class="px-4 py-3 border-r border-gray-300">
+                                    <!-- {{ servicioDetalle }} -->
+                                    <div v-if="servicioDetalle.servicio?.precios[0]?.tipo_costo === 'HABITACION'">
+                                        <HotelHabitacionManual
+                                            :pasajeros="Cotizacion.nro_pasajeros"
+                                            :habitacionesDisponibles="catalogoHabitaciones"
+                                            :proveedoresAlternativos="proveedoresAlternativos"
+                                            @update="(seleccion) => actualizarDistribucion(seleccion, dia.nro_dia, indexItinerario)"
+                                            @cambiarProveedor="(p) => seleccionarProveedor(p, servicioDetalle)"
+                                            class="text-sm"
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
+                                                name="observacion"                                                
+                                                class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="Ingrese observaciones aquí..." rows="2">
+                                        </textarea>
+                                    </div>
+                                </td>
+                                
+                                <!-- CELDA 3: Detalles Financieros -->
+                                <td class="px-4 py-3 border-r border-gray-300">
+                                    <div class="flex flex-col gap-2">                                        
+                                        <!-- Moneda y Monto -->
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-500">Moneda:</span>
+                                                <select v-model="servicioDetalle.pasajero_servicios.moneda"
+                                                        class="w-full border rounded px-2 py-1 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-opacity-50"
+                                                        :class="{
+                                                            'border-blue-500 bg-blue-50 text-blue-800 focus-ring-blue-500': servicioDetalle.pasajero_servicios.moneda === 'USD',
+                                                            'border-green-500 bg-green-50 text-green-800 focus-ring-green-500': servicioDetalle.pasajero_servicios.moneda === 'PEN'
+                                                        }">
+                                                    <option value="USD" class="bg-white">USD</option>
+                                                    <option value="PEN" class="bg-white">PEN</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-500">Monto</span>
+                                                <input type="text" 
+                                                    v-model="servicioDetalle.pasajero_servicios.monto"
+                                                    @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
+                                                    @blur="formatMonto(dia.id, servicioDetalle.id)"
+                                                    class="border border-gray-300 rounded px-2 py-1 text-right text-sm focus:ring-2 focus:ring-blue-500">
+                                            </div>
+                                        </div>                                        
+                                        <!-- cantidad y Subtotal -->                                        
+                                        <div class="grid grid-cols-2 gap-2">                         
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-500">Cantidad</span>
+                                                <input type="number"
+                                                    v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
+                                                    min="1"
+                                                    @input="calcularSubtotal(dia.id, servicioDetalle.id)"
+                                                    class="border border-gray-300 rounded px-2 py-1 text-right text-sm focus:ring-2 focus:ring-blue-500">
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="text-xs text-gray-500">Subtotal:</span>
+                                                <div class="font-semibold text-gray-900 text-right text-sm bg-gray-50 rounded px-2 py-1 border border-gray-200">
+                                                    {{ calcularSubtotalDisplay(dia.id, servicioDetalle.id) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- CELDA 4: Pasajeros -->
+                                <td class="px-4 py-3 border-r border-gray-300">
+                                    <AsignarPasajerosServicio 
+                                        :pasajeros-disponibles="PasajerosReducido"
+                                        v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
+                                        :servicio="servicioDetalle.pasajero_servicios"
+                                        class="text-sm"
+                                    />
+                                </td>
+                                
+                                <!-- CELDA 5: Estado y Acciones -->
+                                <td class="px-4 py-3 border-r border-gray-300">
+                                    <div class="flex flex-col gap-3">
+                                        <!-- Estado -->
+                                        <div>
+                                            <select v-model="servicioDetalle.pasajero_servicios.estatus"
+                                                    class="w-full border rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-opacity-50"
+                                                    :class="{
+                                                        'border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-yellow-500': servicioDetalle.pasajero_servicios.estatus == 0,
+                                                        'border-green-300 bg-green-50 text-green-800 focus:ring-green-500': servicioDetalle.pasajero_servicios.estatus == 1,
+                                                        'border-red-300 bg-red-50 text-red-800 focus:ring-red-500': [2,3].includes(servicioDetalle.pasajero_servicios.estatus)
+                                                    }">
+                                                <option value="0">🟡 PENDIENTE</option>
+                                                <option value="1">✅ CONFIRMADA</option>
+                                                <option value="2">❌ CANCELADA</option>
+                                                <option value="3">👤 XPASAJERO</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Botones de Acción -->
+                                        <div class="flex gap-1">
+                                            <button type="button" @click="openModalStatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
+                                                    class="flex-1 px-2 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                </svg>
+                                            </button>
+                                            
+                                            <button type="button" @click="agregarDetalle(dia.nro_dia, indexItinerario, dia.id)"
+                                                    class="flex-1 px-2 py-1.5 bg-green-100 hover:bg-green-200 text-green-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">                                                
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
-                                            </button> -->
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(servicioDetalle, indexItinerario) in dia.itinerario_servicios" :key="servicioDetalle.id"
-                                        className="bg-white border-b text-gray-900 font-semibold">
-                                        <td class="px-1" hidden>
-                                            <input v-model="servicioDetalle.itinerario_servicio_id" type="text"
-                                                class="w-full border-gray-300 rounded-md shadow-sm" />
-                                        </td>
-                                        <!-- <td class="px-1 ">
-                                        </td> -->
-                                        <!-- {{ servicioDetalle.nro_orden }} -->
-                                        <td class="px-1">
-                                            <div class="flex space-x-1">
-                                                <div class="w-2/12">
-                                                    <InputHora v-model="servicioDetalle.pasajero_servicios.hora" />
-                                                </div>
-                                                <div class="w-3/12">
-                                                    <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs">
-                                                        <option disabled value="0">-- Selecciona una opción --</option>
-                                                        <option v-for="option in sCategoriaProveedor" :key="option.value"
-                                                            :value="option.value">
-                                                            {{ option.label }}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="w-7/12">
-                                                    <select v-model="servicioDetalle.servicio_id"
-                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs"
-                                                        @change="handleChange(dia.nro_dia, indexItinerario)">
-                                                        <option disabled value="0">-- Selecciona una opción --</option>
-                                                        <option v-for="item in servicios" :key="item.value"
-                                                            :value="item.value">
-                                                            {{ item.label }}
-                                                        </option>
-                                                        <option value='__add_new__'>➕ Agregar nuevo...</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-1">
-                                            <div class="flex space-x-1">
-                                                <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
-                                                    name="observacion"
-                                                    class="w-full border-gray-300 rounded-md shadow-sm text-xs text-pink-900 italic"
-                                                    placeholder="Observación del Servicio" rows="1">
-                                                </textarea>
-                                            </div>                                            
-                                        </td>
-                                        <td class="px-1">
-                                            <div class="flex space-x-1 justify-between" :class="{'text-green-600' : servicioDetalle.pasajero_servicios.moneda === 'USD', 'text-blue-600' : servicioDetalle.pasajero_servicios.moneda === 'PEN'}">
-                                                <select v-model="servicioDetalle.pasajero_servicios.moneda"
-                                                    class="w-2/6 border-gray-300 rounded-md shadow-sm text-xs">
-                                                    <option value="USD" class="bg-blue-600 text-white hover:bg-white hover:text-blue-700">USD</option>
-                                                    <option value="PEN" class="bg-green-600 text-white hover:bg-white hover:text-green-700">PEN</option>
-                                                </select>
-                                                <div class="flex space-x-1 w-4/6">
-                                                    <input type="text" v-model="servicioDetalle.pasajero_servicios.monto"
-                                                        @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
-                                                        @blur="formatMonto(dia.id, servicioDetalle.id)"
-                                                        class="monto-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                                    <input type="number"
-                                                        v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
-                                                        min="1" @input="calcularSubtotal(dia.id, servicioDetalle.id)"
-                                                        class="pasajeros-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                                    <input type="text"
-                                                        :value="calcularSubtotalDisplay(dia.id, servicioDetalle.id)"
-                                                        readonly disabled="true"
-                                                        class="subtotal-input w-full border-gray-300 rounded-md shadow-sm text-right text-xs" />
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-1">
-                                            <AsignarPasajerosServicio :pasajeros-disponibles="PasajerosReducido"
-                                                v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
-                                                :servicio="servicioDetalle.pasajero_servicios" />
-                                        </td>
-                                        <td class="px-1">
-                                            <!-- {{ dia.nro_dia }} - {{ indexItinerario }} - {{ servicioDetalle.pasajero_servicios.nro_orden }} -->
-                                            <div class="flex space-x-1">
-                                                <div class="w-2/3 flex justify-between">
-                                                    <select v-model="servicioDetalle.pasajero_servicios.estatus" aria-readonly="true"
-                                                        class="w-full border-gray-300 rounded-md shadow-sm text-xs"
-                                                        :class="{
-                                                            'p-2 font-medium rounded-full border-rounded text-gray-900 text-left': true,
-                                                            'bg-yellow-400': servicioDetalle.pasajero_servicios.estatus == 0,
-                                                            'bg-green-500': servicioDetalle.pasajero_servicios.estatus == 1,
-                                                            'bg-red-400': servicioDetalle.pasajero_servicios.estatus == 2 || servicioDetalle.pasajero_servicios.estatus == 3,
-                                                        }"
-                                                        >
-                                                        <option value="0" class="bg-yellow-600 text-white">PENDIENTE</option>
-                                                        <option value="1" class="bg-green-600 text-white">CONFIRMADA</option>
-                                                        <option value="2" class="bg-red-600 text-white">CANCELADA</option>
-                                                        <option value="3" class="bg-red-600 text-white">XPASAJERO</option>
-                                                    </select>
-                                                </div>
-                                                <div class="w-1/3 flex justify-between">
-                                                    <button @click="openModalStatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
-                                                        type="button">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                        </svg>
-                                                    </button>
-                                                    <button @click="agregarDetalle(dia.nro_dia, indexItinerario, dia.id)"
-                                                        type="button">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="size-6">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                        </svg>
-                                                    </button>
-                                                    <button @click="eliminarDetalle(dia.nro_dia, indexItinerario)" type="button">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </Transition>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 w-full p-0">
-                        <div class="text-sm font-semibold mb-2">
-                        </div>
-                        <div v-if="Object.keys(totalesPorMoneda).length > 0" class="overflow-x-auto">
-                            <CotizacionTotales
-                                :totalesPorMoneda="{ USD: totalesPorMoneda['USD'] ?? 0, PEN: totalesPorMoneda['PEN'] ?? 0 }"
-                                :calcularTotalGeneral="calcularTotalGeneral"
-                            />
-                        </div>
-                    </div>
+                                            </button>
+                                            
+                                            <button type="button" @click="eliminarDetalle(dia.nro_dia, indexItinerario)"
+                                                    class="flex-1 px-2 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </Transition>
+        </div>
+        </div>
+
+        <!-- TARJETA 6: COSTOS -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-calculator text-green-500"></i>
+                    Detalle de Costos
+                </h3>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4 w-full p-0 mb-4">
+                <div class="w-full md:w-1/2">
                     <!-- <ServicioDetalle v-if="listaServicioDetalle.length > 0 || listaServicioDetalle.length != null"
                         :Lista_servicio_detalle = "listaServicioDetalle" 
                         :Lista_servicio_x_dia = "ListaServicioPasajeroTemp"
@@ -364,57 +637,98 @@
                         v-model="contador"
                     /> -->
                 </div>
-            </div>
-            <div class="grid grid-cols-6 gap-6 w-full p-5">
-                <!-- Sexta fila -->
-                <div class="col-span-1">
-                    <label for="costo_parcial" class="block text-sm font-medium text-gray-700">C. Parcial</label>
-                    <input v-model="Cotizacion.costo_parcial" type="text" id="costo_parcial" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="C. Parcial">
-                </div>
-                <div class="col-span-1 ">
-                    <label for="descuento_estudiante" class=" text-sm font-medium text-gray-700">Desc.
-                        Estudiante</label>
-                    <input v-model="Cotizacion.descuento_estudiante"
-                        @input="(event) => handleInput(event, 'descuento_estudiante')" type="text"
-                        id="descuento_estudiante" class="w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Desc. Estudiante">
-                </div>
-                <div class="col-span-1">
-                    <label for="descuento_ninio" class="block text-sm font-medium text-gray-700">Descuento Niño</label>
-                    <input v-model="Cotizacion.descuento_ninio"
-                        @input="(event) => handleInput(event, 'descuento_ninio')" type="text" id="descuento_ninio"
-                        required="true" class="mt-1  w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder="Descuento Niño">
-                </div>
-                <div class="col-span-1">
-                    <label for="descuento_otro" class="block text-sm font-medium text-gray-700">Descuento Otro</label>
-                    <input v-model="Cotizacion.descuento_otro" @input="(event) => handleInput(event, 'descuento_otro')"
-                        type="text" id="descuento_otro" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Descuento Otro">
-                </div>
-                <div class="col-span-1">
-                    <label for="costo_total" class="block text-sm font-medium text-gray-700">Costo Total</label>
-                    <input v-model="Cotizacion.costo_total" type="text" id="costo_total" required="true"
-                        class="mt-1  w-full border-gray-300 rounded-md shadow-sm" placeholder="Costo Total">
+                <div class="w-full md:w-1/2">
+                    <div v-if="Object.keys(totalesPorMoneda).length > 0" class="overflow-x-auto">
+                        <CotizacionTotales
+                            :totalesPorMoneda="{ USD: totalesPorMoneda['USD'] ?? 0, PEN: totalesPorMoneda['PEN'] ?? 0 }"
+                            :calcularTotalGeneral="calcularTotalGeneral"
+                        />
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-end">
-                <label class="block text-sm font-medium text-gray-700">&nbsp;</label>
-                <PrimaryButton type="submit"
-                    class="mt-2 uppercase bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    {{ Accion }}
-                </PrimaryButton>
-                <button type="button" @click="mostrarConsola()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
-                </button>
+            
+            <div class="grid grid-cols-1 md:grid-cols-10 gap-4 bm-4 pb-4 border-b border-gray-100">                
+                <!-- Costo Parcial -->
+                <div class="md:col-span-2">
+                    <label for="costo_parcial" class="block text-sm font-medium text-gray-700 mb-1">
+                        Costo Parcial
+                    </label>
+                    <input v-model="Cotizacion.costo_parcial" type="text" id="costo_parcial"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-right font-medium"
+                           placeholder="0.00">
+                </div>                
+                
+                <!-- Descuentos -->
+                <div class="md:col-span-6">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label for="descuento_estudiante" class="block text-sm font-medium text-gray-700 mb-1">
+                                Desc. Estudiante
+                            </label>
+                            <input v-model="Cotizacion.descuento_estudiante"
+                                   @input="(event) => handleInput(event, 'descuento_estudiante')" type="text"
+                                   id="descuento_estudiante"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-right"
+                                   placeholder="0.00">
+                        </div>
+                        
+                        <div>
+                            <label for="descuento_ninio" class="block text-sm font-medium text-gray-700 mb-1">
+                                Desc. Niño
+                            </label>
+                            <input v-model="Cotizacion.descuento_ninio"
+                                   @input="(event) => handleInput(event, 'descuento_ninio')" type="text"
+                                   id="descuento_ninio"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-right"
+                                   placeholder="0.00">
+                        </div>
+                        
+                        <div>
+                            <label for="descuento_otro" class="block text-sm font-medium text-gray-700 mb-1">
+                                Otros Descuentos
+                            </label>
+                            <input v-model="Cotizacion.descuento_otro"
+                                   @input="(event) => handleInput(event, 'descuento_otro')" type="text"
+                                   id="descuento_otro"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-right"
+                                   placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costo Total -->
+                <div class="md:col-span-2">
+                    <label for="costo_total" class="block text-sm font-medium text-gray-700 mb-1">
+                        Costo Total
+                    </label>
+                    <input v-model="Cotizacion.costo_total" type="text" id="costo_total"
+                           class="w-full px-3 py-2 border-2 border-green-300 bg-green-50 rounded-lg text-right font-bold text-green-700"
+                           placeholder="0.00" readonly>
+                </div>
             </div>
-        </form>
-    </div>
+
+            <div class="items-center mb-2 pt-4">
+                <div class="flex justify-end">
+                    <!-- Botón Submit -->
+                    <button type="submit"
+                            class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 font-semibold text-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                        </svg>
+                        {{ Accion || 'Guardar Cotización' }}
+                    </button>
+                    <button type="button" @click="mostrarConsola()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
     <PasajeroModal v-if="Cotizacion.pasajeros != null" :isModalVisible="showModal" :ListaPasajeros=Cotizacion.pasajeros
         :errorMessage="error" @close="showModal = false" @update=recalcularTotalPasajeros />
     <ClienteModal :isModalVisibleProveedor="showModalProveedor" :errorMessage="error"
@@ -454,6 +768,8 @@ import StatusModal from "@/Components/Cotizacion/CompModalStatus.vue";
 import { generateFieldsFromObject } from '@/Utils/objectToFiels';
 import { auditoriaSimple } from '@/Utils/JsonDiffDetector';
 
+import HotelHabitacionManual from '@/Components/Cotizacion/CompHotelHabitacionManual.vue';
+
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
 
@@ -482,6 +798,40 @@ const props = defineProps({
         required: true,
     },
 });
+
+// #region SELECCION DE HABITACIONES PARA SERVICIO
+// Aquí guardaremos la distribución final que emite el hijo
+const distribucionFinal = ref([])
+
+function actualizarDistribucion(seleccion, indiceDia, indiceServicio) {
+    distribucionFinal.value = seleccion
+
+    console.log("Distribución actualizada:", seleccion, indiceDia, indiceServicio)
+
+    const totalHabitaciones = seleccion.reduce(
+        (sum, h) => sum + h.cantidad,
+        0
+    )
+
+    const totalPasajeros = seleccion.reduce(
+        (sum, h) => sum + h.capacidad * h.cantidad,
+        0
+    )
+
+    // Subtotal del día
+    const subtotal = seleccion.reduce(
+        (sum, h) => sum + h.precio * h.cantidad,
+        0
+    )
+
+  //serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].cantidad_pasajeros = totalPasajeros;
+  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.monto = subtotal;
+  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.cantidad_pasajeros = totalHabitaciones;
+  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.subtotal = subtotal;
+
+    calcularSubtotal(indiceDia, indiceServicio);
+}
+//#endregion SELECCION DE HABITACIONES PARA SERVICIO
 
 const esEdicion = computed(() => props.Accion === 'edit');
 
@@ -539,7 +889,7 @@ let emptyInputTimeout = null;
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
 const cotizacionOriginal = ref(null);
-
+const catalogoHabitaciones = ref([]);
 
 // Cotizacion.file_nro = props.Correlativo;
 Cotizacion.fecha = esEdicion.value ? new Date(Cotizacion.fecha) : fechaActual.value;
@@ -563,7 +913,49 @@ const PasajerosReducido = computed(() =>
 )
 
 if (esEdicion.value) {
-    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados;
+    const servicioAxios = Cotizacion.destinos_turisticos.itinerario_destinos.map(dia => {
+        return {
+            ...dia,
+            isVisible: true,
+            itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => {
+
+                // Extraemos el primer precio de forma segura
+                const precio = itinerarioServicios.servicio?.precios?.[0];
+
+                // Si existe precio, lo agregamos al catálogo
+                if (precio && precio.tipo_costo === 'HABITACION') {
+                    catalogoHabitaciones.value.push({
+                        id: precio.id,
+                        nombre: itinerarioServicios.servicio.servicio_detalles.descripcion,
+                        tipo: precio.tipo_habitacion,
+                        capacidad: precio.capacidad_pax,
+                        precio: Number(precio.monto),
+                        moneda: precio.moneda
+                    });
+                }
+
+                return {
+                    ...itinerarioServicios,
+                    pasajero_servicios: {
+                        id: null,
+                        cotizacion_id: Cotizacion.id,
+                        itinerario_servicio_id: itinerarioServicios.id,
+                        itinerario_destino_id: dia.id,
+                        hora: '09:00',
+                        pasajerosAsignados: [],
+                        observacion: '',
+                        moneda: precio?.moneda ?? 'USD',
+                        monto: precio?.monto ?? 0,
+                        cantidad_pasajeros: 1,
+                        subtotal: (precio?.monto ?? 0) * 1,
+                        estatus: '0',
+                        estado_activo: '1'
+                    }
+                };
+            })
+        };
+    });
+    serviciosPorDia.value = reactive(servicioAxios);
     // snapshot profundo (NO reactivo)
     cotizacionOriginal.value = { ...Cotizacion };
 
@@ -781,6 +1173,8 @@ function eliminarItinerario(indiceItinerario) {
     serviciosPorDia.value.splice(Number(indiceItinerario), 1);
 }
 
+// const catalogoHabitaciones = ref([]);
+
 async function ListaCategoriaProveedor() {
     try {
         const data = {
@@ -789,28 +1183,48 @@ async function ListaCategoriaProveedor() {
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, { destino_turistico_id: Cotizacion.destino_turistico_id });
         if (response.status === 200) {
             console.log("Lista de servicios por dia", response.data);
-            const servicioAxios = response.data.itinerario_destinos.map(dia => ({
-                ...dia,
-                isVisible: true,
-                itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => ({
-                    ...itinerarioServicios,
-                    pasajero_servicios: {
-                        id: null,
-                        cotizacion_id: Cotizacion.id,
-                        itinerario_servicio_id: itinerarioServicios.id,
-                        itinerario_destino_id: dia.id,
-                        hora: '09:00',
-                        pasajerosAsignados: [],
-                        observacion: '',
-                        moneda: itinerarioServicios.servicio.precios[0].moneda,
-                        monto: itinerarioServicios.servicio.precios[0].monto,
-                        cantidad_pasajeros: 1,
-                        subtotal: itinerarioServicios.servicio.precios[0].monto * 1,
-                        estatus: '0', // PENDIENTE
-                        estado_activo: '1'
-                    },
-                }))
-            }));
+            const servicioAxios = response.data.itinerario_destinos.map(dia => {
+                return {
+                    ...dia,
+                    isVisible: true,
+                    itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => {
+
+                        // Extraemos el primer precio de forma segura
+                        const precio = itinerarioServicios.servicio.precios?.[0];
+
+                        // Si existe precio, lo agregamos al catálogo
+                        if (precio && precio.tipo_costo === 'HABITACION') {
+                            catalogoHabitaciones.value.push({
+                                id: precio.id,
+                                nombre: itinerarioServicios.servicio.servicio_detalles.descripcion,
+                                tipo: precio.tipo_habitacion,
+                                capacidad: precio.capacidad_pax,
+                                precio: Number(precio.monto),
+                                moneda: precio.moneda
+                            });
+                        }
+
+                        return {
+                            ...itinerarioServicios,
+                            pasajero_servicios: {
+                                id: null,
+                                cotizacion_id: Cotizacion.id,
+                                itinerario_servicio_id: itinerarioServicios.id,
+                                itinerario_destino_id: dia.id,
+                                hora: '09:00',
+                                pasajerosAsignados: [],
+                                observacion: '',
+                                moneda: precio?.moneda ?? 'USD',
+                                monto: precio?.monto ?? 0,
+                                cantidad_pasajeros: 1,
+                                subtotal: (precio?.monto ?? 0) * 1,
+                                estatus: '0',
+                                estado_activo: '1'
+                            }
+                        };
+                    })
+                };
+            });
 
             serviciosPorDia.value = reactive(servicioAxios);
 
