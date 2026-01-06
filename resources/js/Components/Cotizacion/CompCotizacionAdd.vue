@@ -268,7 +268,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
-                <i class="text-red-500">
+                <i class="text-sky-500">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" />
                     </svg>
@@ -283,10 +283,10 @@
                         Destino Turístico
                     </label>
                     <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                            class="w-full px-3 py-2 border border-cyan-300 bg-cyan-50 rounded-lg text-cyan-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                         <option disabled value="0">Seleccionar destino...</option>
                         <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
-                            {{ option.label }}
+                            📍{{ option.label }}
                         </option>
                     </select>
                 </div>
@@ -396,41 +396,55 @@
 
             <!-- TABLA RESPONSIVE -->
             <Transition name="fade-slide">
-                <div v-show="dia.isVisible" class="overflow-x-auto rounded-lg border border-gray-300 shadow-sm">
-                    <table class="min-w-full divide-y divide-gray-300 text-sm">
+                <div v-show="dia.isVisible" class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+                    <table class="min-w-[1200px] divide-y divide-gray-300 text-sm">
                         <thead class="bg-gray-100">
                             <tr>
-                                <!-- COLUMNA 1: Hora + Categoría + Servicio (Agrupado) -->
-                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-3/12">
+                                <!-- COLUMNA 1: Hora -->
+                                <th class="sticky left-0 z-10 bg-gray-100 px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[80px] max-w-[100px]">
                                     <div class="flex flex-col">
-                                        <span class="font-semibold">Detalles del Servicio</span>
-                                        <span class="text-xs font-normal text-gray-500">Hora / Categoría / Servicio</span>
+                                        <span class="font-semibold">Hora</span>
+                                        <span class="text-xs font-normal text-gray-500">Editar</span>
                                     </div>
                                 </th>
                                 
-                                <!-- COLUMNA 2: Observación -->
-                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-3/12">
-                                    Observación
+                                <!-- COLUMNA 2: Detalles del Servicio -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[470px] max-w-[470px]">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Detalles del Servicio</span>
+                                        <span class="text-xs font-normal text-gray-500">Categoría / Proveedor / Servicio</span>
+                                    </div>
                                 </th>
                                 
-                                <!-- COLUMNA 3: Financiero (Agrupado) -->
-                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
+                                <!-- COLUMNA 3: Observación -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[150px] max-w-[150px]">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Observación</span>
+                                        <span class="text-xs font-normal text-gray-500">Notas / Configuración</span>
+                                    </div>
+                                </th>
+                                
+                                <!-- COLUMNA 4: Financiero -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[180px] max-w-[220px]">
                                     <div class="flex flex-col">
                                         <span class="font-semibold">Detalles Financieros</span>
                                         <span class="text-xs font-normal text-gray-500">Moneda / Monto / Cant. / Subtotal</span>
                                     </div>
                                 </th>
                                 
-                                <!-- COLUMNA 4: Pasajeros -->
-                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
-                                    Pasajeros Asignados
+                                <!-- COLUMNA 5: Pasajeros -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[150px] max-w-[180px]">
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">Pasajeros</span>
+                                        <span class="text-xs font-normal text-gray-500">Asignados</span>
+                                    </div>
                                 </th>
                                 
-                                <!-- COLUMNA 5: Estado y Acciones -->
-                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 w-2/12">
+                                <!-- COLUMNA 6: Estado y Acciones -->
+                                <th class="px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[180px] max-w-[220px]">
                                     <div class="flex flex-col">
                                         <span class="font-semibold">Estado</span>
-                                        <span class="text-xs font-normal text-gray-500">y acciones</span>
+                                        <span class="text-xs font-normal text-gray-500">y Acciones</span>
                                     </div>
                                 </th>
                             </tr>
@@ -439,113 +453,138 @@
                         <tbody class="divide-y divide-gray-200 bg-white">
                             <tr v-for="(servicioDetalle, indexItinerario) in dia.itinerario_servicios" 
                                 :key="servicioDetalle.id"
-                                class="hover:bg-gray-50 transition-colors">
+                                class="hover:bg-gray-50/50 transition-colors duration-150">
                                 
-                                <!-- CELDA 1: Detalles del Servicio -->
-                                <td class="px-4 py-3 border-r border-gray-300">
-                                    <div class="flex flex-col gap-2">
-                                        <!-- Hora -->
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-xs text-gray-500 w-10">Hora:</span>
-                                            <InputHora v-model="servicioDetalle.pasajero_servicios.hora" 
-                                                    class="flex-1 text-sm" />
-                                        </div>
-                                        
+                                <!-- CELDA 1: Hora (Sticky) -->
+                                <td class="sticky left-0 z-10 bg-white px-4 py-3 border-r border-gray-300 min-w-[50px] max-w-[100px]">
+                                    <div class="flex flex-col items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                            class="size-5 text-gray-500 mb-1 text-center">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>                                                                          
+                                        <InputHora v-model="servicioDetalle.pasajero_servicios.hora" 
+                                            class="w-full text-sm text-center py-1.5 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                                    </div>
+                                    <!-- <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        Hospedaje
+                                    </span> -->
+                                </td>
+                                
+                                <!-- CELDA 2: Detalles del Servicio -->
+                                <td class="px-4 py-3 border-r border-gray-300 min-w-[300px] max-w-[350px]">
+                                    <div class="space-y-2">
                                         <!-- Categoría -->
                                         <div class="flex items-center gap-2">
-                                            <span class="text-xs text-gray-500 w-10">Cat:</span>
+                                            <label class="text-xs text-gray-500 min-w-[40px]">Cat:</label>
                                             <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                    class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                                 <option disabled value="0">Seleccionar categoría</option>
                                                 <option v-for="option in sCategoriaProveedor" 
                                                         :key="option.value"
-                                                        :value="option.value">
+                                                        :value="option.value"
+                                                        class="py-1">
                                                     {{ option.label }}
                                                 </option>
                                             </select>
                                         </div>
                                         
+                                        <!-- Proveedor -->
+                                        <div class="flex items-center gap-2">
+                                            <label class="text-xs text-gray-500 min-w-[40px]">Prov:</label>
+                                            <div class="w-full px-2 py-1.5 bg-gray-50 rounded border border-gray-200">
+                                                <span class="text-sm text-gray-800 font-medium truncate block">
+                                                    {{ servicioDetalle.servicio?.proveedor?.razon_social || 'Sin proveedor' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
                                         <!-- Servicio -->
                                         <div class="flex items-center gap-2">
-                                            <span class="text-xs text-gray-500 w-10">Serv:</span>
+                                            <label class="text-xs text-gray-500 min-w-[40px]">Serv:</label>
                                             <select v-model="servicioDetalle.servicio_id"
-                                                    class="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                     @change="handleChange(dia.nro_dia, indexItinerario)">
                                                 <option disabled value="0">Seleccionar servicio</option>
                                                 <option v-for="item in servicios" 
                                                         :key="item.value"
-                                                        :value="item.value">
+                                                        :value="item.value"
+                                                        class="py-1">
                                                     {{ item.label }}
                                                 </option>
-                                                <option value='__add_new__' class="text-green-600 font-medium">
+                                                <option value='__add_new__' 
+                                                        class="text-green-600 font-medium bg-green-50 py-1">
                                                     ➕ Agregar nuevo servicio
                                                 </option>
                                             </select>
                                         </div>
+                                        <div v-if="servicioDetalle.proveedor_categoria_id === 2 && servicioDetalle.servicio.precios[0].tipo_costo === 'HABITACION'">
+                                            <button type="button" class="text-xs text-blue-600 hover:underline"
+                                                @click="editarAlojamiento(dia.nro_dia, indexItinerario)">
+                                                Cambiar
+                                            </button>
+                                            <HotelHabitacionManual
+                                                :pasajeros="Cotizacion.nro_pasajeros"
+                                                :habitacionesDisponibles="servicioDetalle.catalogoHabitaciones"
+                                                @update="(seleccion) => actualizarDistribucion(seleccion, dia.nro_dia, indexItinerario)"
+                                                @cambiarProveedor="(p) => seleccionarProveedor(p, servicioDetalle)"
+                                                class="text-sm"
+                                            />
+                                        </div>
                                     </div>
                                 </td>
                                 
-                                <!-- CELDA 2: Observación -->
-                                <td class="px-4 py-3 border-r border-gray-300">
-                                    <!-- {{ servicioDetalle }} -->
-                                    <div v-if="servicioDetalle.servicio?.precios[0]?.tipo_costo === 'HABITACION'">
-                                        <HotelHabitacionManual
-                                            :pasajeros="Cotizacion.nro_pasajeros"
-                                            :habitacionesDisponibles="catalogoHabitaciones"
-                                            :proveedoresAlternativos="proveedoresAlternativos"
-                                            @update="(seleccion) => actualizarDistribucion(seleccion, dia.nro_dia, indexItinerario)"
-                                            @cambiarProveedor="(p) => seleccionarProveedor(p, servicioDetalle)"
-                                            class="text-sm"
-                                        />
-                                    </div>
-                                    <div v-else>
+                                <!-- CELDA 3: Observación -->
+                                <td class="px-4 py-3 border-r border-gray-300 min-w-[350px] max-w-[350px]">
+                                    <div class="h-full">                                        
                                         <textarea v-model="servicioDetalle.pasajero_servicios.observacion"
-                                                name="observacion"                                                
-                                                class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                placeholder="Ingrese observaciones aquí..." rows="2">
+                                                name="observacion"
+                                                class="w-full h-full min-h-[80px] border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                                placeholder="Ingrese observaciones aquí..."
+                                                rows="3">
                                         </textarea>
-                                    </div>
+                                    </div>                                    
                                 </td>
                                 
-                                <!-- CELDA 3: Detalles Financieros -->
-                                <td class="px-4 py-3 border-r border-gray-300">
-                                    <div class="flex flex-col gap-2">                                        
+                                <!-- CELDA 4: Detalles Financieros -->
+                                <td class="px-4 py-3 border-r border-gray-300 min-w-[180px] max-w-[220px]">
+                                    <div class="space-y-3">
                                         <!-- Moneda y Monto -->
                                         <div class="grid grid-cols-2 gap-2">
-                                            <div class="flex flex-col">
-                                                <span class="text-xs text-gray-500">Moneda:</span>
+                                            <div>
+                                                <label class="text-xs text-gray-500 block mb-1">Moneda</label>
                                                 <select v-model="servicioDetalle.pasajero_servicios.moneda"
-                                                        class="w-full border rounded px-2 py-1 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-opacity-50"
+                                                        class="w-full border rounded px-2 py-1.5 text-sm font-medium transition-all focus:ring-2 focus:ring-opacity-50"
                                                         :class="{
-                                                            'border-blue-500 bg-blue-50 text-blue-800 focus-ring-blue-500': servicioDetalle.pasajero_servicios.moneda === 'USD',
-                                                            'border-green-500 bg-green-50 text-green-800 focus-ring-green-500': servicioDetalle.pasajero_servicios.moneda === 'PEN'
+                                                            'border-blue-500 bg-blue-50 text-blue-800 focus:ring-blue-500': servicioDetalle.pasajero_servicios.moneda === 'USD',
+                                                            'border-green-500 bg-green-50 text-green-800 focus:ring-green-500': servicioDetalle.pasajero_servicios.moneda === 'PEN'
                                                         }">
-                                                    <option value="USD" class="bg-white">USD</option>
-                                                    <option value="PEN" class="bg-white">PEN</option>
+                                                    <option value="USD">USD</option>
+                                                    <option value="PEN">PEN</option>
                                                 </select>
                                             </div>
-                                            <div class="flex flex-col">
-                                                <span class="text-xs text-gray-500">Monto</span>
+                                            <div>
+                                                <label class="text-xs text-gray-500 block mb-1">Monto</label>
                                                 <input type="text" 
                                                     v-model="servicioDetalle.pasajero_servicios.monto"
                                                     @input="handleMontoInput($event, dia.id, servicioDetalle.id)"
                                                     @blur="formatMonto(dia.id, servicioDetalle.id)"
-                                                    class="border border-gray-300 rounded px-2 py-1 text-right text-sm focus:ring-2 focus:ring-blue-500">
+                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-right text-sm focus:ring-2 focus:ring-blue-500">
                                             </div>
-                                        </div>                                        
-                                        <!-- cantidad y Subtotal -->                                        
-                                        <div class="grid grid-cols-2 gap-2">                         
-                                            <div class="flex flex-col">
-                                                <span class="text-xs text-gray-500">Cantidad</span>
+                                        </div>
+                                        
+                                        <!-- Cantidad y Subtotal -->
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label class="text-xs text-gray-500 block mb-1">Cantidad</label>
                                                 <input type="number"
                                                     v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
                                                     min="1"
                                                     @input="calcularSubtotal(dia.id, servicioDetalle.id)"
-                                                    class="border border-gray-300 rounded px-2 py-1 text-right text-sm focus:ring-2 focus:ring-blue-500">
+                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-right text-sm focus:ring-2 focus:ring-blue-500">
                                             </div>
-                                            <div class="flex flex-col">
-                                                <span class="text-xs text-gray-500">Subtotal:</span>
-                                                <div class="font-semibold text-gray-900 text-right text-sm bg-gray-50 rounded px-2 py-1 border border-gray-200">
+                                            <div>
+                                                <label class="text-xs text-gray-500 block mb-1">Subtotal</label>
+                                                <div class="font-semibold text-gray-900 text-right text-sm bg-gray-50 rounded px-2 py-1.5 border border-gray-200 truncate">
                                                     {{ calcularSubtotalDisplay(dia.id, servicioDetalle.id) }}
                                                 </div>
                                             </div>
@@ -553,23 +592,25 @@
                                     </div>
                                 </td>
                                 
-                                <!-- CELDA 4: Pasajeros -->
-                                <td class="px-4 py-3 border-r border-gray-300">
-                                    <AsignarPasajerosServicio 
-                                        :pasajeros-disponibles="PasajerosReducido"
-                                        v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
-                                        :servicio="servicioDetalle.pasajero_servicios"
-                                        class="text-sm"
-                                    />
+                                <!-- CELDA 5: Pasajeros -->
+                                <td class="px-4 py-3 border-r border-gray-300 min-w-[300px] max-w-[300px]">
+                                    <div class="h-full">
+                                        <AsignarPasajerosServicio 
+                                            :pasajeros-disponibles="PasajerosReducido"
+                                            v-model="servicioDetalle.pasajero_servicios.pasajerosAsignados"
+                                            :servicio="servicioDetalle.pasajero_servicios"
+                                            class="text-sm h-full"
+                                        />
+                                    </div>
                                 </td>
                                 
-                                <!-- CELDA 5: Estado y Acciones -->
-                                <td class="px-4 py-3 border-r border-gray-300">
-                                    <div class="flex flex-col gap-3">
+                                <!-- CELDA 6: Estado y Acciones -->
+                                <td class="px-4 py-3 border-r border-gray-300 min-w-[300px] max-w-[300px]">
+                                    <div class="space-y-3">
                                         <!-- Estado -->
                                         <div>
                                             <select v-model="servicioDetalle.pasajero_servicios.estatus"
-                                                    class="w-full border rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus:ring-2 focus:ring-opacity-50"
+                                                    class="w-full border rounded-lg px-3 py-2 text-sm font-medium transition-all focus:ring-2 focus:ring-opacity-50"
                                                     :class="{
                                                         'border-yellow-300 bg-yellow-50 text-yellow-800 focus:ring-yellow-500': servicioDetalle.pasajero_servicios.estatus == 0,
                                                         'border-green-300 bg-green-50 text-green-800 focus:ring-green-500': servicioDetalle.pasajero_servicios.estatus == 1,
@@ -583,31 +624,35 @@
                                         </div>
                                         
                                         <!-- Botones de Acción -->
-                                        <div class="flex gap-1">
-                                            <button type="button" @click="openModalStatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
-                                                    class="flex-1 px-2 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        <div class="flex gap-2">
+                                            <button type="button" 
+                                                    @click="openModalStatus(dia.nro_dia, servicioDetalle.pasajero_servicios)"
+                                                    class="flex-1 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1 border border-blue-200"
+                                                    title="Editar estado">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
+                                                <span class="hidden sm:inline">Editar</span>
                                             </button>
                                             
-                                            <button type="button" @click="agregarDetalle(dia.nro_dia, indexItinerario, dia.id)"
-                                                    class="flex-1 px-2 py-1.5 bg-green-100 hover:bg-green-200 text-green-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">                                                
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                    class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            <button type="button" 
+                                                    @click="agregarDetalle(dia.nro_dia, indexItinerario, dia.id)"
+                                                    class="flex-1 px-3 py-2 bg-green-50 hover:bg-green-100 text-green-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1 border border-green-200"
+                                                    title="Agregar detalle">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                                 </svg>
+                                                <span class="hidden sm:inline">Agregar</span>
                                             </button>
                                             
-                                            <button type="button" @click="eliminarDetalle(dia.nro_dia, indexItinerario)"
-                                                    class="flex-1 px-2 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            <button type="button" 
+                                                    @click="eliminarDetalle(dia.nro_dia, indexItinerario)"
+                                                    class="flex-1 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-xs rounded-lg transition-colors flex items-center justify-center gap-1 border border-red-200"
+                                                    title="Eliminar detalle">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
+                                                <span class="hidden sm:inline">Eliminar</span>
                                             </button>
                                         </div>
                                     </div>
@@ -742,6 +787,24 @@
         @cerrar=" showModalStatus = false"
         @guardar="updateServicio"     
     />
+
+    <!-- Modal alojamiento -->
+    <AlojamientoSelector
+
+     v-if="modalAlojamiento.visible"
+        :pasajeros=Cotizacion.nro_pasajeros
+        :categoria=categoriaAlojamiento
+        @preview="previsualizarAlojamiento"
+        @confirm= "(seleccionado) => aplicarAlojamiento(seleccionado, modalAlojamiento.indexDia, modalAlojamiento.indexServicio)"
+        @close="modalAlojamiento.visible = false"
+        
+    />
+
+     <!-- v-if="modalAlojamiento.visible"
+        :pasajeros=Cotizacion.nro_pasajeros
+        :categoria=categoriaAlojamiento
+        @update="aplicarAlojamiento"
+        @close="modalAlojamiento.visible = false" -->
 </template>
 
 <script setup>
@@ -769,6 +832,7 @@ import { generateFieldsFromObject } from '@/Utils/objectToFiels';
 import { auditoriaSimple } from '@/Utils/JsonDiffDetector';
 
 import HotelHabitacionManual from '@/Components/Cotizacion/CompHotelHabitacionManual.vue';
+import AlojamientoSelector from '@/Components/Cotizacion/CompAlojamientoSelector.vue'
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
@@ -806,8 +870,6 @@ const distribucionFinal = ref([])
 function actualizarDistribucion(seleccion, indiceDia, indiceServicio) {
     distribucionFinal.value = seleccion
 
-    console.log("Distribución actualizada:", seleccion, indiceDia, indiceServicio)
-
     const totalHabitaciones = seleccion.reduce(
         (sum, h) => sum + h.cantidad,
         0
@@ -832,6 +894,40 @@ function actualizarDistribucion(seleccion, indiceDia, indiceServicio) {
     calcularSubtotal(indiceDia, indiceServicio);
 }
 //#endregion SELECCION DE HABITACIONES PARA SERVICIO
+
+//#region SELECCION DE PROVEEDOR
+const categoriaAlojamiento = ref(2)
+
+const modalAlojamiento = ref({
+  visible: false,
+  indexDia: null,
+  indexServicio: null
+})
+
+function editarAlojamiento(indexDia, indexServicio) {
+  modalAlojamiento.value.visible = true
+  modalAlojamiento.value.indexDia = indexDia
+  modalAlojamiento.value.indexServicio = indexServicio
+}
+
+function previsualizarAlojamiento(resumen) {
+  // opcional: mostrar precio en vivo
+  console.log('opcion elegida previsualizar', resumen)
+}
+
+function aplicarAlojamiento(resumen, indiceDia, indiceServicio) {
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.monto = resumen.subtotal;
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.cantidad_pasajeros = resumen.totalHabitaciones;
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.subtotal = resumen.subtotal;
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].catalogoHabitaciones = resumen.habitaciones;
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].servicio.proveedor.razon_social = resumen.proveedor.razon_social;
+
+    console.log('opcion elegida', resumen);
+    calcularSubtotal(indiceDia, indiceServicio);
+
+    modalAlojamiento.value.visible = false
+}
+//#endregion SELECCION DE PROVEEDOR
 
 const esEdicion = computed(() => props.Accion === 'edit');
 
@@ -862,7 +958,7 @@ const toggleTable = (index) => {
 }
 
 onMounted(() => {
-    //axiosServicios();
+   // cargarProveedores();
 })
 
 // Variables reactivas
@@ -889,7 +985,6 @@ let emptyInputTimeout = null;
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
 const cotizacionOriginal = ref(null);
-const catalogoHabitaciones = ref([]);
 
 // Cotizacion.file_nro = props.Correlativo;
 Cotizacion.fecha = esEdicion.value ? new Date(Cotizacion.fecha) : fechaActual.value;
@@ -912,55 +1007,41 @@ const PasajerosReducido = computed(() =>
     }))
 )
 
-if (esEdicion.value) {
-    const servicioAxios = Cotizacion.destinos_turisticos.itinerario_destinos.map(dia => {
-        return {
-            ...dia,
-            isVisible: true,
-            itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => {
-
-                // Extraemos el primer precio de forma segura
-                const precio = itinerarioServicios.servicio?.precios?.[0];
-
-                // Si existe precio, lo agregamos al catálogo
-                if (precio && precio.tipo_costo === 'HABITACION') {
-                    catalogoHabitaciones.value.push({
-                        id: precio.id,
-                        nombre: itinerarioServicios.servicio.servicio_detalles.descripcion,
-                        tipo: precio.tipo_habitacion,
-                        capacidad: precio.capacidad_pax,
-                        precio: Number(precio.monto),
-                        moneda: precio.moneda
-                    });
-                }
-
-                return {
-                    ...itinerarioServicios,
-                    pasajero_servicios: {
-                        id: null,
-                        cotizacion_id: Cotizacion.id,
-                        itinerario_servicio_id: itinerarioServicios.id,
-                        itinerario_destino_id: dia.id,
-                        hora: '09:00',
-                        pasajerosAsignados: [],
-                        observacion: '',
-                        moneda: precio?.moneda ?? 'USD',
-                        monto: precio?.monto ?? 0,
-                        cantidad_pasajeros: 1,
-                        subtotal: (precio?.monto ?? 0) * 1,
-                        estatus: '0',
-                        estado_activo: '1'
-                    }
-                };
-            })
-        };
-    });
-    serviciosPorDia.value = reactive(servicioAxios);
+if (esEdicion.value) {   
+    serviciosPorDia.value = Cotizacion.pasajeros_servicios_agrupados;
+    console.log('serviciosPorDia.value desde edicion', serviciosPorDia.value);
     // snapshot profundo (NO reactivo)
     cotizacionOriginal.value = { ...Cotizacion };
 
     serviciosPorDia.value.forEach(dia => {
         dia.isVisible = true; // Inicialmente todas las tablas visibles
+        serviciosPorDia.value.forEach(dia => {
+            dia.isVisible = true;
+
+            const catalogoHabitaciones0 = [];
+
+            dia.itinerario_servicios.forEach(itinerarioServicio => {
+                const listaPrecios = itinerarioServicio.servicio?.precios;
+
+                if (!listaPrecios) return;
+                
+                listaPrecios.forEach(precio => {
+                    if (precio.tipo_costo !== 'HABITACION') return;
+                    catalogoHabitaciones0.push({
+                        id: precio.id,
+                        nombre: itinerarioServicio.servicio?.servicio_detalles?.descripcion ?? '',
+                        tipo: precio.tipo_habitacion,
+                        capacidad: precio.capacidad_pax,
+                        precio: Number(precio.monto),
+                        moneda: precio.moneda
+                    });
+                });
+            });
+
+            dia.itinerario_servicios.forEach(servicio => {
+                servicio.catalogoHabitaciones = [...catalogoHabitaciones0];
+            });
+        });
     });
     //console.log('serviciosPorDia.value edit', serviciosPorDia.value);
     listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
@@ -1173,39 +1254,44 @@ function eliminarItinerario(indiceItinerario) {
     serviciosPorDia.value.splice(Number(indiceItinerario), 1);
 }
 
-// const catalogoHabitaciones = ref([]);
-
 async function ListaCategoriaProveedor() {
     try {
-        const data = {
-            destino_turistico_id: Cotizacion.destino_turistico_id,
-        }
         const response = await axios.post(`${route('destino_turistico')}/destinoServicios`, { destino_turistico_id: Cotizacion.destino_turistico_id });
         if (response.status === 200) {
-            console.log("Lista de servicios por dia", response.data);
             const servicioAxios = response.data.itinerario_destinos.map(dia => {
+
+                // 1) Construimos el catálogo completo del día
+                const catalogoHabitaciones0 = [];
+
+                dia.itinerario_servicios.forEach(itinerarioServicios => {
+                    const listaPrecios = itinerarioServicios.servicio?.precios ?? [];
+
+                    listaPrecios.forEach(precio => {
+                        if (precio.tipo_costo !== 'HABITACION') return;
+
+                        catalogoHabitaciones0.push({
+                            id: precio.id,
+                            nombre: itinerarioServicios.servicio?.servicio_detalles?.descripcion ?? '',
+                            tipo: precio.tipo_habitacion,
+                            capacidad: precio.capacidad_pax,
+                            precio: Number(precio.monto),
+                            moneda: precio.moneda
+                        });
+                    });
+                });
+
+                // 2) Ahora sí, devolvemos cada servicio con el catálogo completo
                 return {
                     ...dia,
                     isVisible: true,
+
                     itinerario_servicios: dia.itinerario_servicios.map(itinerarioServicios => {
 
-                        // Extraemos el primer precio de forma segura
-                        const precio = itinerarioServicios.servicio.precios?.[0];
-
-                        // Si existe precio, lo agregamos al catálogo
-                        if (precio && precio.tipo_costo === 'HABITACION') {
-                            catalogoHabitaciones.value.push({
-                                id: precio.id,
-                                nombre: itinerarioServicios.servicio.servicio_detalles.descripcion,
-                                tipo: precio.tipo_habitacion,
-                                capacidad: precio.capacidad_pax,
-                                precio: Number(precio.monto),
-                                moneda: precio.moneda
-                            });
-                        }
+                        const precio = itinerarioServicios.servicio?.precios?.[0] ?? {};
 
                         return {
                             ...itinerarioServicios,
+
                             pasajero_servicios: {
                                 id: null,
                                 cotizacion_id: Cotizacion.id,
@@ -1214,17 +1300,23 @@ async function ListaCategoriaProveedor() {
                                 hora: '09:00',
                                 pasajerosAsignados: [],
                                 observacion: '',
-                                moneda: precio?.moneda ?? 'USD',
-                                monto: precio?.monto ?? 0,
+                                moneda: precio.moneda ?? 'USD',
+                                monto: precio.monto ?? 0,
                                 cantidad_pasajeros: 1,
-                                subtotal: (precio?.monto ?? 0) * 1,
+                                subtotal: (precio.monto ?? 0) * 1,
                                 estatus: '0',
                                 estado_activo: '1'
-                            }
+                            },
+
+                            // Catálogo completo para todos los servicios del día
+                            catalogoHabitaciones: [...catalogoHabitaciones0]
                         };
                     })
                 };
             });
+
+            console.log('serviciosPorDia.value desde destino', servicioAxios);
+
 
             serviciosPorDia.value = reactive(servicioAxios);
 

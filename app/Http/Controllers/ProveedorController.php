@@ -8,7 +8,9 @@ use App\Models\Destino;
 use App\Models\DistribucionVenta;
 use App\Models\ProveedorCategoria;
 use App\Models\proveedor;
+use App\Models\Servicio;
 use App\Models\ServicioDetalle;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class ProveedorController extends Controller
@@ -137,6 +139,59 @@ class ProveedorController extends Controller
         $ruc = $request->input('ruc') ?? ''; 
         $proveedorList = Proveedor::findProveedor($tipoDoc, $ruc);
         return response()->json($proveedorList);
+    }
+
+    public function proveedorAlojamiento(Request $request)
+    {
+        $pasajeros = $request->pasajeros;
+        $categoria   = $request->categoria;
+
+        $result = Proveedor::whereHas('servicios', function ($q) use ($categoria) {
+            $q->where('estado_activo', 1)
+            ->whereHas('proveedor', function ($c) use ($categoria) {
+                $c->where('proveedor_categoria_id', $categoria);
+            });
+        })
+        ->withCount([
+            'servicios as capacidad_total' => function ($q) {
+                $q->join('precios', 'servicios.id', '=', 'precios.servicio_id')
+                  ->select(DB::raw('SUM(precios.capacidad_pax)'));
+            }
+        ])
+        ->having('capacidad_total', '>=', $pasajeros)
+        ->get(
+            [
+                'id',
+                'ruc',
+                'razon_social',
+                'nombre',
+                'estrellas',
+                'ciudad'
+            ]
+        );
+
+        return response()->json($result);
+    }
+
+    public function proveedorHabitacion($proveedorId)
+    {
+        return Servicio::where('proveedor_id', $proveedorId)
+            ->with([
+                'servicioDetalles:id,descripcion',
+                'precios' => fn ($p) => $p->where('estado_activo', 1)
+            ])
+            ->get()
+            ->map(function ($servicio) {
+                return [
+                    'id'                => $servicio->id,
+                    'servicioDetalles'  => $servicio->servicioDetalles->descripcion,
+                    'tipo_costo'        => $servicio->precios->first()->tipo_costo,
+                    'tipo'   => $servicio->precios->first()->tipo_habitacion,
+                    'capacidad' => $servicio->precios->first()->capacidad_pax,
+                    'precio'    => (float) $servicio->precios->first()->monto,
+                    'moneda'    => $servicio->precios->first()->moneda
+                ];
+            });
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use App\Http\Requests\ItinerarioServicio\StoreRequest;
-        use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ItinerarioServicio extends Model

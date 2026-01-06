@@ -95,9 +95,22 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
     Route::patch('/dashboard/proveedor/{proveedor}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
     Route::delete('/dashboard/proveedor/{proveedor}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
+    Route::get('/dashboard/proveedor/proveedorAlojamiento', [ProveedorController::class, 'proveedorAlojamiento'])->name('proveedor.proveedorAlojamiento');
+    Route::get('/dashboard/proveedor/{proveedor}/proveedorHabitacion', [ProveedorController::class, 'proveedorHabitacion'])->name('proveedor.proveedorHabitacion');
+
+    // Route::prefix('/dashboard/proveedor')->group(function () {
+    //     // 1️⃣ Proveedores sugeridos para alojamiento
+    //     Route::get('/', [ProveedorController::class, 'proveedoresAlojamiento']);
+    //     // GET /api/proveedor?destino=1&pasajeros=4
+
+    //     // 2️⃣ Habitaciones de un proveedor
+    //     Route::get('{proveedor}/habitaciones', [ProveedorController::class, 'habitacionesProveedor']);
+    //     // GET /api/proveedor/5/habitaciones
+    // });
 
     //Route::get('/api/proveedores', function (Request $request) { return Proveedor::paginate(10); });
     //Route::resource('/dashboard/servicio_clase', ServicioClaseController::class);
+
     Route::get('/dashboard/servicio_clase', [ServicioClaseController::class, 'index'])->name('servicio_clase');
     Route::get('/dashboard/servicio_clase/selectOptions', [ServicioClaseController::class, 'selectOptions'])->name('servicio_clase.selectOptions'); 
     Route::get('/dashboard/servicio_clase/create', [ServicioClaseController::class, 'create'])->name('servicio_clase.create');

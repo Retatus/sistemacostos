@@ -143,6 +143,9 @@ class DestinoTuristicoController extends Controller
                                                 }
                                             ]);
                                     },
+                                    'proveedor' => function($query) {
+                                        $query->select('id', 'ruc', 'razon_social');
+                                    }
                                 ]);
                             },
                             //'pasajeroServicios.pasajero' // Nueva relación añadida
