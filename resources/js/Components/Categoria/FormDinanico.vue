@@ -45,6 +45,7 @@
                 :type="field.type"                
                 v-model="form[key]"                
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                :disabled="field.disabled ?? false"
                 required
                 aurofocus
                 :placeholder="field.placeholder || ''"
@@ -56,6 +57,7 @@
                 v-else-if="field.type === 'select'"
                 :id="key"
                 v-model="form[key]"
+                :disabled="field.disabled ?? false"
                 required
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
             >
@@ -75,6 +77,7 @@
                 :type="field.type" 
                 v-model="form[key]"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                :disabled="field.disabled ?? false"
                 required
                 aurofocus
                 :placeholder="field.placeholder || ''"
@@ -87,6 +90,7 @@
                     :id="key"
                     type="checkbox"
                     v-model="form[key]"
+                    :disabled="field.disabled ?? false"
                     required
                     class="h-4 w-4 border-gray-300 rounded"
                 />
@@ -100,6 +104,7 @@
                 :type="field.type"
                 v-model="form[key]"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                :disabled="field.disabled ?? false"
                 required
                 aurofocus
                 :placeholder="field.placeholder || ''"

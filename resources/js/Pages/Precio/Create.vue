@@ -38,6 +38,7 @@
         anio: "",
         moneda: "USD",
         tipo_costo: "UNITARIO",
+        tipo_habitacion: "simple",
         pax_min: 1,
         pax_max: 99,
         capacidad_pax: 1,
@@ -74,6 +75,17 @@
                 { value: 'GRUPAL', label: 'Grupal' }, 
                 { value: 'HABITACION', label: 'Habitacion' }, 
             ],             
+        },
+        tipo_habitacion: {
+            label: 'Tipo Habitacion',
+            type: 'select', 
+            options: [
+                { value: 'simple', label: 'Simple' },
+                { value: 'doble', label: 'Doble' }, 
+                { value: 'triple', label: 'Triple' },
+                { value: 'cuadruple', label: 'Cuadruple' },
+                { value: 'suite', label: 'Suite' },
+            ]
         },
         pax_min: { type: 'number', placeholder: 'Ingrese pax min', label: 'pax min' },
         pax_max: { type: 'number', placeholder: 'Ingrese pax max', label: 'pax max' },

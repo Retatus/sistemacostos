@@ -45,6 +45,11 @@
     const form = useForm({
         anio: props.precio.anio,
         moneda: props.precio.moneda,
+        tipo_costo: props.precio.tipo_costo,
+        tipo_habitacion: props.precio.tipo_habitacion,
+        pax_min: props.precio.pax_min,
+        pax_max: props.precio.pax_max,
+        capacidad_pax: props.precio.capacidad_pax,
         monto: props.precio.monto,
         tipo_pasajero_id: props.precio.tipo_pasajero_id,
         servicio_id: props.precio.servicio_id,
@@ -54,22 +59,47 @@
 
     const formFields = {   
         servicio_id: { 
-            label: 'Servicio', 
+            label: 'Servicio',
             type: 'select', 
+            disabled: true,
             options: [
                 { value: '', label: '--Seleccionar--' },
                 ... ListaServicios.value
             ]
+            
         },
         anio: { type: 'text', placeholder: 'Ingrese la año', label: 'año' },
         moneda: { 
             label: 'Moneda',
             type: 'select', 
             options: [
-                { value: 'DOLARES', label: 'DOLARES' },
-                { value: 'SOLES', label: 'SOLES' }, 
+                { value: 'USD', label: 'USD' },
+                { value: 'PEN', label: 'PEN' }, 
             ],             
         },
+        tipo_costo: {
+            label: 'Tipo Costo',
+            type: 'select', 
+            options: [
+                { value: 'UNITARIO', label: 'Unitario' },
+                { value: 'GRUPAL', label: 'Grupal' }, 
+                { value: 'HABITACION', label: 'Habitacion' },
+            ]
+        },
+        tipo_habitacion: {
+            label: 'Tipo Habitacion',
+            type: 'select', 
+            options: [
+                { value: 'simple', label: 'SIMPLE' },
+                { value: 'doble', label: 'DOBLE' },
+                { value: 'triple', label: 'TRIPLE' },
+                { value: 'cuadruple', label: 'CUADRUPLE' },
+                { value: 'suite', label: 'Suite' },
+            ]
+        },
+        pax_min: { type: 'number', placeholder: 'Ingrese pax min', label: 'pax min' },
+        pax_max: { type: 'number', placeholder: 'Ingrese pax max', label: 'pax max' },
+        capacidad_pax: { type: 'number', placeholder: 'Ingrese capacidad pax', label: 'capacidad pax' },
         monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },
         tipo_pasajero_id: { 
             label: 'Tipo Pasajero', 

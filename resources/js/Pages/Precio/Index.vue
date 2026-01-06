@@ -101,7 +101,15 @@
                                         {{precio.capacidad_pax}}
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{precio.tipo_costo}}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium capitalize"
+                                            :class="{
+                                                'bg-blue-100 text-blue-800': precio.tipo_costo?.includes('UNITARIO'),
+                                                'bg-green-100 text-green-800': precio.tipo_costo?.includes('GRUPAL'),
+                                                'bg-purple-100 text-purple-800': precio.tipo_costo?.includes('HABITACION'),
+                                                'bg-gray-100 text-gray-800': !precio.tipo_costo
+                                                }">
+                                            {{ precio.tipo_costo || 'Sin tipo' }}
+                                        </span>
                                     </td>
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{precio.monto}}
