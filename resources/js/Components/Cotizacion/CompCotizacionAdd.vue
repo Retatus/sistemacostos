@@ -473,22 +473,63 @@
                                 <!-- CELDA 2: Detalles del Servicio -->
                                 <td class="px-4 py-3 border-r border-gray-300 min-w-[300px] max-w-[350px]">
                                     <div class="space-y-2">
-                                        <!-- Categoría -->
-                                        <div class="flex items-center gap-2">
-                                            <label class="text-xs text-gray-500 min-w-[40px]">Cat:</label>
-                                            <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                                <option disabled value="0">Seleccionar categoría</option>
-                                                <option v-for="option in sCategoriaProveedor" 
-                                                        :key="option.value"
-                                                        :value="option.value"
-                                                        class="py-1">
-                                                    {{ option.label }}
-                                                </option>
-                                            </select>
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-xs font-semibold text-gray-500  tracking-wide">Modificar</span>
+                                            <button type="button" 
+                                                @click="toggleEdit(dia.nro_dia, indexItinerario)" 
+                                                class="edit-btn group flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200"
+                                                :class="servicioDetalle.modo_edit 
+                                                    ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-blue-200 text-blue-600 hover:bg-blue-100 hover:border-blue-300 shadow-sm' 
+                                                    : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 hover:shadow-sm'">
+                                                <span v-if="!servicioDetalle.modo_edit" class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                    Editar
+                                                </span>
+                                                <span v-else class="flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    Guardar
+                                                </span>
+                                            </button>
                                         </div>
-                                        
-                                        <!-- Proveedor -->
+                                        <!-- Modo visualización -->
+                                        <div v-if="!servicioDetalle.modo_edit" class="display-mode">
+                                            <div class="flex items-center gap-2 mb-2 bg-gray-50/50 rounded-lg hover:bg-gray-100 transition-colors">
+                                                <span class="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-medium capitalize">                                                    
+                                                    {{ servicioDetalle.servicio.servicio_detalles.proveedor_categoria.nombre || 'Sin categoría' }}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center gap-2 mb-2 bg-purple-50/50 rounded-lg">
+                                                <span class="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[10px] font-medium capitalize">                                                    
+                                                    {{ servicioDetalle.servicio?.proveedor?.razon_social || 'Sin proveedor' || 'Sin proveedor' }}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center gap-2 mb-2 bg-purple-50/50 rounded-lg">
+                                                 <span class="inline-flex items-center px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full text-[10px] font-medium capitalize">                                                    
+                                                    {{ servicioDetalle.servicio.servicio_detalles.descripcion || 'Sin servicio                                                                                                                                                                                                ' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- Modo edición -->
+                                        <div v-if="servicioDetalle.modo_edit">
+                                            <!-- Categoría -->
+                                            <div class="flex items-center gap-2">
+                                                <label class="text-xs text-gray-500 min-w-[40px]">Cat:</label>
+                                                <select v-model="servicioDetalle.proveedor_categoria_id"
+                                                        class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                                    <option disabled value="0">Seleccionar categoría</option>
+                                                    <option v-for="option in sCategoriaProveedor" 
+                                                            :key="option.value"
+                                                            :value="option.value"
+                                                            class="py-1">
+                                                        {{ option.label }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!-- Proveedor -->
                                         <div class="flex items-center gap-2">
                                             <label class="text-xs text-gray-500 min-w-[40px]">Prov:</label>
                                             <div class="w-full px-2 py-1.5 bg-gray-50 rounded border border-gray-200">
@@ -517,6 +558,13 @@
                                                 </option>
                                             </select>
                                         </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         <div v-if="servicioDetalle.proveedor_categoria_id === 2 && servicioDetalle.servicio.precios[0].tipo_costo === 'HABITACION'">
                                             <button type="button" class="text-xs text-blue-600 hover:underline"
                                                 @click="editarAlojamiento(dia.nro_dia, indexItinerario)">
@@ -524,7 +572,7 @@
                                             </button>
                                             <HotelHabitacionManual
                                                 :pasajeros="Cotizacion.nro_pasajeros"
-                                                :habitacionesDisponibles="servicioDetalle.catalogoHabitaciones"
+                                                :habitacionesDisponibles="servicioDetalle.servicio.proveedor.catalogo_habitaciones"
                                                 @update="(seleccion) => actualizarDistribucion(seleccion, dia.nro_dia, indexItinerario)"
                                                 @cambiarProveedor="(p) => seleccionarProveedor(p, servicioDetalle)"
                                                 class="text-sm"
@@ -575,7 +623,7 @@
                                         <!-- Cantidad y Subtotal -->
                                         <div class="grid grid-cols-2 gap-2">
                                             <div>
-                                                <label class="text-xs text-gray-500 block mb-1">Cantidad</label>
+                                                <label class="text-xs text-gray-500 block mb-1">Cantidad {{ servicioDetalle.proveedor_categoria_id === 2 ? 'Hab.' : '' }} </label>
                                                 <input type="number"
                                                     v-model="servicioDetalle.pasajero_servicios.cantidad_pasajeros"
                                                     min="1"
@@ -863,6 +911,15 @@ const props = defineProps({
     },
 });
 
+const toggleEdit = (indiceDia, indiceServicio) => {
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].modo_edit = !serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].modo_edit;
+    // Aquí podrías agregar lógica para guardar cambios
+    //console.log('toggleEdit', section);
+    // if (!this.servicioDetalle.modo_edit[section]) {
+    //     //this.saveChanges(section);
+    // }
+}
+
 // #region SELECCION DE HABITACIONES PARA SERVICIO
 // Aquí guardaremos la distribución final que emite el hijo
 const distribucionFinal = ref([])
@@ -919,7 +976,7 @@ function aplicarAlojamiento(resumen, indiceDia, indiceServicio) {
     serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.monto = resumen.subtotal;
     serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.cantidad_pasajeros = resumen.totalHabitaciones;
     serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.subtotal = resumen.subtotal;
-    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].catalogoHabitaciones = resumen.habitaciones;
+    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].servicio.proveedor.catalogo_habitaciones = resumen.habitaciones;
     serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].servicio.proveedor.razon_social = resumen.proveedor.razon_social;
 
     console.log('opcion elegida', resumen);
@@ -1012,36 +1069,8 @@ if (esEdicion.value) {
     console.log('serviciosPorDia.value desde edicion', serviciosPorDia.value);
     // snapshot profundo (NO reactivo)
     cotizacionOriginal.value = { ...Cotizacion };
-
     serviciosPorDia.value.forEach(dia => {
-        dia.isVisible = true; // Inicialmente todas las tablas visibles
-        serviciosPorDia.value.forEach(dia => {
-            dia.isVisible = true;
-
-            const catalogoHabitaciones0 = [];
-
-            dia.itinerario_servicios.forEach(itinerarioServicio => {
-                const listaPrecios = itinerarioServicio.servicio?.precios;
-
-                if (!listaPrecios) return;
-                
-                listaPrecios.forEach(precio => {
-                    if (precio.tipo_costo !== 'HABITACION') return;
-                    catalogoHabitaciones0.push({
-                        id: precio.id,
-                        nombre: itinerarioServicio.servicio?.servicio_detalles?.descripcion ?? '',
-                        tipo: precio.tipo_habitacion,
-                        capacidad: precio.capacidad_pax,
-                        precio: Number(precio.monto),
-                        moneda: precio.moneda
-                    });
-                });
-            });
-
-            dia.itinerario_servicios.forEach(servicio => {
-                servicio.catalogoHabitaciones = [...catalogoHabitaciones0];
-            });
-        });
+        dia.isVisible = true;
     });
     //console.log('serviciosPorDia.value edit', serviciosPorDia.value);
     listaServicioDetalle.value = calcularMontoTotalXCategoria(Cotizacion.destinos_turisticos);
@@ -1260,26 +1289,6 @@ async function ListaCategoriaProveedor() {
         if (response.status === 200) {
             const servicioAxios = response.data.itinerario_destinos.map(dia => {
 
-                // 1) Construimos el catálogo completo del día
-                const catalogoHabitaciones0 = [];
-
-                dia.itinerario_servicios.forEach(itinerarioServicios => {
-                    const listaPrecios = itinerarioServicios.servicio?.precios ?? [];
-
-                    listaPrecios.forEach(precio => {
-                        if (precio.tipo_costo !== 'HABITACION') return;
-
-                        catalogoHabitaciones0.push({
-                            id: precio.id,
-                            nombre: itinerarioServicios.servicio?.servicio_detalles?.descripcion ?? '',
-                            tipo: precio.tipo_habitacion,
-                            capacidad: precio.capacidad_pax,
-                            precio: Number(precio.monto),
-                            moneda: precio.moneda
-                        });
-                    });
-                });
-
                 // 2) Ahora sí, devolvemos cada servicio con el catálogo completo
                 return {
                     ...dia,
@@ -1291,6 +1300,7 @@ async function ListaCategoriaProveedor() {
 
                         return {
                             ...itinerarioServicios,
+                            modo_edit: false,
 
                             pasajero_servicios: {
                                 id: null,
@@ -1307,9 +1317,6 @@ async function ListaCategoriaProveedor() {
                                 estatus: '0',
                                 estado_activo: '1'
                             },
-
-                            // Catálogo completo para todos los servicios del día
-                            catalogoHabitaciones: [...catalogoHabitaciones0]
                         };
                     })
                 };

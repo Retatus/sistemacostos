@@ -253,7 +253,9 @@ class CotizacionController extends Controller
                                             ]);
                                     },
                                     'proveedor' => function($query) {
-                                        $query->select('id', 'ruc', 'razon_social');
+                                        $query->select('id', 'ruc', 'razon_social', 'proveedor_categoria_id')
+                                            //->where('proveedor_categoria_id', 2) // unicamente categorias de hoteles
+                                            ->with('catalogoHabitaciones');
                                     }
                                 ]);
                             },
@@ -266,13 +268,10 @@ class CotizacionController extends Controller
             },
             'pasajeros' => function($query) use ($cotizacion) {
                 $query->where('cotizacion_id', $cotizacion->id);
-            },
-            // tatus
-            'pasajerosServicios' => function($query) use ($cotizacion) {
-                $query->where('cotizacion_id', $cotizacion->id);
             }
         ])->find($cotizacion->id);
 
+        //dd(json_encode($cotizacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
         $coleccionServiciosNoRelacionados = collect(PasajeroServicio::whereNull('itinerario_servicio_id')
         ->where('cotizacion_id', $cotizacion->id)
         ->get());

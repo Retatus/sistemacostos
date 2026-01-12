@@ -15,7 +15,7 @@ const hasActions = computed(() => !! useSlots().actions);
                     class="px-4 py-5 bg-white sm:p-6 shadow"
                     :class="hasActions ? 'sm:rounded-tl-md sm:rounded-tr-md' : 'sm:rounded-md'"
                 >
-                    <div class="grid grid-cols-1 gap-6">
+                    <div class="w-full">
                         <slot name="form" />
                     </div>
                 </div>

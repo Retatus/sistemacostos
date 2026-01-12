@@ -144,7 +144,9 @@ class DestinoTuristicoController extends Controller
                                             ]);
                                     },
                                     'proveedor' => function($query) {
-                                        $query->select('id', 'ruc', 'razon_social');
+                                        $query->select('id', 'ruc', 'razon_social', 'proveedor_categoria_id')
+                                            //->where('proveedor_categoria_id', 2) // unicamente categorias de hoteles
+                                            ->with('catalogoHabitaciones');
                                     }
                                 ]);
                             },

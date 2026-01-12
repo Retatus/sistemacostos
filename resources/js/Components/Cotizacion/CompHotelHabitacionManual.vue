@@ -73,7 +73,7 @@
                   {{ h.moneda }}
                 </span>
                 <span class="text-xs font-semibold text-gray-900">
-                  {{ h.precio.toFixed(2) }}
+                  {{ Number(h.precio).toFixed(2) }}
                 </span>
               </div>
             </td>
@@ -105,10 +105,10 @@
             <td class="px-1.5 py-1.5 text-right">
               <div class="flex flex-col">
                 <span class="text-xs font-bold text-gray-900">
-                  {{ h.moneda }} {{ (h.precio * h.cantidad).toFixed(2) }}
+                  {{ h.moneda }} {{ ( Number(h.precio) * h.cantidad ).toFixed(2) }}
                 </span>
                 <span class="text-[9px] text-gray-400">
-                  {{ h.precio.toFixed(2) }} × {{ h.cantidad }}
+                  {{ Number (h.precio).toFixed(2) }} × {{ h.cantidad }}
                 </span>
               </div>
             </td>
@@ -145,13 +145,13 @@
         <!-- Total -->
         <div class="flex flex-col items-center p-1.5 bg-green-50/50 rounded-lg">
           <span class="text-[10px] text-gray-500 mb-0.5">Total</span>
-          <span class="text-sm font-bold text-green-700">S/ {{ subtotal.toFixed(2) }}</span>
+          <span class="text-sm font-bold text-green-700">S/ {{ Number(subtotal).toFixed(2) }}</span>
         </div>
 
         <!-- Unitario -->
         <div class="flex flex-col items-center p-1.5 bg-purple-50/50 rounded-lg">
           <span class="text-[10px] text-gray-500 mb-0.5">Unit/pax</span>
-          <span class="text-sm font-bold text-purple-700">S/ {{ costoUnitario.toFixed(2) }}</span>
+          <span class="text-sm font-bold text-purple-700">S/ {{ Number(costoUnitario).toFixed(2) }}</span>
         </div>
       </div>
     </div>

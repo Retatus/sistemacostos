@@ -23,6 +23,27 @@ class proveedor extends Model
         return $this->hasMany(Servicio::class, 'proveedor_id');
     }
 
+    public function catalogoHabitaciones()
+    {
+        return $this->hasManyThrough(
+            Precio::class,
+            Servicio::class,
+            'proveedor_id',   // FK en servicios
+            'servicio_id',    // FK en precios
+            'id',             // PK proveedor
+            'id'              // PK servicio
+        )->where('tipo_costo', 'HABITACION')
+        ->selectRaw("
+            precios.anio,
+            precios.moneda,
+            precios.tipo_pasajero_id,
+            precios.tipo_habitacion as tipo,
+            precios.capacidad_pax as capacidad,
+            CAST(precios.monto AS DECIMAL(10,2)) as precio            
+        ");
+        // CAST(precios.monto AS DECIMAL(10,2)) as precio
+    }
+
     public static function getFormattedForDropdown($parametro = null)
     {
         return self::orderBy('id', 'desc')
