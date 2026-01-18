@@ -154,6 +154,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/servicio/create', [ServicioController::class, 'create'])->name('servicio.create');
     Route::post('/dashboard/servicio', [ServicioController::class, 'store'])->name('servicio.store');
     Route::post('/dashboard/servicio/servicioList', [ServicioController::class, 'servicioList'])->name('servicio.servicioList');
+    Route::post('/dashboard/servicio/servicioParaCotizaciones', [ServicioController::class, 'servicioParaCotizaciones'])->name('servicio.servicioParaCotizaciones');
     Route::get('/dashboard/servicio/{servicio}/edit', [ServicioController::class, 'edit'])->name('servicio.edit');
     Route::patch('/dashboard/servicio/{servicio}/update', [ServicioController::class, 'update'])->name('servicio.update');
     Route::delete('/dashboard/servicio/{servicio}/destroy', [ServicioController::class, 'destroy'])->name('servicio.destroy');

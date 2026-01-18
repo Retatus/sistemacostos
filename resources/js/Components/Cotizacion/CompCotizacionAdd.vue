@@ -15,10 +15,10 @@
                 </h3> 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                     <div hidden class="md:col-span-3 lg:col-span-2">
-                        <label for="cliente_nro_doc" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-1">
                             <span class="text-red-500">*</span> Cliente Id
                         </label>
-                        <input v-model="Cotizacion.cliente_nro_doc" type="text" id="cliente_nro_doc" 
+                        <input v-model="Cotizacion.cliente_id" type="text" id="cliente_id" 
                             required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             placeholder="Ej: 12345678">
                     </div>
@@ -92,7 +92,7 @@
                         <label for="estado_cotizacion" class="block text-sm font-medium text-gray-700 mb-1">
                             Estado de Cotización
                         </label>
-                        <select v-model="Cotizacion.estado_cotizacion"
+                        <select v-model="Cotizacion.estado_cotizacion" id="estado_cotizacion"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium">
                             <option disabled value="0">Seleccionar estado...</option>
                             <option v-for="option in EstadoCotizacion" :key="option.value" :value="option.value"
@@ -129,7 +129,7 @@
                             <label for="comprobante_id" class="block text-sm font-medium text-gray-700 mb-1">
                                 Tipo Comprobante
                             </label>
-                            <select v-model="Cotizacion.comprobante_id" 
+                            <select v-model="Cotizacion.comprobante_id" id="comprobante_id"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                                 <option disabled value="0">Seleccionar...</option>
                                 <option v-for="option in sTipoComprobante" :key="option.value" :value="option.value">
@@ -150,7 +150,7 @@
                             <label for="idioma" class="block text-sm font-medium text-gray-700 mb-1">
                                 Idioma
                             </label>
-                            <select v-model="Cotizacion.idioma_id" 
+                            <select v-model="Cotizacion.idioma_id" id ="idioma"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                                 <option disabled value="0">Seleccionar...</option>
                                 <option v-for="option in sIdioma" :key="option.value" :value="option.value">
@@ -163,7 +163,7 @@
                             <label for="mercado" class="block text-sm font-medium text-gray-700 mb-1">
                                 Mercado
                             </label>
-                            <select v-model="Cotizacion.mercado_id" 
+                            <select v-model="Cotizacion.mercado_id" id ="mercado"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                                 <option disabled value="0">Seleccionar...</option>
                                 <option v-for="option in sMercado" :key="option.value" :value="option.value">
@@ -282,7 +282,7 @@
                     <label for="destino_turistico_id" class="block text-sm font-medium text-gray-700 mb-1">
                         Destino Turístico
                     </label>
-                    <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor"
+                    <select v-model="Cotizacion.destino_turistico_id" @change="ListaCategoriaProveedor" id = "destino_turistico_id"
                             class="w-full px-3 py-2 border border-cyan-300 bg-cyan-50 rounded-lg text-cyan-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                         <option disabled value="0">Seleccionar destino...</option>
                         <option v-for="option in DestinoTuristico" :key="option.value" :value="option.value">
@@ -296,7 +296,7 @@
                     <label for="pais_id" class="block text-sm font-medium text-gray-700 mb-1">
                         País
                     </label>
-                    <select v-model="Cotizacion.pais_id" 
+                    <select v-model="Cotizacion.pais_id" id = "pais_id"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                         <option disabled value="0">Seleccionar...</option>
                         <option v-for="option in sPais" :key="option.value" :value="option.value">
@@ -401,7 +401,7 @@
                         <thead class="bg-gray-100">
                             <tr>
                                 <!-- COLUMNA 1: Hora -->
-                                <th class="sticky left-0 z-10 bg-gray-100 px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[80px] max-w-[100px]">
+                                <th class="sticky left-0 z-10 bg-gray-100 px-4 py-3 border-r border-gray-300 font-medium text-gray-900 min-w-[100px] max-w-[100px]">
                                     <div class="flex flex-col">
                                         <span class="font-semibold">Hora</span>
                                         <span class="text-xs font-normal text-gray-500">Editar</span>
@@ -472,104 +472,119 @@
                                 
                                 <!-- CELDA 2: Detalles del Servicio -->
                                 <td class="px-4 py-3 border-r border-gray-300 min-w-[300px] max-w-[350px]">
-                                    <div class="space-y-2">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <span class="text-xs font-semibold text-gray-500  tracking-wide">Modificar</span>
-                                            <button type="button" 
-                                                @click="toggleEdit(dia.nro_dia, indexItinerario)" 
-                                                class="edit-btn group flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200"
-                                                :class="servicioDetalle.modo_edit 
-                                                    ? 'bg-gradient-to-r from-blue-50 to-sky-50 border-blue-200 text-blue-600 hover:bg-blue-100 hover:border-blue-300 shadow-sm' 
-                                                    : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 hover:shadow-sm'">
-                                                <span v-if="!servicioDetalle.modo_edit" class="flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="space-y-3">
+                                        <!-- Encabezado con toggle switch -->
+                                        <div class="flex items-center justify-between px-1 py-2">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-7 h-7 flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg">
+                                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
-                                                    Editar
-                                                </span>
-                                                <span v-else class="flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    Guardar
+                                                </div>
+                                                <span class="text-xs font-semibold text-gray-700"></span>
+                                            </div>
+                                            <button type="button" 
+                                                    @click="toggleEdit(dia.nro_dia, indexItinerario, servicioDetalle.proveedor_categoria_id, servicioDetalle.proveedor_id, servicioDetalle.servicio_id)" 
+                                                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-400"
+                                                    :class="servicioDetalle.modo_edit 
+                                                        ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                                                        : 'bg-gray-300 hover:bg-gray-400'">
+                                                <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-all duration-200"
+                                                    :class="servicioDetalle.modo_edit ? 'translate-x-6' : 'translate-x-1'">
+                                                    <span v-if="!servicioDetalle.modo_edit" class="flex items-center justify-center h-full">
+                                                        <svg class="w-2.5 h-2.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <span v-else class="flex items-center justify-center h-full">
+                                                        <svg class="w-2.5 h-2.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                        </svg>
+                                                    </span>
                                                 </span>
                                             </button>
                                         </div>
+
                                         <!-- Modo visualización -->
-                                        <div v-if="!servicioDetalle.modo_edit" class="display-mode">
-                                            <div class="flex items-center gap-2 mb-2 bg-gray-50/50 rounded-lg hover:bg-gray-100 transition-colors">
-                                                <span class="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-[10px] font-medium capitalize">                                                    
-                                                    {{ servicioDetalle.servicio.servicio_detalles.proveedor_categoria.nombre || 'Sin categoría' }}
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mb-2 bg-purple-50/50 rounded-lg">
-                                                <span class="inline-flex items-center px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-[10px] font-medium capitalize">                                                    
-                                                    {{ servicioDetalle.servicio?.proveedor?.razon_social || 'Sin proveedor' || 'Sin proveedor' }}
-                                                </span>
-                                            </div>
-                                            <div class="flex items-center gap-2 mb-2 bg-purple-50/50 rounded-lg">
-                                                 <span class="inline-flex items-center px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full text-[10px] font-medium capitalize">                                                    
-                                                    {{ servicioDetalle.servicio.servicio_detalles.descripcion || 'Sin servicio                                                                                                                                                                                                ' }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <!-- Modo edición -->
-                                        <div v-if="servicioDetalle.modo_edit">
-                                            <!-- Categoría -->
+                                        <div v-if="!servicioDetalle.modo_edit" class="space-y-2 px-1">
+                                            
                                             <div class="flex items-center gap-2">
-                                                <label class="text-xs text-gray-500 min-w-[40px]">Cat:</label>
-                                                <select v-model="servicioDetalle.proveedor_categoria_id"
-                                                        class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                                    <option disabled value="0">Seleccionar categoría</option>
-                                                    <option v-for="option in sCategoriaProveedor" 
-                                                            :key="option.value"
-                                                            :value="option.value"
-                                                            class="py-1">
-                                                        {{ option.label }}
-                                                    </option>
-                                                </select>
+                                                <header-label
+                                                    label="Categoría"
+                                                    :id="servicioDetalle.proveedor_categoria_id"
+                                                />
+                                                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold truncate border border-blue-100">
+                                                    {{ servicioDetalle.servicio?.servicio_detalles?.proveedor_categoria?.nombre || 'Sin categoría' }}
+                                                </span>
                                             </div>
-                                            <!-- Proveedor -->
-                                        <div class="flex items-center gap-2">
-                                            <label class="text-xs text-gray-500 min-w-[40px]">Prov:</label>
-                                            <div class="w-full px-2 py-1.5 bg-gray-50 rounded border border-gray-200">
-                                                <span class="text-sm text-gray-800 font-medium truncate block">
+                                            
+                                            <div class="flex items-center gap-2">
+                                                <header-label
+                                                    label="Proveedor"
+                                                    :id="servicioDetalle.proveedor_id"
+                                                />
+                                                <span class="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-semibold truncate border border-emerald-100">
                                                     {{ servicioDetalle.servicio?.proveedor?.razon_social || 'Sin proveedor' }}
                                                 </span>
                                             </div>
+                                            
+                                            <div class="flex items-center gap-2">
+                                                <header-label
+                                                    label="Servicio"
+                                                    :id="servicioDetalle.servicio_id"
+                                                />
+                                                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-semibold truncate border border-purple-100">
+                                                    {{ servicioDetalle.servicio?.servicio_detalles?.descripcion || 'Sin servicio' }}
+                                                </span>
+                                            </div>
                                         </div>
                                         
-                                        <!-- Servicio -->
-                                        <div class="flex items-center gap-2">
-                                            <label class="text-xs text-gray-500 min-w-[40px]">Serv:</label>
-                                            <select v-model="servicioDetalle.servicio_id"
-                                                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                                    @change="handleChange(dia.nro_dia, indexItinerario)">
-                                                <option disabled value="0">Seleccionar servicio</option>
-                                                <option v-for="item in servicios" 
-                                                        :key="item.value"
-                                                        :value="item.value"
-                                                        class="py-1">
-                                                    {{ item.label }}
-                                                </option>
-                                                <option value='__add_new__' 
-                                                        class="text-green-600 font-medium bg-green-50 py-1">
-                                                    ➕ Agregar nuevo servicio
-                                                </option>
-                                            </select>
+                                            
+
+                                        <!-- Modo edición -->
+                                        <div v-if="servicioDetalle.modo_edit" class="space-y-3 px-1 animate-fadeIn">
+                                            <ServicioSelector
+                                                v-model="dia.itinerario_servicios[indexItinerario]"
+                                                :categorias="sCategorias"
+                                                :proveedores="sProveedores"
+                                                :servicios="sServicios"
+                                                :loading-proveedores="cargandoProveedores"
+                                                :loading-servicios="cargandoServicios"
+                                                :guardando="guardando"
+                                                @change-categoria="categoriaId =>
+                                                    cargarCategoria(
+                                                        categoriaId,
+                                                        dia.nro_dia,
+                                                        indexItinerario
+                                                    )"
+
+                                                @change-proveedor="proveedorId =>
+                                                    cargarProveedor(
+                                                        proveedorId,
+                                                        dia.nro_dia,
+                                                        indexItinerario
+                                                    )"                                            
+
+                                                @guardar="guardarCambios(dia.nro_dia, indexItinerario, $event)"
+                                            />
                                         </div>
-                                        </div>
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        <div v-if="servicioDetalle.proveedor_categoria_id === 2 && servicioDetalle.servicio.precios[0].tipo_costo === 'HABITACION'">
-                                            <button type="button" class="text-xs text-blue-600 hover:underline"
-                                                @click="editarAlojamiento(dia.nro_dia, indexItinerario)">
-                                                Cambiar
-                                            </button>
+
+                                        <!-- Alojamiento especial -->
+                                        <div v-if="servicioDetalle.proveedor_categoria_id === 2 && servicioDetalle.servicio.precios[0].tipo_costo === 'HABITACION'"
+                                            class="mt-3 pt-3 border-t border-gray-200">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <span class="text-xs font-semibold text-sky-700">Alojamiento</span>
+                                                <button type="button" 
+                                                        class="text-xs text-sky-600 hover:text-sky-800 hover:underline font-medium flex items-center gap-1"
+                                                        @click="editarAlojamiento(dia.nro_dia, indexItinerario)">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                    Configurar
+                                                </button>
+                                            </div>
+                                            
                                             <HotelHabitacionManual
                                                 :pasajeros="Cotizacion.nro_pasajeros"
                                                 :habitacionesDisponibles="servicioDetalle.servicio.proveedor.catalogo_habitaciones"
@@ -881,6 +896,8 @@ import { auditoriaSimple } from '@/Utils/JsonDiffDetector';
 
 import HotelHabitacionManual from '@/Components/Cotizacion/CompHotelHabitacionManual.vue';
 import AlojamientoSelector from '@/Components/Cotizacion/CompAlojamientoSelector.vue'
+import ServicioSelector from '@/Components/Cotizacion/CompServicioSelector.vue';
+import HeaderLabel from '@/Components/Cotizacion/HeaderLabel.vue'
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';
@@ -911,14 +928,6 @@ const props = defineProps({
     },
 });
 
-const toggleEdit = (indiceDia, indiceServicio) => {
-    serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].modo_edit = !serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].modo_edit;
-    // Aquí podrías agregar lógica para guardar cambios
-    //console.log('toggleEdit', section);
-    // if (!this.servicioDetalle.modo_edit[section]) {
-    //     //this.saveChanges(section);
-    // }
-}
 
 // #region SELECCION DE HABITACIONES PARA SERVICIO
 // Aquí guardaremos la distribución final que emite el hijo
@@ -1526,6 +1535,66 @@ async function submitCotizacion() {
         error.value = errorMessage;
     }
 }
+
+// #region SERVICIOS
+
+// Datos reactivos
+const sCategorias = ref([])
+const sProveedores = ref([])
+const sServicios = ref([])
+
+const cargandoProveedores = ref(false)
+const cargandoServicios = ref(false)
+const guardando = ref(false)
+
+const toggleEdit = async (indiceDia, indiceServicio, categoria, proveedor) => {
+    
+    const item = serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio]
+    item.modo_edit = !item.modo_edit
+    
+    if (sCategorias.value.length === 0) {
+       await cargarCategorias()
+    }
+
+    if (sProveedores.value.length === 0) {
+        await cargarCategoria(categoria)
+    }
+
+    if (sServicios.value.length === 0) {
+        await cargarProveedor(proveedor)
+    }
+}
+
+async function cargarCategorias(){
+    const { data } = await axios.get(`${route('proveedor_categoria.selectOptions')}`);  
+    sCategorias.value = data;
+}
+
+async function cargarCategoria(categoriaId) {
+    cargandoProveedores.value = true
+    sProveedores.value = []
+    sServicios.value = []
+    const { data } = await axios.post(`${route('proveedor.proveedorList')}`, {proveedor_categoria_id: categoriaId});
+    sProveedores.value = data;
+    cargandoProveedores.value = false
+}
+
+async function cargarProveedor(proveedorId) {
+    cargandoServicios.value = true
+    sServicios.value = []
+    const { data } = await axios.post(`${route('servicio.servicioList')}`, {proveedor_id: proveedorId});    
+    sServicios.value = data;
+    cargandoServicios.value = false
+}
+
+async function guardarCambios(indexDia, indexServicio, nuevoDetalle) {
+    const result = await axios.post(`${route('servicio.servicioParaCotizaciones')}`, nuevoDetalle)
+    const item = serviciosPorDia.value[indexDia - 1].itinerario_servicios[indexServicio]
+    item.modo_edit = false,
+    item.servicio = result.data.servicio
+}
+// #endregion SERVICIOS
+
 </script>
 
 <style scoped>
@@ -1549,5 +1618,175 @@ async function submitCotizacion() {
     opacity: 0;
     transform: translateY(-10px);
 }
-</style>
 
+.animate-fadeIn {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25em 1.25em;
+    padding-right: 3rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.modern-select:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    outline: none;
+}
+
+.option-new {
+    margin-top: 8px;
+    border-radius: 0.75rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll personalizado para selects */
+.modern-select::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modern-select::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 10px;
+    margin: 4px;
+}
+
+.modern-select::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #c7d2fe, #a5b4fc);
+    border-radius: 10px;
+    border: 2px solid #f8fafc;
+}
+
+.modern-select::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #a5b4fc, #818cf8);
+}
+
+/* Efecto hover para tarjetas */
+.display-mode > div {
+    position: relative;
+    overflow: hidden;
+}
+
+.display-mode > div::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.7s;
+}
+
+.display-mode > div:hover::after {
+    left: 100%;
+}
+
+/* Efecto de borde animado para el formulario */
+.edit-mode {
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-mode::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Efecto de pulso para el botón principal */
+button[type="button"]:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .display-mode {
+        grid-template-columns: 1fr;
+    }
+    
+    .edit-mode {
+        padding: 1rem;
+    }
+}
+
+.select-arrow {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.custom-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3e%3cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>

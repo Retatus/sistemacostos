@@ -90,6 +90,7 @@
             label: 'Tipo Habitacion',
             type: 'select', 
             options: [
+                { value: '', label: 'NINGUNA' },
                 { value: 'simple', label: 'SIMPLE' },
                 { value: 'doble', label: 'DOBLE' },
                 { value: 'triple', label: 'TRIPLE' },
@@ -97,9 +98,9 @@
                 { value: 'suite', label: 'Suite' },
             ]
         },
-        pax_min: { type: 'number', placeholder: 'Ingrese pax min', label: 'pax min' },
-        pax_max: { type: 'number', placeholder: 'Ingrese pax max', label: 'pax max' },
-        capacidad_pax: { type: 'number', placeholder: 'Ingrese capacidad pax', label: 'capacidad pax' },
+        pax_min: { type: 'number', disabled: true, placeholder: 'Ingrese pax min', label: 'pax min' },
+        pax_max: { type: 'number', disabled: true, placeholder: 'Ingrese pax max', label: 'pax max' },
+        capacidad_pax: { type: 'number', disabled: true, placeholder: 'Ingrese capacidad pax', label: 'capacidad pax' },
         monto: { type: 'text', placeholder: 'Ingrese el monto', label: 'monto' },
         tipo_pasajero_id: { 
             label: 'Tipo Pasajero', 

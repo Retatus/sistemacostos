@@ -65,9 +65,42 @@ class ServicioController extends Controller
     {
         $data = $request->all();
         $servicioList = Servicio::getFormattedForDropdownPrecio($data['proveedor_id']);
-        //$servicioList = Servicio::getFormattedForDropdown($data['proveedor_id']);        
-        //dd($servicioList1->toJson(), $servicioList->toJson());
         return response()->json($servicioList);
+    }
+
+    public function servicioParaCotizaciones(Request $request)
+    {
+        $data = $request->all();
+        //dd($data);
+        $proveedorCategoriaId = $data['proveedor_categoria_id'];
+        $proveedorId = $data['proveedor_id'];
+        $servicioId = $data['servicio_id'];
+
+        $response = Servicio::with([
+            'precios',
+            'servicioDetalles' => function($query) use ($proveedorCategoriaId) {
+                $query->where('proveedor_categoria_id', $proveedorCategoriaId)
+                    ->select('id', 'descripcion', 'proveedor_categoria_id')
+                    ->with([
+                        'proveedor_categoria' => function($query) use ($proveedorCategoriaId) {
+                            $query->where('id', $proveedorCategoriaId)
+                            ->select('id', 'nombre'); // Solo los campos necesarios
+                        }
+                    ]);
+            },
+            'proveedor' => function($query) {
+                $query->select('id', 'ruc', 'razon_social', 'proveedor_categoria_id')
+                    //->where('proveedor_categoria_id', 2) // unicamente categorias de hoteles
+                    ->with('catalogoHabitaciones');
+            }
+        ])
+        ->where('proveedor_id', $proveedorId)
+        ->where('id', $servicioId)
+        ->get();
+
+        return response()->json([
+            'servicio' => $response
+        ]);
     }
 
     /**

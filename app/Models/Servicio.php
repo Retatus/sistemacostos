@@ -62,6 +62,7 @@ class Servicio extends Model
                 return $q->where('servicios.proveedor_id', $parametro);
             })
             ->select('precios.id as precio_id', 'tipo_pasajeros.nombre as tipo_pasajero_nombre', 'precios.moneda', 'precios.monto', 'servicios.id as servicio_id', 'servicio_detalles.descripcion')
+            ->where('precios.estado_activo', 1)
             ->get()
             ->map(function ($servicio) {
                 return [

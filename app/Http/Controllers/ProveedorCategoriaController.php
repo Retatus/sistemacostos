@@ -15,7 +15,6 @@ class ProveedorCategoriaController extends Controller
         //$proveedorcategoria = ProveedorCategoria::all();
         $proveedorcategorias = ProveedorCategoria::orderBy('id', 'desc')->get();
         return Inertia::render('ProveedorCategoria/Index', compact('proveedorcategorias'));
-        //return response()->json( ['proveedorcategoria' => $proveedorcategoria]);
     }
 
     public function selectOptions()
