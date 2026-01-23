@@ -7,6 +7,7 @@ use App\Models\Servicio;
 use App\Models\ServicioClase;
 use App\Models\TipoPasajero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 class PrecioController extends Controller
 {
@@ -149,5 +150,19 @@ class PrecioController extends Controller
     {
         $precio->delete();
         return to_route('precio');
+    }
+
+    public function listaTiposCosto()
+    {
+        $columna = DB::select("SHOW COLUMNS FROM precios LIKE 'tipo_costo'");
+
+        // Ejemplo: enum('UNITARIO','GRUPAL','HABITACION',...)
+        $type = $columna[0]->Type;
+
+        // Limpiar y convertir a array
+        $enum = str_replace(["enum(", ")", "'"], "", $type);
+        $valores = explode(",", $enum);
+
+        return response()->json($valores);
     }
 }

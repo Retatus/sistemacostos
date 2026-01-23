@@ -57,9 +57,9 @@
               <select v-model="item.precios[0].tipo_costo"
                 class="w-full border-gray-300 rounded-md shadow-sm text-xs"
                 @change="ajustarCampos(index)">
-                <option value="UNITARIO">UNITARIO</option>
-                <option value="GRUPAL">GRUPAL</option>
-                <option value="HABITACION">HABITACIÓN</option>
+                <option v-for="option in ListaTipoCostos" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
               </select>
             </td>
 
@@ -182,6 +182,7 @@
     const ListaClases = ref({ ...categoriesStore.globals.servicio_clases });
     const ListaUbicaciones = ref({ ...categoriesStore.globals.ubicaciones });
     const ListaTipoPasajeros = ref({ ...categoriesStore.globals.tipo_pasajeros });
+    const ListaTipoCostos = useCategoriesStore().globals.tipo_costos;
 
     const emit = defineEmits(['update']); // Define el evento que vas a emitir
     

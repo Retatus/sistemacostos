@@ -209,6 +209,11 @@ class ProveedorController extends Controller
     {
       //$servicio = Servicio::where('proveedor_id', $proveedor->id)->get();
         $proveedor = proveedor::with('servicios.precios')->find($proveedor->id);
+
+        $proveedor->setRelation(
+            'servicios', collect($this->serviciosFormateadosParaEdicion($proveedor->servicios))
+        );
+
         $formattedServicioDetalle = ServicioDetalle::getFormattedForDropdown($parametro = null);
         return Inertia::render('proveedor/CreateProveedor',
         [
@@ -216,6 +221,55 @@ class ProveedorController extends Controller
             'Proveedor' => $proveedor,
             'ListaServicioDetalle' => $formattedServicioDetalle
         ]); //compact('proveedorcategorias'));
+    }
+
+    public function serviciosFormateadosParaEdicion($servicios)
+    {
+        $resultado = [];
+
+        foreach ($servicios as $servicio) {
+            $grupales = [];
+            $otros = [];
+
+            foreach ($servicio->precios as $precio) {
+
+                if ($precio->tipo_costo === 'GRUPAL') {
+                    $grupales[] = $precio;
+                } else {
+                    $otros[] = $precio;
+                }
+            }
+
+            // 1️⃣ Bloque virtual: GRUPAL agrupado
+            if (count($grupales)) {
+                $resultado[] = [
+                    'id' => $servicio->id,
+                    'servicio_virtual_id' => $servicio->id . '-GRUPAL',
+                    'tipo_costo' => 'GRUPAL',
+                    'proveedor_id' => $servicio->proveedor_id,
+                    'servicio_detalle_id' => $servicio->servicio_detalle_id,
+                    'ubicacion_id' => $servicio->ubicacion_id,
+                    'estado_activo' => $servicio->estado_activo,
+                    'precios' => $grupales,
+                ];
+            }
+
+            // 2️⃣ Bloques virtuales: TRAYECTO, HORA, DIA
+            foreach ($otros as $precio) {
+                $resultado[] = [
+                    'id' => $servicio->id,
+                    'servicio_virtual_id' => $servicio->id . '-' . $precio->tipo_costo . '-' . $precio->id,
+                    'tipo_costo' => $precio->tipo_costo,
+                    'proveedor_id' => $servicio->proveedor_id,
+                    'servicio_detalle_id' => $servicio->servicio_detalle_id,
+                    'ubicacion_id' => $servicio->ubicacion_id,
+                    'estado_activo' => $servicio->estado_activo,
+                    'precios' => [$precio], // solo 1
+                ];
+            }
+        }
+
+        return $resultado;
     }
 
     /**

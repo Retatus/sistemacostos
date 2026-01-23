@@ -220,6 +220,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/dashboard/precio/{precio}/edit', [PrecioController::class, 'edit'])->name('precio.edit');
     Route::patch('/dashboard/precio/{precio}/update', [PrecioController::class, 'update'])->name('precio.update');
     Route::delete('/dashboard/precio/{precio}/destroy', [PrecioController::class, 'destroy'])->name('precio.destroy');
+    Route::get('/dashboard/precio/listaTiposCosto', [PrecioController::class, 'listaTiposCosto'])->name('precio.listaTiposCosto');
 
     Route::get('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'index'])->name('itinerario_destino');
     Route::get('/dashboard/itinerario_destino/create', [ItinerarioDestinoController::class, 'create'])->name('itinerario_destino.create');

@@ -52,6 +52,15 @@ const apiService = {
     const response = await axios.get(`/dashboard/mercado/selectOptions`); 
     return response.data;
   },
+
+  async getTipoCostos() {
+    const response = await axios.get(`/dashboard/precio/listaTiposCosto`); 
+    const result = response.data.map(tipo => ({
+      value: tipo,
+      label: tipo
+    }));
+    return result;
+  }
 };
 
 export default apiService;
