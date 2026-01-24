@@ -14,10 +14,14 @@ class PrecioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$precio = Precio::all();
-        //$precios = Precio::orderBy('id', 'desc')->get();
+        // Parámetros de búsqueda
+        $category = $request->input('proveedor_categoria') ?? ''; 
+        $ruc_name = $request->input('ruc_razonsocial') ?? ''; 
+        $esCliente = $category == 0 ? 1 : 0; 
+
+        // Consulta principal
         $precios = Precio::with(
             [
                 'servicio.servicio_detalle:id,descripcion',
@@ -25,11 +29,27 @@ class PrecioController extends Controller
                 'tipo_pasajero:id,nombre',
                 'servicio_clase:id,nombre',
             ])
+        ->when($category, function ($query, $category) use ($esCliente) {
+            return $query->whereHas('servicio.proveedor', function ($q) use ($category, $esCliente) {
+                $q->where('escliente', $esCliente)
+                  ->where('proveedor_categoria_id', $category);
+            });
+        })
+        ->when($ruc_name, function ($query, $ruc_name) {
+            $query->whereHas('servicio.proveedor', function ($q) use ($ruc_name) {
+                $q->where('ruc', 'LIKE', "%{$ruc_name}%")
+                ->orWhere('razon_social', 'LIKE', "%{$ruc_name}%");
+            });
+        })
         ->orderBy('id', 'desc')
-        ->paginate(10); // ->get();
-        //dd($precios);
+        ->paginate(10);
+        
+        // Verificar si es una solicitud AJAX o normal
+        if ($request->wantsJson()) {
+            return response()->json(['precios' => $precios]);
+        }
+
         return Inertia::render('Precio/Index', ['precios' => $precios]); //compact('precios'));
-        //return response()->json( ['precio' => $precio]);
     }
 
     /**

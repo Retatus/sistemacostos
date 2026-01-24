@@ -1,39 +1,106 @@
 <template>
     <AppLayout title="Dashboard">
-        <template #header>
-            <div class="grid grid-cols-1 md:grid-cols-8 gap-4 w-full">
-                <!-- <div class="col-span-1">
-                    <PrimaryButton class="btn btn-primary mt-1 px-5 py-2.5 text-sm font-medium sm:min-w-[120px] w-full sm:w-auto text-center" @click="handleSearch">Cotizacion</PrimaryButton>
-                </div> -->
-                <div class="col-span-1">
-                    <PrimaryButton class="btn btn-primary mt-1 px-5 py-2.5 text-sm font-medium sm:min-w-[120px] w-full sm:w-auto text-center" @click="handleSearch">Confirmado</PrimaryButton>
-                </div>
-                <div class="col-span-1">
-                    <PrimaryButton class="btn btn-primary mt-1 px-5 py-2.5 text-sm font-medium sm:min-w-[120px] w-full sm:w-auto text-center" @click="handleSearch">Pendientes&nbsp;</PrimaryButton>
-                </div>
-                <div class="col-span-1">
-                    <PrimaryButton class="btn btn-primary mt-1 px-5 py-2.5 text-sm font-medium sm:min-w-[120px] w-full sm:w-auto text-center" @click="handleSearch">Cancelados&nbsp;</PrimaryButton>
-                </div>
-                <div class="col-span-1">
-                    <Datepicker v-model="filterOperaciones.fecha_inicio"/>
-                </div>
-                <div class="col-span-1">
-                    <Datepicker v-model="filterOperaciones.fecha_fin"/>
-                </div>
-                <div class="col-span-1">
-                    <input v-model="filterOperaciones.nombre_nro_pax" type="search" placeholder="Pax ó Nro File"
-                        class="mt-1 text-sm border border-gray-300 rounded-md shadow-sm px-4 w-full sm:flex-1">
-                </div>
-                <div class="col-span-1"> 
-                    <PrimaryButton class="btn btn-primary mt-1 px-5 py-2.5 text-sm font-medium sm:min-w-[120px] w-full sm:w-auto text-center" @click="handleSearch">&nbsp;&nbsp;Buscar&nbsp;&nbsp;&nbsp;</PrimaryButton>
-                </div>
-                <div class="col-span-1"> 
-                    <Link :href="route('cotizacion.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                        Agregar Cotizacion
-                    </Link>
-                </div>
-            </div>
-        </template>
+   <template #header>
+  <div
+    class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-3 sm:px-4 py-3 bg-white border-b border-gray-200"
+  >
+    <!-- Grupo 1: Estados (scroll horizontal en mobile) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+      <button 
+        @click="handleStatusClick('confirmado')"
+        class="flex items-center justify-center px-3 py-2 text-xs font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all shadow-sm whitespace-nowrap"
+      >
+        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        Confirmado
+      </button>
+
+      <button 
+        @click="handleStatusClick('pendiente')"
+        class="flex items-center justify-center px-3 py-2 text-xs font-medium text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:outline-none focus:ring-2 focus:ring-amber-300 transition-all shadow-sm whitespace-nowrap"
+      >
+        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Pendientes
+      </button>
+
+      <button 
+        @click="handleStatusClick('cancelado')"
+        class="flex items-center justify-center px-3 py-2 text-xs font-medium text-white bg-gradient-to-r from-rose-600 to-pink-600 rounded-lg hover:from-rose-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all shadow-sm whitespace-nowrap"
+      >
+        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Cancelados
+      </button>
+    </div>
+
+    <!-- Grupo 2: Filtros -->
+    <div class="w-full lg:flex-1">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <!-- Fecha Inicio -->
+        <div class="relative">
+          <Datepicker 
+            v-model="filterOperaciones.fecha_inicio"
+            placeholder="Fecha Inicio"
+            :input-class-name="'datepicker-input'"
+            class="mt-0"
+          />
+        </div>
+
+        <!-- Fecha Fin -->
+        <div class="relative">
+          <Datepicker 
+            v-model="filterOperaciones.fecha_fin"
+            placeholder="Fecha Fin"
+            :input-class-name="'datepicker-input'"
+            class="mt-0"
+          />
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="relative">
+          <input 
+            v-model="filterOperaciones.nombre_nro_pax" 
+            type="search" 
+            placeholder="Pax ó Nro File"
+            class="w-full pl-3 pr-4 py-2 mt-1 text-xs border border-gray-300 rounded-lg bg-white hover:border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors placeholder:text-gray-400"
+            @keyup.enter="handleSearch"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 3: Acciones -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+      <!-- Buscar -->
+      <button 
+        @click="handleSearch"
+        class="flex items-center justify-center px-4 py-2 text-xs font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 border border-blue-600 rounded-lg hover:from-blue-700 hover:to-blue-800 hover:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all shadow-sm whitespace-nowrap"
+      >
+        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        Buscar
+      </button>
+
+      <!-- Agregar -->
+      <Link 
+        :href="route('cotizacion.create')" 
+        class="flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg hover:from-emerald-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-1 transition-all shadow-sm whitespace-nowrap"
+      >
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+        <span class="hidden md:inline">Agregar Cotización</span>
+        <span class="md:hidden">Agregar</span>
+      </Link>
+    </div>
+  </div>
+</template>
+
 
         <div class="py-12">
             <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
