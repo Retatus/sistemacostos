@@ -85,7 +85,7 @@
             label: 'Tipo Habitacion',
             type: 'select', 
             options: [
-                { value: '', label: 'NINGUNA' },
+                { value: 'ninguna', label: 'NINGUNA' },
                 { value: 'simple', label: 'SIMPLE' },
                 { value: 'doble', label: 'DOBLE' },
                 { value: 'triple', label: 'TRIPLE' },
