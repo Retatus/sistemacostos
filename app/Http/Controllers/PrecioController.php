@@ -172,7 +172,7 @@ class PrecioController extends Controller
         return to_route('precio');
     }
 
-    public function listaTiposCosto()
+    public function selectOptions()
     {
         $columna = DB::select("SHOW COLUMNS FROM precios LIKE 'tipo_costo'");
 

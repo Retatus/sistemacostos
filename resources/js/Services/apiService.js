@@ -54,7 +54,7 @@ const apiService = {
   },
 
   async getTipoCostos() {
-    const response = await axios.get(`/dashboard/precio/listaTiposCosto`); 
+    const response = await axios.get(`/dashboard/precio/selectOptions`); 
     const result = response.data.map(tipo => ({
       value: tipo,
       label: tipo

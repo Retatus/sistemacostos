@@ -10,6 +10,7 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
     import { ref } from 'vue';
     import { useCategoriesStore } from '@/Stores/categories';
+    const categoriesStore = useCategoriesStore();
 
     const props = defineProps({
         tipopasajeros: {
@@ -28,7 +29,7 @@
 
     const ListaServicios = ref([]);
 
-    const ListaTipoCostos = useCategoriesStore().globals.tipo_costos;
+    const sListaTipoCostos = ref([...categoriesStore.globals.tipo_costos]);
 
     props.servicios.forEach(servicio => {
         ListaServicios.value.push({
@@ -73,7 +74,7 @@
         tipo_costo: {
             label: 'Tipo Costo',
             type: 'select', 
-            options: [ ...ListaTipoCostos ],             
+            options: [ ...sListaTipoCostos.value ],             
         },
         tipo_habitacion: {
             label: 'Tipo Habitacion',
