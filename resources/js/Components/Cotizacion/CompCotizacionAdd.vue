@@ -569,9 +569,8 @@
                                                 @guardar="guardarCambios(dia.nro_dia, indexItinerario, $event)"
                                             />
                                         </div>
-
                                         <!-- Alojamiento especial -->
-                                        <div v-if="servicioDetalle.proveedor_categoria_id === 2 && servicioDetalle.servicio.precios[0].tipo_costo === 'HABITACION'"
+                                        <div v-if="[2, 3].includes(servicioDetalle.proveedor_categoria_id) && ['HABITACION', 'GRUPAL'].includes(servicioDetalle.servicio.precios[0].tipo_costo)"
                                             class="mt-3 pt-3 border-t border-gray-200">
                                             <div class="flex items-center justify-between mb-2">
                                                 <span class="text-xs font-semibold text-sky-700">Alojamiento</span>
@@ -585,11 +584,18 @@
                                                 </button>
                                             </div>
                                             
-                                            <HotelHabitacionManual
+                                            <HotelHabitacionManual v-if="servicioDetalle.servicio.proveedor?.catalogo_habitaciones?.length > 0"
                                                 :pasajeros="Cotizacion.nro_pasajeros"
-                                                :habitacionesDisponibles="servicioDetalle.servicio.proveedor.catalogo_habitaciones"
-                                                @update="(seleccion) => actualizarDistribucion(seleccion, dia.nro_dia, indexItinerario)"
+                                                :habitacionesDisponibles="servicioDetalle.servicio.proveedor?.catalogo_habitaciones"
+                                                @update="(seleccion) => actualizarDistribucionHabitacion(seleccion, dia.nro_dia, indexItinerario)"
                                                 @cambiarProveedor="(p) => seleccionarProveedor(p, servicioDetalle)"
+                                                class="text-sm"
+                                            />
+
+                                            <TransporteManual v-if="servicioDetalle.servicio.proveedor?.catalogo_transportes?.length > 0"
+                                                :pasajeros="Cotizacion.nro_pasajeros"
+                                                :transportesDisponibles="servicioDetalle.servicio.proveedor?.catalogo_transportes"
+                                                @update="(seleccion) => actualizarSeleccionTransporte(seleccion, dia.nro_dia, indexItinerario)"
                                                 class="text-sm"
                                             />
                                         </div>
@@ -895,6 +901,7 @@ import { generateFieldsFromObject } from '@/Utils/objectToFiels';
 import { auditoriaSimple } from '@/Utils/JsonDiffDetector';
 
 import HotelHabitacionManual from '@/Components/Cotizacion/CompHotelHabitacionManual.vue';
+import TransporteManual from '@/Components/Cotizacion/CompTransporteManual.vue';
 import AlojamientoSelector from '@/Components/Cotizacion/CompAlojamientoSelector.vue'
 import ServicioSelector from '@/Components/Cotizacion/CompServicioSelector.vue';
 import HeaderLabel from '@/Components/Cotizacion/HeaderLabel.vue'
@@ -928,12 +935,85 @@ const props = defineProps({
     },
 });
 
+// #region SELECCION DE TRANSPORTE PARA SERVICIO
+function actualizarSeleccionTransporte(seleccion, indiceDia, indiceServicio) {
+    if (!seleccion) {
+        console.log('Transporte actualizado desde el hijo: trasporte ', seleccion)
+    } else {
+        console.log('Transporte seleccionado:', seleccion)
+
+        const subtotal = seleccion.precio * seleccion.cantidad;
+
+        const servicio = serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio];
+        servicio.pasajero_servicios.monto = subtotal;
+        servicio.pasajero_servicios.cantidad_pasajeros = seleccion.cantidad;
+        servicio.pasajero_servicios.subtotal = subtotal;
+
+        calcularSubtotal(indiceDia, indiceServicio);
+    }
+
+
+//   // ---------------------------------------------------
+//   // 1. Determinar multiplicador según tipo tarifa
+//   // ---------------------------------------------------
+//   let multiplicador = 1
+
+//   if (seleccion.tipo_tarifa === 'HORA') {
+//     multiplicador = seleccion.cantidad_horas || 1
+//   }
+
+//   if (seleccion.tipo_tarifa === 'DIA') {
+//     multiplicador = seleccion.cantidad_dias || 1
+//   }
+
+//   const precio = Number(seleccion.precio)
+//   const subtotal = precio * multiplicador
+
+//   // ---------------------------------------------------
+//   // 2. Mapear a pasajero_servicios
+//   // ---------------------------------------------------
+//   servicio.pasajero_servicios.servicio_id = seleccion.servicio_id
+//   servicio.pasajero_servicios.itinerario_servicio_id = servicio.id
+
+//   servicio.pasajero_servicios.tipo_costo_aplicado = 'GRUPAL' // transporte casi siempre grupal
+//   servicio.pasajero_servicios.precio = precio
+//   servicio.pasajero_servicios.monto = subtotal
+//   servicio.pasajero_servicios.subtotal = subtotal
+
+//   servicio.pasajero_servicios.cantidad_pasajeros = totalPasajeros.value
+//   servicio.pasajero_servicios.cantidad_unidades = 1
+
+//   // ---------------------------------------------------
+//   // 3. Observación automática
+//   // ---------------------------------------------------
+//   let obs = `${seleccion.tipo} (${seleccion.min}-${seleccion.max} pax)`
+
+//   if (seleccion.tipo_tarifa === 'HORA') {
+//     obs += ` · ${multiplicador} h`
+//   }
+
+//   if (seleccion.tipo_tarifa === 'DIA') {
+//     obs += ` · ${multiplicador} día(s)`
+//   }
+
+//   servicio.pasajero_servicios.observacion = obs
+
+  // ---------------------------------------------------
+  // 4. Recalcular totales del día
+  // ---------------------------------------------------
+  calcularSubtotal(indiceDia, indiceServicio)
+}
+
+
+// #endregion SELECCION DE TRANSPORTE PARA SERVICIO
+
 
 // #region SELECCION DE HABITACIONES PARA SERVICIO
 // Aquí guardaremos la distribución final que emite el hijo
 const distribucionFinal = ref([])
 
-function actualizarDistribucion(seleccion, indiceDia, indiceServicio) {
+function actualizarDistribucionHabitacion(seleccion, indiceDia, indiceServicio) {
+    console.log('Distribución actualizada desde el hijo:', seleccion)
     distribucionFinal.value = seleccion
 
     const totalHabitaciones = seleccion.reduce(
@@ -952,10 +1032,10 @@ function actualizarDistribucion(seleccion, indiceDia, indiceServicio) {
         0
     )
 
-  //serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].cantidad_pasajeros = totalPasajeros;
-  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.monto = subtotal;
-  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.cantidad_pasajeros = totalHabitaciones;
-  serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio].pasajero_servicios.subtotal = subtotal;
+    const servicio = serviciosPorDia.value[indiceDia - 1].itinerario_servicios[indiceServicio];
+    servicio.pasajero_servicios.monto = subtotal;
+    servicio.pasajero_servicios.cantidad_pasajeros = totalHabitaciones;
+    servicio.pasajero_servicios.subtotal = subtotal;
 
     calcularSubtotal(indiceDia, indiceServicio);
 }

@@ -147,6 +147,7 @@ class DestinoTuristicoController extends Controller
                                         $query->select('id', 'ruc', 'razon_social', 'proveedor_categoria_id')
                                             //->where('proveedor_categoria_id', 2) // unicamente categorias de hoteles
                                             ->with('catalogoHabitaciones');
+                                            //->with('catalogoTransportes');
                                     }
                                 ]);
                             },
@@ -156,6 +157,19 @@ class DestinoTuristicoController extends Controller
                 ]);
             }
         ])->find($destinoId);
+
+        // AQUÍ haces el formateo
+        foreach ($destinoServicios->itinerarioDestinos as $itDestino) {
+            foreach ($itDestino->itinerarioServicios as $itServicio) {
+
+                $proveedor = $itServicio->servicio->proveedor;
+
+                if ($proveedor) {
+                    $proveedor->catalogo_transportes =
+                        $proveedor->catalogoTransportes();
+                }
+            }
+        }
         // dd($destinoServicios->toJson());
         return response()->json($destinoServicios);
     }

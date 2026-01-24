@@ -272,6 +272,56 @@ class ProveedorController extends Controller
         return $resultado;
     }
 
+    public function obtenerCatalogoTransportesFormateado($servicios)
+    {
+        $grupales = [];
+        $tarifasLibres = [];
+
+        foreach ($servicios as $servicio) {
+
+            foreach ($servicio->precios as $precio) {
+
+                if ($precio->tipo_costo === 'GRUPAL') {
+
+                    $tipo = $precio->tipo_habitacion; // estandar | confort | familiar
+
+                    if (!isset($grupales[$tipo])) {
+                        $grupales[$tipo] = [
+                            'tipo' => $tipo,
+                            'min' => $precio->pax_min,
+                            'max' => $precio->pax_max,
+                            'capacidad' => $precio->capacidad_pax,
+                            'tarifas' => []
+                        ];
+                    }
+
+                    $grupales[$tipo]['tarifas'][] = [
+                        'tipo_costo' => 'GRUPAL',
+                        'precio' => (float) $precio->monto,
+                        'moneda' => $precio->moneda,
+                        'precio_id' => $precio->id,
+                        'anio' => $precio->anio,
+                    ];
+
+                } else {
+                    // TRAYECTO | HORA | DIA
+                    $tarifasLibres[] = [
+                        'tipo_costo' => $precio->tipo_costo,
+                        'precio' => (float) $precio->monto,
+                        'moneda' => $precio->moneda,
+                        'precio_id' => $precio->id,
+                        'anio' => $precio->anio,
+                    ];
+                }
+            }
+        }
+
+        return [
+            'vehiculos' => array_values($grupales),
+            'tarifas_generales' => $tarifasLibres
+        ];
+    }
+
     /**
      * Update the specified resource in storage.
      */
