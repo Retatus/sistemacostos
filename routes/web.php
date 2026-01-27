@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoriaProveedorController;
 use App\Http\Controllers\CostoController;
 use App\Http\Controllers\CotizacionController;
@@ -34,9 +34,22 @@ use App\Models\PasajeroServicio;
 use Illuminate\Support\Facades\Route;
 
 // No autenticadas
-Route::get('/', [DashboardController::class, 'index']); 
+Route::get('/', [DashboardController::class, 'index']);
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::post('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::resource('users', UserController::class);
+
+        // Ruta para cambiar rol
+        Route::post('users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+        
+
+        // Ruta para cambiar contraseña
+        Route::post('users/{user}/password', [UserController::class, 'updatePassword'])->name('users.updatePassword');
+    });
+
     // /Autenticadas
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/categoria_proveedor', [CategoriaProveedorController::class, 'index'])->name('categoria_proveedor');
