@@ -10,6 +10,14 @@ const props = defineProps({
         type: Object,
         default: null
     },
+    roles: {
+        type: Array,
+        default: () => []
+    },
+    permissions: {
+        type: Array,
+        default: () => []
+    },
     isEditing: {
         type: Boolean,
         default: false
@@ -21,7 +29,9 @@ const form = useForm({
     name: props.user?.name || '',
     email: props.user?.email || '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    roles: props.user?.roles.map(r => r.id) || [],
+    permissions: props.user?.permissions.map(p => p.id) || []
 });
 
 // Estado para mostrar/ocultar contraseña
@@ -285,6 +295,29 @@ onMounted(() => {
                                     class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:ring-offset-1 transition duration-200"
                                 />
                             </div>
+                        </div>
+                        <h2 class="text-xl mt-6">Roles</h2>
+                        <div v-for="role in roles" :key="role.id">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    :value="role.id"
+                                    v-model="form.roles"
+                                >
+                                {{ role.name }}
+                            </label>
+                        </div>
+
+                        <h2 class="text-xl mt-6">Permisos especiales</h2>
+                        <div v-for="perm in permissions" :key="perm.id">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    :value="perm.id"
+                                    v-model="form.permissions"
+                                >
+                                {{ perm.name }}
+                            </label>
                         </div>
 
                         <!-- Botones de acción -->

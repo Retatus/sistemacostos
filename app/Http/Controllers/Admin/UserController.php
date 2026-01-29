@@ -8,19 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+
 class UserController extends Controller
 {
     public function index()
     {
         return Inertia::render('Admin/Users/Index', [
-            'users' => User::paginate(10)
+            'users' => User::with('roles', 'permissions')->paginate(10)
         ]);
     }  
 
     public function create()
     {
         return Inertia::render('Admin/Users/FormAdmin', [
-            'isEditing' => false
+            'isEditing' => false,
+            'roles' => Role::all(),
+            'permissions' => Permission::all(),
             // No enviar 'user' porque estamos creando
         ]);
     }
@@ -33,11 +39,15 @@ class UserController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        // Asignar roles y permisos especiales
+        $user->syncRoles($request->roles ?? []);
+        $user->syncPermissions($request->permissions ?? []);
 
         return redirect()->route('admin.users.index');
     }
@@ -45,8 +55,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('Admin/Users/FormAdmin', [ // Cambiar 'Edit' por 'Form'
-            'user' => $user,
-            'isEditing' => true // Agregar esta bandera
+            'user' => $user->load('roles', 'permissions'),
+            'roles' => Role::all(),
+            'permissions' => Permission::all(),
+            'isEditing' => true
         ]);
     }
 
@@ -58,6 +70,10 @@ class UserController extends Controller
         ]);
 
         $user->update($request->only('name', 'email'));
+
+        // Actualizar roles y permisos
+        $user->syncRoles($request->roles ?? []);
+        $user->syncPermissions($request->permissions ?? []);
 
         return redirect()->route('admin.users.index');
     }

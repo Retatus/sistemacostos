@@ -43,6 +43,7 @@
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
                                         {{usuario.email}}
                                     </td> 
+                                    <td class="p-2">{{ usuario.roles.map(r => r.name).join(', ') }}</td>
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
                                             <Link :href="route('admin.users.edit', usuario)">
