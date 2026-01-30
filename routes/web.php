@@ -31,12 +31,20 @@ use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\TipoHabitacionController;
 use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
+use App\Helpers\UserPermissionHelper;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // No autenticadas
 Route::get('/', [DashboardController::class, 'index']);
 
-Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','force.password.change'])->group(function () {
+
+    // 🔐 Cambio obligatorio de contraseña (USUARIO)
+    Route::get('/cambiar-password', [UserController::class, 'changePasswordForm'])->name('password.change');
+
+    // 🔐 Fin cambio obligatorio de contraseña (USUARIO)
+    Route::post('/cambiar-password', [UserController::class, 'updateOwnPassword'])->name('password.update');
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -45,9 +53,12 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         // Ruta para cambiar rol
         Route::post('users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
         
-
         // Ruta para cambiar contraseña
         Route::post('users/{user}/password', [UserController::class, 'updatePassword'])->name('users.updatePassword');
+
+        // Ruta para restablecer contraseña ok
+        Route::post('users/{user}/reset_password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+
     });
 
     // /Autenticadas
@@ -227,14 +238,29 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::patch('/dashboard/tipo_pasajero/{tipo_pasajero}/update', [TipoPasajeroController::class, 'update'])->name('tipo_pasajero.update');
     Route::delete('/dashboard/tipo_pasajero/{tipo_pasajero}/destroy', [TipoPasajeroController::class, 'destroy'])->name('tipo_pasajero.destroy');
 
-    Route::get('/dashboard/precio', [PrecioController::class, 'index'])->name('precio');
-    Route::get('/dashboard/precio/create', [PrecioController::class, 'create'])->name('precio.create');
-    Route::post('/dashboard/precio', [PrecioController::class, 'store'])->name('precio.store');
-    Route::get('/dashboard/precio/{precio}/edit', [PrecioController::class, 'edit'])->name('precio.edit');
-    Route::patch('/dashboard/precio/{precio}/update', [PrecioController::class, 'update'])->name('precio.update');
-    Route::delete('/dashboard/precio/{precio}/destroy', [PrecioController::class, 'destroy'])->name('precio.destroy');
-    Route::get('/dashboard/precio/selectOptions', [PrecioController::class, 'selectOptions'])->name('precio.selectOptions');
+    // Rutas para ver precios
+    Route::middleware(['auth', 'permission:precios.view'])->group(function () {
+        Route::get('/dashboard/precio', [PrecioController::class, 'index'])->name('precio');
+        Route::get('/dashboard/precio/{precio}', [PrecioController::class, 'show'])->name('precio.show'); // Si existe un show
+        Route::get('/dashboard/precio/selectOptions', [PrecioController::class, 'selectOptions'])->name('precio.selectOptions');
+    });
 
+    // Rutas para crear precios
+    Route::middleware(['auth', 'permission:precios.create'])->group(function () {
+        Route::get('/dashboard/precio/create', [PrecioController::class, 'create'])->name('precio.create');
+        Route::post('/dashboard/precio', [PrecioController::class, 'store'])->name('precio.store');
+    });
+
+    // Rutas para actualizar precios
+    Route::middleware(['auth', 'permission:precios.update'])->group(function () {
+        Route::get('/dashboard/precio/{precio}/edit', [PrecioController::class, 'edit'])->name('precio.edit');
+        Route::patch('/dashboard/precio/{precio}/update', [PrecioController::class, 'update'])->name('precio.update');
+    });
+
+    // Rutas para eliminar precios
+    Route::middleware(['auth', 'permission:precios.delete'])->group(function () {
+        Route::delete('/dashboard/precio/{precio}/destroy', [PrecioController::class, 'destroy'])->name('precio.destroy');
+    });
     Route::get('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'index'])->name('itinerario_destino');
     Route::get('/dashboard/itinerario_destino/create', [ItinerarioDestinoController::class, 'create'])->name('itinerario_destino.create');
     Route::post('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'store'])->name('itinerario_destino.store');

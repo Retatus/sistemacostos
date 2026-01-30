@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+use function Symfony\Component\Clock\now;
 
 class UserController extends Controller
 {
@@ -85,15 +87,57 @@ class UserController extends Controller
         ]);
 
         $user->update([
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'must_change_password' => false,
         ]);
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('dashboard');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('admin.users.index');
+    }
+
+    
+    
+    public function resetPassword(User $user)
+    {
+        $capitalizedName = ucfirst(strtolower($user->name));
+
+        $tempPassword = $capitalizedName . now()->format('Ymd') .'@';
+
+        $user->update([
+            'password' => Hash::make($tempPassword),
+            'must_change_password' => true,
+        ]);
+
+        return response()->json([
+            'message' => 'Contraseña restablecida correctamente',
+            'temporary_password' => $tempPassword,
+        ]);
+    }
+
+    public function changePasswordForm()
+    {
+        return inertia('Auth/ForceChangePassword');
+    }
+
+    public function updateOwnPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $user = Auth()->user();
+
+        $user->update([
+            'password' => Hash::make($request->password),
+            'must_change_password' => false,
+        ]);
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Contraseña actualizada correctamente');
     }
 }
