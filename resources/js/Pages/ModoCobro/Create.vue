@@ -1,0 +1,66 @@
+<script>
+    export default {
+        components: { FormularioDinamico },
+    };
+</script>
+
+<script setup>
+    import {Link, useForm} from '@inertiajs/vue3';
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
+
+    const form = useForm({
+        codigo: "",
+        nombre: "",
+        requiere_cantidad: "",
+        requiere_habitacion: "",
+        estado_activo: "",
+    });
+
+    const formFields = {
+        codigo: { type: 'text', placeholder: 'Ingrese el codigo', label: 'codigo' },
+        nombre: { type: 'text', placeholder: 'Ingrese la nombre', label: 'nombre' },
+        requiere_cantidad: { type: 'text', placeholder: 'Ingrese la cantidad requerida', label: 'Requiere Cantidad' },
+        requiere_habitacion: { type: 'text', placeholder: 'Ingrese la habitacion requerida', label: 'Requiere Habitacion' },
+        estado_activo: { 
+            type: 'select', 
+            options: [
+                { value: '1', label: 'Activo' }, 
+                { value: '0', label: 'Desactivo' }
+            ], 
+            label: 'Estado activo' 
+        }
+    }
+</script>
+
+<template>
+    <AppLayout title="Dashboard">
+        <template #header>
+          <div class="flex justify-between">
+              <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                  ModoCobro
+              </h2>   
+              <Link :href="route('modo_cobro')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Lista ModoCobro
+              </Link>                             
+          </div>    
+        </template>
+        <div class="py-12">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="flex justify-center overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <FormularioDinamico
+                        :form="form"
+                        :fields="formFields"                            
+                        :updating="false"
+                        @submit="form.post(route('modo_cobro.store'))" 
+                    />
+                </div>
+            </div>
+        </div>
+    </AppLayout>  
+</template>
+  
+  <style scoped>
+  /* Estilos opcionales */
+  </style>
+  

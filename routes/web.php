@@ -32,6 +32,7 @@ use App\Http\Controllers\TipoHabitacionController;
 use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
 use App\Helpers\UserPermissionHelper;
+use App\Http\Controllers\ModoCobroController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -328,4 +329,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::get('/dashboard/tipo_habitacion/{tipo_habitacion}/edit', [TipoHabitacionController::class, 'edit'])->name('tipo_habitacion.edit');
     Route::patch('/dashboard/tipo_habitacion/{tipo_habitacion}/update', [TipoHabitacionController::class, 'update'])->name('tipo_habitacion.update');
     Route::delete('/dashboard/tipo_habitacion/{tipo_habitacion}/destroy', [TipoHabitacionController::class, 'destroy'])->name('tipo_habitacion.destroy');
+
+    Route::get('/dashboard/modo_cobro', [ModoCobroController::class, 'index'])->name('modo_cobro');
+    Route::get('/dashboard/modo_cobro/create', [ModoCobroController::class, 'create'])->name('modo_cobro.create');
+    Route::post('/dashboard/modo_cobro', [ModoCobroController::class, 'store'])->name('modo_cobro.store');
+    Route::get('/dashboard/modo_cobro/{modo_cobro}/edit', [ModoCobroController::class, 'edit'])->name('modo_cobro.edit');
+    Route::patch('/dashboard/modo_cobro/{modo_cobro}/update', [ModoCobroController::class, 'update'])->name('modo_cobro.update');
+    Route::delete('/dashboard/modo_cobro/{modo_cobro}/destroy', [ModoCobroController::class, 'destroy'])->name('modo_cobro.destroy');
 });
