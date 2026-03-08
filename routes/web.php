@@ -33,6 +33,7 @@ use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
 use App\Helpers\UserPermissionHelper;
 use App\Http\Controllers\ModoCobroController;
+use App\Http\Controllers\TipoCostoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -336,4 +337,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::get('/dashboard/modo_cobro/{modo_cobro}/edit', [ModoCobroController::class, 'edit'])->name('modo_cobro.edit');
     Route::patch('/dashboard/modo_cobro/{modo_cobro}/update', [ModoCobroController::class, 'update'])->name('modo_cobro.update');
     Route::delete('/dashboard/modo_cobro/{modo_cobro}/destroy', [ModoCobroController::class, 'destroy'])->name('modo_cobro.destroy');
+
+    Route::get('/dashboard/tipo_costo', [TipoCostoController::class, 'index'])->name('tipo_costo');
+    Route::get('/dashboard/tipo_costo/create', [TipoCostoController::class, 'create'])->name('tipo_costo.create');
+    Route::post('/dashboard/tipo_costo', [TipoCostoController::class, 'store'])->name('tipo_costo.store');
+    Route::get('/dashboard/tipo_costo/{tipo_costo}/edit', [TipoCostoController::class, 'edit'])->name('tipo_costo.edit');
+    Route::patch('/dashboard/tipo_costo/{tipo_costo}/update', [TipoCostoController::class, 'update'])->name('tipo_costo.update');
+    Route::delete('/dashboard/tipo_costo/{tipo_costo}/destroy', [TipoCostoController::class, 'destroy'])->name('tipo_costo.destroy');
 });
