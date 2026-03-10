@@ -32,6 +32,7 @@ use App\Http\Controllers\TipoHabitacionController;
 use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
 use App\Helpers\UserPermissionHelper;
+use App\Http\Controllers\CotizacionServicioController;
 use App\Http\Controllers\ModoCobroController;
 use App\Http\Controllers\TipoCostoController;
 use Illuminate\Support\Facades\Route;
@@ -344,4 +345,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::get('/dashboard/tipo_costo/{tipo_costo}/edit', [TipoCostoController::class, 'edit'])->name('tipo_costo.edit');
     Route::patch('/dashboard/tipo_costo/{tipo_costo}/update', [TipoCostoController::class, 'update'])->name('tipo_costo.update');
     Route::delete('/dashboard/tipo_costo/{tipo_costo}/destroy', [TipoCostoController::class, 'destroy'])->name('tipo_costo.destroy');
+
+    Route::get('/dashboard/cotizacion_servicio', [CotizacionServicioController::class, 'index'])->name('cotizacion_servicio');
+    Route::get('/dashboard/cotizacion_servicio/create', [CotizacionServicioController::class, 'create'])->name('cotizacion_servicio.create');
+    Route::post('/dashboard/cotizacion_servicio', [CotizacionServicioController::class, 'store'])->name('cotizacion_servicio.store');
+    Route::get('/dashboard/cotizacion_servicio/{cotizacion_servicio}/edit', [CotizacionServicioController::class, 'edit'])->name('cotizacion_servicio.edit');
+    Route::patch('/dashboard/cotizacion_servicio/{cotizacion_servicio}/update', [CotizacionServicioController::class, 'update'])->name('cotizacion_servicio.update');
+    Route::delete('/dashboard/cotizacion_servicio/{cotizacion_servicio}/destroy', [CotizacionServicioController::class, 'destroy'])->name('cotizacion_servicio.destroy');
 });
