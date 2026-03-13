@@ -77,7 +77,6 @@
 import { ref, computed, toRefs, onMounted } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServicio/CompDestinoTuristicoDetalleServicioEdit.vue';
-import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   Lista_itinerarios: {

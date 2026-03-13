@@ -232,57 +232,56 @@
     </FormSectionNew>
 </template>
 
-<script setup>
-    import { defineProps, defineEmits, ref } from 'vue'
+<script setup>    
     import PrimaryButton from '@/Components/PrimaryButton.vue'; 
     import InputError from '../InputError.vue';
     import FormSectionNew from './FormSectionNew.vue';
 
-defineProps({
-    fields: {
-        type: Object,
-        required: true,
-        default: () => ({})
-    },
-    form: {
-        type: Object,
-        required: true
-    },
-    updating: {
-        type: Boolean,
-        default: false
-    },
-    showCancelButton: {
-        type: Boolean,
-        default: true
-    }
-})
-
-defineEmits(['submit', 'cancel'])
-
-// Formatear label automáticamente
-const formatLabel = (key) => {
-    return key
-        .replace(/([A-Z])/g, ' $1')
-        .replace(/^./, str => str.toUpperCase())
-        .replace(/_/g, ' ')
-}
-
-// Manejar upload de archivos
-const handleFileUpload = (key, event) => {
-    const file = event.target.files[0]
-    if (file) {
-        // Aquí puedes manejar la validación del archivo
-        const maxSize = 5 * 1024 * 1024 // 5MB
-        if (file.size > maxSize) {
-            alert('El archivo es demasiado grande. Máximo 5MB.')
-            event.target.value = null
-            return
+    defineProps({
+        fields: {
+            type: Object,
+            required: true,
+            default: () => ({})
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        updating: {
+            type: Boolean,
+            default: false
+        },
+        showCancelButton: {
+            type: Boolean,
+            default: true
         }
-        // Emitir evento o actualizar form
-        // this.form[key] = file
+    })
+
+    defineEmits(['submit', 'cancel'])
+
+    // Formatear label automáticamente
+    const formatLabel = (key) => {
+        return key
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/^./, str => str.toUpperCase())
+            .replace(/_/g, ' ')
     }
-}
+
+    // Manejar upload de archivos
+    const handleFileUpload = (key, event) => {
+        const file = event.target.files[0]
+        if (file) {
+            // Aquí puedes manejar la validación del archivo
+            const maxSize = 5 * 1024 * 1024 // 5MB
+            if (file.size > maxSize) {
+                alert('El archivo es demasiado grande. Máximo 5MB.')
+                event.target.value = null
+                return
+            }
+            // Emitir evento o actualizar form
+            // this.form[key] = file
+        }
+    }
 </script>
 
 <style scoped>

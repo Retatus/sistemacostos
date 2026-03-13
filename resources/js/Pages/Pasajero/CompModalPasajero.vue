@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-    import { ref, defineProps, defineEmits } from 'vue';
+    import { ref } from 'vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import Modal from '@/Components/Modal.vue';
     import { useCategoriesStore } from '@/Stores/categories';

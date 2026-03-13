@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 

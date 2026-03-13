@@ -78,7 +78,6 @@
 import { ref, computed, toRefs, onMounted } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import CompDestinoTuristicoDetalleServicio from '../DestinoTuristicoDetalleServicio/CompDestinoTuristicoDetalleServicioAdd.vue';
-import { defineProps, defineEmits } from 'vue';
 
 // resources/js/app.js o main.js
 import '../../../css/excelTable.css';

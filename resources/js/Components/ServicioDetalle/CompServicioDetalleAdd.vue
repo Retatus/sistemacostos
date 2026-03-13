@@ -72,7 +72,6 @@
 <script setup>
 import PasajeroDetalleModal from '@/Pages/Pasajero/CompModalPasajeroDetalleServicio.vue';
 import PasajeroEditModal from '@/Pages/Pasajero/CompModalPasajeroEditServicio.vue';
-import { defineProps, defineEmits } from 'vue';
 import { ref, watch, toRefs } from 'vue';
 import { useCategoriesStore } from '@/Stores/categories';
 const categoriesStore = useCategoriesStore();

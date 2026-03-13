@@ -168,7 +168,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 import PrimaryButton from '../PrimaryButton.vue';
-import { defineProps, defineEmits } from 'vue';
 import { useCategoriesStore } from '@/Stores/categories';
 const categoriesStore = useCategoriesStore();
 

@@ -40,10 +40,11 @@
             class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white">
             <option disabled value="" class="text-gray-400">Seleccione un proveedor...</option>
             <option v-for="p in proveedores" :key="p.id" :value="p.id" class="py-2 hover:bg-blue-50">
-              <div class="flex justify-between items-center">
+              {{ p.razon_social }} - RUC: {{ p.ruc }}
+              <!-- <div class="flex justify-between items-center">
                 <span class="font-medium">{{ p.razon_social }}</span>
                 <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">RUC: {{ p.ruc }}</span>
-              </div>
+              </div> -->
             </option>
           </select>
         </div>
