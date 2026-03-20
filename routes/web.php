@@ -241,11 +241,12 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::patch('/dashboard/tipo_pasajero/{tipo_pasajero}/update', [TipoPasajeroController::class, 'update'])->name('tipo_pasajero.update');
     Route::delete('/dashboard/tipo_pasajero/{tipo_pasajero}/destroy', [TipoPasajeroController::class, 'destroy'])->name('tipo_pasajero.destroy');
 
+    Route::get('/dashboard/precio/selectOptions', [PrecioController::class, 'selectOptions'])->name('precio.selectOptions');
+
     // Rutas para ver precios
-    Route::middleware(['auth', 'permission:precios.view'])->group(function () {
+    Route::middleware(['auth', 'permission:precios.view'])->group(function () {        
         Route::get('/dashboard/precio', [PrecioController::class, 'index'])->name('precio');
         Route::get('/dashboard/precio/{precio}', [PrecioController::class, 'show'])->name('precio.show'); // Si existe un show
-        Route::get('/dashboard/precio/selectOptions', [PrecioController::class, 'selectOptions'])->name('precio.selectOptions');
     });
 
     // Rutas para crear precios
@@ -264,6 +265,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::middleware(['auth', 'permission:precios.delete'])->group(function () {
         Route::delete('/dashboard/precio/{precio}/destroy', [PrecioController::class, 'destroy'])->name('precio.destroy');
     });
+
     Route::get('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'index'])->name('itinerario_destino');
     Route::get('/dashboard/itinerario_destino/create', [ItinerarioDestinoController::class, 'create'])->name('itinerario_destino.create');
     Route::post('/dashboard/itinerario_destino', [ItinerarioDestinoController::class, 'store'])->name('itinerario_destino.store');
