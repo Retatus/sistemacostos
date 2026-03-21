@@ -22,20 +22,22 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "nro_dia" => 'required',
-            "nro_orden" => 'required',
+             "cotizacion_id" => 'required',
+            "cotizacion_dia_id" => 'required',
+            "servicio_id" => 'required',
+            "proveedor_id" => 'required',
+            "orden" => 'required',
             "hora" => 'required|min:3|max:5',
-            "itinerario_servicio_id" => 'required',
-            "cotizacion_id" => 'required',
+            "nombre_servicio" => 'required|min:3|max:100',
+            "observacion" => 'required',
+            "tipo_costo_id" => 'required',
+            "tipo_habitacion_id" => 'required',
             "precio_id" => 'required',
             "moneda" => 'required',
             "precio_unitario" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             "cantidad" => 'required',
             "capacidad" => 'required',
-            "tipo_habitacion_id" => 'required',
             "subtotal" => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            "observacion" => 'required|min:3|max:50',
-            "tipo_costo_id" => 'required',
             "estado_activo" => 'required',
 
         ];

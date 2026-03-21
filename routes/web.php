@@ -32,7 +32,9 @@ use App\Http\Controllers\TipoHabitacionController;
 use App\Models\ItinerarioDestino;
 use App\Models\PasajeroServicio;
 use App\Helpers\UserPermissionHelper;
+use App\Http\Controllers\CotizacionDiaController;
 use App\Http\Controllers\CotizacionServicioController;
+use App\Http\Controllers\CotizacionServicioPasajeroController;
 use App\Http\Controllers\ModoCobroController;
 use App\Http\Controllers\TipoCostoController;
 use Illuminate\Support\Facades\Route;
@@ -348,10 +350,24 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::patch('/dashboard/tipo_costo/{tipo_costo}/update', [TipoCostoController::class, 'update'])->name('tipo_costo.update');
     Route::delete('/dashboard/tipo_costo/{tipo_costo}/destroy', [TipoCostoController::class, 'destroy'])->name('tipo_costo.destroy');
 
+    Route::get('/dashboard/cotizacion_dia', [CotizacionDiaController::class, 'index'])->name('cotizacion_dia');
+    Route::get('/dashboard/cotizacion_dia/create', [CotizacionDiaController::class, 'create'])->name('cotizacion_dia.create');
+    Route::post('/dashboard/cotizacion_dia', [CotizacionDiaController::class, 'store'])->name('cotizacion_dia.store');
+    Route::get('/dashboard/cotizacion_dia/{cotizacion_dia}/edit', [CotizacionDiaController::class, 'edit'])->name('cotizacion_dia.edit');
+    Route::patch('/dashboard/cotizacion_dia/{cotizacion_dia}/update', [CotizacionDiaController::class, 'update'])->name('cotizacion_dia.update');
+    Route::delete('/dashboard/cotizacion_dia/{cotizacion_dia}/destroy', [CotizacionDiaController::class, 'destroy'])->name('cotizacion_dia.destroy');
+
     Route::get('/dashboard/cotizacion_servicio', [CotizacionServicioController::class, 'index'])->name('cotizacion_servicio');
     Route::get('/dashboard/cotizacion_servicio/create', [CotizacionServicioController::class, 'create'])->name('cotizacion_servicio.create');
     Route::post('/dashboard/cotizacion_servicio', [CotizacionServicioController::class, 'store'])->name('cotizacion_servicio.store');
     Route::get('/dashboard/cotizacion_servicio/{cotizacion_servicio}/edit', [CotizacionServicioController::class, 'edit'])->name('cotizacion_servicio.edit');
     Route::patch('/dashboard/cotizacion_servicio/{cotizacion_servicio}/update', [CotizacionServicioController::class, 'update'])->name('cotizacion_servicio.update');
     Route::delete('/dashboard/cotizacion_servicio/{cotizacion_servicio}/destroy', [CotizacionServicioController::class, 'destroy'])->name('cotizacion_servicio.destroy');
+
+    Route::get('/dashboard/cotizacion_servicio_pasajero', [CotizacionServicioPasajeroController::class, 'index'])->name('cotizacion_servicio_pasajero');
+    Route::get('/dashboard/cotizacion_servicio_pasajero/create', [CotizacionServicioPasajeroController::class, 'create'])->name('cotizacion_servicio_pasajero.create');
+    Route::post('/dashboard/cotizacion_servicio_pasajero', [CotizacionServicioPasajeroController::class, 'store'])->name('cotizacion_servicio_pasajero.store');
+    Route::get('/dashboard/cotizacion_servicio_pasajero/{cotizacion_servicio_pasajero}/edit', [CotizacionServicioPasajeroController::class, 'edit'])->name('cotizacion_servicio_pasajero.edit');
+    Route::patch('/dashboard/cotizacion_servicio_pasajero/{cotizacion_servicio_pasajero}/update', [CotizacionServicioPasajeroController::class, 'update'])->name('cotizacion_servicio_pasajero.update');
+    Route::delete('/dashboard/cotizacion_servicio_pasajero/{cotizacion_servicio_pasajero}/destroy', [CotizacionServicioPasajeroController::class, 'destroy'])->name('cotizacion_servicio_pasajero.destroy');
 });

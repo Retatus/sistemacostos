@@ -9,5 +9,5 @@ class CotizacionServicio extends Model
 {
     use HasFactory;    
 
-    protected $fillable = ['nro_dia', 'nro_orden', 'hora', 'itinerario_servicio_id', 'cotizacion_id', 'precio_id', 'moneda', 'precio_unitario', 'cantidad', 'capacidad', 'tipo_habitacion', 'subtotal', 'observacion',  'tipo_costo_id', 'estado_activo'];
+    protected $fillable = ['cotizacion_id', 'cotizacion_dia_id', 'servicio_id', 'proveedor_id', 'orden', 'hora', 'nombre_servicio', 'observacion', 'tipo_costo_id', 'tipo_habitacion_id', 'precio_id', 'moneda', 'precio_unitario', 'cantidad', 'capacidad', 'subtotal', 'estado_activo'];
 }

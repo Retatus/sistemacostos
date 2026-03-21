@@ -6,12 +6,12 @@
     import { router } from '@inertiajs/vue3';
 
     const page = usePage();
-    const CotizacionServicios = ref(page.props.cotizacionservicios);
+    const CotizacionServicioPasajeros = ref(page.props.cotizacionserviciopasajeros);
     
-    const onDeleteConfirm = (CotizacionServicio) => {
+    const onDeleteConfirm = (CotizacionServicioPasajero) => {
         Swal.fire({
             title: '<strong>¿Estás seguro?</strong>',
-            html: `Este elemento <strong>${CotizacionServicio.nombre}</strong> será eliminado permanentemente.`,
+            html: `Este elemento <strong>${CotizacionServicioPasajero.nombre}</strong> será eliminado permanentemente.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, eliminar',
@@ -19,9 +19,9 @@
             focusCancel: true,
         }).then((result) => {
             if (result.isConfirmed) {
-            router.delete(route('cotizacion_servicio.destroy', CotizacionServicio), {
+            router.delete(route('cotizacion_servicio_pasajero.destroy', CotizacionServicioPasajero), {
                 onSuccess: (page) => {
-                CotizacionServicios.value = page.props.cotizacionservicios;
+                CotizacionServicioPasajeros.value = page.props.cotizacionserviciopasajeros;
                 Swal.fire('Eliminado', 'El elemento ha sido eliminado con éxito.', 'success');
                 },
             });
@@ -35,68 +35,38 @@
         <template #header>
           <div class="flex justify-between">
               <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                  CotizacionServicio
+                  CotizacionServicioPasajero
               </h2>   
-              <Link :href="route('cotizacion_servicio.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
-                  Agregar CotizacionServicio
+              <Link :href="route('cotizacion_servicio_pasajero.create')" class="btn btn-primary"> <i class="bi bi-plus"></i>
+                  Agregar CotizacionServicioPasajero
               </Link>                    
           </div>    
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-8xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="relative overflow-y-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope='col' className='px-6 py-3'>
-                                        cotizacion_id
+                                        cotizacion_servicio_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        cotizacion_dia_id
+                                        pasajero_id
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        servicio_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        proveedor_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        orden
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        hora
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        nombre_servicio
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        observacion
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        tipo_costo_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        tipo_habitacion_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        precio_id
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        moneda
-                                    </th> 
-                                    <th scope='col' className='px-6 py-3'>
-                                        precio_unitario
+                                        precio
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         cantidad
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        capacidad
+                                        descuento
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
-                                        subtotal
+                                        total
                                     </th> 
                                     <th scope='col' className='px-6 py-3'>
                                         estado_activo
@@ -108,67 +78,37 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="cotizacionservicio in CotizacionServicios" className="bg-white border-b ">
+                                <tr v-for="cotizacionserviciopasajero in CotizacionServicioPasajeros" className="bg-white border-b ">
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.cotizacion_id}}
+                                        {{cotizacionserviciopasajero.cotizacion_servicio_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.cotizacion_dia_id}}
+                                        {{cotizacionserviciopasajero.pasajero_id}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.servicio_id}}
+                                        {{cotizacionserviciopasajero.precio}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.proveedor_id}}
+                                        {{cotizacionserviciopasajero.cantidad}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.orden}}
+                                        {{cotizacionserviciopasajero.descuento}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.hora}}
+                                        {{cotizacionserviciopasajero.total}}
                                     </td> 
                                     <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.nombre_servicio}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.observacion}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.tipo_costo_id}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.tipo_habitacion_id}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.precio_id}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.moneda}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.precio_unitario}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.cantidad}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.capacidad}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.subtotal}}
-                                    </td> 
-                                    <td scope='col' className='px-6 py-4 font-medium text-gray-900'>
-                                        {{cotizacionservicio.estado_activo}}
+                                        {{cotizacionserviciopasajero.estado_activo}}
                                     </td> 
 
                                     <td scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         <div class="flex space-x-2">
-                                            <Link :href="route('cotizacion_servicio.edit', cotizacionservicio)">
+                                            <Link :href="route('cotizacion_servicio_pasajero.edit', cotizacionserviciopasajero)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                 </svg>
                                             </Link>
-                                            <button @click="onDeleteConfirm(cotizacionservicio)">
+                                            <button @click="onDeleteConfirm(cotizacionserviciopasajero)">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                                 </svg>
