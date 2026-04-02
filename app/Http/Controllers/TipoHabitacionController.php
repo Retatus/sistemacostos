@@ -49,7 +49,7 @@ class TipoHabitacionController extends Controller
      */
     public function edit(TipoHabitacion $tipoHabitacion)
     {
-        return Inertia::render('TipoHabitacion/Edit', compact('tipo_habitacion'));
+        return Inertia::render('TipoHabitacion/Edit', compact('tipoHabitacion'));
     }
 
     /**
@@ -58,8 +58,8 @@ class TipoHabitacionController extends Controller
     public function update(Request $request, TipoHabitacion $tipoHabitacion)
     {
         $data = $request->all();
-        $tipo_habitacion->update($data);
-        return Inertia::render('TipoHabitacion/Edit', compact('tipo_habitacion'));
+        $tipoHabitacion->update($data);
+        return Inertia::render('TipoHabitacion/Edit', compact('tipoHabitacion'));
     }
 
     /**
@@ -67,7 +67,7 @@ class TipoHabitacionController extends Controller
      */
     public function destroy(TipoHabitacion $tipoHabitacion)
     {
-        $tipo_habitacion->delete();
+        $tipoHabitacion->delete();
         return to_route('tipo_habitacion');
     }
 }

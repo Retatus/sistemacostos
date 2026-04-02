@@ -10,7 +10,7 @@
     import FormularioDinamico from '@/Components/Categoria/FormDinanico.vue';
   
     const props = defineProps({
-        tipo_habitacion: {
+        tipoHabitacion: {
             type: Object, 
             required: true
         } 
@@ -18,8 +18,8 @@
  
     console.log(props);
     const form = useForm({
-        nombre: props.tipo_habitacion.nombre,
-        estado_activo: props.tipo_habitacion.estado_activo,
+        nombre: props.tipoHabitacion.nombre,
+        estado_activo: props.tipoHabitacion.estado_activo,
     });
 
     const formFields = {   
@@ -54,7 +54,7 @@
                         :form="form"
                         :fields="formFields"                            
                         :updating="true"
-                        @submit="form.patch(route('tipo_habitacion.update', tipo_habitacion))" 
+                        @submit="form.patch(route('tipo_habitacion.update', tipoHabitacion))" 
                     />
                 </div>
             </div>
