@@ -45,6 +45,27 @@ class PasajeroDTO
     );
   }
 
+  public static function fromModel(Pasajero $pasajero): self
+  {
+    return new self(
+      id: $pasajero->id,
+      temp_id: $pasajero->temp_id,
+      nombre: $pasajero->nombre,
+      apellido_paterno: $pasajero->apellido_paterno,
+      apellido_materno: $pasajero->apellido_materno,
+      documento_tipo_id: $pasajero->documento_tipo_id,
+      documento_numero: $pasajero->documento_numero,
+      pais_id: $pasajero->pais_id,
+      documento_file: $pasajero->documento_file,
+      temp_file_name: '', // No se obtiene del modelo, se maneja en frontend
+      temp_file_preview: '', // No se obtiene del modelo, se maneja en frontend
+      clase_id: $pasajero->clase_id, 
+      cotizacion_id: $pasajero->cotizacion_id,
+      tipo_pasajero_id: $pasajero->tipo_pasajero_id,
+      estado_activo: $pasajero->estado_activo,
+    );
+  }
+
   public static function fromArray(array $data): self
   {
     return new self(

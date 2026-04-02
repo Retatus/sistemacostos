@@ -3,7 +3,8 @@
 namespace App\DTO;
 
 use App\Models\Cotizacion;
-use App\Models\Pasajero;
+
+use Illuminate\Http\Request;
 
 class CotizacionDTO
 {
@@ -37,6 +38,7 @@ class CotizacionDTO
         public array $destino_turistico_detalle = [],
         public array $destino_turistico_detalle_monto_x_categoria = [],
         public ?DestinoTuristicoDTO $destinos_turisticos = null,
+        public array $dias = [],
         public array $pasajeros = []
     ) {}
 
@@ -76,6 +78,49 @@ class CotizacionDTO
         );
     }
 
+    public static function fromModel(Cotizacion $model): self
+    {
+        return new self(
+            id: $model->id,
+            proveedor_id: $model->proveedor_id,
+            file_nro: $model->file_nro,
+            file_nombre: $model->file_nombre,
+            comprobante_id: $model->comprobante_id,
+            fecha: $model->fecha,
+            estado_reserva: $model->estado_reserva,
+            estado_documentacion: $model->estado_documentacion,            
+            nro_pasajeros: $model->nro_pasajeros,
+            nro_ninio: $model->nro_ninio,
+            nro_adulto: $model->nro_adulto,
+            nro_estudiante: $model->nro_estudiante,
+            idioma_id: $model->idioma_id,
+            mercado_id: $model->mercado_id,
+            destino_turistico_id: $model->destino_turistico_id,
+            pais_id: $model->pais_id,
+            fecha_inicio: $model->fecha_inicio,
+            fecha_fin: $model->fecha_fin,
+            nro_dias: $model->nro_dias,
+            estado_cotizacion: $model->estado_cotizacion,
+            costo_parcial: (float) $model->costo_parcial,
+            descuento_estudiante: (float) $model->descuento_estudiante,
+            descuento_ninio: (float) $model->descuento_ninio,
+            descuento_otro: (float) $model->descuento_otro,
+            costo_total: (float) $model->costo_total,
+            estado_activo: $model->estado_activo,            
+            destino_turistico_detalle: $model->destino_turistico_detalle ?? [],
+            destino_turistico_detalle_monto_x_categoria: $model->destino_turistico_detalle_monto_x_categoria ?? [],
+            destinos_turisticos: isset($model->destinos_turisticos) 
+                ? DestinoTuristicoDTO::fromArray($model->destinos_turisticos) 
+                : null,
+            dias: $model->dias
+                ->map(fn($dia) => CotizacionDiaDTO::fromModel($dia))
+                ->toArray(),
+            pasajeros: $model->pasajeros
+                ->map(fn($p) => PasajeroDTO::fromModel($p))
+                ->toArray(),
+        );
+    }
+
     public static function fromArray(array $data): self
     {
         return new self(
@@ -110,10 +155,59 @@ class CotizacionDTO
             destinos_turisticos: isset($data['destinos_turisticos']) 
                 ? DestinoTuristicoDTO::fromArray($data['destinos_turisticos']) 
                 : null,
+            dias: array_map(
+                fn($dia) => CotizacionDiaDTO::fromArray($dia),
+                $data['dias'] ?? []
+            ),
             pasajeros: array_map(
                 fn($pasajero) => PasajeroDTO::fromArray($pasajero),
                 $data['pasajeros'] ?? []
             )
+        );
+    }
+
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            id: $request->input('id') ?? null,
+            proveedor_id: $request->input('proveedor_id'),
+            file_nro: $request->input('file_nro') ?? Cotizacion::generarCorrelativo(),
+            file_nombre: $request->input('file_nombre'),
+            comprobante_id: $request->input('comprobante_id'),
+            fecha: $request->input('fecha'),
+            estado_reserva: $request->input('estado_reserva'),
+            estado_documentacion: $request->input('estado_documentacion'),            
+            nro_pasajeros: $request->input('nro_pasajeros'),
+            nro_ninio: $request->input('nro_ninio'),
+            nro_adulto: $request->input('nro_adulto'),
+            nro_estudiante: $request->input('nro_estudiante'),
+            idioma_id: $request->input('idioma_id'),
+            mercado_id: $request->input('mercado_id'),
+            destino_turistico_id: $request->input('destino_turistico_id'),
+            pais_id: $request->input('pais_id'),
+            fecha_inicio: $request->input('fecha_inicio'),
+            fecha_fin: $request->input('fecha_fin'),
+            nro_dias: $request->input('nro_dias'),
+            estado_cotizacion: $request->input('estado_cotizacion'),
+            costo_parcial: (float) $request->input('costo_parcial'),
+            descuento_estudiante: (float) $request->input('descuento_estudiante'),
+            descuento_ninio: (float) $request->input('descuento_ninio'),
+            descuento_otro: (float) $request->input('descuento_otro'),
+            costo_total: (float) $request->input('costo_total'),
+            estado_activo: $request->input('estado_activo'),            
+            destino_turistico_detalle: $request->input('destino_turistico_detalle'),
+            destino_turistico_detalle_monto_x_categoria: $request->input('destino_turistico_detalle_monto_x_categoria'),
+            destinos_turisticos: $request->has('destinos_turisticos') 
+                ? DestinoTuristicoDTO::fromArray($request->input('destinos_turisticos')) 
+                : null,
+            dias: array_map(
+                fn($dia) => CotizacionDiaDTO::fromArray($dia),
+                $request->input('dias', [])
+            ),
+            pasajeros: array_map(
+                fn($pasajero) => PasajeroDTO::fromArray($pasajero),
+                $request->input('pasajeros', [])
+            ),          
         );
     }
 }
