@@ -44,6 +44,13 @@ class Pasajero extends Model
         return $this->belongsTo(Cotizacion::class, 'cotizacion_id', 'id');
     }
 
+    public function servicios()
+    {
+        return $this->belongsToMany(CotizacionServicio::class, 'cotizacion_servicio_pasajeros')
+            ->withPivot(['precio', 'cantidad', 'descuento', 'total'])
+            ->withTimestamps();
+    }
+
     public static function getFormattedForDropdown()
     {
         return self::orderBy('id', 'desc')

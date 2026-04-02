@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('cotizacion_dias', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cotizacion_id')->constrained('cotizacions')->cascadeOnDelete();
+
+            $table->foreignId('cotizacion_id')
+                ->constrained('cotizacions')
+                ->cascadeOnDelete();
+
             $table->integer('dia');
-            $table->string('nombre', 100)->nullable();
-            $table->text('descripcion')->nullable()->default('');
+            $table->string('nombre', 100);
+            $table->text('descripcion')->nullable();
             $table->tinyInteger('estado_activo' )->default(1);
+
             $table->timestamps();
+
+            // 🔥 evita duplicar días en una misma cotización
+            $table->unique(['cotizacion_id', 'dia']);
         });
     }
 

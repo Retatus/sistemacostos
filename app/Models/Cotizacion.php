@@ -48,6 +48,11 @@ class Cotizacion extends Model
         return $this->belongsTo(DestinoTuristico::class, 'destino_turistico_id', 'id');
     }
 
+    public function dias()
+    {
+        return $this->hasMany(CotizacionDia::class);
+    }
+
     public function pasajeros() {
         return $this->hasMany(Pasajero::class, 'cotizacion_id');
     }

@@ -14,40 +14,55 @@ return new class extends Migration
         Schema::create('cotizacion_servicios', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('cotizacion_id')->constrained('cotizacions')->cascadeOnDelete();
-            $table->foreignId('cotizacion_dia_id')->constrained('cotizacion_dias')->cascadeOnDelete();
+            // 🔥 RELACIÓN REAL
+            $table->foreignId('cotizacion_dia_id')
+                ->constrained('cotizacion_dias')
+                ->cascadeOnDelete();
 
-            $table->foreignId('servicio_id')->nullable()->constrained('servicios')->nullOnDelete();
-            $table->foreignId('proveedor_id')->nullable()->constrained('proveedors')->nullOnDelete();
+            $table->foreignId('servicio_id')
+                ->nullable()
+                ->constrained('servicios')
+                ->nullOnDelete();
 
-            // Estructura
-            $table->unsignedInteger('orden')->default(0); // nro_orden
+            $table->foreignId('proveedor_id')
+                ->nullable()
+                ->constrained('proveedors')
+                ->nullOnDelete();
+
+            $table->unsignedInteger('orden')->default(1);
             $table->time('hora')->nullable();
 
-            // Información editable
-            $table->string('nombre_servicio');
+            $table->string('nombre_servicio', 100);
             $table->text('observacion')->nullable();
 
-            // Lógica de negocio
-            $table->foreignId('tipo_costo_id')->nullable()->constrained('costos')->nullOnDelete();
-            $table->foreignId('tipo_habitacion_id')->nullable()->constrained('tipo_habitacions')->nullOnDelete();
+            $table->foreignId('tipo_costo_id')
+                ->constrained('tipo_costos');
 
-            // Precios
-            $table->foreignId('precio_id')->nullable()->constrained('precios')->nullOnDelete();
+            $table->foreignId('tipo_habitacion_id')
+                ->nullable()
+                ->constrained('tipo_habitacions')
+                ->nullOnDelete();
 
-            $table->enum('moneda', ['USD','PEN'])->default('USD');
-            $table->decimal('precio_unitario', 12, 2)->default(0);
+            $table->foreignId('precio_id')
+                ->nullable()
+                ->constrained('precios')
+                ->nullOnDelete();
+
+            $table->enum('moneda', ['USD', 'PEN']);
+
+            $table->decimal('precio_unitario', 12, 2)->nullable();
 
             $table->unsignedInteger('cantidad')->default(1);
             $table->unsignedInteger('capacidad')->nullable();
 
             $table->decimal('subtotal', 14, 2)->default(0);
 
-            $table->boolean('estado_activo')->default(true);
+            $table->tinyInteger('estado_activo')->default(1);
 
             $table->timestamps();
 
-            $table->index(['cotizacion_id','cotizacion_dia_id']);
+            // 🔥 optimización consultas
+            $table->index(['cotizacion_dia_id', 'orden']);
         });
     }
 

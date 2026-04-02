@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class CotizacionServicioPasajero extends Model
 {
-    use HasFactory;    
-
+    use HasFactory;
+    protected $table = 'cotizacion_servicio_pasajeros';
     protected $fillable = ['cotizacion_servicio_id', 'pasajero_id', 'precio', 'cantidad', 'descuento', 'total', 'estado_activo'];
+
+    public function servicio()
+    {
+        return $this->belongsTo(CotizacionServicio::class, 'cotizacion_servicio_id');
+    }
+
+    public function pasajero()
+    {
+        return $this->belongsTo(Pasajero::class);
+    }
 }
