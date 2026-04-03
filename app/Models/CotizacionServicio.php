@@ -52,11 +52,11 @@ class CotizacionServicio extends Model
     /**
      * 🔥 RELACIÓN MANY TO MANY (la importante para frontend)
      */
-    public function pasajeros()
+    public function pasajeros() // pivot: cotizacion_servicio_pasajeros, tato
     {
         return $this->belongsToMany(Pasajero::class, 'cotizacion_servicio_pasajeros')
-            ->withPivot(['precio', 'cantidad', 'descuento', 'total'])
-            ->withTimestamps();
+            ->withPivot(['precio', 'cantidad', 'descuento', 'total']);
+            //->withTimestamps();
     }
 
     // public function pasajeros()

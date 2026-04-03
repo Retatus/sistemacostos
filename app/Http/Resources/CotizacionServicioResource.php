@@ -16,7 +16,7 @@ class CotizacionServicioResource extends JsonResource
             'precio_unitario' => $this->precio_unitario,
             'total' => $this->total,
 
-            'pasajeros' => $this->pasajeros->pluck('id'),
+            'pasajeros' => $this->pasajeros, //->pluck('id'),
         ];
     }
 }
