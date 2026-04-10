@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DestinoTuristico\DestinoTuristicoRequest;
-use App\Http\Requests\DestinoTuristico\StoreRequest;
 use App\Models\DestinoTuristico;
 use App\Models\Itinerario;
 use App\Models\ItinerarioDestino;
@@ -18,8 +17,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use App\Services\DestinoTuristicoServiceApi;
+
 class DestinoTuristicoController extends Controller
 {    
+    protected $destinoTuristicoServiceApi;
+
+    public function __construct(DestinoTuristicoServiceApi $destinoTuristicoServiceApi )
+    {
+        $this->destinoTuristicoServiceApi = $destinoTuristicoServiceApi;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -126,37 +134,8 @@ class DestinoTuristicoController extends Controller
     {
         $data = $request->all();
         $destinoId = $data["destino_turistico_id"];
-        $destinoServicios = DestinoTuristico::with([
-            'itinerarioDestinos' => function($query) {
-                $query->with([
-                    'itinerario',
-                    'itinerarioServicios' => function($query) {
-                        $query->with([
-                            'servicio' => function($query) {
-                                $query->with([
-                                    'precios',
-                                    'servicioDetalles' => function($query) {
-                                        $query->select('id', 'descripcion', 'proveedor_categoria_id') // Incluye la clave foránea
-                                            ->with([
-                                                'proveedor_categoria' => function($query) {
-                                                    $query->select('id', 'nombre'); // Solo los campos necesarios
-                                                }
-                                            ]);
-                                    },
-                                    'proveedor' => function($query) {
-                                        $query->select('id', 'ruc', 'razon_social', 'proveedor_categoria_id')
-                                            //->where('proveedor_categoria_id', 2) // unicamente categorias de hoteles
-                                            ->with('catalogoHabitaciones');
-                                            //->with('catalogoTransportes');
-                                    }
-                                ]);
-                            },
-                            //'pasajeroServicios.pasajero' // Nueva relación añadida
-                        ]);
-                    }
-                ]);
-            }
-        ])->find($destinoId);
+
+        $destinoServicios =  $this->destinoTuristicoServiceApi->RecuperarDestino($destinoId);
 
         // AQUÍ haces el formateo
         foreach ($destinoServicios->itinerarioDestinos as $itDestino) {
