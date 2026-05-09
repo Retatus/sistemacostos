@@ -891,7 +891,7 @@ import getCotizacionInicial from '@/models/cotizacionModel.js';
 import getPersonaInicial from '@/models/personaModel.js';
 import { useCategoriesStore } from '@/Stores/categories';
 import { validateNumberInput } from '@/Utils/validators';
-import calcularDiferenciaDias from '@/Utils/calculos';
+import { calcularDiferenciaDias }from '@/Utils/calculos';
 import AsignarPasajerosServicio from '@/Components/AsignarPasajerosServicio.vue';
 import InputHora from "@/Components/InputHora.vue";
 import CotizacionTotales from '@/Components/Cotizacion/CompCotizacionTotales.vue';

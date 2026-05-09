@@ -115,6 +115,11 @@ class CotizacionController extends Controller
         ]);
     }
 
+    public function newcreate()
+    {
+        return Inertia::render('CotizacionApi/CreateCotizacion');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
