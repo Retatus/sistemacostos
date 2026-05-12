@@ -10,6 +10,7 @@ import ChkEditor from '@/Components/ChkEditor.vue'
 // Importar Pinia y el plugin de persistencia
 import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
+import uppercase from '@/Utils/uppercase.js';
 
 // Importar el store de categorías
 import { useCategoriesStore } from '@/Stores/categories'; // Ajusta la ruta según tu estructura
@@ -28,7 +29,8 @@ createInertiaApp({
             .use(plugin) // Usar el plugin de Inertia
             .use(ZiggyVue) // Usar Ziggy
             .component('ChkEditor', ChkEditor) // Registrar el componente Editor globalmente
-            .use(pinia); // Usar Pinia
+            .use(pinia) // Usar Pinia
+            .directive('uppercase', uppercase); // Registrar la directiva uppercase
 
         // Inicializar el store de categorías
         const categoriesStore = useCategoriesStore();
