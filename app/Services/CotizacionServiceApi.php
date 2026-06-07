@@ -1,55 +1,70 @@
 <?php
 
 namespace App\Services;
+use App\Mappers\DestinoToCotizacionMapper;
 
 use App\Models\Cotizacion;
-use App\Models\CotizacionDia;
-use App\Models\CotizacionServicio;
-use App\Models\Pasajero;
+use App\Models\Proveedor;
+
 use App\DTO\CotizacionDTO;
+use App\Factory\CotizacionFactory;
+use App\Repositories\CotizacionRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Nette\Utils\Json;
 
 class CotizacionServiceApi
 {
-    /**
-     * Construir una cotización vacía basada en la plantilla del destino
-     */
-    public function buildFromDestino(int $destinoId): Cotizacion
+    protected $destinoService;
+
+    public function __construct(DestinoTuristicoServiceApi $destinoService)
     {
-        //dd('destino_id service', $destinoId);
-        $destino = \App\Models\DestinoTuristico::with([
-            'itinerarioDestinos.itinerarioServicios.servicio'
-        ])->findOrFail($destinoId);
-
-        //dd('destino', $destino->itinerarioDestinos);
-        // Cotización temporal (NO se guarda en BD)
-        $cotizacion = new Cotizacion([
-            'destino_turistico_id' => $destinoId,
-            'fecha' => now()->toDateString(),
-        ]);
-        //dd('cotizacion', $cotizacion);
-        // Mapear días desde la plantilla
-        $cotizacion->setRelation('dias', $destino->itinerarioDestinos->map(function ($dia) {
-            $tmpDia = new CotizacionDia([
-                'dia' => $dia->nro_dia,
-                'nombre' => $dia->nombre,
-                'descripcion' => $dia->descripcion,
-            ]);
-
-            // Servicios vacíos (el usuario los agregará)
-            $tmpDia->setRelation('servicios', collect());
-
-            return $tmpDia;
-        }));
-        //dd('cotizacion con dias', $cotizacion);
-
-        // Pasajeros vacíos
-        $cotizacion->setRelation('pasajeros', collect());
-        return $cotizacion;
+        $this->destinoService = $destinoService;
     }
 
+    public function getDestinosForSelect()
+    {
+        return $this->destinoService->getDestinosForSelect();
+    }
+
+    public function searchDestinos(string $search = null)
+    {
+        return $this->destinoService->searchDestinos($search);
+    }
+
+
+    public function generarDesdeDestino1($destinoId)
+    {
+        $destino = $this->destinoService->RecuperarDestinoParaCotizacion($destinoId);
+
+        //dd('destino', Json::encode($destino, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+        return DestinoToCotizacionMapper::map($destino);
+    }
+
+    public function createEmpty(): CotizacionDTO
+    {
+        return CotizacionFactory::createEmpty();
+    }    
+
+    public function generarDesdeDestino($destinoId)
+    {
+        $cotizacion = CotizacionRepository::DestinoSeleccionado($destinoId);
+
+        //dd('cotizacion', Json::encode($cotizacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+        return $cotizacion;
+
+        //return DestinoToCotizacionMapper::map($cotizacion);
+    }
+
+    public function editarCotizacion($id)
+    {
+        $cotizacion = CotizacionRepository::EditarCotizacion($id);
+        // para efectos visuales en el frontend, agregamos estos campos adicionales (no están en la tabla cotizaciones, pero se necesitan para mostrar info del proveedor)
+        $proveedor = Proveedor::find($cotizacion->proveedor_id);
+        $cotizacion['proveedor_ruc'] = $proveedor->ruc ?? '';
+        $cotizacion['proveedor_razon_social'] = $proveedor->razon_social ?? '';
+        return $cotizacion;
+    }
     /**
      * Crear una nueva cotización
      */
@@ -120,7 +135,6 @@ class CotizacionServiceApi
             $this->saveDias($cotizacion, $dto, $pasajerosMap);
 
             return $cotizacion->fresh([
-                'destino',
                 'dias.servicios.pasajeros',
                 'pasajeros'
             ]);
