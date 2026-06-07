@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CotizacionApiController;
+use App\Http\Controllers\Api\CategoriaApiController;
+use App\Http\Controllers\Api\ServicioApiController;
+use App\Http\Controllers\Api\ProveedorApiController;
+
 use App\Http\Controllers\DestinoTuristicoController;
 
 // -------------------------------
@@ -26,7 +30,8 @@ Route::prefix('cotizaciones')->group(function () {
     Route::post('/', [CotizacionApiController::class, 'store']);
 
     // Cargar cotización para editar
-    Route::get('{cotizacion}/edit', [CotizacionApiController::class, 'edit']);
+    //Route::get('{cotizacion}/edit', [CotizacionApiController::class, 'edit']);
+    Route::get('{cotizacion}/edit', [CotizacionApiController::class, 'edit'])->name('cotizacionapi.edit');
 
     // Actualizar cotización existente
     Route::put('{cotizacion}', [CotizacionApiController::class, 'update']);
@@ -40,6 +45,11 @@ Route::prefix('cotizaciones')->group(function () {
     // Opcional: eliminar
     Route::delete('{cotizacion}', [CotizacionApiController::class, 'destroy']);
 });
+
+Route::get('categorias', [CategoriaApiController::class, 'index']);
+Route::get('proveedores/{categoria}', [ProveedorApiController::class, 'listProveedores']);
+Route::get('servicios/proveedor/{id}', [ServicioApiController::class, 'listServicios']);
+Route::get('servicio/{id}', [ServicioApiController::class, 'getServicio']);
 
 Route::post('/dashboard/destino_turistico/destinoServicios', [DestinoTuristicoController::class, 'destinoServicios'])->name('destino_turistico.destinoServicios'); 
 

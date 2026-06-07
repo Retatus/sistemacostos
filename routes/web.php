@@ -298,7 +298,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified','f
     Route::patch('/dashboard/cotizacion/{cotizacion}/update', [CotizacionController::class, 'update'])->name('cotizacion.update');
     Route::delete('/dashboard/cotizacion/{cotizacion}/destroy', [CotizacionController::class, 'destroy'])->name('cotizacion.destroy');
 
-    Route::get('/dashboard/cotizacion/newcreate', [CotizacionController::class, 'newcreate'])->name('cotizacion.newcreate');
+    //Route::get('/dashboard/cotizacion/newcreate', [CotizacionController::class, 'newcreate'])->name('cotizacion.newcreate');
+    Route::get('/dashboard/cotizacion/newcreate/{id?}', [CotizacionController::class, 'newcreate'])->name('cotizacion.newcreate');
 
     Route::get('/dashboard/pasajero', [PasajeroController::class, 'index'])->name('pasajero');
     Route::get('/dashboard/pasajero/create', [PasajeroController::class, 'create'])->name('pasajero.create');
