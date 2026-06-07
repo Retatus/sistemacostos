@@ -11,12 +11,23 @@ class CotizacionServicioResource extends JsonResource
         return [
             'id' => $this->id,
             'servicio_id' => $this->servicio_id,
-            'nombre' => $this->servicio->nombre ?? null,
-            'cantidad' => $this->cantidad,
+            'proveedor_id' => $this->proveedor_id,
+            'orden' => $this->orden,
+            'hora' => $this->hora,
+            'nombre_servicio' => $this->servicio->nombre ?? null,
+            'observacion' => $this->observacion,
+            'tipo_costo_id' => $this->tipo_costo_id,
+            'tipo_habitacion_id' => $this->tipo_habitacion_id,
+            'precio_id' => $this->precio_id,
+            'moneda' => $this->moneda,
             'precio_unitario' => $this->precio_unitario,
-            'total' => $this->total,
-
+            'cantidad' => $this->cantidad,
+            'capacidad' => $this->capacidad,
+            'subtotal' => $this->monto,
+            'estado_activo' => $this->estado_activo,
             'pasajeros' => $this->pasajeros, //->pluck('id'),
+            'servicio' => new ServicioResource($this->whenLoaded('servicio', $this->servicio)),
+            
         ];
     }
 }

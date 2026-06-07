@@ -11,6 +11,8 @@ class CotizacionResource extends JsonResource
         return [
             'id' => $this->id,
             'proveedor_id' => $this->proveedor_id,
+                'proveedor_ruc' => $this->proveedor_ruc,
+                'proveedor_razon_social' => $this->proveedor_razon_social,
             'file_nro' => $this->file_nro,
             'file_nombre' => $this->file_nombre,
             'comprobante_id' => $this->comprobante_id,
@@ -44,35 +46,6 @@ class CotizacionResource extends JsonResource
             'dias' => CotizacionDiaResource::collection(
                 $this->whenLoaded('dias', $this->dias)
             )
-        ];
-    
-
-        return [
-            'id' => $this->id,
-
-            'destino' => $this->whenLoaded('destino', function () {
-                return [
-                    'id' => $this->destino->id,
-                    'nombre' => $this->destino->nombre,
-                    'ubicacion' => $this->destino->ubicacion,
-                ];
-            }),
-
-            'fecha' => $this->fecha,
-
-            'dias' => CotizacionDiaResource::collection(
-                $this->whenLoaded('dias', $this->dias)
-            ),
-
-            'pasajeros' => PasajeroResource::collection(
-                $this->whenLoaded('pasajeros', $this->pasajeros)
-            ),
-
-            'totales' => [
-                'subtotal' => $this->subtotal ?? 0,
-                'impuestos' => $this->impuestos ?? 0,
-                'total' => $this->total ?? 0,
-            ]
         ];
     }
 }
