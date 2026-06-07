@@ -24,66 +24,66 @@ class PasajeroDTO
     public int $estado_activo = 1,
   ) {}
 
-  public static function createEmpty(): self
-  {
-    return new self(
-      id: null,
-      temp_id: '',
-      nombre: '',
-      apellido_paterno: '',
-      apellido_materno: '',
-      documento_tipo_id: 0,
-      documento_numero: '',
-      pais_id: 0,
-      documento_file: '',
-      temp_file_name: '',
-      temp_file_preview: '',    
-      clase_id: 0, 
-      cotizacion_id: 0,
-      tipo_pasajero_id: 0,
-      estado_activo: 1,
-    );
-  }
+  // public static function createEmpty(): self
+  // {
+  //   return new self(
+  //     id: null,
+  //     temp_id: '',
+  //     nombre: '',
+  //     apellido_paterno: '',
+  //     apellido_materno: '',
+  //     documento_tipo_id: 0,
+  //     documento_numero: '',
+  //     pais_id: 0,
+  //     documento_file: '',
+  //     temp_file_name: '',
+  //     temp_file_preview: '',    
+  //     clase_id: 0, 
+  //     cotizacion_id: 0,
+  //     tipo_pasajero_id: 0,
+  //     estado_activo: 1,
+  //   );
+  // }
 
-  public static function fromModel(Pasajero $pasajero): self
-  {
-    return new self(
-      id: $pasajero->id,
-      temp_id: $pasajero->temp_id,
-      nombre: $pasajero->nombre,
-      apellido_paterno: $pasajero->apellido_paterno,
-      apellido_materno: $pasajero->apellido_materno,
-      documento_tipo_id: $pasajero->documento_tipo_id,
-      documento_numero: $pasajero->documento_numero,
-      pais_id: $pasajero->pais_id,
-      documento_file: $pasajero->documento_file,
-      temp_file_name: '', // No se obtiene del modelo, se maneja en frontend
-      temp_file_preview: '', // No se obtiene del modelo, se maneja en frontend
-      clase_id: $pasajero->clase_id, 
-      cotizacion_id: $pasajero->cotizacion_id,
-      tipo_pasajero_id: $pasajero->tipo_pasajero_id,
-      estado_activo: $pasajero->estado_activo,
-    );
-  }
+  // public static function fromModel(Pasajero $pasajero): self
+  // {
+  //   return new self(
+  //     id: $pasajero->id,
+  //     temp_id: $pasajero->temp_id,
+  //     nombre: $pasajero->nombre,
+  //     apellido_paterno: $pasajero->apellido_paterno,
+  //     apellido_materno: $pasajero->apellido_materno,
+  //     documento_tipo_id: $pasajero->documento_tipo_id,
+  //     documento_numero: $pasajero->documento_numero,
+  //     pais_id: $pasajero->pais_id,
+  //     documento_file: $pasajero->documento_file,
+  //     temp_file_name: '', // No se obtiene del modelo, se maneja en frontend
+  //     temp_file_preview: '', // No se obtiene del modelo, se maneja en frontend
+  //     clase_id: $pasajero->clase_id, 
+  //     cotizacion_id: $pasajero->cotizacion_id,
+  //     tipo_pasajero_id: $pasajero->tipo_pasajero_id,
+  //     estado_activo: $pasajero->estado_activo,
+  //   );
+  // }
 
-  public static function fromArray(array $data): self
-  {
-    return new self(
-      id: $data['id'] ?? null,
-      temp_id: $data['temp_id'] ?? 0,
-      nombre: $data['nombre'] ?? '',
-      apellido_paterno: $data['apellido_paterno'] ?? '',
-      apellido_materno: $data['apellido_materno'] ?? '',
-      documento_tipo_id: $data['documento_tipo_id'] ?? 0,
-      documento_numero: $data['documento_numero'] ?? '',
-      pais_id: $data['pais_id'] ?? 0,
-      documento_file: $data['documento_file'] ?? '',
-      temp_file_name: $data['temp_file_name'] ?? '',
-      temp_file_preview: $data['temp_file_preview'] ?? 0,
-      clase_id: $data['clase_id'] ?? 0,
-      cotizacion_id: $data['cotizacion_id'] ?? 0,
-      tipo_pasajero_id: $data['tipo_pasajero_id'] ?? 0,
-      estado_activo: $data['estado_activo'] ?? 1,
-    );
-  }
+  // public static function fromArray(array $data): self
+  // {
+  //   return new self(
+  //     id: $data['id'] ?? null,
+  //     temp_id: $data['temp_id'] ?? 0,
+  //     nombre: $data['nombre'] ?? '',
+  //     apellido_paterno: $data['apellido_paterno'] ?? '',
+  //     apellido_materno: $data['apellido_materno'] ?? '',
+  //     documento_tipo_id: $data['documento_tipo_id'] ?? 0,
+  //     documento_numero: $data['documento_numero'] ?? '',
+  //     pais_id: $data['pais_id'] ?? 0,
+  //     documento_file: $data['documento_file'] ?? '',
+  //     temp_file_name: $data['temp_file_name'] ?? '',
+  //     temp_file_preview: $data['temp_file_preview'] ?? 0,
+  //     clase_id: $data['clase_id'] ?? 0,
+  //     cotizacion_id: $data['cotizacion_id'] ?? 0,
+  //     tipo_pasajero_id: $data['tipo_pasajero_id'] ?? 0,
+  //     estado_activo: $data['estado_activo'] ?? 1,
+  //   );
+  // }
 }
