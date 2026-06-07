@@ -115,9 +115,9 @@ class CotizacionController extends Controller
         ]);
     }
 
-    public function newcreate()
+    public function newcreate($id = null)
     {
-        return Inertia::render('CotizacionApi/CreateCotizacion');
+        return Inertia::render('CotizacionApi/CreateCotizacion', ['id' => $id]);
     }
 
     /**

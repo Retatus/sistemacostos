@@ -6,36 +6,57 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Cotizacion\StoreCotizacionRequest;
 
 use App\Models\Cotizacion;
+use App\Models\Proveedor;
 use App\Http\Resources\CotizacionResource;
+use App\Http\Resources\DestinoTuristicoResource;
 use App\DTO\CotizacionDTO;
+use App\Factory\CotizacionFactory;
 use App\Services\CotizacionServiceApi;
+use App\Services\DestinoTuristicoServiceApi;
 use Illuminate\Support\Facades\Log;
+use Nette\Utils\Json;
 
 class CotizacionApiController extends Controller
 {
-    protected CotizacionServiceApi $service;
+    protected CotizacionServiceApi $cotizacionService;
+    protected DestinoTuristicoServiceApi $destinoService;
 
-    public function __construct(CotizacionServiceApi $service)
+    public function __construct(CotizacionServiceApi $cotizacionService, DestinoTuristicoServiceApi $destinoService)
     {
-        $this->service = $service;
+        $this->cotizacionService = $cotizacionService;
+        $this->destinoService = $destinoService;
     }
 
+    public function destino_select()
+    {
+        return response()->json(
+            $this->destinoService->getDestinosForSelect()
+        );
+    }
+
+    public function destino_search(Request $request)
+    {
+        $search = $request->input('search');
+        return response()->json(
+            $this->destinoService->searchDestinos($search)
+        );
+    }
+
+    public function destino($id)
+    {
+        $destino = $this->cotizacionService->generarDesdeDestino($id);
+        //dd('destino', Json::encode($destino, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        //return response()->json($cotizacion);
+        return new DestinoTuristicoResource($destino);
+    }
     /**
      * Cargar estructura inicial basada en un destino (plantilla)
      */
-    public function create(Request $request)
+    public function create($id = null)
     {
-        $destinoId = $request->query('destino_id');
-        //dd('destino_id', $destinoId);
-
-        if (!$destinoId) {
-            return response()->json(['error' => 'destino_id es requerido'], 422);
-        }
-
-        // El service arma la cotización vacía basada en la plantilla
-        $cotizacion = $this->service->buildFromDestino($destinoId);
-        
-        return new CotizacionResource($cotizacion);
+        return response()->json(
+            $this->cotizacionService->createEmpty()
+        );
     }
 
     /**
@@ -43,25 +64,25 @@ class CotizacionApiController extends Controller
      */
     public function store(Request  $request)
     {    
-        $dto = CotizacionDTO::fromRequest($request);
-
+        $data = $request->all();
+        $dto = CotizacionFactory::fromArray($data);
+        //dd('DTO recibido en el controlador:', Json::encode($dto, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         //Log::debug($dto);
-        $cotizacion = $this->service->create($dto);
+        $cotizacion = $this->cotizacionService->create($dto);
+        //dd('cotizacion creada', Json::encode($cotizacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
+        //return response()->json($cotizacion);
         return new CotizacionResource($cotizacion);
     }
 
     /**
      * Cargar cotización para editar
      */
-    public function edit(Cotizacion $cotizacion)
-    {
-        $cotizacion->load([
-            'destino',
-            'dias.servicios.pasajeros',
-            'pasajeros'
-        ]);
-
+    public function edit(int $id)
+    {                
+        $cotizacion = $this->cotizacionService->editarCotizacion($id);
+        //dd('cotizacion para editar', Json::encode($cotizacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));        
+        //return response()->json($cotizacion);
         return new CotizacionResource($cotizacion);
     }
 
@@ -70,9 +91,11 @@ class CotizacionApiController extends Controller
      */
     public function update(Request $request, Cotizacion $cotizacion)
     {
-        $dto = CotizacionDTO::fromRequest($request, $cotizacion->id);
+        $data = $request->all();
 
-        $cotizacion = $this->service->update($dto, $cotizacion);
+        $dto = CotizacionFactory::fromArray($data);
+
+        $cotizacion = $this->cotizacionService->update($dto, $cotizacion);
 
         return new CotizacionResource($cotizacion);
     }
@@ -82,14 +105,6 @@ class CotizacionApiController extends Controller
      */
     public function index()
     {
-        // $paginator = Cotizacion::with([
-        //     'pasajeros',
-        //     'dias.servicios.pasajeros'
-        // ])
-        // ->latest()
-        // ->paginate(20);
-        // return response()->json($paginator);
-
         return CotizacionResource::collection(
             Cotizacion::with([
                 'pasajeros', 
