@@ -13,3 +13,5 @@ export const getDestinoSearch = (search) => api.get(`/cotizaciones/destino/desti
 export const getDestino = (id) => api.get(`/cotizaciones/destino/${id}`);
 
 export const guardarCotizacion = (data) => api.post("/cotizaciones", data);
+
+export const getCotizacionById = (id) => api.get(`/cotizaciones/${id}/edit`);
