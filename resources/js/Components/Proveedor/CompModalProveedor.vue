@@ -20,7 +20,7 @@
                             </p>
                         </Transition>
                     </div>                    
-                    <form @submit.prevent="addCliente">
+                    <form @submit.prevent="handleSubmit">
                         <div class="grid grid-cols-6 gap-4 w-full p-5">
                             <div class="col-span-3">
                                 <label for="tipo_documento" class=" text-xs font-medium text-gray-700">Tipo Documento</label>                            
@@ -78,7 +78,7 @@
                         <!-- Footer -->
                         <div class="px-4 py-3 border-t flex justify-end space-x-2">
                             <SecondaryButton @click="closeModal">Cerrar</SecondaryButton>
-                            <PrimaryButton type="submit">Agregar</PrimaryButton>
+                            <PrimaryButton type="submit">{{ actionLabel  }}</PrimaryButton>
                         </div>
                     </form>
                  </div>                
@@ -88,103 +88,159 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import Swal from 'sweetalert2';
+
+import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import Modal from '@/Components/Modal.vue';
+
 import { useCategoriesStore } from '@/Stores/categories';
-import Swal from 'sweetalert2';
+
 const categoriesStore = useCategoriesStore();
 
 const props = defineProps({
-    isModalVisibleProveedor: { 
-        type: Boolean, 
-        required: true 
+    isModalVisibleProveedor: {
+        type: Boolean,
+        required: true,
     },
-})
+});
 
-// Variables para el personas y detalle temporal
-const personas = ref({
+const emit = defineEmits(['close', 'submit']);
+
+const TipoDocumento = categoriesStore.globals.tipo_documentos;
+const tiposSunat = categoriesStore.globals.tipo_sunat;
+
+const initialPersona = () => ({
     ruc: '',
     razon_social: '',
     contacto: '',
     correo: '',
     direccion: '',
     tipo_documento_id: '',
-    tipo_comprobante: 1,//otros
+    tipo_comprobante: 1,
     tipo_sunat: 1,
-    proveedor_categoria_id: 0,//cliente
+    proveedor_categoria_id: 0,
     escliente: 1,
     editado: 0,
     estado_activo: 1,
 });
 
-const error = ref('');
-const TipoDocumento = ref({ ...categoriesStore.globals.tipo_documentos });
-const tiposSunat = ref({ ...categoriesStore.globals.tipo_sunat });
-const emit = defineEmits(['close', 'submit']);
+const personas = ref(initialPersona());
+
+const loading = ref(false);
+const responseMessage = ref('');
+const personaExiste = ref(false);
+
+const actionLabel = computed(() =>
+    personaExiste.value ? 'Copiar' : 'Agregar'
+);
+
+function resetForm() {
+    personas.value = initialPersona();
+    responseMessage.value = '';
+    personaExiste.value = false;
+}
 
 function closeModal() {
-    emit('submit', personas.value);
+    resetForm();
     emit('close');
 }
+
+async function handleSubmit() {
+    if (personaExiste.value) {
+        emit('submit', personas.value);
+        closeModal();
+        return;
+    }
+
+    await addCliente();
+}
+
 async function addCliente() {
+    loading.value = true;
+
     try {
-        const response = await axios.post(`${route('proveedor.store')}`, personas.value);  
-        if (response.status === 201) { 
-            personas.value = response.data.data;
-            emit('submit', personas.value);
-        }else{
-            //console.error('Error al agregar el elemento:', error);
-            alert('Error al agregar el elemento:', response.data);
-        }
-    } catch (err) {
-        console.log('Error al agregar el elemento:', err);
-        if (err.response.status === 422) {
+        const { data, status } = await axios.post(
+            route('proveedor.store'),
+            personas.value
+        );
+
+        if (status === 201) {
+            emit('submit', data.data);
+
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                html: `<strong>${err.response.data.message}</strong>`,
-                confirmButtonText: 'Aceptar',
+                icon: 'success',
+                title: 'Cliente agregado',
+                timer: 1500,
+                showConfirmButton: false,
             });
-            emit('submit', personas.value);
-        } else {
-            error.value = err.response?.data?.message || 'Ocurrió un error';
+
+            closeModal();
         }
+    } catch (err) {
+        handleError(err);
+    } finally {
+        loading.value = false;
     }
 }
 
-const responseMessage = ref('');
 async function findCliente() {
+    if (!personas.value.ruc) return;
+
+    loading.value = true;
+    responseMessage.value = '';
+
     try {
-        const response = await axios.post(`${route('proveedor.find')}`, personas.value);
-        if (response.status === 200 && Object.keys(response.data).length > 0) {
-            personas.value = response.data;
-            responseMessage.value = '';
-        }else{
-            responseMessage.value = 'Cliente no encontrado';
-            personas.value.razon_social = '';
-            personas.value.direccion = '';
-            personas.value.contacto = '';
-            personas.value.correo = '';
+        const { data, status } = await axios.post(
+            route('proveedor.find'),
+            {
+                ruc: personas.value.ruc,
+                tipo_documento_id: personas.value.tipo_documento_id,
+            }
+        );
+
+        if (status === 200 && data && data.id) {
+            personas.value = {
+                ...initialPersona(),
+                ...data,
+            };
+
+            personaExiste.value = true;
+            return;
         }
+
+        clienteNoEncontrado();
+
     } catch (err) {
-        error.value = err.response?.data?.message || 'Ocurrió un error';
+        clienteNoEncontrado();
+    } finally {
+        loading.value = false;
     }
 }
 
-async function findPasajero() {
-    try {
-        const response = await axios.post(`${route('pasajero.find')}`, personas.value);
-        if (response.status === 200) {
-            personas.value = response.data;
-        }else{
-            alert('Error al agregar el elemento:', response.data);
-        }
-    } catch (err) {
-        error.value = err.response?.data?.message || 'Ocurrió un error';
-    }
+function clienteNoEncontrado() {
+    personas.value = {
+        ...initialPersona(),
+        ruc: personas.value.ruc,
+        tipo_documento_id: personas.value.tipo_documento_id,
+    };
+
+    personaExiste.value = false;
+    responseMessage.value = 'Cliente no encontrado';
 }
 
+function handleError(err) {
+    console.error(err);
 
+    const message =
+        err.response?.data?.message ||
+        'Ocurrió un error inesperado';
+
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message,
+    });
+}
 </script>

@@ -18,7 +18,7 @@
                         <label for="cliente_id" class="block text-sm font-medium text-gray-700 mb-1">
                             <span class="text-red-500">*</span> Cliente Id
                         </label>
-                        <input v-model="Cotizacion.cliente_id" type="text" id="cliente_id" 
+                        <input v-model="Cotizacion.proveedor_id" type="text" id="cliente_id" 
                             required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             placeholder="Ej: 12345678">
                     </div>
@@ -1130,6 +1130,7 @@ let emptyInputTimeout = null;
 // Variables para el cotizacion y detalle temporal
 //const Cotizacion = reactive(getCotizacionInicial());
 const Cotizacion = reactive(props.Cotizacion); // || reactive(getCotizacionInicial());
+console.log('Cotizacion reactiva', Cotizacion);
 const cotizacionOriginal = ref(null);
 
 // Cotizacion.file_nro = props.Correlativo;
