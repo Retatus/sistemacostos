@@ -24,6 +24,11 @@ class ItinerarioDestino extends Model
         return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
     }
 
+    public function servicios()
+    {
+        return $this->hasMany(ItinerarioServicio::class, 'itinerario_destino_id');
+    }
+
     public function destinoTuristico()
     {
         return $this->belongsTo(DestinoTuristico::class);

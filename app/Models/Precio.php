@@ -18,6 +18,8 @@ class Precio extends Model
 
     protected $fillable = ['anio', 'moneda', 'tipo_costo', 'tipo_habitacion', 'pax_min', 'pax_max', 'capacidad_pax', 'monto', 'tipo_pasajero_id', 'servicio_id', 'servicio_clase_id', 'estado_activo'];
 
+    protected $appends = ['tipo_costo_id', 'tipo_habitacion_id'];
+
     public function servicio()
     {
         return $this->belongsTo(Servicio::class, 'servicio_id', 'id');
@@ -47,5 +49,33 @@ class Precio extends Model
                     //'monto' => $servicio->monto,
                 ];
             });
+    }
+
+    /**
+     * Get the tipo_costo_id attribute.
+     */
+    public function getTipoCostoIdAttribute()
+    {
+        static $map = null;
+
+        if (!$map) {
+            $map = TipoCosto::pluck('id', 'codigo')->toArray();
+        }
+
+        return $map[$this->tipo_costo] ?? null;
+    }
+
+    /**
+     * Get the tipo_habitacion_id attribute.
+     */
+    public function getTipoHabitacionIdAttribute()
+    {
+        static $map = null;
+
+        if (!$map) {
+            $map = TipoHabitacion::pluck('id', 'nombre')->toArray();
+        }
+
+        return $map[$this->tipo_habitacion] ?? null;
     }
 }

@@ -18,6 +18,11 @@ class DestinoTuristico extends Model
     {
         return $this->hasMany(ItinerarioDestino::class);
     }
+
+    public function dias()
+    {
+        return $this->hasMany(ItinerarioDestino::class);
+    }
     
     public function cotizacion()
     {
