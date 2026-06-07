@@ -6,6 +6,26 @@ use App\Models\DestinoTuristico;
 
 class DestinoTuristicoRepository
 {
+    public function getAllForSelect()
+    {
+        return DestinoTuristico::select('id', 'nombre')
+            ->where('estado_activo', 1)
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    public function searchForAutocomplete(?string $search = null, int $perPage = 10)
+    {
+        return DestinoTuristico::select('id', 'nombre')
+            ->where('estado_activo', 1)
+            ->when($search, function ($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%");
+            })
+            ->orderBy('nombre')
+            ->paginate($perPage);
+    }
+
+
     public static function DestinoSeleccionado(int $destinoId)
     {
         $destino = DestinoTuristico::with([
