@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Models;
-use App\Http\Requests\Cotizacion\StoreRequest;
-        use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasHistorial;
 
 class Cotizacion extends Model
 {
-    use HasFactory;  
+    use HasFactory, HasHistorial;
     
     protected $hidden = ['created_at', 'updated_at'];    
     
