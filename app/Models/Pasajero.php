@@ -2,12 +2,13 @@
 
 namespace App\Models;
 use App\Http\Requests\Pasajero\StoreRequest;
-        use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasHistorial;
 
 class Pasajero extends Model
 {
-    use HasFactory;    
+    use HasFactory, HasHistorial;    
 
     protected $hidden = ['created_at', 'updated_at'];
 

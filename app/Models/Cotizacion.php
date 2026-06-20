@@ -12,8 +12,28 @@ class Cotizacion extends Model
     protected $hidden = ['created_at', 'updated_at'];    
     
     protected $fillable = ['proveedor_id', 'file_nro', 'file_nombre', 'comprobante_id', 'fecha', 'estado_reserva', 'estado_documentacion', 'nro_pasajeros', 'nro_ninio', 'nro_adulto', 'nro_estudiante', 'idioma_id', 'mercado_id', 'destino_turistico_id' , 'destino_turistico_detalle', 'destino_turistico_detalle_monto_x_categoria', 'pais_id', 'fecha_inicio', 'fecha_fin', 'nro_dias', 'estado_cotizacion', 'costo_parcial', 'descuento_estudiante', 'descuento_ninio', 'descuento_otro', 'costo_total', 'estado_activo'];
-    
+   
+    protected $appends = [
+        'proveedor_ruc',
+        'proveedor_razon_social',
+    ];
+
     protected $casts = ['destino_turistico_detalle' => 'array', 'destino_turistico_detalle_monto_x_categoria' => 'array'];
+
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
+    }
+
+    public function getProveedorRucAttribute()
+    {
+        return $this->proveedor->ruc ?? '';
+    }
+
+    public function getProveedorRazonSocialAttribute()
+    {
+        return $this->proveedor->razon_social ?? '';
+    }
 
     // App/Models/Cotizacion.php
     public function pasajerosServicios()

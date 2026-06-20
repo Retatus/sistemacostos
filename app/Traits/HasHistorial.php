@@ -10,7 +10,14 @@ trait HasHistorial
     public static function bootHasHistorial()
     {
         static::updated(function ($model) {
-            $dirty = $model->getDirty();
+            //$dirty = $model->getDirty();
+            $dirty = collect($model->getDirty())
+            ->except([
+                'updated_at',
+                'created_at',
+                'deleted_at'
+            ])
+            ->toArray();
 
             foreach ($dirty as $campo => $nuevoValor) {
                 HistorialCambio::create([

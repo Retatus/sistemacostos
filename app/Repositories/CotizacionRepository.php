@@ -37,6 +37,7 @@ class CotizacionRepository
     public static function EditarCotizacion(int $id)
     {
         return Cotizacion::with([
+            'proveedor:id,ruc,razon_social', // ← SE AGREGA EL SELECT PARA OBTENER SOLO LOS CAMPOS NECESARIOS
             'dias' => function($query) {
                 $query->with([
                     'servicios' => function($query) {
