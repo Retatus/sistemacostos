@@ -1,9 +1,14 @@
 // uppercase.js
 export default {
   beforeMount(el) {
-    el.addEventListener('input', () => {
-      el.value = el.value.toUpperCase()
-      el.dispatchEvent(new Event('input'))
-    })
+    el.addEventListener('input', (e) => {
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+
+      el.value = e.target.value.toUpperCase();
+
+      // restaurar posición del cursor
+      el.setSelectionRange(start, end);
+    });
   }
-}
+};
