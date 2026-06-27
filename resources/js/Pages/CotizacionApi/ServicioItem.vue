@@ -1,64 +1,87 @@
 <template>
-  <div class="servicio-row" :style="{ backgroundColor: servicio.id === null ? '#f2f2f2' : '' }">    
-    <div class="item_sm">
-      <strong>Hora:</strong> {{ servicio.hora }} - {{ servicio.orden }}
+  <div
+    class="table-grid table-row"
+    :style="{ backgroundColor: servicio.id === null ? '#f8fafc' : '' }"
+  >
+    <div>
+      {{ servicio.orden }}
+      <br>
+      {{ servicio.hora }}
     </div>
 
-    <div class="item">
-      <strong>Categoría:</strong> [{{ servicio.servicio?.servicio_detalles?.proveedor_categoria_id }}] {{ servicio.servicio?.servicio_detalles?.proveedor_categoria?.nombre }}
+    <div>
+      [{{ servicio.servicio?.servicio_detalles?.proveedor_categoria_id }}]
+      {{ servicio.servicio?.servicio_detalles?.proveedor_categoria?.nombre }}
     </div>
 
-    <div class="item">
-      <strong>Proveedor:</strong> [{{ servicio.proveedor_id }}] {{ servicio.servicio?.proveedor?.razon_social }}
+    <div>
+      [{{ servicio.proveedor_id }}]
+      {{ servicio.servicio?.proveedor?.razon_social }}
     </div>
 
-    <div class="item">
-      <strong>Servicio:</strong> [{{ servicio.servicio_id }}] {{ servicio.servicio?.servicio_detalles?.descripcion }}
+    <div class="table-description">
+      [{{ servicio.servicio_id }}]
+      {{ servicio.servicio?.servicio_detalles?.descripcion }}
     </div>
 
-    <div class="item">
-      <strong>Observación:</strong>
-      <textarea v-model="servicio.observacion" rows="1" cols="30" placeholder="Ingrese observación..."></textarea>
+    <div class="table-description">
+      {{ servicio.observacion }}
     </div>
 
-    <div class="item">
-      <strong>Precio:</strong> [{{ servicio.precio_id }}] {{ servicio.moneda }} {{ servicio.monto }} cantidad: {{ servicio.cantidad }}
+    <div>
+      {{ servicio.moneda }}
+      {{ servicio.monto }}
     </div>
 
-    <div class="item">
-      <strong>Precio Unitario:</strong> {{ servicio.moneda }} {{ servicio.servicio?.precio_unitario }}
-      <input 
-        type="text" 
+    <div>
+      <input
+        type="text"
         v-model="servicio.precio_unitario"
         readonly
-        class="input-precio"
+        class="table-number"
       />
     </div>
 
-    <div class="item">
-      <strong>Seleccionar Precio:</strong>
-      <select v-model="servicio.precio_id" @change="actualizarPrecioUnitario"> <!-- @change="actualizarPrecioUnitario" -->
+    <div>
+      <select
+        v-model="servicio.precio_id"
+        @change="actualizarPrecioUnitario"
+      >
         <option value="">Seleccione precio</option>
+
         <option
           v-for="p in servicio?.servicio?.precios"
           :key="p.id"
           :value="p.id"
         >
-          {{ p.tipo_costo }} - {{ p.monto }} [{{ p.tipo_costo_id }}] [{{ p.tipo_habitacion_id }}]
+          {{ p.tipo_costo }}
+          - {{ p.monto }}
         </option>
       </select>
     </div>
 
-    <div class="item_sm">
-      <strong>Cantidad:</strong>
-      <input type="number" v-model="servicio.cantidad" min="1" width="50px"/>
+    <div>
+      <input
+        type="number"
+        v-model="servicio.cantidad"
+        min="1"
+      />
     </div>
-    <div class="item_sm">
-      <strong>Sub total:</strong> {{ servicio.cantidad * servicio.precio_unitario   }}
+
+    <div class="table-number">
+      {{
+        (
+          Number(servicio.cantidad || 0) *
+          Number(servicio.precio_unitario || 0)
+        ).toFixed(2)
+      }}
     </div>
-    <div class="item_sm">
-      <button @click="$emit('remove')">Eliminar</button>
-    </div>    
+
+    <div class="table-action">
+      <button @click="$emit('remove')">
+        Eliminar
+      </button>
+    </div>
   </div>
 </template>
 
@@ -86,27 +109,3 @@ const actualizarPrecioUnitario = (evento) => {
   }
 }
 </script>
-
-<style scoped>
-  .servicio-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 11px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .item_sm {
-    flex: 1 1 50px;
-  }
-
-  .item {
-    flex: 1 1 200px;
-  }
-
-  input {
-    width: 100%;
-    max-width: 80px;
-  }
-</style>

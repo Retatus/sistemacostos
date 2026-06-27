@@ -5,10 +5,11 @@ use App\Http\Requests\CotizacionServicio\StoreRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasHistorial;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CotizacionServicio extends Model
 {
-    use HasFactory, HasHistorial;    
+    use HasFactory, HasHistorial, SoftDeletes;
 
     protected $fillable = ['cotizacion_dia_id', 'servicio_id', 'proveedor_id', 'orden', 'hora', 'nombre_servicio', 'observacion', 'tipo_costo_id', 'tipo_habitacion_id', 'precio_id', 'moneda', 'precio_unitario', 'cantidad', 'capacidad', 'subtotal', 'estado_activo'];
 

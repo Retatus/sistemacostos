@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h2>Crear Cotización</h2>
+    <header class="form-header">
+      <div class="badge" :class="esModoEdicion ? 'badge-edit' : 'badge-create'">
+        {{ esModoEdicion ? 'Modo Edición (Autoguardado activo)' : 'Nueva Cotización' }}
+      </div>
+      <h1>{{ esModoEdicion ? 'Editar Cotización #' + cotizacion.id : 'Crear Nueva Cotización' }}</h1>
+    </header>
 
     <div >
       <!-- IDENTIFICACIÓN -->
@@ -20,11 +25,8 @@
         <input type="text" name="proveedor_razon_social" v-model="cotizacion.proveedor_razon_social" v-uppercase>
 
         <button type="button" @click="showModalProveedor = true"
-            class="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-            </svg>
-            Nuevo
+            class="w-xs px-4 py-2.5 mt-2 bg-gradient-to-r from-sky-600 to-violet-700 text-white rounded-lg hover:from-violet-700 hover:to-violet-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            + Agregar Cliente
         </button>
       </fieldset>
 
@@ -193,14 +195,18 @@
         @submit="recuperarValorModal" 
       />
 
-      <button type="button" @click="guardar">Guardar</button>
-
+      <button 
+        :disabled="!botonGuardarHabilitado" 
+        @click="guardarCotizacionNueva"
+        class="w-xs px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">                  
+        Nueva Cotización
+      </button>
     </div>    
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch  } from "vue";
+import { ref, onMounted, watch, watchEffect, computed  } from "vue";
 import Swal from "sweetalert2";
 import {
   getCotizacionEmpty,
@@ -218,7 +224,7 @@ import ClienteModal from '@/Components/Proveedor/CompModalProveedor.vue';
 import DialogModal from "@/Components/DialogModal.vue";
 
 const props = defineProps({
-  id: Number
+  id: [String, Number]
 });
 
 const cotizacionId = props.id ?? null;
@@ -229,8 +235,12 @@ const cotizacion = ref({
   pasajeros: [],
 });
 
-const destinoId = ref(null);
 const destinos = ref([]);
+const esModoEdicion = computed(() => !!cotizacion.value.id)
+
+const botonGuardarHabilitado = computed(() => {
+  return !esModoEdicion.value && cotizacion.value.dias?.length > 0
+})
 
 // 🔥 cargar encabezado vacío
 const loadData = async () => {
@@ -259,6 +269,7 @@ const loadCotizacionEdit = async (id) => {
 
   cotizacion.value = cotizacionRes.data.data;   // 🔥 JSON idéntico al create
   destinos.value = destinosSelectRes.data;
+  console.log("Cotización cargada para edición:", cotizacion.value);
 };
 
 // 🔥 cargar encabezado vacío
@@ -300,6 +311,28 @@ watch(
   }
 );
 
+watchEffect(() => {
+
+  const parcial = cotizacion.value.dias.reduce((totalDias, dia) => {
+
+    return totalDias + dia.servicios.reduce((totalServicios, servicio) => {
+
+      return totalServicios +
+        (Number(servicio.precio_unitario || 0) *
+        Number(servicio.cantidad || 0));
+
+    }, 0);
+
+  }, 0);
+  
+  const totalDescuento = Number(cotizacion.value.descuento_estudiante || 0) +
+    Number(cotizacion.value.descuento_ninio || 0) +
+    Number(cotizacion.value.descuento_otro || 0);
+
+  cotizacion.value.costo_parcial = parcial.toFixed(2);
+  cotizacion.value.costo_total = (parcial - totalDescuento).toFixed(2);
+});
+
 const removeServicio = async ({ diaIndex, servIndex }) => {
   const result = await Swal.fire({
     title: "¿Eliminar servicio?",
@@ -329,7 +362,7 @@ async function recuperarValorModal(persona) {
 // fin modal proveedor
 
 // guardar
-const guardar = async () => {
+const guardarCotizacionNueva = async () => {
   console.log("Cotización a guardar:", cotizacion.value);
   cotizacion.value.destinos_turisticos = []; // 🔥 evitar enviar datos anidados complejos
   await guardarCotizacion(cotizacion.value);

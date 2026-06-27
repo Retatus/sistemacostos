@@ -5,10 +5,11 @@ use App\Http\Requests\Pasajero\StoreRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasHistorial;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pasajero extends Model
 {
-    use HasFactory, HasHistorial;    
+    use HasFactory, HasHistorial, SoftDeletes;    
 
     protected $hidden = ['created_at', 'updated_at'];
 

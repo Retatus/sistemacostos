@@ -11,6 +11,7 @@ import ChkEditor from '@/Components/ChkEditor.vue'
 import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
 import uppercase from '@/Utils/uppercase.js';
+import '../css/table-grid.css';
 
 // Importar el store de categorías
 import { useCategoriesStore } from '@/Stores/categories'; // Ajusta la ruta según tu estructura

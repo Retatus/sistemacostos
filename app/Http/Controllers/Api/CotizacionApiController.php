@@ -81,8 +81,6 @@ class CotizacionApiController extends Controller
     public function edit(int $id)
     {                
         $cotizacion = $this->cotizacionService->editarCotizacion($id);
-        //dd('cotizacion para editar', Json::encode($cotizacion, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));        
-        //return response()->json($cotizacion);
         return new CotizacionResource($cotizacion);
     }
 

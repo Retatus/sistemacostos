@@ -14,7 +14,7 @@ class CotizacionServicioResource extends JsonResource
             'proveedor_id' => $this->proveedor_id,
             'orden' => $this->orden,
             'hora' => $this->hora,
-            'nombre_servicio' => $this->servicio->nombre ?? null,
+            'nombre_servicio' => $this->nombre_servicio,
             'observacion' => $this->observacion,
             'tipo_costo_id' => $this->tipo_costo_id,
             'tipo_habitacion_id' => $this->tipo_habitacion_id,

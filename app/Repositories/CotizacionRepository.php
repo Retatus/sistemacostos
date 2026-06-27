@@ -41,7 +41,9 @@ class CotizacionRepository
             'dias' => function($query) {
                 $query->with([
                     'servicios' => function($query) {
-                        $query->with([
+                        $query
+                        ->orderBy('orden', 'asc') // Ordenar por el campo 'orden' de la tabla pivot
+                        ->with([
                             'servicio' => function($query) {
                                 $query->with([
                                     'precios',
